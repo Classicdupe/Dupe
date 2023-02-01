@@ -1,0 +1,22 @@
+plugins {
+    id 'java'
+    id 'com.github.johnrengelman.shadow' version '7.1.2'
+}
+
+group 'xyz.prorickey.classicdupe'
+version '1.0-SNAPSHOT'
+
+repositories {
+    maven { url = uri("https://repo.papermc.io/repository/maven-public/") }
+    mavenCentral()
+}
+
+dependencies {
+    compileOnly 'io.papermc.paper:paper-api:1.19.3-R0.1-SNAPSHOT'
+    compileOnly 'net.luckperms:api:5.4'
+    implementation 'com.h2database:h2:2.1.214'
+}
+
+java {
+    toolchain.languageVersion.set(JavaLanguageVersion.of(17))
+}

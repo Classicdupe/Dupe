@@ -1,0 +1,18 @@
+main: xyz.prorickey.classicdupe.ClassicDupe
+name: ClassicDupe
+version: 1.0.0-beta
+api-version: 1.19
+author: Prorickey
+commands:
+  dupe:
+    description: To dupe items. Can dupe up to 6 times
+  filter:
+    description: To add, remove or list the filter
+    permission: admin.filter
+  random:
+    description: To toggle random items
+  spawn:
+    description: Teleports you to spawn
+  setspawn:
+    description: Sets the spawn to the players location
+    permission: admin.setspawn

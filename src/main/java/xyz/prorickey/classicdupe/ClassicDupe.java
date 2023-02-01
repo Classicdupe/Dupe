@@ -1,0 +1,81 @@
+package xyz.prorickey.classicdupe;
+
+import net.luckperms.api.LuckPerms;
+import org.bukkit.Bukkit;
+import org.bukkit.plugin.RegisteredServiceProvider;
+import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.potion.PotionEffect;
+import org.bukkit.potion.PotionEffectType;
+import org.bukkit.scheduler.BukkitRunnable;
+import xyz.prorickey.classicdupe.commands.admin.FilterCMD;
+import xyz.prorickey.classicdupe.commands.admin.SetSpawnCMD;
+import xyz.prorickey.classicdupe.commands.default1.DupeCMD;
+import xyz.prorickey.classicdupe.commands.default1.RandomCMD;
+import xyz.prorickey.classicdupe.commands.default1.SpawnCMD;
+import xyz.prorickey.classicdupe.database.Database;
+import xyz.prorickey.classicdupe.events.*;
+
+public class ClassicDupe extends JavaPlugin {
+
+    public static JavaPlugin plugin;
+    public static LuckPerms lpapi;
+    public static Database database;
+
+    @Override
+    public void onEnable() {
+        plugin = this;
+        database = new Database();
+
+        RegisteredServiceProvider<LuckPerms> provider = Bukkit.getServicesManager().getRegistration(LuckPerms.class);
+        if (provider != null) {
+            lpapi = provider.getProvider();
+        }
+
+        enableNightVision();
+
+        this.getCommand("dupe").setExecutor(new DupeCMD());
+        this.getCommand("dupe").setTabCompleter(new DupeCMD());
+        this.getCommand("filter").setExecutor(new FilterCMD());
+        this.getCommand("filter").setTabCompleter(new FilterCMD());
+        this.getCommand("random").setExecutor(new RandomCMD());
+        this.getCommand("random").setTabCompleter(new RandomCMD());
+        this.getCommand("spawn").setExecutor(new SpawnCMD());
+        this.getCommand("spawn").setTabCompleter(new SpawnCMD());
+        this.getCommand("setspawn").setExecutor(new SetSpawnCMD());
+        this.getCommand("setspawn").setTabCompleter(new SetSpawnCMD());
+
+        getServer().getPluginManager().registerEvents(new JoinEvent(), this);
+        getServer().getPluginManager().registerEvents(new QuitEvent(), this);
+        getServer().getPluginManager().registerEvents(new CancelPortalCreation(), this);
+        getServer().getPluginManager().registerEvents(new Chat(), this);
+        getServer().getPluginManager().registerEvents(new BlockPlace(), this);
+    }
+
+    @Override
+    public void onDisable() {
+        database.shutdown();
+    }
+
+    private static void enableNightVision() {
+        NightVisionTask task = new NightVisionTask();
+        task.runTaskTimer(ClassicDupe.getPlugin(), 0, 20*5);
+    }
+
+    private static class NightVisionTask extends BukkitRunnable {
+        @Override
+        public void run() {
+            Bukkit.getOnlinePlayers().forEach(p -> {
+                p.addPotionEffect(new PotionEffect(
+                        PotionEffectType.NIGHT_VISION,
+                        999999999,
+                        1
+                ));
+            });
+        }
+    }
+
+    public static JavaPlugin getPlugin() { return plugin; }
+    public static LuckPerms getLPAPI() { return lpapi; }
+    public static Database getDatabase() { return database; }
+
+}
