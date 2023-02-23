@@ -1,0 +1,5 @@
+blockFromPlacing:
+  - bedrock
+  - barrier
+  - end_portal_frame
+  - ender_dragon_spawn_egg

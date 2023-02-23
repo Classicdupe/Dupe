@@ -1,21 +1,35 @@
 package xyz.prorickey.classicdupe;
 
-import net.luckperms.api.LuckPerms;
+import java.util.ArrayList;
+import java.util.List;
+
 import org.bukkit.Bukkit;
+import org.bukkit.Material;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
-import xyz.prorickey.classicdupe.commands.admin.*;
+
+import net.kyori.adventure.text.minimessage.MiniMessage;
+import net.luckperms.api.LuckPerms;
+import xyz.prorickey.classicdupe.commands.admin.FilterCMD;
+import xyz.prorickey.classicdupe.commands.admin.GamemodeCMD;
+import xyz.prorickey.classicdupe.commands.admin.GmaCMD;
+import xyz.prorickey.classicdupe.commands.admin.GmcCMD;
+import xyz.prorickey.classicdupe.commands.admin.GmsCMD;
+import xyz.prorickey.classicdupe.commands.admin.GmspCMD;
+import xyz.prorickey.classicdupe.commands.admin.SetSpawnCMD;
 import xyz.prorickey.classicdupe.commands.default1.DupeCMD;
 import xyz.prorickey.classicdupe.commands.default1.RandomCMD;
 import xyz.prorickey.classicdupe.commands.default1.SpawnCMD;
 import xyz.prorickey.classicdupe.database.Database;
-import xyz.prorickey.classicdupe.events.*;
-
-import java.util.ArrayList;
-import java.util.List;
+import xyz.prorickey.classicdupe.events.BlockPlace;
+import xyz.prorickey.classicdupe.events.CancelPortalCreation;
+import xyz.prorickey.classicdupe.events.Chat;
+import xyz.prorickey.classicdupe.events.JoinEvent;
+import xyz.prorickey.classicdupe.events.QuitEvent;
+import xyz.prorickey.classicdupe.events.VoidTeleport;
 
 public class ClassicDupe extends JavaPlugin {
 
@@ -26,7 +40,12 @@ public class ClassicDupe extends JavaPlugin {
     @Override
     public void onEnable() {
         plugin = this;
+        Config.init(this);
         database = new Database();
+
+        Config.getConfig().getStringList("blockFromPlacing").forEach(str -> {
+            BlockPlace.bannedToPlaceBcAnnoyingASF.add(Material.valueOf(str));
+        });
 
         RegisteredServiceProvider<LuckPerms> provider = Bukkit.getServicesManager().getRegistration(LuckPerms.class);
         if (provider != null) {
@@ -61,6 +80,7 @@ public class ClassicDupe extends JavaPlugin {
         getServer().getPluginManager().registerEvents(new CancelPortalCreation(), this);
         getServer().getPluginManager().registerEvents(new Chat(), this);
         getServer().getPluginManager().registerEvents(new BlockPlace(), this);
+        getServer().getPluginManager().registerEvents(new VoidTeleport(), this);
     }
 
     @Override
@@ -94,6 +114,26 @@ public class ClassicDupe extends JavaPlugin {
         List<String> list = new ArrayList<>();
         plugin.getServer().getOnlinePlayers().forEach(player -> list.add(player.getName()));
         return list;
+    }
+
+    public static void rawBroadcast(String text) {
+        MiniMessage mm = MiniMessage.miniMessage();
+        plugin.getServer().getOnlinePlayers().forEach(player -> {
+            player.sendMessage(mm.deserialize(Utils.format(text)));
+        });
+    }
+
+    public static Boolean scheduledRestartCanceled = false;
+
+    public static void scheduleRestart() {
+        scheduledRestartCanceled = false;
+        rawBroadcast("&c&lThe server will restart in 60 seconds.");
+        Bukkit.getScheduler().scheduleSyncDelayedTask(plugin, new Runnable() {
+            @Override
+            public void run() {
+                if(!scheduledRestartCanceled) plugin.getServer().shutdown();
+            }
+        }, 1200L);
     }
 
 }

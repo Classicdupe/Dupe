@@ -5,16 +5,12 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockPlaceEvent;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class BlockPlace implements Listener {
 
-    List<Material> bannedToPlaceBcAnnoyingASF = List.of(
-            Material.BEDROCK,
-            Material.BARRIER,
-            Material.END_PORTAL_FRAME,
-            Material.ENDER_DRAGON_SPAWN_EGG
-    );
+    public static List<Material> bannedToPlaceBcAnnoyingASF = new ArrayList();
 
     @EventHandler
     public void onBlockPlace(BlockPlaceEvent e) {
