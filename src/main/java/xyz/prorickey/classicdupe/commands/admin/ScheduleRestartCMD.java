@@ -1,6 +1,5 @@
 package xyz.prorickey.classicdupe.commands.admin;
 
-import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -13,7 +12,7 @@ import xyz.prorickey.classicdupe.Utils;
 import java.util.ArrayList;
 import java.util.List;
 
-public class RestartCMD implements CommandExecutor, TabCompleter {
+public class ScheduleRestartCMD implements CommandExecutor, TabCompleter {
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
         if(args.length > 0 && args[0].equals("cancel") && ClassicDupe.restartInProgress) {
@@ -22,13 +21,8 @@ public class RestartCMD implements CommandExecutor, TabCompleter {
             ClassicDupe.rawBroadcast("&aThe server restart has been cancelled");
             return true;
         }
-        try {
-            ClassicDupe.scheduleRestart();
-            sender.sendMessage(Utils.format("&aThe server will restart in 60 seconds"));
-        } catch (InterruptedException e) {
-            Bukkit.getLogger().severe(e.getMessage());
-            sender.sendMessage(Utils.format("&cThere was an error restarting the server."));
-        }
+        ClassicDupe.scheduleRestart();
+        sender.sendMessage(Utils.format("&aThe server will restart in 60 seconds"));
         return true;
     }
 

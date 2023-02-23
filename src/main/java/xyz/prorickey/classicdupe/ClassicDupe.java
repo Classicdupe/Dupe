@@ -12,7 +12,6 @@ import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
 
-import net.kyori.adventure.text.minimessage.MiniMessage;
 import net.luckperms.api.LuckPerms;
 import xyz.prorickey.classicdupe.commands.admin.*;
 import xyz.prorickey.classicdupe.commands.default1.DupeCMD;
@@ -20,12 +19,7 @@ import xyz.prorickey.classicdupe.commands.default1.RandomCMD;
 import xyz.prorickey.classicdupe.commands.default1.SpawnCMD;
 import xyz.prorickey.classicdupe.commands.moderator.MutechatCMD;
 import xyz.prorickey.classicdupe.database.Database;
-import xyz.prorickey.classicdupe.events.BlockPlace;
-import xyz.prorickey.classicdupe.events.CancelPortalCreation;
-import xyz.prorickey.classicdupe.events.Chat;
-import xyz.prorickey.classicdupe.events.JoinEvent;
-import xyz.prorickey.classicdupe.events.QuitEvent;
-import xyz.prorickey.classicdupe.events.VoidTeleport;
+import xyz.prorickey.classicdupe.events.*;
 
 public class ClassicDupe extends JavaPlugin {
 
@@ -40,13 +34,11 @@ public class ClassicDupe extends JavaPlugin {
         database = new Database();
 
         Config.getConfig().getStringList("blockFromPlacing").forEach(str -> {
-            BlockPlace.bannedToPlaceBcAnnoyingASF.add(Material.valueOf(str));
+            BlockPlace.bannedToPlaceBcAnnoyingASF.add(Material.valueOf(str.toUpperCase()));
         });
 
         RegisteredServiceProvider<LuckPerms> provider = Bukkit.getServicesManager().getRegistration(LuckPerms.class);
-        if (provider != null) {
-            lpapi = provider.getProvider();
-        }
+        if (provider != null) { lpapi = provider.getProvider(); }
 
         enableNightVision();
 
@@ -70,8 +62,8 @@ public class ClassicDupe extends JavaPlugin {
         this.getCommand("gms").setTabCompleter(new GmsCMD());
         this.getCommand("gmsp").setExecutor(new GmspCMD());
         this.getCommand("gmsp").setTabCompleter(new GmspCMD());
-        this.getCommand("restart").setExecutor(new RestartCMD());
-        this.getCommand("restart").setTabCompleter(new RestartCMD());
+        this.getCommand("schedulerestart").setExecutor(new ScheduleRestartCMD());
+        this.getCommand("schedulerestart").setTabCompleter(new ScheduleRestartCMD());
         this.getCommand("mutechat").setExecutor(new MutechatCMD());
         this.getCommand("mutechat").setTabCompleter(new MutechatCMD());
 
@@ -83,11 +75,7 @@ public class ClassicDupe extends JavaPlugin {
         getServer().getPluginManager().registerEvents(new VoidTeleport(), this);
 
         Bukkit.getScheduler().scheduleSyncDelayedTask(this, () -> {
-            try {
-                scheduleRestart();
-            } catch (InterruptedException e) {
-                throw new RuntimeException(e);
-            }
+            scheduleRestart();
         }, 20L * 60L * 60L * 24L);
     }
 
@@ -125,34 +113,35 @@ public class ClassicDupe extends JavaPlugin {
     }
 
     public static void rawBroadcast(String text) {
-        MiniMessage mm = MiniMessage.miniMessage();
         plugin.getServer().getOnlinePlayers().forEach(player -> {
-            player.sendMessage(mm.deserialize(Utils.format(text)));
+            player.sendMessage(Utils.format(text));
         });
     }
 
     public static Boolean scheduledRestartCanceled = false;
     public static Boolean restartInProgress = false;
 
-    public static void scheduleRestart() throws InterruptedException {
+    public static void scheduleRestart() {
         scheduledRestartCanceled = false;
         restartInProgress = true;
         rawBroadcast("&c&lThe server will restart in 60 seconds.");
-        TimeUnit.SECONDS.sleep(30);
-        if(scheduledRestartCanceled) return;
-        rawBroadcast("&c&lThe server will restart in 30 seconds.");
-        TimeUnit.SECONDS.sleep(20);
-        if(scheduledRestartCanceled) return;
-        rawBroadcast("&c&lThe server will restart in 10 seconds.");
-        TimeUnit.SECONDS.sleep(5);
-        if(scheduledRestartCanceled) return;
-        rawBroadcast("&c&lThe server will restart in 5 seconds.");
-        TimeUnit.SECONDS.sleep(5);
-        if(scheduledRestartCanceled) return;
-        rawBroadcast("&c&lThe server is now restarting");
-        if(scheduledRestartCanceled) return;
-        restartInProgress = false;
-        plugin.getServer().shutdown();
+        Bukkit.getScheduler().scheduleSyncDelayedTask(getPlugin(), () -> {
+            if (scheduledRestartCanceled) return;
+            rawBroadcast("&c&lThe server will restart in 30 seconds.");
+        }, 20L * 30L);
+        Bukkit.getScheduler().scheduleSyncDelayedTask(getPlugin(), () -> {
+            if (scheduledRestartCanceled) return;
+            rawBroadcast("&c&lThe server will restart in 10 seconds.");
+        }, 20L * 50L);
+        Bukkit.getScheduler().scheduleSyncDelayedTask(getPlugin(), () -> {
+            if (scheduledRestartCanceled) return;
+            rawBroadcast("&c&lThe server will restart in 5 seconds.");
+        }, 20L * 55L);
+        Bukkit.getScheduler().scheduleSyncDelayedTask(getPlugin(), () -> {
+            if (scheduledRestartCanceled) return;
+            restartInProgress = false;
+            plugin.getServer().shutdown();
+        }, 20L * 60L);
     }
 
 }
