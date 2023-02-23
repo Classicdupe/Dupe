@@ -7,13 +7,15 @@ import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
-import xyz.prorickey.classicdupe.commands.admin.FilterCMD;
-import xyz.prorickey.classicdupe.commands.admin.SetSpawnCMD;
+import xyz.prorickey.classicdupe.commands.admin.*;
 import xyz.prorickey.classicdupe.commands.default1.DupeCMD;
 import xyz.prorickey.classicdupe.commands.default1.RandomCMD;
 import xyz.prorickey.classicdupe.commands.default1.SpawnCMD;
 import xyz.prorickey.classicdupe.database.Database;
 import xyz.prorickey.classicdupe.events.*;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class ClassicDupe extends JavaPlugin {
 
@@ -43,6 +45,16 @@ public class ClassicDupe extends JavaPlugin {
         this.getCommand("spawn").setTabCompleter(new SpawnCMD());
         this.getCommand("setspawn").setExecutor(new SetSpawnCMD());
         this.getCommand("setspawn").setTabCompleter(new SetSpawnCMD());
+        this.getCommand("gamemode").setExecutor(new GamemodeCMD());
+        this.getCommand("gamemode").setTabCompleter(new GamemodeCMD());
+        this.getCommand("gmc").setExecutor(new GmcCMD());
+        this.getCommand("gmc").setTabCompleter(new GmcCMD());
+        this.getCommand("gma").setExecutor(new GmaCMD());
+        this.getCommand("gma").setTabCompleter(new GmaCMD());
+        this.getCommand("gms").setExecutor(new GmsCMD());
+        this.getCommand("gms").setTabCompleter(new GmsCMD());
+        this.getCommand("gmsp").setExecutor(new GmspCMD());
+        this.getCommand("gmsp").setTabCompleter(new GmspCMD());
 
         getServer().getPluginManager().registerEvents(new JoinEvent(), this);
         getServer().getPluginManager().registerEvents(new QuitEvent(), this);
@@ -77,5 +89,11 @@ public class ClassicDupe extends JavaPlugin {
     public static JavaPlugin getPlugin() { return plugin; }
     public static LuckPerms getLPAPI() { return lpapi; }
     public static Database getDatabase() { return database; }
+
+    public static List<String> getOnlinePlayerUsernames() {
+        List<String> list = new ArrayList<>();
+        plugin.getServer().getOnlinePlayers().forEach(player -> list.add(player.getName()));
+        return list;
+    }
 
 }
