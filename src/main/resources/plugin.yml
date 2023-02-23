@@ -49,3 +49,9 @@ commands:
     permission: admin.gamemode.adventure
     description: To change the player's own gamemode or others to adventure mode
     usage: /<command> <player>
+  restart:
+    permission: admin.restart
+    description: To restart the server or cancel a server restart
+  mutechat:
+    permission: mod.mutechat
+    description: To mute or unmute the chat

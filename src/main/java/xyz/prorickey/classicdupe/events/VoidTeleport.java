@@ -10,7 +10,7 @@ public class VoidTeleport implements Listener {
     
     @EventHandler
     public void onPlayerMove(PlayerMoveEvent e) {
-        if(e.getPlayer().getLocation().getBlockY() < -64) {
+        if(e.getPlayer().getLocation().getY() < -64) {
             e.getPlayer().teleport(ClassicDupe.getDatabase().spawn);
         }
     }

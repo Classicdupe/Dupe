@@ -2,6 +2,7 @@ package xyz.prorickey.classicdupe;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
@@ -13,16 +14,11 @@ import org.bukkit.scheduler.BukkitRunnable;
 
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import net.luckperms.api.LuckPerms;
-import xyz.prorickey.classicdupe.commands.admin.FilterCMD;
-import xyz.prorickey.classicdupe.commands.admin.GamemodeCMD;
-import xyz.prorickey.classicdupe.commands.admin.GmaCMD;
-import xyz.prorickey.classicdupe.commands.admin.GmcCMD;
-import xyz.prorickey.classicdupe.commands.admin.GmsCMD;
-import xyz.prorickey.classicdupe.commands.admin.GmspCMD;
-import xyz.prorickey.classicdupe.commands.admin.SetSpawnCMD;
+import xyz.prorickey.classicdupe.commands.admin.*;
 import xyz.prorickey.classicdupe.commands.default1.DupeCMD;
 import xyz.prorickey.classicdupe.commands.default1.RandomCMD;
 import xyz.prorickey.classicdupe.commands.default1.SpawnCMD;
+import xyz.prorickey.classicdupe.commands.moderator.MutechatCMD;
 import xyz.prorickey.classicdupe.database.Database;
 import xyz.prorickey.classicdupe.events.BlockPlace;
 import xyz.prorickey.classicdupe.events.CancelPortalCreation;
@@ -74,6 +70,10 @@ public class ClassicDupe extends JavaPlugin {
         this.getCommand("gms").setTabCompleter(new GmsCMD());
         this.getCommand("gmsp").setExecutor(new GmspCMD());
         this.getCommand("gmsp").setTabCompleter(new GmspCMD());
+        this.getCommand("restart").setExecutor(new RestartCMD());
+        this.getCommand("restart").setTabCompleter(new RestartCMD());
+        this.getCommand("mutechat").setExecutor(new MutechatCMD());
+        this.getCommand("mutechat").setTabCompleter(new MutechatCMD());
 
         getServer().getPluginManager().registerEvents(new JoinEvent(), this);
         getServer().getPluginManager().registerEvents(new QuitEvent(), this);
@@ -81,6 +81,14 @@ public class ClassicDupe extends JavaPlugin {
         getServer().getPluginManager().registerEvents(new Chat(), this);
         getServer().getPluginManager().registerEvents(new BlockPlace(), this);
         getServer().getPluginManager().registerEvents(new VoidTeleport(), this);
+
+        Bukkit.getScheduler().scheduleSyncDelayedTask(this, () -> {
+            try {
+                scheduleRestart();
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
+        }, 20L * 60L * 60L * 24L);
     }
 
     @Override
@@ -124,16 +132,27 @@ public class ClassicDupe extends JavaPlugin {
     }
 
     public static Boolean scheduledRestartCanceled = false;
+    public static Boolean restartInProgress = false;
 
-    public static void scheduleRestart() {
+    public static void scheduleRestart() throws InterruptedException {
         scheduledRestartCanceled = false;
+        restartInProgress = true;
         rawBroadcast("&c&lThe server will restart in 60 seconds.");
-        Bukkit.getScheduler().scheduleSyncDelayedTask(plugin, new Runnable() {
-            @Override
-            public void run() {
-                if(!scheduledRestartCanceled) plugin.getServer().shutdown();
-            }
-        }, 1200L);
+        TimeUnit.SECONDS.sleep(30);
+        if(scheduledRestartCanceled) return;
+        rawBroadcast("&c&lThe server will restart in 30 seconds.");
+        TimeUnit.SECONDS.sleep(20);
+        if(scheduledRestartCanceled) return;
+        rawBroadcast("&c&lThe server will restart in 10 seconds.");
+        TimeUnit.SECONDS.sleep(5);
+        if(scheduledRestartCanceled) return;
+        rawBroadcast("&c&lThe server will restart in 5 seconds.");
+        TimeUnit.SECONDS.sleep(5);
+        if(scheduledRestartCanceled) return;
+        rawBroadcast("&c&lThe server is now restarting");
+        if(scheduledRestartCanceled) return;
+        restartInProgress = false;
+        plugin.getServer().shutdown();
     }
 
 }
