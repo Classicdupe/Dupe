@@ -26,15 +26,10 @@ import xyz.prorickey.classicdupe.database.PlayerDatabase;
 
 import java.util.*;
 
-public class ChatGradientCMD implements CommandExecutor, Listener, TabCompleter {
+public class ChatGradientCMD implements CommandExecutor, Listener {
 
     public static Map<String, GradientProfiles> gradientProfiles = new HashMap<>();
     private static Map<String, Inventory> chatgradientGUIS = new HashMap<>();
-
-    @Override
-    public @Nullable List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
-        return new ArrayList<>();
-    }
 
     public static class GradientProfiles {
         public String gradientFrom;

@@ -61,3 +61,9 @@ commands:
   gradient:
     permission: perks.gradient
     description: To add a little zest to your messages
+  staffchat:
+    permission: mod.staffchat
+    description: To enable or disable staff chat 
+    aliases: 
+      - sc 
+      - schat

@@ -18,6 +18,7 @@ import xyz.prorickey.classicdupe.commands.default1.DupeCMD;
 import xyz.prorickey.classicdupe.commands.default1.RandomCMD;
 import xyz.prorickey.classicdupe.commands.default1.SpawnCMD;
 import xyz.prorickey.classicdupe.commands.moderator.MutechatCMD;
+import xyz.prorickey.classicdupe.commands.moderator.StaffChatCMD;
 import xyz.prorickey.classicdupe.commands.perk.ChatColorCMD;
 import xyz.prorickey.classicdupe.commands.perk.ChatGradientCMD;
 import xyz.prorickey.classicdupe.database.Database;
@@ -71,7 +72,8 @@ public class ClassicDupe extends JavaPlugin {
         this.getCommand("chatcolor").setExecutor(new ChatColorCMD());
         this.getCommand("chatcolor").setTabCompleter(new ChatColorCMD());
         this.getCommand("gradient").setExecutor(new ChatGradientCMD());
-        //this.getCommand("gradient").setTabCompleter(new ChatGradientCMD());
+        this.getCommand("staffchat").setExecutor(new StaffChatCMD());
+        this.getCommand("staffchat").setTabCompleter(new StaffChatCMD());
 
         getServer().getPluginManager().registerEvents(new JoinEvent(), this);
         getServer().getPluginManager().registerEvents(new QuitEvent(), this);

@@ -8,6 +8,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import xyz.prorickey.classicdupe.ClassicDupe;
 import xyz.prorickey.classicdupe.Utils;
+import xyz.prorickey.classicdupe.commands.moderator.StaffChatCMD;
 import xyz.prorickey.classicdupe.commands.perk.ChatColorCMD;
 import xyz.prorickey.classicdupe.commands.perk.ChatGradientCMD;
 
@@ -27,6 +28,19 @@ public class Chat implements Listener {
             e.getPlayer().sendMessage(Utils.format("&cThe chat is currently muted"));
             return;
         }
+
+        if(StaffChatCMD.staffChatPlayers.contains(e.getPlayer())) {
+            e.setCancelled(true);
+            StaffChatCMD.sendToStaffChat(
+                "&8[&cSC&8] " +
+                ((Utils.getPrefix(e.getPlayer()) != null) ? Utils.getPrefix(e.getPlayer()) : "") +
+                e.getPlayer().getName() +
+                Utils.format(" &7\u00BB &a") + 
+                PlainTextComponentSerializer.plainText().serialize(e.message())
+            );
+            return;
+        }
+
         ChatType chatType = ChatType.DEFAULT;
         if(ChatColorCMD.colorProfiles.containsKey(e.getPlayer().getUniqueId().toString())) chatType = ChatType.COLOR;
         if(ChatGradientCMD.gradientProfiles.containsKey(e.getPlayer().getUniqueId().toString())) chatType = ChatType.GRADIENT;
