@@ -10,6 +10,8 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitRunnable;
 import xyz.prorickey.classicdupe.ClassicDupe;
 import xyz.prorickey.classicdupe.Utils;
+import xyz.prorickey.classicdupe.commands.perk.ChatColorCMD;
+import xyz.prorickey.classicdupe.commands.perk.ChatGradientCMD;
 import xyz.prorickey.classicdupe.database.PlayerDatabase;
 
 import java.util.*;
@@ -34,6 +36,13 @@ public class JoinEvent implements Listener {
         if(playerData.randomitem) {
             randomItemList.add(e.getPlayer());
             e.getPlayer().sendMessage(Utils.format("&aEvery &e60 &ayou will recieve a random item. Execute /random to disable or enable this."));
+        }
+        ChatColorCMD.colorProfiles.put(e.getPlayer().getUniqueId().toString(), playerData.chatcolor);
+        if(playerData.gradient) {
+            ChatGradientCMD.gradientProfiles.put(e.getPlayer().getUniqueId().toString(), new ChatGradientCMD.GradientProfiles(
+                    playerData.gradientfrom,
+                    playerData.gradientto
+            ));
         }
         e.joinMessage(Component.text(
                 Utils.format("&8[&a+&8] " +

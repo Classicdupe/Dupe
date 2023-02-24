@@ -18,6 +18,8 @@ import xyz.prorickey.classicdupe.commands.default1.DupeCMD;
 import xyz.prorickey.classicdupe.commands.default1.RandomCMD;
 import xyz.prorickey.classicdupe.commands.default1.SpawnCMD;
 import xyz.prorickey.classicdupe.commands.moderator.MutechatCMD;
+import xyz.prorickey.classicdupe.commands.perk.ChatColorCMD;
+import xyz.prorickey.classicdupe.commands.perk.ChatGradientCMD;
 import xyz.prorickey.classicdupe.database.Database;
 import xyz.prorickey.classicdupe.events.*;
 
@@ -66,6 +68,10 @@ public class ClassicDupe extends JavaPlugin {
         this.getCommand("schedulerestart").setTabCompleter(new ScheduleRestartCMD());
         this.getCommand("mutechat").setExecutor(new MutechatCMD());
         this.getCommand("mutechat").setTabCompleter(new MutechatCMD());
+        this.getCommand("chatcolor").setExecutor(new ChatColorCMD());
+        this.getCommand("chatcolor").setTabCompleter(new ChatColorCMD());
+        this.getCommand("gradient").setExecutor(new ChatGradientCMD());
+        //this.getCommand("gradient").setTabCompleter(new ChatGradientCMD());
 
         getServer().getPluginManager().registerEvents(new JoinEvent(), this);
         getServer().getPluginManager().registerEvents(new QuitEvent(), this);
@@ -73,6 +79,8 @@ public class ClassicDupe extends JavaPlugin {
         getServer().getPluginManager().registerEvents(new Chat(), this);
         getServer().getPluginManager().registerEvents(new BlockPlace(), this);
         getServer().getPluginManager().registerEvents(new VoidTeleport(), this);
+        getServer().getPluginManager().registerEvents(new ChatColorCMD(), this);
+        getServer().getPluginManager().registerEvents(new ChatGradientCMD(), this);
 
         Bukkit.getScheduler().scheduleSyncDelayedTask(this, () -> {
             scheduleRestart();

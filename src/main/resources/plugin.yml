@@ -55,3 +55,9 @@ commands:
   mutechat:
     permission: mod.mutechat
     description: To mute or unmute the chat
+  chatcolor:
+    permission: perks.colorchat
+    description: To change the color of your chat
+  gradient:
+    permission: perks.gradient
+    description: To add a little zest to your messages
