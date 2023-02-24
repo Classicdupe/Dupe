@@ -15,12 +15,15 @@ import org.bukkit.scheduler.BukkitRunnable;
 import net.luckperms.api.LuckPerms;
 import xyz.prorickey.classicdupe.commands.admin.*;
 import xyz.prorickey.classicdupe.commands.default1.DupeCMD;
+import xyz.prorickey.classicdupe.commands.default1.PrivateMessageCMD;
 import xyz.prorickey.classicdupe.commands.default1.RandomCMD;
 import xyz.prorickey.classicdupe.commands.default1.SpawnCMD;
+import xyz.prorickey.classicdupe.commands.moderator.ClearChatCMD;
 import xyz.prorickey.classicdupe.commands.moderator.MutechatCMD;
 import xyz.prorickey.classicdupe.commands.moderator.StaffChatCMD;
 import xyz.prorickey.classicdupe.commands.perk.ChatColorCMD;
 import xyz.prorickey.classicdupe.commands.perk.ChatGradientCMD;
+import xyz.prorickey.classicdupe.commands.perk.RepairCMD;
 import xyz.prorickey.classicdupe.database.Database;
 import xyz.prorickey.classicdupe.events.*;
 
@@ -74,6 +77,11 @@ public class ClassicDupe extends JavaPlugin {
         this.getCommand("gradient").setExecutor(new ChatGradientCMD());
         this.getCommand("staffchat").setExecutor(new StaffChatCMD());
         this.getCommand("staffchat").setTabCompleter(new StaffChatCMD());
+        this.getCommand("repair").setExecutor(new RepairCMD());
+        this.getCommand("clearchat").setExecutor(new ClearChatCMD());
+        this.getCommand("pm").setExecutor(new PrivateMessageCMD());
+        this.getCommand("pm").setTabCompleter(new PrivateMessageCMD());
+        this.getCommand("pmr").setExecutor(new PrivateMessageCMD());
 
         getServer().getPluginManager().registerEvents(new JoinEvent(), this);
         getServer().getPluginManager().registerEvents(new QuitEvent(), this);
@@ -83,10 +91,9 @@ public class ClassicDupe extends JavaPlugin {
         getServer().getPluginManager().registerEvents(new VoidTeleport(), this);
         getServer().getPluginManager().registerEvents(new ChatColorCMD(), this);
         getServer().getPluginManager().registerEvents(new ChatGradientCMD(), this);
+        getServer().getPluginManager().registerEvents(new Stats(), this);
 
-        Bukkit.getScheduler().scheduleSyncDelayedTask(this, () -> {
-            scheduleRestart();
-        }, 20L * 60L * 60L * 24L);
+        Bukkit.getScheduler().scheduleSyncDelayedTask(this, ClassicDupe::scheduleRestart, 20L * 60L * 60L * 24L);
     }
 
     @Override

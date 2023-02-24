@@ -67,3 +67,15 @@ commands:
     aliases: 
       - sc 
       - schat
+  repair:
+    permission: perk.repair
+    description: To repair the item in a players main hand
+  clearchat:
+    permission: mod.clearchat
+    description: To clear the chat
+    aliases:
+      - cc
+  pm:
+    description: To send a private message
+  pmr:
+    description: To reply to a private message

@@ -147,6 +147,43 @@ public class PlayerDatabase {
         }
     }
 
+    public void addKill(String uuid) {
+        try {
+            conn.prepareStatement("UPDATE stats SET kills=kills+1 WHERE uuid='" + uuid +  "'").execute();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public void addDeath(String uuid) {
+        try {
+            conn.prepareStatement("UPDATE stats SET deaths=deaths+1 WHERE uuid='" + uuid +  "'").execute();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public PlayerStats getStats(String uuid) {
+        try {
+            ResultSet set = conn.prepareStatement("SELECT * FROM stats WHERE uuid='" + uuid + "'").executeQuery();
+            if(set.next()) return new PlayerStats(set.getInt("kills"), set.getInt("deaths"));
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return null;
+    }
+
+    public class PlayerStats {
+        public static int kills;
+        public static int deaths;
+        public static int kdr;
+        public PlayerStats(int kills1, int deaths1) {
+            kills = kills1;
+            deaths = deaths1;
+            kdr = kills/deaths;
+        }
+    }
+
     public void initPlayer(Player player) {
         try {
             PreparedStatement stat = conn.prepareStatement("INSERT INTO players(uuid, name, nickname, timesjoined, playtime, randomitem, chatcolor, gradient, gradientfrom, gradientto) VALUES (?, ?, null, 1, 0, true, '&7', false, null, null)");

@@ -1,0 +1,56 @@
+package xyz.prorickey.classicdupe.commands.default1;
+
+import org.bukkit.Bukkit;
+import org.bukkit.command.*;
+import org.bukkit.entity.Player;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+import xyz.prorickey.classicdupe.ClassicDupe;
+import xyz.prorickey.classicdupe.Utils;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+public class PrivateMessageCMD implements CommandExecutor, TabCompleter {
+
+    public static Map<Player, Player> lastInConvo = new HashMap<>();
+
+    @Override
+    public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
+        if(args.length == 0) {
+            sender.sendMessage(Utils.format("&cYou must include a recipient when privately messaging."));
+            return true;
+        }
+        Player recipient = Bukkit.getServer().getPlayer(args[1]);
+        if(recipient == null || !recipient.isOnline()) {
+            sender.sendMessage(Utils.format("&c" + args[1] + " is not currently online."));
+            return true;
+        }
+        String nameOfSender;
+        if(!(sender instanceof Player player)) nameOfSender = "&cConsole&7";
+        else nameOfSender = player.getName();
+        if(args.length < 2) {
+            sender.sendMessage(Utils.format("&cYou must include a message to send them"));
+            return true;
+        }
+        StringBuilder msg = new StringBuilder();
+        for(int i = 1; i < args.length; i++) {
+            msg.append(args[i] + " ");
+        }
+        recipient.sendMessage(Utils.format("&7[PM] &e" + nameOfSender + " &7-> &e" + recipient.getName() + " &8\u00BB &7" + msg.toString().trim()));
+        sender.sendMessage(Utils.format("&7[PM] &e" + nameOfSender + " &7-> &e" + recipient.getName() + " &8\u00BB &7" + msg.toString().trim()));
+        if(sender instanceof Player player) {
+            lastInConvo.put(recipient, player);
+            lastInConvo.put(player, recipient);
+        }
+        return true;
+    }
+
+    @Override
+    public @Nullable List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
+        if(args.length == 1) return Utils.tabCompletionsSearch(args[0], ClassicDupe.getOnlinePlayerUsernames());
+        return new ArrayList<>();
+    }
+}
