@@ -37,7 +37,7 @@ public class PrivateMessageCMD implements CommandExecutor, TabCompleter {
         }
         StringBuilder msg = new StringBuilder();
         for(int i = 1; i < args.length; i++) {
-            msg.append(args[i] + " ");
+            msg.append(args[i]).append(" ");
         }
         recipient.sendMessage(Utils.format("&7[PM] &e" + nameOfSender + " &7-> &e" + recipient.getName() + " &8\u00BB &7" + msg.toString().trim()));
         sender.sendMessage(Utils.format("&7[PM] &e" + nameOfSender + " &7-> &e" + recipient.getName() + " &8\u00BB &7" + msg.toString().trim()));

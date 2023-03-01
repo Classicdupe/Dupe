@@ -1,6 +1,5 @@
 package xyz.prorickey.classicdupe.commands.perk;
 
-import it.unimi.dsi.fastutil.Hash;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
@@ -9,8 +8,6 @@ import org.bukkit.Material;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
-import org.bukkit.command.TabCompleter;
-import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -19,7 +16,6 @@ import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 import xyz.prorickey.classicdupe.ClassicDupe;
 import xyz.prorickey.classicdupe.Utils;
 import xyz.prorickey.classicdupe.database.PlayerDatabase;
@@ -29,7 +25,7 @@ import java.util.*;
 public class ChatGradientCMD implements CommandExecutor, Listener {
 
     public static Map<String, GradientProfiles> gradientProfiles = new HashMap<>();
-    private static Map<String, Inventory> chatgradientGUIS = new HashMap<>();
+    private static final Map<String, Inventory> chatgradientGUIS = new HashMap<>();
 
     public static class GradientProfiles {
         public String gradientFrom;
@@ -46,9 +42,6 @@ public class ChatGradientCMD implements CommandExecutor, Listener {
             sender.sendMessage("&cYou cannot execute this command from console.");
             return true;
         }
-        GradientProfiles playerProfile;
-        if(gradientProfiles.containsKey(p.getUniqueId().toString())) playerProfile = gradientProfiles.get(p.getUniqueId().toString());
-        else playerProfile = new GradientProfiles("", "");
 
         PlayerDatabase.PlayerData pdata = ClassicDupe.getDatabase().getPlayerDatabase().getPlayer(p.getUniqueId().toString());
 

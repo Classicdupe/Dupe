@@ -8,7 +8,6 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabCompleter;
 import org.bukkit.entity.Player;
-import org.bukkit.event.Listener;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -18,7 +17,7 @@ import xyz.prorickey.classicdupe.Utils;
 
 public class StaffChatCMD implements CommandExecutor, TabCompleter {
 
-    public static List<Player> staffChatPlayers = new ArrayList();
+    public static List<Player> staffChatPlayers = new ArrayList<>();
 
     public static void sendToStaffChat(String text) {
         ClassicDupe.getPlugin().getServer().getOnlinePlayers().forEach(p -> {
@@ -41,14 +40,14 @@ public class StaffChatCMD implements CommandExecutor, TabCompleter {
                 p.sendMessage(Component.text(Utils.format("&aTurned on StaffChat")));
             }
         } else {
-            if(args[0].toLowerCase().equals("on")) {
+            if(args[0].equalsIgnoreCase("on")) {
                 if(staffChatPlayers.contains(p)) {
                     p.sendMessage(Component.text(Utils.format("&cYour staffchat is already on")));
                     return true;
                 }
                 staffChatPlayers.add(p);
                 p.sendMessage(Component.text(Utils.format("&aTurned your staffchat on")));
-            } else if(args[0].toLowerCase().equals("off")) {
+            } else if(args[0].equalsIgnoreCase("off")) {
                 if(!staffChatPlayers.contains(p)) {
                     p.sendMessage(Component.text(Utils.format("&cYour staffchat is already off")));
                     return true;
@@ -65,7 +64,7 @@ public class StaffChatCMD implements CommandExecutor, TabCompleter {
     public @Nullable List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command command,
             @NotNull String label, @NotNull String[] args) {
         if(args.length == 1) return List.of("on", "off");
-        return new ArrayList();
+        return new ArrayList<>();
     }
     
 }

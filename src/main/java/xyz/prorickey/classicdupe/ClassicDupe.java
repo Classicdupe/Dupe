@@ -2,7 +2,6 @@ package xyz.prorickey.classicdupe;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
@@ -20,6 +19,7 @@ import xyz.prorickey.classicdupe.commands.default1.RandomCMD;
 import xyz.prorickey.classicdupe.commands.default1.SpawnCMD;
 import xyz.prorickey.classicdupe.commands.moderator.ClearChatCMD;
 import xyz.prorickey.classicdupe.commands.moderator.MutechatCMD;
+import xyz.prorickey.classicdupe.commands.moderator.SpecCMD;
 import xyz.prorickey.classicdupe.commands.moderator.StaffChatCMD;
 import xyz.prorickey.classicdupe.commands.perk.ChatColorCMD;
 import xyz.prorickey.classicdupe.commands.perk.ChatGradientCMD;
@@ -39,9 +39,7 @@ public class ClassicDupe extends JavaPlugin {
         Config.init(this);
         database = new Database();
 
-        Config.getConfig().getStringList("blockFromPlacing").forEach(str -> {
-            BlockPlace.bannedToPlaceBcAnnoyingASF.add(Material.valueOf(str.toUpperCase()));
-        });
+        Config.getConfig().getStringList("blockFromPlacing").forEach(str -> BlockPlace.bannedToPlaceBcAnnoyingASF.add(Material.valueOf(str.toUpperCase())));
 
         RegisteredServiceProvider<LuckPerms> provider = Bukkit.getServicesManager().getRegistration(LuckPerms.class);
         if (provider != null) { lpapi = provider.getProvider(); }
@@ -82,6 +80,10 @@ public class ClassicDupe extends JavaPlugin {
         this.getCommand("pm").setExecutor(new PrivateMessageCMD());
         this.getCommand("pm").setTabCompleter(new PrivateMessageCMD());
         this.getCommand("pmr").setExecutor(new PrivateMessageCMD());
+        this.getCommand("head").setExecutor(new HeadCMD());
+        this.getCommand("head").setTabCompleter(new HeadCMD());
+        this.getCommand("spec").setExecutor(new SpecCMD());
+        this.getCommand("spec").setTabCompleter(new SpecCMD());
 
         getServer().getPluginManager().registerEvents(new JoinEvent(), this);
         getServer().getPluginManager().registerEvents(new QuitEvent(), this);
@@ -109,13 +111,11 @@ public class ClassicDupe extends JavaPlugin {
     private static class NightVisionTask extends BukkitRunnable {
         @Override
         public void run() {
-            Bukkit.getOnlinePlayers().forEach(p -> {
-                p.addPotionEffect(new PotionEffect(
-                        PotionEffectType.NIGHT_VISION,
-                        999999999,
-                        1
-                ));
-            });
+            Bukkit.getOnlinePlayers().forEach(p -> p.addPotionEffect(new PotionEffect(
+                    PotionEffectType.NIGHT_VISION,
+                    999999999,
+                    1
+            )));
         }
     }
 
@@ -130,9 +130,7 @@ public class ClassicDupe extends JavaPlugin {
     }
 
     public static void rawBroadcast(String text) {
-        plugin.getServer().getOnlinePlayers().forEach(player -> {
-            player.sendMessage(Utils.format(text));
-        });
+        plugin.getServer().getOnlinePlayers().forEach(player -> player.sendMessage(Utils.format(text)));
     }
 
     public static Boolean scheduledRestartCanceled = false;

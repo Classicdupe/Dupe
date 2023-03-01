@@ -60,7 +60,7 @@ public class Chat implements Listener {
                             Utils.format(" &7\u00BB " + ChatColorCMD.colorProfiles.get(e.getPlayer().getUniqueId().toString())) +
                             PlainTextComponentSerializer.plainText().serialize(message)
             ));
-        } else if(chatType.equals(ChatType.GRADIENT)) {
+        } else {
             MiniMessage mm = MiniMessage.miniMessage();
             e.renderer((player, sourceDisplayName, message, viewer) -> Component.text(
                     Utils.format((Utils.getPrefix(player) != null) ? Utils.getPrefix(player) : "") +

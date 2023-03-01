@@ -23,9 +23,7 @@ public class DupeCMD implements CommandExecutor, TabCompleter {
         if(args.length > 0) {
             try {
                 dupeNum = Integer.parseInt(args[0]);
-            } catch (NumberFormatException nfe) {
-                dupeNum = 1;
-            }
+            } catch (NumberFormatException ignored) {}
             if(dupeNum < 1) dupeNum = 1;
             if(dupeNum > 6) dupeNum = 6;
         }

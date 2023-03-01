@@ -17,10 +17,10 @@ public class QuitEvent implements Listener {
     @EventHandler
     public void onPlayerQuit(PlayerQuitEvent e) {
         if(JoinEvent.randomTaskMap.get(e.getPlayer()) != null) JoinEvent.randomTaskMap.get(e.getPlayer()).cancel();
-        if(ChatColorCMD.colorProfiles.containsKey(e.getPlayer().getUniqueId().toString())) ChatColorCMD.colorProfiles.remove(e.getPlayer().getUniqueId().toString());
-        if(ChatGradientCMD.gradientProfiles.containsKey(e.getPlayer().getUniqueId().toString())) ChatGradientCMD.gradientProfiles.remove(e.getPlayer().getUniqueId().toString());
-        if(StaffChatCMD.staffChatPlayers.contains(e.getPlayer())) StaffChatCMD.staffChatPlayers.remove(e.getPlayer());
-        if(PrivateMessageCMD.lastInConvo.containsKey(e.getPlayer())) PrivateMessageCMD.lastInConvo.remove(e.getPlayer());
+        ChatColorCMD.colorProfiles.remove(e.getPlayer().getUniqueId().toString());
+        ChatGradientCMD.gradientProfiles.remove(e.getPlayer().getUniqueId().toString());
+        StaffChatCMD.staffChatPlayers.remove(e.getPlayer());
+        PrivateMessageCMD.lastInConvo.remove(e.getPlayer());
         if(PrivateMessageCMD.lastInConvo.containsValue(e.getPlayer())) PrivateMessageCMD.lastInConvo.forEach((sender, recipient) -> PrivateMessageCMD.lastInConvo.remove(sender));
         e.quitMessage(Component.text(
                 Utils.format("&8[&c-&8] " +

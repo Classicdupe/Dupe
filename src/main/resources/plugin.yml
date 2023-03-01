@@ -79,3 +79,9 @@ commands:
     description: To send a private message
   pmr:
     description: To reply to a private message
+  head:
+    description: To get the head of a player
+    permission: admin.head
+  spec:
+    description: To switch between spectator and survival mode as a mod
+    permission: mod.spec

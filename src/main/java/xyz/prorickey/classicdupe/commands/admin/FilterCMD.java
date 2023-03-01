@@ -24,46 +24,49 @@ public class FilterCMD implements CommandExecutor, TabCompleter {
                 return true;
             }
             ClassicDupe.getDatabase().getFilterDatabase().getWordsFromFilter().forEach(filterWord -> {
-                if(filterWord.fullword) sb.append("&c" + filterWord.text + "&7, ");
-                else sb.append("&a" + filterWord.text + "&7, ");
+                if(filterWord.fullword) sb.append("&c").append(filterWord.text).append("&7, ");
+                else sb.append("&a").append(filterWord.text).append("&7, ");
             });
             sb.delete(sb.length() - 4, sb.length() - 1);
             message = message.append(Component.text(Utils.format(sb.toString())));
             sender.sendMessage(message);
             return true;
         }
-        switch(args[0].toLowerCase()) {
-            case "list": {
+        switch (args[0].toLowerCase()) {
+            case "list" -> {
                 Component message = Component.text(Utils.format("&aCurrent Filter Items&7(Fullword in red, Partword in green): "));
                 StringBuilder sb = new StringBuilder();
-                if(ClassicDupe.getDatabase().getFilterDatabase().getWordsFromFilter().size() == 0) {
+                if (ClassicDupe.getDatabase().getFilterDatabase().getWordsFromFilter().size() == 0) {
                     sender.sendMessage(Utils.format("&aThe filter is currently empty."));
                     break;
                 }
                 ClassicDupe.getDatabase().getFilterDatabase().getWordsFromFilter().forEach(filterWord -> {
-                    if(filterWord.fullword) sb.append("&c" + filterWord.text + "&7, ");
-                    else sb.append("&a" + filterWord.text + "&7, ");
+                    if (filterWord.fullword) sb.append("&c").append(filterWord.text).append("&7, ");
+                    else sb.append("&a").append(filterWord.text).append("&7, ");
                 });
                 sb.delete(sb.length() - 4, sb.length() - 1);
                 message = message.append(Component.text(Utils.format(sb.toString())));
                 sender.sendMessage(message);
-                break;
             }
-            case "add": {
-                if(args.length < 3) { sender.sendMessage(Utils.format("&cYou must include a word to add to the filter and if it is the full word or part of a word.")); break; }
-                Boolean successful = ClassicDupe.getDatabase().getFilterDatabase().addWordToFilter(args[1].toLowerCase(), Boolean.parseBoolean(args[2]));
-                if(successful) {
+            case "add" -> {
+                if (args.length < 3) {
+                    sender.sendMessage(Utils.format("&cYou must include a word to add to the filter and if it is the full word or part of a word."));
+                    break;
+                }
+                boolean successful = ClassicDupe.getDatabase().getFilterDatabase().addWordToFilter(args[1].toLowerCase(), Boolean.parseBoolean(args[2]));
+                if (successful) {
                     sender.sendMessage(Utils.format("&aAdded '&e" + args[1] + "&a' to the filter as a &e" + (Boolean.parseBoolean(args[2]) ? "Fullword" : "Partword")));
                 } else {
                     sender.sendMessage(Utils.format("&cThere was an error with adding this word to the filter. Most likely it's already on the filter."));
                 }
-                break;
             }
-            case "remove": {
-                if(args.length < 2) { sender.sendMessage(Utils.format("&cYou must include a word to remove from the filter.")); break; }
+            case "remove" -> {
+                if (args.length < 2) {
+                    sender.sendMessage(Utils.format("&cYou must include a word to remove from the filter."));
+                    break;
+                }
                 ClassicDupe.getDatabase().getFilterDatabase().removeWordFromFilter(args[1].toLowerCase());
                 sender.sendMessage(Utils.format("&aThat word has been removed from the filter."));
-                break;
             }
         }
         return true;

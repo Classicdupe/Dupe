@@ -17,7 +17,7 @@ public class PlayerDatabase {
         this.conn = conn;
     }
 
-    public class PlayerData {
+    public static class PlayerData {
 
         public String uuid;
         public String name;
@@ -62,6 +62,7 @@ public class PlayerDatabase {
             Bukkit.getLogger().severe(e.toString());
         }
         try {
+            assert set != null;
             if(!set.next()) return null;
             return new PlayerData(
                     set.getString("uuid"),
@@ -173,7 +174,7 @@ public class PlayerDatabase {
         return null;
     }
 
-    public class PlayerStats {
+    public static class PlayerStats {
         public static int kills;
         public static int deaths;
         public static int kdr;

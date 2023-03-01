@@ -59,7 +59,7 @@ public class GmaCMD implements CommandExecutor, TabCompleter {
         if(args.length == 1) {
             return Utils.tabCompletionsSearch(args[0], ClassicDupe.getOnlinePlayerUsernames());
         }
-        return new ArrayList();
+        return new ArrayList<>();
     }
 
 }

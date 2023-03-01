@@ -10,7 +10,7 @@ import java.util.List;
 
 public class BlockPlace implements Listener {
 
-    public static List<Material> bannedToPlaceBcAnnoyingASF = new ArrayList();
+    public static List<Material> bannedToPlaceBcAnnoyingASF = new ArrayList<>();
 
     @EventHandler
     public void onBlockPlace(BlockPlaceEvent e) {

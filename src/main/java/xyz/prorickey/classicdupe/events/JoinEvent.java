@@ -54,7 +54,7 @@ public class JoinEvent implements Listener {
 
     public static class RandomItemTask extends BukkitRunnable {
 
-        private Player player;
+        private final Player player;
 
         public RandomItemTask(Player pl) {
             player = pl;

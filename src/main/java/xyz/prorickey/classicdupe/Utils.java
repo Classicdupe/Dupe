@@ -21,7 +21,7 @@ public class Utils {
     public enum TabCompleteType {
         CONTAINS,
         SEARCH,
-        NONE;
+        NONE
     }
 
     public static <TabCompleteType> List<String> tabCompletions(TabCompleteType type, String currentArg, List<String> completions) {

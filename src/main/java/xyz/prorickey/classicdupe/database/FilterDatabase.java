@@ -8,7 +8,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 import java.util.concurrent.atomic.AtomicReference;
 
 public class FilterDatabase {
@@ -88,7 +87,7 @@ public class FilterDatabase {
         return safe.get();
     }
 
-    public class FilterWord {
+    public static class FilterWord {
         public String text;
         public Boolean fullword;
         public FilterWord(String text, Boolean fullword) {
