@@ -17,10 +17,7 @@ import xyz.prorickey.classicdupe.commands.default1.DupeCMD;
 import xyz.prorickey.classicdupe.commands.default1.PrivateMessageCMD;
 import xyz.prorickey.classicdupe.commands.default1.RandomCMD;
 import xyz.prorickey.classicdupe.commands.default1.SpawnCMD;
-import xyz.prorickey.classicdupe.commands.moderator.ClearChatCMD;
-import xyz.prorickey.classicdupe.commands.moderator.MutechatCMD;
-import xyz.prorickey.classicdupe.commands.moderator.SpecCMD;
-import xyz.prorickey.classicdupe.commands.moderator.StaffChatCMD;
+import xyz.prorickey.classicdupe.commands.moderator.*;
 import xyz.prorickey.classicdupe.commands.perk.ChatColorCMD;
 import xyz.prorickey.classicdupe.commands.perk.ChatGradientCMD;
 import xyz.prorickey.classicdupe.commands.perk.RepairCMD;
@@ -84,6 +81,10 @@ public class ClassicDupe extends JavaPlugin {
         this.getCommand("head").setTabCompleter(new HeadCMD());
         this.getCommand("spec").setExecutor(new SpecCMD());
         this.getCommand("spec").setTabCompleter(new SpecCMD());
+        this.getCommand("broadcast").setExecutor(new BroadcastCMD());
+        this.getCommand("broadcast").setTabCompleter(new BroadcastCMD());
+        this.getCommand("sudo").setExecutor(new SudoCMD());
+        this.getCommand("sudo").setTabCompleter(new SudoCMD());
 
         getServer().getPluginManager().registerEvents(new JoinEvent(), this);
         getServer().getPluginManager().registerEvents(new QuitEvent(), this);

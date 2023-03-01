@@ -85,3 +85,9 @@ commands:
   spec:
     description: To switch between spectator and survival mode as a mod
     permission: mod.spec
+  broadcast:
+    description: To broadcast a message to the server
+    permission: mod.broadcast
+  sudo:
+    description: To sudo another player
+    permission: admin.sudo

@@ -2,6 +2,7 @@ package xyz.prorickey.classicdupe;
 
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
+import org.codehaus.plexus.util.StringUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -49,4 +50,9 @@ public class Utils {
     public static List<String> tabCompletionsContains(String currentArg, List<String> completions) { return tabCompletions(TabCompleteType.CONTAINS, currentArg, completions); }
     public static List<String> tabCompletionsSearch(String currentArg, List<String> completions) { return tabCompletions(TabCompleteType.SEARCH, currentArg, completions); }
 
+    public static String centerText(String text) {
+        int maxWidth = 80,
+                spaces = (int) Math.round((maxWidth-1.4*ChatColor.stripColor(text).length())/2);
+        return StringUtils.repeat(" ", spaces)+text;
+    }
 }
