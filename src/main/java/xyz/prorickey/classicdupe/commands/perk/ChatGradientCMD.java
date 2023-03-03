@@ -129,8 +129,8 @@ public class ChatGradientCMD implements CommandExecutor, Listener {
 
     @EventHandler
     public void onInventoryClose(InventoryCloseEvent e) {
-        if(!e.getInventory().equals(chatgradientGUIS.get(e.getPlayer()))) return;
-        chatgradientGUIS.remove(e.getPlayer());
+        if(!e.getInventory().equals(chatgradientGUIS.get(e.getPlayer().getUniqueId().toString()))) return;
+        chatgradientGUIS.remove(e.getPlayer().getUniqueId().toString());
     }
 
 }

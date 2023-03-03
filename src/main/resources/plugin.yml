@@ -91,3 +91,9 @@ commands:
   sudo:
     description: To sudo another player
     permission: admin.sudo
+  pv:
+    description: To open and access different private vaults
+    permission: perk.pv
+  pvadd:
+    description: To add a player vault to a player
+    permission: admin.pvadd

@@ -20,8 +20,10 @@ import xyz.prorickey.classicdupe.commands.default1.SpawnCMD;
 import xyz.prorickey.classicdupe.commands.moderator.*;
 import xyz.prorickey.classicdupe.commands.perk.ChatColorCMD;
 import xyz.prorickey.classicdupe.commands.perk.ChatGradientCMD;
+import xyz.prorickey.classicdupe.commands.perk.PlayerVaultCMD;
 import xyz.prorickey.classicdupe.commands.perk.RepairCMD;
 import xyz.prorickey.classicdupe.database.Database;
+import xyz.prorickey.classicdupe.database.PlayerVaultDatabase;
 import xyz.prorickey.classicdupe.events.*;
 
 public class ClassicDupe extends JavaPlugin {
@@ -29,12 +31,14 @@ public class ClassicDupe extends JavaPlugin {
     public static JavaPlugin plugin;
     public static LuckPerms lpapi;
     public static Database database;
+    public static PlayerVaultDatabase pvdatabase;
 
     @Override
     public void onEnable() {
         plugin = this;
         Config.init(this);
         database = new Database();
+        pvdatabase = new PlayerVaultDatabase(this);
 
         Config.getConfig().getStringList("blockFromPlacing").forEach(str -> BlockPlace.bannedToPlaceBcAnnoyingASF.add(Material.valueOf(str.toUpperCase())));
 
@@ -85,6 +89,10 @@ public class ClassicDupe extends JavaPlugin {
         this.getCommand("broadcast").setTabCompleter(new BroadcastCMD());
         this.getCommand("sudo").setExecutor(new SudoCMD());
         this.getCommand("sudo").setTabCompleter(new SudoCMD());
+        this.getCommand("pv").setExecutor(new PlayerVaultCMD());
+        this.getCommand("pv").setTabCompleter(new PlayerVaultCMD());
+        this.getCommand("pvadd").setExecutor(new PvAddCMD());
+        this.getCommand("pvadd").setTabCompleter(new PvAddCMD());
 
         getServer().getPluginManager().registerEvents(new JoinEvent(), this);
         getServer().getPluginManager().registerEvents(new QuitEvent(), this);
@@ -95,6 +103,7 @@ public class ClassicDupe extends JavaPlugin {
         getServer().getPluginManager().registerEvents(new ChatColorCMD(), this);
         getServer().getPluginManager().registerEvents(new ChatGradientCMD(), this);
         getServer().getPluginManager().registerEvents(new Stats(), this);
+        getServer().getPluginManager().registerEvents(new PlayerVaultCMD(), this);
 
         Bukkit.getScheduler().scheduleSyncDelayedTask(this, ClassicDupe::scheduleRestart, 20L * 60L * 60L * 24L);
     }
@@ -123,6 +132,7 @@ public class ClassicDupe extends JavaPlugin {
     public static JavaPlugin getPlugin() { return plugin; }
     public static LuckPerms getLPAPI() { return lpapi; }
     public static Database getDatabase() { return database; }
+    public static PlayerVaultDatabase getPVDatabase() { return pvdatabase; }
 
     public static List<String> getOnlinePlayerUsernames() {
         List<String> list = new ArrayList<>();
