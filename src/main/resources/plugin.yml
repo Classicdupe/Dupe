@@ -97,3 +97,6 @@ commands:
   pvadd:
     description: To add a player vault to a player
     permission: admin.pvadd
+  invsee:
+    description: TO open and see a player's inventory
+    permission: admin.invsee

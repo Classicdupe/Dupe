@@ -93,6 +93,8 @@ public class ClassicDupe extends JavaPlugin {
         this.getCommand("pv").setTabCompleter(new PlayerVaultCMD());
         this.getCommand("pvadd").setExecutor(new PvAddCMD());
         this.getCommand("pvadd").setTabCompleter(new PvAddCMD());
+        this.getCommand("invsee").setExecutor(new InvseeCMD());
+        this.getCommand("invsee").setTabCompleter(new InvseeCMD());
 
         getServer().getPluginManager().registerEvents(new JoinEvent(), this);
         getServer().getPluginManager().registerEvents(new QuitEvent(), this);
