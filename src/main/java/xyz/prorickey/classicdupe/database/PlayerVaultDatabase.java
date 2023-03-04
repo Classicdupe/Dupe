@@ -15,7 +15,7 @@ import java.util.Map;
 
 public class PlayerVaultDatabase {
 
-    private File dir;
+    private final File dir;
 
     public PlayerVaultDatabase(JavaPlugin plugin) {
         dir = new File(plugin.getDataFolder() + "/pvs/");

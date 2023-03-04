@@ -20,7 +20,7 @@ public class PrivateMessageReplyCMD implements CommandExecutor {
             return true;
         }
         StringBuilder msg = new StringBuilder();
-        for(int i = 0; i < args.length; i++) msg.append(args[i]).append(" ");
+        for (String arg : args) msg.append(arg).append(" ");
         if(PrivateMessageCMD.lastInConvo.containsKey(player)) {
             Player recipient = PrivateMessageCMD.lastInConvo.get(player);
             recipient.sendMessage(Utils.cmdMsg("&7[PM] &e" + player.getName() + " &7-> &e" + recipient.getName() + " &8\u00BB &7" + msg.toString().trim()));

@@ -1,7 +1,6 @@
 package xyz.prorickey.classicdupe.commands.admin;
 
 import org.bukkit.Bukkit;
-import org.bukkit.OfflinePlayer;
 import org.bukkit.command.*;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
@@ -23,15 +22,13 @@ public class SetSpawnCMD implements CommandExecutor, TabCompleter {
             ClassicDupe.getDatabase().setSpawn(p.getLocation());
             p.sendMessage(Utils.cmdMsg("&aSet the spawn location to your location"));
         } else {
-            OfflinePlayer tarj = Bukkit.getOfflinePlayer(args[0]);
-            Player invPlayer = Bukkit.getServer().getPlayer(args[0]);
-            if(invPlayer == null || !invPlayer.isOnline()) {
+            Player tarj = Bukkit.getServer().getPlayer(args[0]);
+            if(tarj == null || !tarj.isOnline()) {
                 sender.sendMessage(Utils.cmdMsg("&e" + args[0] + " &cis not currently online"));
                 return true;
             }
-            Player tarPlayer = Bukkit.getPlayer(tarj.getUniqueId());
-            ClassicDupe.getDatabase().setSpawn(tarPlayer.getLocation());
-            sender.sendMessage(Utils.cmdMsg("&aSet the spawn location to &e" + tarPlayer.getName() + "'s &alocation"));
+            ClassicDupe.getDatabase().setSpawn(tarj.getLocation());
+            sender.sendMessage(Utils.cmdMsg("&aSet the spawn location to &e" + tarj.getName() + "'s &alocation"));
         }
         return true;
     }

@@ -20,12 +20,12 @@ public class Chat implements Listener {
     public void onChat(AsyncChatEvent e) {
         if(!ClassicDupe.getDatabase().getFilterDatabase().checkMessage(PlainTextComponentSerializer.plainText().serialize(e.message()).toLowerCase())) {
             e.setCancelled(true);
-            e.getPlayer().sendMessage(Utils.format("&cYour message has been blocked by the filter."));
+            e.getPlayer().sendMessage(Utils.cmdMsg("&cYour message has been blocked by the filter"));
             return;
         }
         if(mutedChat && !e.getPlayer().hasPermission("mod.mutechat.bypass")) {
             e.setCancelled(true);
-            e.getPlayer().sendMessage(Utils.format("&cThe chat is currently muted"));
+            e.getPlayer().sendMessage(Utils.cmdMsg("&cThe chat is currently muted"));
             return;
         }
 

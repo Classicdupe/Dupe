@@ -26,7 +26,7 @@ public class JoinEvent implements Listener {
         if(ClassicDupe.getDatabase().getPlayerDatabase().getPlayer(e.getPlayer().getUniqueId().toString()) == null) {
             ClassicDupe.getDatabase().getPlayerDatabase().initPlayer(e.getPlayer());
             e.getPlayer().teleport(ClassicDupe.getDatabase().spawn);
-            e.joinMessage(Component.text(Utils.format("&e" + e.getPlayer().getName() + " &aJust joined for the first time! Give them a warm welcome.")));
+            e.joinMessage(Component.text(Utils.format("&e" + e.getPlayer().getName() + " &aJust joined for the first time! Give them a warm welcome")));
             return;
         }
         PlayerDatabase.PlayerData playerData = ClassicDupe.getDatabase().getPlayerDatabase().getPlayer(e.getPlayer().getUniqueId().toString());
@@ -35,7 +35,7 @@ public class JoinEvent implements Listener {
         task.runTaskTimer(ClassicDupe.getPlugin(), 0, 20*60);
         if(playerData.randomitem) {
             randomItemList.add(e.getPlayer());
-            e.getPlayer().sendMessage(Utils.format("&aEvery &e60 &ayou will recieve a random item. Execute /random to disable or enable this."));
+            e.getPlayer().sendMessage(Utils.cmdMsg("&aEvery &e60 &ayou will recieve a random item. Execute /random to disable or enable this"));
         }
         ChatColorCMD.colorProfiles.put(e.getPlayer().getUniqueId().toString(), playerData.chatcolor);
         if(playerData.gradient) {
