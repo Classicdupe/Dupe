@@ -113,7 +113,7 @@ public class ClassicDupe extends JavaPlugin {
         getServer().getPluginManager().registerEvents(new VoidTeleport(), this);
         getServer().getPluginManager().registerEvents(new ChatColorCMD(), this);
         getServer().getPluginManager().registerEvents(new ChatGradientCMD(), this);
-        getServer().getPluginManager().registerEvents(new Stats(), this);
+        getServer().getPluginManager().registerEvents(new DeathEvent(), this);
         getServer().getPluginManager().registerEvents(new PlayerVaultCMD(), this);
         getServer().getPluginManager().registerEvents(new SuffixCMD(), this);
 
