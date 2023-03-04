@@ -144,6 +144,9 @@ commands:
   tpacancel:
     description: To cancel a tpa request sent
     usage: "Usage: /tpacancel"
+  stats:
+    description: To get the stats of a player
+    usage: "Usage: /stats <player>"
 permissions:
   default.spawn.others:
     description: Allows you to teleport others to spawn

@@ -104,6 +104,8 @@ public class ClassicDupe extends JavaPlugin {
         this.getCommand("tpacancel").setTabCompleter(new TpacancelCMD());
         this.getCommand("tpadecline").setExecutor(new TpadeclineCMD());
         this.getCommand("tpadecline").setTabCompleter(new TpadeclineCMD());
+        this.getCommand("stats").setExecutor(new StatsCMD());
+        this.getCommand("stats").setTabCompleter(new StatsCMD());
 
         getServer().getPluginManager().registerEvents(new JoinEvent(), this);
         getServer().getPluginManager().registerEvents(new QuitEvent(), this);

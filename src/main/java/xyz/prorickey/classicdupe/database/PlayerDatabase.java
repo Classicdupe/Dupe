@@ -2,6 +2,7 @@ package xyz.prorickey.classicdupe.database;
 
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
+import org.jetbrains.annotations.Nullable;
 import xyz.prorickey.classicdupe.commands.perk.ChatGradientCMD;
 
 import java.sql.Connection;
@@ -164,6 +165,7 @@ public class PlayerDatabase {
         }
     }
 
+    @Nullable
     public PlayerStats getStats(String uuid) {
         try {
             ResultSet set = conn.prepareStatement("SELECT * FROM stats WHERE uuid='" + uuid + "'").executeQuery();
