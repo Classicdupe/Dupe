@@ -128,7 +128,22 @@ commands:
   trash:
     description: To throw stuff away in the trash
     usage: "Usage: /trash"
+  suffix:
+    description: To change your suffix
+    permission: perks.suffix
+    usage: "Usage: /suffix [suffix]"
+  tpa:
+    description: To ask to teleport to someone
+    usage: "Usage: /tpa <player>"
+  tpaccept:
+    description: To accept a tpa request of someone
+    usage: "Usage: /tpaccept <player>"
+  tpadecline:
+    description: To decline the tpa request of someone
+    usage: "Usage: /tpadecline <player>"
+  tpacancel:
+    description: To cancel a tpa request sent
+    usage: "Usage: /tpacancel"
 permissions:
   default.spawn.others:
     description: Allows you to teleport others to spawn
-    

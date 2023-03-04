@@ -15,10 +15,7 @@ import net.luckperms.api.LuckPerms;
 import xyz.prorickey.classicdupe.commands.admin.*;
 import xyz.prorickey.classicdupe.commands.default1.*;
 import xyz.prorickey.classicdupe.commands.moderator.*;
-import xyz.prorickey.classicdupe.commands.perk.ChatColorCMD;
-import xyz.prorickey.classicdupe.commands.perk.ChatGradientCMD;
-import xyz.prorickey.classicdupe.commands.perk.PlayerVaultCMD;
-import xyz.prorickey.classicdupe.commands.perk.RepairCMD;
+import xyz.prorickey.classicdupe.commands.perk.*;
 import xyz.prorickey.classicdupe.database.Database;
 import xyz.prorickey.classicdupe.database.PlayerVaultDatabase;
 import xyz.prorickey.classicdupe.events.*;
@@ -39,11 +36,13 @@ public class ClassicDupe extends JavaPlugin {
 
         Config.getConfig().getStringList("blockFromPlacing").forEach(str -> BlockPlace.bannedToPlaceBcAnnoyingASF.add(Material.valueOf(str.toUpperCase())));
         Config.getConfig().getStringList("forbiddenDupes").forEach(str -> DupeCMD.forbiddenDupes.add(Material.valueOf(str.toUpperCase())));
+        Config.getConfig().getValues(true).forEach((name, value) -> SuffixCMD.suffixes.put(name, (String) value));
 
         RegisteredServiceProvider<LuckPerms> provider = Bukkit.getServicesManager().getRegistration(LuckPerms.class);
         if (provider != null) { lpapi = provider.getProvider(); }
 
         enableNightVision();
+        enabledTPATask();
 
         this.getCommand("dupe").setExecutor(new DupeCMD());
         this.getCommand("dupe").setTabCompleter(new DupeCMD());
@@ -95,6 +94,16 @@ public class ClassicDupe extends JavaPlugin {
         this.getCommand("invsee").setTabCompleter(new InvseeCMD());
         this.getCommand("trash").setExecutor(new TrashCMD());
         this.getCommand("trash").setTabCompleter(new TrashCMD());
+        this.getCommand("suffix").setExecutor(new SuffixCMD());
+        this.getCommand("suffix").setTabCompleter(new SuffixCMD());
+        this.getCommand("tpa").setExecutor(new TpaCMD());
+        this.getCommand("tpa").setTabCompleter(new TpaCMD());
+        this.getCommand("tpaccept").setExecutor(new TpacceptCMD());
+        this.getCommand("tpaccept").setTabCompleter(new TpacceptCMD());
+        this.getCommand("tpacancel").setExecutor(new TpacancelCMD());
+        this.getCommand("tpacancel").setTabCompleter(new TpacancelCMD());
+        this.getCommand("tpadecline").setExecutor(new TpadeclineCMD());
+        this.getCommand("tpadecline").setTabCompleter(new TpadeclineCMD());
 
         getServer().getPluginManager().registerEvents(new JoinEvent(), this);
         getServer().getPluginManager().registerEvents(new QuitEvent(), this);
@@ -106,6 +115,7 @@ public class ClassicDupe extends JavaPlugin {
         getServer().getPluginManager().registerEvents(new ChatGradientCMD(), this);
         getServer().getPluginManager().registerEvents(new Stats(), this);
         getServer().getPluginManager().registerEvents(new PlayerVaultCMD(), this);
+        getServer().getPluginManager().registerEvents(new SuffixCMD(), this);
 
         Bukkit.getScheduler().scheduleSyncDelayedTask(this, ClassicDupe::scheduleRestart, 20L * 60L * 60L * 24L);
     }
@@ -118,6 +128,24 @@ public class ClassicDupe extends JavaPlugin {
     private static void enableNightVision() {
         NightVisionTask task = new NightVisionTask();
         task.runTaskTimer(ClassicDupe.getPlugin(), 0, 20*5);
+    }
+
+    private static void enabledTPATask() {
+        TPATask task = new TPATask();
+        task.runTaskTimer(ClassicDupe.getPlugin(), 0, 20);
+    }
+
+    private static class TPATask extends BukkitRunnable {
+        @Override
+        public void run() {
+            TpaCMD.tpaRequestTimes.forEach((player, time) -> {
+                if(time + (1000*60) < System.currentTimeMillis()) {
+                    player.sendMessage(Utils.cmdMsg("&cTPA request to &e" + TpaCMD.tpaRequests.get(player).getName() + "&c has timed out"));
+                    TpaCMD.tpaRequests.remove(player);
+                    TpaCMD.tpaRequestTimes.remove(player);
+                }
+            });
+        }
     }
 
     private static class NightVisionTask extends BukkitRunnable {

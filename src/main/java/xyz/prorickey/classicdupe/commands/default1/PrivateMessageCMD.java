@@ -27,9 +27,9 @@ public class PrivateMessageCMD implements CommandExecutor, TabCompleter {
             sender.sendMessage(Utils.cmdMsg("&cYou must include a message to send them"));
             return true;
         }
-        Player recipient = Bukkit.getServer().getPlayer(args[1]);
+        Player recipient = Bukkit.getServer().getPlayer(args[0]);
         if(recipient == null || !recipient.isOnline()) {
-            sender.sendMessage(Utils.cmdMsg("&e" + args[1] + " &cis not currently online"));
+            sender.sendMessage(Utils.cmdMsg("&e" + args[0] + " &cis not currently online"));
             return true;
         }
         String nameOfSender;

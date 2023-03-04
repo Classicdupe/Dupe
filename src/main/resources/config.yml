@@ -6,3 +6,6 @@ blockFromPlacing:
 forbiddenDupes:
   - ender_dragon_spawn_egg
 prefix: "&8[&ai&8]"
+suffix:
+  god: "&6&lGOD"
+  duper: "&d&lDUPER"
