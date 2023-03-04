@@ -20,7 +20,7 @@ public class FilterCMD implements CommandExecutor, TabCompleter {
             Component message = Component.text(Utils.format("&aCurrent Filter Items&7(Fullword in red, Partword in green): "));
             StringBuilder sb = new StringBuilder();
             if(ClassicDupe.getDatabase().getFilterDatabase().getWordsFromFilter().size() == 0) {
-                sender.sendMessage(Utils.format("&aThe filter is currently empty."));
+                sender.sendMessage(Utils.cmdMsg("&aThe filter is currently empty"));
                 return true;
             }
             ClassicDupe.getDatabase().getFilterDatabase().getWordsFromFilter().forEach(filterWord -> {
@@ -37,7 +37,7 @@ public class FilterCMD implements CommandExecutor, TabCompleter {
                 Component message = Component.text(Utils.format("&aCurrent Filter Items&7(Fullword in red, Partword in green): "));
                 StringBuilder sb = new StringBuilder();
                 if (ClassicDupe.getDatabase().getFilterDatabase().getWordsFromFilter().size() == 0) {
-                    sender.sendMessage(Utils.format("&aThe filter is currently empty."));
+                    sender.sendMessage(Utils.cmdMsg("&aThe filter is currently empty"));
                     break;
                 }
                 ClassicDupe.getDatabase().getFilterDatabase().getWordsFromFilter().forEach(filterWord -> {
@@ -50,23 +50,23 @@ public class FilterCMD implements CommandExecutor, TabCompleter {
             }
             case "add" -> {
                 if (args.length < 3) {
-                    sender.sendMessage(Utils.format("&cYou must include a word to add to the filter and if it is the full word or part of a word."));
+                    sender.sendMessage(Utils.cmdMsg("&cYou must include a word to add to the filter and if it is the full word or part of a word"));
                     break;
                 }
                 boolean successful = ClassicDupe.getDatabase().getFilterDatabase().addWordToFilter(args[1].toLowerCase(), Boolean.parseBoolean(args[2]));
                 if (successful) {
-                    sender.sendMessage(Utils.format("&aAdded '&e" + args[1] + "&a' to the filter as a &e" + (Boolean.parseBoolean(args[2]) ? "Fullword" : "Partword")));
+                    sender.sendMessage(Utils.cmdMsg("&aAdded &e" + args[1] + "&a to the filter as a &e" + (Boolean.parseBoolean(args[2]) ? "Fullword" : "Partword")));
                 } else {
-                    sender.sendMessage(Utils.format("&cThere was an error with adding this word to the filter. Most likely it's already on the filter."));
+                    sender.sendMessage(Utils.cmdMsg("&cThere was an error with adding this word to the filter. Most likely it's already on the filter"));
                 }
             }
             case "remove" -> {
                 if (args.length < 2) {
-                    sender.sendMessage(Utils.format("&cYou must include a word to remove from the filter."));
+                    sender.sendMessage(Utils.cmdMsg("&cYou must include a word to remove from the filter"));
                     break;
                 }
                 ClassicDupe.getDatabase().getFilterDatabase().removeWordFromFilter(args[1].toLowerCase());
-                sender.sendMessage(Utils.format("&aThat word has been removed from the filter."));
+                sender.sendMessage(Utils.cmdMsg("&aThat word has been removed from the filter"));
             }
         }
         return true;
@@ -74,11 +74,8 @@ public class FilterCMD implements CommandExecutor, TabCompleter {
 
     @Override
     public @Nullable List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
-        if(args.length == 1) {
-            return List.of("list", "add", "remove");
-        } else if(args.length == 3) {
-            return List.of("true", "false");
-        }
+        if(args.length == 1) return List.of("list", "add", "remove");
+        else if(args.length == 3) return List.of("true", "false");
         return new ArrayList<>();
     }
 }

@@ -18,15 +18,15 @@ public class SudoCMD implements CommandExecutor, TabCompleter {
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
         if(args.length < 1) {
-            sender.sendMessage(Utils.format("&cYou need to provide a player to sudo."));
+            sender.sendMessage(Utils.cmdMsg("&cYou need to provide a player to sudo"));
             return true;
         } else if(args.length == 1) {
-            sender.sendMessage(Utils.format("&cYou need to provide a message or command for the player to execute."));
+            sender.sendMessage(Utils.cmdMsg("&cYou need to provide a message or command for the player to execute"));
             return true;
         } else {
             Player p = Bukkit.getServer().getPlayer(args[0]);
             if(p == null || !p.isOnline()) {
-                sender.sendMessage(Utils.format("&cThat player is not currently on the server"));
+                sender.sendMessage(Utils.cmdMsg("&cThat player is not currently on the server"));
                 return true;
             }
             StringBuilder msg = new StringBuilder();
@@ -34,10 +34,10 @@ public class SudoCMD implements CommandExecutor, TabCompleter {
             String message = msg.toString();
             if(message.startsWith("/")) {
                 p.chat(message);
-                sender.sendMessage(Utils.format("&eMade &6" + p.getName() + "&e execute the command &6" + message));
+                sender.sendMessage(Utils.cmdMsg("&aMade &e" + p.getName() + "&a execute the command &e" + message));
             } else {
                 p.chat(message);
-                sender.sendMessage(Utils.format("&eMade &6" + p.getName() + "&e send the message &6" + message));
+                sender.sendMessage(Utils.cmdMsg("&aMade &e" + p.getName() + "&a send the message &e" + message));
             }
 
         }

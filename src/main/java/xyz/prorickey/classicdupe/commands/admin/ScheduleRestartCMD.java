@@ -22,7 +22,7 @@ public class ScheduleRestartCMD implements CommandExecutor, TabCompleter {
             return true;
         }
         ClassicDupe.scheduleRestart();
-        sender.sendMessage(Utils.format("&aThe server will restart in 60 seconds"));
+        sender.sendMessage(Utils.cmdMsg("&aThe server will restart in 60 seconds"));
         return true;
     }
 

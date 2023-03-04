@@ -30,7 +30,7 @@ public class ChatColorCMD implements CommandExecutor, Listener, TabCompleter {
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
         if(!(sender instanceof Player p)) {
-            sender.sendMessage("&cYou cannot execute this command from console.");
+            sender.sendMessage(Utils.cmdMsg("&cYou cannot execute this command from console"));
             return true;
         }
         String currentColor;
@@ -126,39 +126,39 @@ public class ChatColorCMD implements CommandExecutor, Listener, TabCompleter {
             switch (args[0].toLowerCase()) {
                 case "white" -> {
                     colorProfiles.put(p.getUniqueId().toString(), "&f");
-                    p.sendMessage(Component.text(Utils.format("&aSet your chat color to &fWhite")));
+                    p.sendMessage(Utils.cmdMsg("&aSet your chat color to &fWhite"));
                 }
                 case "pink" -> {
                     colorProfiles.put(p.getUniqueId().toString(), "&d");
-                    p.sendMessage(Component.text(Utils.format("&aSet your chat color to &dPink")));
+                    p.sendMessage(Utils.cmdMsg("&aSet your chat color to &dPink"));
                 }
                 case "red" -> {
                     colorProfiles.put(p.getUniqueId().toString(), "&c");
-                    p.sendMessage(Component.text(Utils.format("&aSet your chat color to &cRed")));
+                    p.sendMessage(Utils.cmdMsg("&aSet your chat color to &cRed"));
                 }
                 case "aqua" -> {
                     colorProfiles.put(p.getUniqueId().toString(), "&b");
-                    p.sendMessage(Component.text(Utils.format("&aSet your chat color to &bAqua")));
+                    p.sendMessage(Utils.cmdMsg("&aSet your chat color to &bAqua"));
                 }
                 case "blue" -> {
                     colorProfiles.put(p.getUniqueId().toString(), "&9");
-                    p.sendMessage(Component.text(Utils.format("&aSet your chat color to &9Blue")));
+                    p.sendMessage(Utils.cmdMsg("&aSet your chat color to &9Blue"));
                 }
                 case "green" -> {
                     colorProfiles.put(p.getUniqueId().toString(), "&a");
-                    p.sendMessage(Component.text(Utils.format("&aSet your chat color to &aGreen")));
+                    p.sendMessage(Utils.cmdMsg("&aSet your chat color to &aGreen"));
                 }
                 case "yellow" -> {
                     colorProfiles.put(p.getUniqueId().toString(), "&e");
-                    p.sendMessage(Component.text(Utils.format("&aSet your chat color to &eYellow")));
+                    p.sendMessage(Utils.cmdMsg("&aSet your chat color to &eYellow"));
                 }
                 case "gold" -> {
                     colorProfiles.put(p.getUniqueId().toString(), "&6");
-                    p.sendMessage(Component.text(Utils.format("&aSet your chat color to &6Gold")));
+                    p.sendMessage(Utils.cmdMsg("&aSet your chat color to &6Gold"));
                 }
                 case "gray" -> {
                     colorProfiles.put(p.getUniqueId().toString(), "&7");
-                    p.sendMessage(Component.text(Utils.format("&aSet your chat color to &7Gray")));
+                    p.sendMessage(Utils.cmdMsg("&aSet your chat color to &7Gray"));
                 }
             }
             ClassicDupe.getDatabase().getPlayerDatabase().setChatColor(p.getUniqueId().toString(), colorProfiles.get(p.getUniqueId().toString()));
@@ -174,39 +174,39 @@ public class ChatColorCMD implements CommandExecutor, Listener, TabCompleter {
         switch (e.getRawSlot()) {
             case 0 -> {
                 colorProfiles.put(p.getUniqueId().toString(), "&f");
-                p.sendMessage(Component.text(Utils.format("&aSet your chat color to &fWhite")));
+                p.sendMessage(Utils.cmdMsg("&aSet your chat color to &fWhite"));
             }
             case 1 -> {
                 colorProfiles.put(p.getUniqueId().toString(), "&d");
-                p.sendMessage(Component.text(Utils.format("&aSet your chat color to &dPink")));
+                p.sendMessage(Utils.cmdMsg("&aSet your chat color to &dPink"));
             }
             case 2 -> {
                 colorProfiles.put(p.getUniqueId().toString(), "&c");
-                p.sendMessage(Component.text(Utils.format("&aSet your chat color to &cRed")));
+                p.sendMessage(Utils.cmdMsg("&aSet your chat color to &cRed"));
             }
             case 3 -> {
                 colorProfiles.put(p.getUniqueId().toString(), "&b");
-                p.sendMessage(Component.text(Utils.format("&aSet your chat color to &bAqua")));
+                p.sendMessage(Utils.cmdMsg("&aSet your chat color to &bAqua"));
             }
             case 4 -> {
                 colorProfiles.put(p.getUniqueId().toString(), "&9");
-                p.sendMessage(Component.text(Utils.format("&aSet your chat color to &9Blue")));
+                p.sendMessage(Utils.cmdMsg("&aSet your chat color to &9Blue"));
             }
             case 5 -> {
                 colorProfiles.put(p.getUniqueId().toString(), "&a");
-                p.sendMessage(Component.text(Utils.format("&aSet your chat color to &aGreen")));
+                p.sendMessage(Utils.cmdMsg("&aSet your chat color to &aGreen"));
             }
             case 6 -> {
                 colorProfiles.put(p.getUniqueId().toString(), "&e");
-                p.sendMessage(Component.text(Utils.format("&aSet your chat color to &eYellow")));
+                p.sendMessage(Utils.cmdMsg("&aSet your chat color to &eYellow"));
             }
             case 7 -> {
                 colorProfiles.put(p.getUniqueId().toString(), "&6");
-                p.sendMessage(Component.text(Utils.format("&aSet your chat color to &6Gold")));
+                p.sendMessage(Utils.cmdMsg("&aSet your chat color to &6Gold"));
             }
             case 8 -> {
                 colorProfiles.put(p.getUniqueId().toString(), "&7");
-                p.sendMessage(Component.text(Utils.format("&aSet your chat color to &7Gray")));
+                p.sendMessage(Utils.cmdMsg("&aSet your chat color to &7Gray"));
             }
         }
         ClassicDupe.getDatabase().getPlayerDatabase().setChatColor(p.getUniqueId().toString(), colorProfiles.get(p.getUniqueId().toString()));
@@ -221,9 +221,7 @@ public class ChatColorCMD implements CommandExecutor, Listener, TabCompleter {
 
     @Override
     public @Nullable List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
-        if(args.length == 1) {
-            return List.of("white", "pink", "red", "aqua", "blue", "green", "yellow", "gold", "gray");
-        }
+        if(args.length == 1) return List.of("white", "pink", "red", "aqua", "blue", "green", "yellow", "gold", "gray");
         return new ArrayList<>();
     }
 }

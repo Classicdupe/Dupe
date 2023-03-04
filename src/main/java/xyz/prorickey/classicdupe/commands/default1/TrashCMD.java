@@ -18,7 +18,7 @@ public class TrashCMD implements CommandExecutor, TabCompleter {
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
         if(!(sender instanceof Player p)) {
-            sender.sendMessage(Utils.format("&cYou cannot execute this command from console"));
+            sender.sendMessage(Utils.cmdMsg("&cYou cannot execute this command from console"));
             return true;
         }
         Inventory trash = Bukkit.createInventory(null, 54, Utils.format("&c&lTrash"));

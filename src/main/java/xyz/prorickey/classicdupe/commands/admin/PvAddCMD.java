@@ -18,20 +18,22 @@ public class PvAddCMD implements CommandExecutor, TabCompleter {
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
         if(args.length < 1) {
-            sender.sendMessage(Utils.format("&cPlease include a player to add a player vault to."));
+            sender.sendMessage(Utils.cmdMsg("&cPlease include a player to add a player vault to"));
             return true;
         }
         OfflinePlayer tarj = Bukkit.getOfflinePlayer(args[0]);
         if(tarj == null) {
-            sender.sendMessage(Utils.format("&cThat player does not exist."));
+            sender.sendMessage(Utils.cmdMsg("&cThat player does not exist"));
             return true;
         }
         ClassicDupe.getPVDatabase().addVault(tarj.getUniqueId().toString());
+        Utils.cmdMsg("&aGave &e" + tarj.getName() + "&a one vault");
         return true;
     }
 
     @Override
     public @Nullable List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
+        if(args.length == 1) return Utils.tabCompletionsSearch(args[0], ClassicDupe.getOnlinePlayerUsernames());
         return new ArrayList<>();
     }
 }

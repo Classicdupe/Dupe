@@ -15,14 +15,14 @@ public class RepairCMD implements CommandExecutor {
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
         if(!(sender instanceof Player p)) {
-            sender.sendMessage(Component.text(Utils.format("&cYou cannot execute this command from console")));
+            sender.sendMessage(Utils.cmdMsg("&cYou cannot execute this command from console"));
             return true;
         }
         p.getInventory().getItemInMainHand().editMeta(meta -> {
-            if(!(meta instanceof Damageable dmeta)) p.sendMessage(Utils.format("&cYou cannot repair that item"));
+            if(!(meta instanceof Damageable dmeta)) p.sendMessage(Utils.cmdMsg("&cYou cannot repair that item"));
             else {
                 dmeta.setDamage(0);
-                p.sendMessage(Utils.format("&aRepaired item in main hand."));
+                p.sendMessage(Utils.cmdMsg("&aRepaired item in main hand"));
             }
         });
         return true;

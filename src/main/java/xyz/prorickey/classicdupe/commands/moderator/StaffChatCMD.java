@@ -28,32 +28,32 @@ public class StaffChatCMD implements CommandExecutor, TabCompleter {
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
         if(!(sender instanceof Player p)) {
-            sender.sendMessage(Component.text(Utils.format("&cYou cannot execute this command from console.")));
+            sender.sendMessage(Utils.cmdMsg("&cYou cannot execute this command from console."));
             return true;
         }
         if(args.length == 0) {
             if(staffChatPlayers.contains(p)) {
                 staffChatPlayers.remove(p);
-                p.sendMessage(Component.text(Utils.format("&cTurned off StaffChat")));
+                p.sendMessage(Utils.cmdMsg("&cTurned off StaffChat"));
             } else {
                 staffChatPlayers.add(p);
-                p.sendMessage(Component.text(Utils.format("&aTurned on StaffChat")));
+                p.sendMessage(Utils.cmdMsg("&aTurned on StaffChat"));
             }
         } else {
             if(args[0].equalsIgnoreCase("on")) {
                 if(staffChatPlayers.contains(p)) {
-                    p.sendMessage(Component.text(Utils.format("&cYour staffchat is already on")));
+                    p.sendMessage(Utils.cmdMsg("&cYour staffchat is already on"));
                     return true;
                 }
                 staffChatPlayers.add(p);
-                p.sendMessage(Component.text(Utils.format("&aTurned your staffchat on")));
+                p.sendMessage(Component.text(Utils.cmdMsg("&aTurned your staffchat on")));
             } else if(args[0].equalsIgnoreCase("off")) {
                 if(!staffChatPlayers.contains(p)) {
-                    p.sendMessage(Component.text(Utils.format("&cYour staffchat is already off")));
+                    p.sendMessage(Utils.cmdMsg("&cYour staffchat is already off"));
                     return true;
                 }
                 staffChatPlayers.remove(p);
-                p.sendMessage(Component.text(Utils.format("&aTurned your staffchat off")));
+                p.sendMessage(Utils.cmdMsg("&aTurned your staffchat off"));
             }
         }
         return true;
@@ -61,8 +61,7 @@ public class StaffChatCMD implements CommandExecutor, TabCompleter {
     }
 
     @Override
-    public @Nullable List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command command,
-            @NotNull String label, @NotNull String[] args) {
+    public @Nullable List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
         if(args.length == 1) return List.of("on", "off");
         return new ArrayList<>();
     }

@@ -32,17 +32,17 @@ public class PlayerVaultCMD implements CommandExecutor, TabCompleter, Listener {
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
         if(!(sender instanceof Player p)) {
-            sender.sendMessage(Utils.format("&cYou cannot execute that command from console."));
+            sender.sendMessage(Utils.cmdMsg("&cYou cannot execute that command from console"));
             return true;
         }
         if(args.length == 0) {
-            p.sendMessage(Utils.format("&cYou must include which vault you would like to open"));
+            p.sendMessage(Utils.cmdMsg("&cYou must include which vault you would like to open"));
             return true;
         }
         int vault = Integer.parseInt(args[0]);
         Map<Integer, ItemStack> vaultMap = ClassicDupe.getPVDatabase().getVault(p.getUniqueId().toString(), vault);
         if(vaultMap == null) {
-            p.sendMessage(Utils.format("&cYou do not have access to that vault."));
+            p.sendMessage(Utils.cmdMsg("&cYou do not have access to that vault"));
             return true;
         }
         Inventory vaultGUI = Bukkit.createInventory(null, 54, Utils.format("&9&lVault #" + vault));

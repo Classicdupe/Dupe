@@ -1,5 +1,7 @@
 package xyz.prorickey.classicdupe.commands.admin;
 
+import org.bukkit.Bukkit;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.command.*;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
@@ -13,15 +15,30 @@ import java.util.List;
 public class SetSpawnCMD implements CommandExecutor, TabCompleter {
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
-        if(sender instanceof ConsoleCommandSender) return false;
-        Player player = (Player) sender;
-        ClassicDupe.getDatabase().setSpawn(player.getLocation());
-        player.sendMessage(Utils.format("&aSet the spawn location to your location."));
+        if(args.length == 0) {
+            if(!(sender instanceof Player p)) {
+                sender.sendMessage(Utils.cmdMsg("&cYou cannot execute this command from console"));
+                return true;
+            }
+            ClassicDupe.getDatabase().setSpawn(p.getLocation());
+            p.sendMessage(Utils.cmdMsg("&aSet the spawn location to your location"));
+        } else {
+            OfflinePlayer tarj = Bukkit.getOfflinePlayer(args[0]);
+            Player invPlayer = Bukkit.getServer().getPlayer(args[0]);
+            if(invPlayer == null || !invPlayer.isOnline()) {
+                sender.sendMessage(Utils.cmdMsg("&e" + args[0] + " &cis not currently online"));
+                return true;
+            }
+            Player tarPlayer = Bukkit.getPlayer(tarj.getUniqueId());
+            ClassicDupe.getDatabase().setSpawn(tarPlayer.getLocation());
+            sender.sendMessage(Utils.cmdMsg("&aSet the spawn location to &e" + tarPlayer.getName() + "'s &alocation"));
+        }
         return true;
     }
 
     @Override
     public @Nullable List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
+        if(args.length == 1) return Utils.tabCompletionsSearch(args[0], ClassicDupe.getOnlinePlayerUsernames());
         return new ArrayList<>();
     }
 }

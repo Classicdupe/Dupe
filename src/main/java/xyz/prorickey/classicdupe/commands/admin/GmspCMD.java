@@ -18,47 +18,45 @@ public class GmspCMD implements CommandExecutor, TabCompleter {
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String s, @NotNull String[] args) {
         if(args.length < 1) {
             if(sender instanceof ConsoleCommandSender) {
-                sender.sendMessage(Utils.format("&cYou cannot change console's gamemode."));
+                sender.sendMessage(Utils.cmdMsg("&cYou cannot change console's gamemode"));
                 return true;
             }
             Player p = (Player) sender;
             if(!p.hasPermission("admin.gamemode.spectator")) {
-                sender.sendMessage("&cYou do not have permission to change your gamemode to spectator mode.");
+                sender.sendMessage("&cYou do not have permission to change your gamemode to spectator mode");
                 return true;
             }
             if(p.getGameMode() == GameMode.SPECTATOR) {
-                sender.sendMessage(Utils.format("&cYou're already in spectator mode."));
+                sender.sendMessage(Utils.cmdMsg("&cYou're already in spectator mode"));
                 return true;
             }
             p.setGameMode(GameMode.SPECTATOR);
-            p.sendMessage(Utils.format("&eSet your gamemode to &aspectator &emode."));
+            p.sendMessage(Utils.cmdMsg("&aSet your gamemode to &espectator &amode"));
             return true;
         } else {
             Player p = Bukkit.getServer().getPlayer(args[0]);
             if(p == null || !p.isOnline()) {
-                sender.sendMessage(Utils.format("&c" + args[0] + " is not currently online."));
+                sender.sendMessage(Utils.cmdMsg("&c" + args[0] + " is not currently online"));
                 return true;
             }
             if(!sender.hasPermission("admin.gamemode.spectator.others") && !(sender instanceof ConsoleCommandSender)) {
-                sender.sendMessage(Utils.format("&cYou do not have permission to set other player's gamemode to spectator."));
+                sender.sendMessage(Utils.cmdMsg("&cYou do not have permission to set other player's gamemode to spectator"));
                 return true;
             }
             if(p.getGameMode() == GameMode.SPECTATOR) {
-                sender.sendMessage(Utils.format("&6" + p.getName() + "'s &cgamemode is already spectator mode."));
+                sender.sendMessage(Utils.cmdMsg("&e" + p.getName() + "'s &cgamemode is already spectator mode"));
                 return true;
             }
             p.setGameMode(GameMode.SPECTATOR);
-            p.sendMessage(Utils.format("&eYour gamemode has been set to &aspectator&e mode by &6" + sender.getName()));
-            sender.sendMessage(Utils.format("&eSet " + p.getName() + "'s gamemode to &aspectator"));
+            p.sendMessage(Utils.cmdMsg("&aYour gamemode has been set to &espectator&a mode by &e" + sender.getName()));
+            sender.sendMessage(Utils.cmdMsg("&aSet &e" + p.getName() + "'s &agamemode to &espectator"));
             return true;
         }
     }
 
     @Override
     public @Nullable List<String> onTabComplete(@NotNull CommandSender commandSender, @NotNull Command command, @NotNull String s, @NotNull String[] args) {
-        if(args.length == 1) {
-            return Utils.tabCompletionsSearch(args[0], ClassicDupe.getOnlinePlayerUsernames());
-        }
+        if(args.length == 1) return Utils.tabCompletionsSearch(args[0], ClassicDupe.getOnlinePlayerUsernames());
         return new ArrayList<>();
     }
 

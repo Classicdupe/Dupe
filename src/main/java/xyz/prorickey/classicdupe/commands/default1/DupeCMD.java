@@ -5,6 +5,7 @@ import org.bukkit.command.*;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import xyz.prorickey.classicdupe.Utils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,8 +19,10 @@ public class DupeCMD implements CommandExecutor, TabCompleter {
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
         int dupeNum = 1;
-        if(sender instanceof ConsoleCommandSender) return true;
-        Player p = (Player) sender;
+        if(!(sender instanceof Player p)) {
+            sender.sendMessage(Utils.cmdMsg("&cYou cannot execute this command from console"));
+            return true;
+        }
         if(args.length > 0) {
             try {
                 dupeNum = Integer.parseInt(args[0]);
@@ -27,9 +30,7 @@ public class DupeCMD implements CommandExecutor, TabCompleter {
             if(dupeNum < 1) dupeNum = 1;
             if(dupeNum > 6) dupeNum = 6;
         }
-        for(int i = 0; i < dupeNum; i++) {
-            p.getInventory().addItem(p.getInventory().getItemInMainHand());
-        }
+        for(int i = 0; i < dupeNum; i++) p.getInventory().addItem(p.getInventory().getItemInMainHand());
         return true;
     }
 

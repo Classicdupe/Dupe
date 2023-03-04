@@ -17,15 +17,15 @@ public class SpecCMD implements CommandExecutor, TabCompleter {
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
         if(!(sender instanceof Player p)) {
-            sender.sendMessage(Utils.format("&cYou cannot execute this command from console."));
+            sender.sendMessage(Utils.cmdMsg("&cYou cannot execute this command from console"));
             return true;
         }
         if(p.getGameMode() == GameMode.SPECTATOR) {
             p.setGameMode(GameMode.SURVIVAL);
-            p.sendMessage(Utils.format("&aSet your gamemode to survival"));
+            p.sendMessage(Utils.cmdMsg("&aSet your gamemode to survival"));
         } else {
             p.setGameMode(GameMode.SPECTATOR);
-            p.sendMessage(Utils.format("&aSet your gamemode to spectator"));
+            p.sendMessage(Utils.cmdMsg("&aSet your gamemode to spectator"));
         }
         return true;
     }
