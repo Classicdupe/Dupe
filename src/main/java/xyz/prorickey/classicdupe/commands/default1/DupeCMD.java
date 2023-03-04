@@ -5,6 +5,7 @@ import org.bukkit.command.*;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import xyz.prorickey.classicdupe.Config;
 import xyz.prorickey.classicdupe.Utils;
 
 import java.util.ArrayList;
@@ -12,15 +13,17 @@ import java.util.List;
 
 public class DupeCMD implements CommandExecutor, TabCompleter {
 
-    public static List<Material> forbiddenDupes = List.of(
-            Material.DRAGON_EGG
-    );
+    public static List<Material> forbiddenDupes = new ArrayList<>();
 
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
         int dupeNum = 1;
         if(!(sender instanceof Player p)) {
             sender.sendMessage(Utils.cmdMsg("&cYou cannot execute this command from console"));
+            return true;
+        }
+        if(forbiddenDupes.contains(p.getInventory().getItemInMainHand().getType())) {
+            p.sendMessage(Utils.cmdMsg("&cYou cannot dupe that item"));
             return true;
         }
         if(args.length > 0) {

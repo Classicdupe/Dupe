@@ -7,7 +7,6 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.meta.Damageable;
 import org.jetbrains.annotations.NotNull;
 
-import net.kyori.adventure.text.Component;
 import xyz.prorickey.classicdupe.Utils;
 
 public class RepairCMD implements CommandExecutor {

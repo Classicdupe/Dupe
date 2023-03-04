@@ -1,5 +1,6 @@
 package xyz.prorickey.classicdupe.commands.perk;
 
+import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
@@ -11,8 +12,6 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
-import org.bukkit.event.inventory.InventoryMoveItemEvent;
-import org.bukkit.inventory.DoubleChestInventory;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
@@ -45,8 +44,8 @@ public class PlayerVaultCMD implements CommandExecutor, TabCompleter, Listener {
             p.sendMessage(Utils.cmdMsg("&cYou do not have access to that vault"));
             return true;
         }
-        Inventory vaultGUI = Bukkit.createInventory(null, 54, Utils.format("&9&lVault #" + vault));
-        vaultMap.forEach((key, item) -> vaultGUI.setItem(key, item));
+        Inventory vaultGUI = Bukkit.createInventory(null, 54, Component.text(Utils.format("&9&lVault #" + vault)));
+        vaultMap.forEach(vaultGUI::setItem);
         p.openInventory(vaultGUI);
         vaultGuis.put(p.getUniqueId().toString(), vaultGUI);
         return true;

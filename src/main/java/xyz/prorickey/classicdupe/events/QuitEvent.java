@@ -7,7 +7,6 @@ import org.bukkit.event.player.PlayerQuitEvent;
 import xyz.prorickey.classicdupe.ClassicDupe;
 import xyz.prorickey.classicdupe.Utils;
 import xyz.prorickey.classicdupe.commands.default1.PrivateMessageCMD;
-import xyz.prorickey.classicdupe.commands.default1.PrivateMessageReplyCMD;
 import xyz.prorickey.classicdupe.commands.moderator.StaffChatCMD;
 import xyz.prorickey.classicdupe.commands.perk.ChatColorCMD;
 import xyz.prorickey.classicdupe.commands.perk.ChatGradientCMD;

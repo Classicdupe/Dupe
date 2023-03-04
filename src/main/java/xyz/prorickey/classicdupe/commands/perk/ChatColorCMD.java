@@ -215,8 +215,8 @@ public class ChatColorCMD implements CommandExecutor, Listener, TabCompleter {
 
     @EventHandler
     public void onInventoryClose(InventoryCloseEvent e) {
-        if(!e.getInventory().equals(chatcolorGUIS.get(e.getPlayer()))) return;
-        chatcolorGUIS.remove(e.getPlayer());
+        if(!e.getInventory().equals(chatcolorGUIS.get(e.getPlayer().getUniqueId().toString()))) return;
+        chatcolorGUIS.remove(e.getPlayer().getUniqueId().toString());
     }
 
     @Override

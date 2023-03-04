@@ -15,14 +15,13 @@ import java.util.List;
 public class BroadcastCMD implements CommandExecutor, TabCompleter {
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
-        StringBuilder sb = new StringBuilder();
-        sb.append(Utils.format("&a-----------------------------------------------------"));
-        sb.append(Utils.centerText(Utils.format("&eAnnouncement")));
         StringBuilder msg = new StringBuilder();
-        for(int i = 0; i < args.length; i++) msg.append(args[i]).append(" ");
-        sb.append(Utils.format(msg.toString()));
-        sb.append(Utils.format("&a-----------------------------------------------------"));
-        ClassicDupe.getPlugin().getServer().getOnlinePlayers().forEach(p -> p.sendMessage(sb.toString()));
+        for (String arg : args) msg.append(arg).append(" ");
+        String sb = Utils.format("&a-----------------------------------------------------") +
+                Utils.centerText(Utils.format("&eAnnouncement")) +
+                Utils.format(msg.toString()) +
+                Utils.format("&a-----------------------------------------------------");
+        ClassicDupe.getPlugin().getServer().getOnlinePlayers().forEach(p -> p.sendMessage(sb));
         return true;
     }
 

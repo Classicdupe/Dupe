@@ -13,10 +13,7 @@ import org.bukkit.scheduler.BukkitRunnable;
 
 import net.luckperms.api.LuckPerms;
 import xyz.prorickey.classicdupe.commands.admin.*;
-import xyz.prorickey.classicdupe.commands.default1.DupeCMD;
-import xyz.prorickey.classicdupe.commands.default1.PrivateMessageCMD;
-import xyz.prorickey.classicdupe.commands.default1.RandomCMD;
-import xyz.prorickey.classicdupe.commands.default1.SpawnCMD;
+import xyz.prorickey.classicdupe.commands.default1.*;
 import xyz.prorickey.classicdupe.commands.moderator.*;
 import xyz.prorickey.classicdupe.commands.perk.ChatColorCMD;
 import xyz.prorickey.classicdupe.commands.perk.ChatGradientCMD;
@@ -41,6 +38,7 @@ public class ClassicDupe extends JavaPlugin {
         pvdatabase = new PlayerVaultDatabase(this);
 
         Config.getConfig().getStringList("blockFromPlacing").forEach(str -> BlockPlace.bannedToPlaceBcAnnoyingASF.add(Material.valueOf(str.toUpperCase())));
+        Config.getConfig().getStringList("forbiddenDupes").forEach(str -> DupeCMD.forbiddenDupes.add(Material.valueOf(str.toUpperCase())));
 
         RegisteredServiceProvider<LuckPerms> provider = Bukkit.getServicesManager().getRegistration(LuckPerms.class);
         if (provider != null) { lpapi = provider.getProvider(); }
@@ -95,6 +93,8 @@ public class ClassicDupe extends JavaPlugin {
         this.getCommand("pvadd").setTabCompleter(new PvAddCMD());
         this.getCommand("invsee").setExecutor(new InvseeCMD());
         this.getCommand("invsee").setTabCompleter(new InvseeCMD());
+        this.getCommand("trash").setExecutor(new TrashCMD());
+        this.getCommand("trash").setTabCompleter(new TrashCMD());
 
         getServer().getPluginManager().registerEvents(new JoinEvent(), this);
         getServer().getPluginManager().registerEvents(new QuitEvent(), this);

@@ -23,6 +23,10 @@ public class PrivateMessageCMD implements CommandExecutor, TabCompleter {
             sender.sendMessage(Utils.cmdMsg("&cYou must include a recipient when privately messaging"));
             return true;
         }
+        if(args.length < 2) {
+            sender.sendMessage(Utils.cmdMsg("&cYou must include a message to send them"));
+            return true;
+        }
         Player recipient = Bukkit.getServer().getPlayer(args[1]);
         if(recipient == null || !recipient.isOnline()) {
             sender.sendMessage(Utils.cmdMsg("&e" + args[1] + " &cis not currently online"));
@@ -31,10 +35,6 @@ public class PrivateMessageCMD implements CommandExecutor, TabCompleter {
         String nameOfSender;
         if(!(sender instanceof Player player)) nameOfSender = "&cConsole&7";
         else nameOfSender = player.getName();
-        if(args.length < 2) {
-            sender.sendMessage(Utils.cmdMsg("&cYou must include a message to send them"));
-            return true;
-        }
         StringBuilder msg = new StringBuilder();
         for(int i = 1; i < args.length; i++) { msg.append(args[i]).append(" "); }
         recipient.sendMessage(Utils.cmdMsg("&7[PM] &e" + nameOfSender + " &7-> &e" + recipient.getName() + " &8\u00BB &7" + msg.toString().trim()));

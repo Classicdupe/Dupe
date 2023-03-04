@@ -1,5 +1,6 @@
 package xyz.prorickey.classicdupe.commands.default1;
 
+import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -21,7 +22,7 @@ public class TrashCMD implements CommandExecutor, TabCompleter {
             sender.sendMessage(Utils.cmdMsg("&cYou cannot execute this command from console"));
             return true;
         }
-        Inventory trash = Bukkit.createInventory(null, 54, Utils.format("&c&lTrash"));
+        Inventory trash = Bukkit.createInventory(null, 54, Component.text(Utils.format("&c&lTrash")));
         p.openInventory(trash);
         return true;
     }

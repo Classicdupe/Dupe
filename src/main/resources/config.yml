@@ -3,4 +3,6 @@ blockFromPlacing:
   - barrier
   - end_portal_frame
   - ender_dragon_spawn_egg
+forbiddenDupes:
+  - ender_dragon_spawn_egg
 prefix: "&8[&ai&8]"

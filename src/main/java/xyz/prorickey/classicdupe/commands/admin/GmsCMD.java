@@ -32,7 +32,6 @@ public class GmsCMD implements CommandExecutor, TabCompleter {
             }
             p.setGameMode(GameMode.SURVIVAL);
             p.sendMessage(Utils.cmdMsg("&aSet your gamemode to &esurvival &amode"));
-            return true;
         } else {
             Player p = Bukkit.getServer().getPlayer(args[0]);
             if(p == null || !p.isOnline()) {
@@ -50,8 +49,8 @@ public class GmsCMD implements CommandExecutor, TabCompleter {
             p.setGameMode(GameMode.SURVIVAL);
             p.sendMessage(Utils.cmdMsg("&aYour gamemode has been set to &esurvival&a mode by &e" + sender.getName()));
             sender.sendMessage(Utils.cmdMsg("&aSet &e" + p.getName() + "'s &agamemode to &esurvival"));
-            return true;
         }
+        return true;
     }
 
     @Override

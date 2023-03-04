@@ -100,3 +100,5 @@ commands:
   invsee:
     description: TO open and see a player's inventory
     permission: admin.invsee
+  trash:
+    description: To throw stuff away in the trash
