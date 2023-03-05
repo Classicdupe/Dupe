@@ -49,7 +49,7 @@ public class TpaCMD implements CommandExecutor, TabCompleter {
                                 .hoverEvent(HoverEvent.hoverEvent(HoverEvent.Action.SHOW_TEXT, Component.text(Utils.format("&aClick to accept teleport request")))))
                         .append(Component.text(" "))
                         .append(Component.text(Utils.format("&8[&c&lDECLINE&8]"))
-                                .clickEvent(ClickEvent.clickEvent(ClickEvent.Action.RUN_COMMAND, "/tpdecline " + p.getName()))
+                                .clickEvent(ClickEvent.clickEvent(ClickEvent.Action.RUN_COMMAND, "/tpadecline " + p.getName()))
                                 .hoverEvent(HoverEvent.hoverEvent(HoverEvent.Action.SHOW_TEXT, Component.text(Utils.format("&aClick to decline teleport request")))))
         );
         p.sendMessage(Utils.cmdMsg("&aTPA request has been send to &e" + recipient.getName()));
