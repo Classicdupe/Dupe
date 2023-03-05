@@ -56,19 +56,20 @@ public class PlayerVaultCMD implements CommandExecutor, TabCompleter, Listener {
         return new ArrayList<>();
     }
 
-    @EventHandler
+    /*@EventHandler
     public void onInventoryClick(InventoryClickEvent e) {
         if(!e.getInventory().equals(vaultGuis.get(e.getWhoClicked().getUniqueId().toString()))) return;
-        int slot = e.getRawSlot();
         String name = PlainTextComponentSerializer.plainText().serialize(e.getView().title());
         int vault = Integer.parseInt(name.substring(name.length() - 1));
-        ItemStack changedTo = e.getCurrentItem();
-        ClassicDupe.getPVDatabase().setItemInVault(e.getWhoClicked().getUniqueId().toString(), vault, slot, changedTo);
-    }
+        ClassicDupe.getPVDatabase().setVault(e.getWhoClicked().getUniqueId().toString(), vault, e.getInventory());
+    }*/
 
     @EventHandler
     public void onInventoryClose(InventoryCloseEvent e) {
         if(!e.getInventory().equals(vaultGuis.get(e.getPlayer().getUniqueId().toString()))) return;
         vaultGuis.remove(e.getPlayer().getUniqueId().toString());
+        String name = PlainTextComponentSerializer.plainText().serialize(e.getView().title());
+        int vault = Integer.parseInt(name.substring(name.length() - 1));
+        ClassicDupe.getPVDatabase().setVault(e.getPlayer().getUniqueId().toString(), vault, e.getInventory());
     }
 }

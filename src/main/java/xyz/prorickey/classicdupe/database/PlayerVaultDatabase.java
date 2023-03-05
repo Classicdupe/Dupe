@@ -4,6 +4,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.Nullable;
@@ -23,7 +24,7 @@ public class PlayerVaultDatabase {
     }
 
     public void setItemInVault(String uuid, int vault, int pos, ItemStack item) {
-        File playerFile = new File(dir + uuid + ".yml");
+        File playerFile = new File(dir + "/" + uuid + ".yml");
         FileConfiguration yaml = YamlConfiguration.loadConfiguration(playerFile);
         yaml.set("pvs." + vault + "." + pos, item);
         try {
@@ -35,7 +36,7 @@ public class PlayerVaultDatabase {
 
     @Nullable
     public Map<Integer, ItemStack> getVault(String uuid, int num) {
-        File playerFile = new File(dir + uuid + ".yml");
+        File playerFile = new File(dir + "/" + uuid + ".yml");
         if(!playerFile.exists()) return null;
         FileConfiguration yaml = YamlConfiguration.loadConfiguration(playerFile);
         if(yaml.get("pvs." + num) == null) return null;
@@ -44,8 +45,19 @@ public class PlayerVaultDatabase {
         return itemsMap;
     }
 
+    public void setVault(String uuid, int num, Inventory inv) {
+        File playerFile = new File(dir + "/" + uuid + ".yml");
+        FileConfiguration yaml = YamlConfiguration.loadConfiguration(playerFile);
+        for(int i = 0; i < 54; i++) yaml.set("pvs." + num + "." + i, inv.getItem(i) == null ? new ItemStack(Material.AIR) : inv.getItem(i));
+        try {
+            yaml.save(playerFile);
+        } catch (IOException e) {
+            Bukkit.getLogger().severe(e.toString());
+        }
+    }
+
     public void addVault(String uuid) {
-        File playerFile = new File(dir + uuid + ".yml");
+        File playerFile = new File(dir + "/" + uuid + ".yml");
         if(!playerFile.exists()) {
             try {
                 playerFile.createNewFile();
@@ -60,7 +72,7 @@ public class PlayerVaultDatabase {
         }
         else {
             yaml.set("pvnum", yaml.getInt("pvnum") + 1);
-            for(int i = 0; i < 54; i++) yaml.set("pvs." + yaml.getInt("pvnum") + 1 + "." + i, new ItemStack(Material.AIR));
+            for(int i = 0; i < 54; i++) yaml.set("pvs." + yaml.getInt("pvnum") + "." + i, new ItemStack(Material.AIR));
         }
         try {
             yaml.save(playerFile);

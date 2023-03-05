@@ -179,11 +179,15 @@ public class PlayerDatabase {
     public static class PlayerStats {
         public static int kills;
         public static int deaths;
-        public static int kdr;
+        public static String kdr;
         public PlayerStats(int kills1, int deaths1) {
             kills = kills1;
             deaths = deaths1;
-            kdr = kills/deaths;
+            if(deaths == 0) {
+                kdr = "Infinity";
+            } else {
+                kdr = (kills/deaths) + "";
+            }
         }
     }
 
@@ -193,6 +197,7 @@ public class PlayerDatabase {
             stat.setString(1, player.getUniqueId().toString());
             stat.setString(2, player.getName());
             stat.execute();
+            conn.prepareStatement("INSERT INTO stats(uuid, kills, deaths) VALUES('" + player.getUniqueId() + "', 0, 0)").execute();
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }

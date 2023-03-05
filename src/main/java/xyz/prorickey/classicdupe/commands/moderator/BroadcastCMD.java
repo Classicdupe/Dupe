@@ -17,11 +17,12 @@ public class BroadcastCMD implements CommandExecutor, TabCompleter {
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
         StringBuilder msg = new StringBuilder();
         for (String arg : args) msg.append(arg).append(" ");
-        String sb = Utils.format("&a-----------------------------------------------------") +
-                Utils.centerText(Utils.format("&eAnnouncement")) +
-                Utils.format(msg.toString()) +
-                Utils.format("&a-----------------------------------------------------");
-        ClassicDupe.getPlugin().getServer().getOnlinePlayers().forEach(p -> p.sendMessage(sb));
+        ClassicDupe.getPlugin().getServer().getOnlinePlayers().forEach(p -> {
+            p.sendMessage(Utils.format("&a-----------------------------------------------------"));
+            p.sendMessage(Utils.centerText(Utils.format("&eAnnouncement")));
+            p.sendMessage(Utils.format(msg.toString()));
+            p.sendMessage(Utils.format("&a-----------------------------------------------------"));
+        });
         return true;
     }
 

@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
+import org.bukkit.configuration.MemorySection;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.potion.PotionEffect;
@@ -36,7 +37,10 @@ public class ClassicDupe extends JavaPlugin {
 
         Config.getConfig().getStringList("blockFromPlacing").forEach(str -> BlockPlace.bannedToPlaceBcAnnoyingASF.add(Material.valueOf(str.toUpperCase())));
         Config.getConfig().getStringList("forbiddenDupes").forEach(str -> DupeCMD.forbiddenDupes.add(Material.valueOf(str.toUpperCase())));
-        Config.getConfig().getValues(true).forEach((name, value) -> SuffixCMD.suffixes.put(name, (String) value));
+        MemorySection sec = (MemorySection) Config.getConfig().get("suffix");
+        sec.getKeys(true).forEach((name) -> {
+            SuffixCMD.suffixes.put(name, Config.getConfig().getString("suffix." + name));
+        });
 
         RegisteredServiceProvider<LuckPerms> provider = Bukkit.getServicesManager().getRegistration(LuckPerms.class);
         if (provider != null) { lpapi = provider.getProvider(); }

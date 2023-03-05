@@ -18,6 +18,10 @@ import java.util.List;
 public class StatsCMD implements CommandExecutor, TabCompleter {
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
+        if(args.length == 0) {
+            sender.sendMessage(Utils.cmdMsg("&cPlease include a player to get the stats of"));
+            return true;
+        }
         OfflinePlayer tarj = Bukkit.getOfflinePlayer(args[0]);
         PlayerDatabase.PlayerStats stats = ClassicDupe.getDatabase().getPlayerDatabase().getStats(tarj.getUniqueId().toString());
         if(stats == null) {

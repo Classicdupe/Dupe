@@ -10,6 +10,7 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabCompleter;
+import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -41,13 +42,23 @@ public class SuffixCMD implements CommandExecutor, TabCompleter, Listener {
             return true;
         }
         if(args.length == 1) {
+            if(args[0].equalsIgnoreCase("clear")) {
+                if(ClassicDupe.getLPAPI().getUserManager().getUser(p.getUniqueId()).getCachedData().getMetaData().getSuffix() == null) {
+                    p.sendMessage(Utils.cmdMsg("&cYou have no suffix to clear"));
+                    return true;
+                }
+                ClassicDupe.getLPAPI().getUserManager().modifyUser(p.getUniqueId(), user -> user.data().remove(SuffixNode.builder(user.getCachedData().getMetaData().getSuffix(), 250).build()));
+                p.sendMessage(Utils.cmdMsg("&aDisabled your suffix"));
+                return true;
+            }
             if(!suffixes.containsKey(args[0].toLowerCase()) || !p.hasPermission("perk.suffix." + args[0].toLowerCase())) {
                 p.sendMessage(Utils.cmdMsg("&cYou do not have that suffix or it does not exist"));
                 return true;
             }
-            NodeMap nodeMap = ClassicDupe.getLPAPI().getUserManager().getUser(p.getUniqueId()).data();
-            nodeMap.remove(WeightNode.builder(250).build());
-            nodeMap.add(SuffixNode.builder(suffixes.get(args[0].toLowerCase()), 250).build());
+            ClassicDupe.getLPAPI().getUserManager().modifyUser(p.getUniqueId(), user -> {
+                if(user.getCachedData().getMetaData().getSuffix() != null) user.data().remove(SuffixNode.builder(user.getCachedData().getMetaData().getSuffix(), 250).build());
+                user.data().add(SuffixNode.builder(suffixes.get(args[0].toLowerCase()), 250).build());
+            });
             p.sendMessage(Utils.cmdMsg("&aEnabled the " + suffixes.get(args[0].toLowerCase()) + "&a suffix"));
         } else {
             Map<String, String> suffixesAccessTo = new HashMap<>();
@@ -61,7 +72,12 @@ public class SuffixCMD implements CommandExecutor, TabCompleter, Listener {
             Inventory gui = Bukkit.createInventory(null, invNum, Component.text(Utils.format("&9&lSuffix Menu")));
             for(int i = 0; i < invNum; i++) gui.setItem(i, new ItemStack(Material.RED_STAINED_GLASS_PANE));
             Map<Integer, String> slotData = new HashMap<>();
-            AtomicInteger i = new AtomicInteger();
+
+            ItemStack clear = new ItemStack(Material.BARRIER);
+            clear.editMeta(meta -> meta.displayName(Component.text(Utils.format("&cClear Suffix"))));
+            gui.setItem(0, clear);
+
+            AtomicInteger i = new AtomicInteger(1);
             suffixesAccessTo.forEach((name, value) -> {
                 ItemStack item = new ItemStack(Material.NAME_TAG);
                 item.editMeta(meta -> meta.displayName(Component.text(Utils.format(value))));
@@ -81,11 +97,17 @@ public class SuffixCMD implements CommandExecutor, TabCompleter, Listener {
         if(!e.getInventory().equals(guis.get(e.getWhoClicked().getUniqueId().toString()))) return;
         e.setCancelled(true);
         Map<Integer, String> slotData = guiData.get(e.getInventory());
-        if(slotData.containsKey(e.getRawSlot())) {
+        if(e.getRawSlot() == 0) {
+            if(ClassicDupe.getLPAPI().getUserManager().getUser(e.getWhoClicked().getUniqueId()).getCachedData().getMetaData().getSuffix() == null) return;
+            ClassicDupe.getLPAPI().getUserManager().modifyUser(e.getWhoClicked().getUniqueId(), user -> user.data().remove(SuffixNode.builder(user.getCachedData().getMetaData().getSuffix(), 250).build()));
+            e.getWhoClicked().sendMessage(Utils.cmdMsg("&aDisabled your suffix"));
+            e.getInventory().close();
+        } else if(slotData.containsKey(e.getRawSlot())) {
             String suffixName = slotData.get(e.getRawSlot());
-            NodeMap nodeMap = ClassicDupe.getLPAPI().getUserManager().getUser(e.getWhoClicked().getUniqueId()).data();
-            nodeMap.remove(WeightNode.builder(250).build());
-            nodeMap.add(SuffixNode.builder(suffixes.get(suffixName), 250).build());
+            ClassicDupe.getLPAPI().getUserManager().modifyUser(e.getWhoClicked().getUniqueId(), user -> {
+                if(user.getCachedData().getMetaData().getSuffix() != null) user.data().remove(SuffixNode.builder(user.getCachedData().getMetaData().getSuffix(), 250).build());
+                user.data().add(SuffixNode.builder(suffixes.get(suffixName), 250).build());
+            });
             e.getWhoClicked().sendMessage(Utils.cmdMsg("&aEnabled the " + suffixes.get(suffixName) + "&a suffix"));
             e.getInventory().close();
         }
@@ -99,7 +121,9 @@ public class SuffixCMD implements CommandExecutor, TabCompleter, Listener {
     }
     @Override
     public @Nullable List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
-        if(args.length == 1) return Utils.tabCompletionsSearch(args[0], new ArrayList<>(suffixes.keySet()));
+        List<String> list = new ArrayList<>(suffixes.keySet());
+        list.add("clear");
+        if(args.length == 1) return Utils.tabCompletionsSearch(args[0], list);
         return new ArrayList<>();
     }
 }
