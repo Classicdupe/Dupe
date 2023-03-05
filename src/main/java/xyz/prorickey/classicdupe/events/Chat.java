@@ -51,6 +51,7 @@ public class Chat implements Listener {
                             player.getName() +
                             Utils.format((Utils.getSuffix(player) != null) ? " " + Utils.getSuffix(player)  : "") +
                             Utils.format(" &7\u00BB &7")
+
             ).append(message));
         } else if(chatType.equals(ChatType.COLOR)) {
             e.renderer((player, sourceDisplayName, message, viewer) -> Component.text(

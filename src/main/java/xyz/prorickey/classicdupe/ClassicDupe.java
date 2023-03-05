@@ -81,7 +81,8 @@ public class ClassicDupe extends JavaPlugin {
         this.getCommand("clearchat").setExecutor(new ClearChatCMD());
         this.getCommand("pm").setExecutor(new PrivateMessageCMD());
         this.getCommand("pm").setTabCompleter(new PrivateMessageCMD());
-        this.getCommand("pmr").setExecutor(new PrivateMessageCMD());
+        this.getCommand("pmr").setExecutor(new PrivateMessageReplyCMD());
+        this.getCommand("pmr").setTabCompleter(new PrivateMessageReplyCMD());
         this.getCommand("head").setExecutor(new HeadCMD());
         this.getCommand("head").setTabCompleter(new HeadCMD());
         this.getCommand("spec").setExecutor(new SpecCMD());
