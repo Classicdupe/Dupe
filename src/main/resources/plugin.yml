@@ -147,6 +147,9 @@ commands:
   stats:
     description: To get the stats of a player
     usage: "Usage: /stats <player>"
+  discord:
+    description: To get the link to the discord
+    usage: "Usage: /discord"
 permissions:
   default.spawn.others:
     description: Allows you to teleport others to spawn

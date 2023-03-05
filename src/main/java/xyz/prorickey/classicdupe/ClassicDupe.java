@@ -111,6 +111,8 @@ public class ClassicDupe extends JavaPlugin {
         this.getCommand("tpadecline").setTabCompleter(new TpadeclineCMD());
         this.getCommand("stats").setExecutor(new StatsCMD());
         this.getCommand("stats").setTabCompleter(new StatsCMD());
+        this.getCommand("discord").setExecutor(new DiscordCMD());
+        this.getCommand("discord").setTabCompleter(new DiscordCMD());
 
         getServer().getPluginManager().registerEvents(new JoinEvent(), this);
         getServer().getPluginManager().registerEvents(new QuitEvent(), this);
