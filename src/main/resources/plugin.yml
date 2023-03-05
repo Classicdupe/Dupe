@@ -154,6 +154,8 @@ commands:
     description: To open your enderchest
     usage: "Usage: /enderchest"
     permission: perks.enderchest
+    aliases:
+      - ec
 permissions:
   default.spawn.others:
     description: Allows you to teleport others to spawn
