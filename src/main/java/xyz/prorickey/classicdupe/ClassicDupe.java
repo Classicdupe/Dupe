@@ -113,6 +113,8 @@ public class ClassicDupe extends JavaPlugin {
         this.getCommand("stats").setTabCompleter(new StatsCMD());
         this.getCommand("discord").setExecutor(new DiscordCMD());
         this.getCommand("discord").setTabCompleter(new DiscordCMD());
+        this.getCommand("enderchest").setExecutor(new EnderChestCMD());
+        this.getCommand("enderchest").setTabCompleter(new EnderChestCMD());
 
         getServer().getPluginManager().registerEvents(new JoinEvent(), this);
         getServer().getPluginManager().registerEvents(new QuitEvent(), this);

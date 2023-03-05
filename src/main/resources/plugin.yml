@@ -150,6 +150,10 @@ commands:
   discord:
     description: To get the link to the discord
     usage: "Usage: /discord"
+  enderchest:
+    description: To open your enderchest
+    usage: "Usage: /enderchest"
+    permission: perks.enderchest
 permissions:
   default.spawn.others:
     description: Allows you to teleport others to spawn
