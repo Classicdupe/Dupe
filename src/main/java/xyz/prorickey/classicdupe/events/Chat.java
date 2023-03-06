@@ -11,6 +11,7 @@ import xyz.prorickey.classicdupe.Utils;
 import xyz.prorickey.classicdupe.commands.moderator.StaffChatCMD;
 import xyz.prorickey.classicdupe.commands.perk.ChatColorCMD;
 import xyz.prorickey.classicdupe.commands.perk.ChatGradientCMD;
+import xyz.prorickey.classicdupe.database.PlayerDatabase;
 
 public class Chat implements Listener {
 
@@ -45,27 +46,34 @@ public class Chat implements Listener {
         if(ChatColorCMD.colorProfiles.containsKey(e.getPlayer().getUniqueId().toString())) chatType = ChatType.COLOR;
         if(ChatGradientCMD.gradientProfiles.containsKey(e.getPlayer().getUniqueId().toString())) chatType = ChatType.GRADIENT;
 
+        String name = e.getPlayer().getName();
+        PlayerDatabase.PlayerData data = ClassicDupe.getDatabase().getPlayerDatabase().getPlayer(e.getPlayer().getUniqueId().toString());
+        if(data.nickname != null) name = data.nickname;
+
         if(chatType.equals(ChatType.DEFAULT)) {
+            String finalName = name;
             e.renderer((player, sourceDisplayName, message, viewer) -> Component.text(
                     Utils.format((Utils.getPrefix(player) != null) ? Utils.getPrefix(player) : "") +
-                            player.getName() +
+                            Utils.format(finalName) +
                             Utils.format((Utils.getSuffix(player) != null) ? " " + Utils.getSuffix(player)  : "") +
                             Utils.format(" &7\u00BB &7")
 
             ).append(message));
         } else if(chatType.equals(ChatType.COLOR)) {
+            String finalName1 = name;
             e.renderer((player, sourceDisplayName, message, viewer) -> Component.text(
                     Utils.format((Utils.getPrefix(player) != null) ? Utils.getPrefix(player) : "") +
-                            player.getName() +
+                            Utils.format(finalName1) +
                             Utils.format((Utils.getSuffix(player) != null) ? " " + Utils.getSuffix(player)  : "") +
                             Utils.format(" &7\u00BB " + ChatColorCMD.colorProfiles.get(e.getPlayer().getUniqueId().toString())) +
                             PlainTextComponentSerializer.plainText().serialize(message)
             ));
         } else {
             MiniMessage mm = MiniMessage.miniMessage();
+            String finalName2 = name;
             e.renderer((player, sourceDisplayName, message, viewer) -> Component.text(
                     Utils.format((Utils.getPrefix(player) != null) ? Utils.getPrefix(player) : "") +
-                            player.getName() +
+                            Utils.format(finalName2) +
                             Utils.format((Utils.getSuffix(player) != null) ? " " + Utils.getSuffix(player)  : "") +
                             Utils.format(" &7\u00BB ")
             ).append(mm.deserialize( "<gradient:" +

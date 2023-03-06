@@ -83,6 +83,22 @@ public class PlayerDatabase {
         }
     }
 
+    public void setNickname(String uuid, String nickname) {
+        try {
+            conn.prepareStatement("UPDATE players SET nickname='" + nickname + "' WHERE uuid='" + uuid +  "'").execute();
+        } catch (SQLException e) {
+            Bukkit.getLogger().severe(e.toString());
+        }
+    }
+
+    public void resetNickname(String uuid) {
+        try {
+            conn.prepareStatement("UPDATE players SET nickname=null WHERE uuid='" + uuid +  "'").execute();
+        } catch (SQLException e) {
+            Bukkit.getLogger().severe(e.toString());
+        }
+    }
+
     public Boolean swapRandomItem(String uuid) {
         PlayerData data = getPlayer(uuid);
         if(data.randomitem) {
@@ -98,7 +114,7 @@ public class PlayerDatabase {
         try {
             conn.prepareStatement("UPDATE players SET chatcolor='" + color + "' WHERE uuid='" + uuid +  "'").execute();
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            Bukkit.getLogger().severe(e.toString());
         }
     }
 

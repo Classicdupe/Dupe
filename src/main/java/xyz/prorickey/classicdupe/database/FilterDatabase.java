@@ -80,7 +80,6 @@ public class FilterDatabase {
         AtomicReference<Boolean> safe = new AtomicReference<>(true);
         String finalText = text;
         filter.forEach(filterWord -> {
-            System.out.println("'" + finalText + "'");
             if(filterWord.fullword && finalText.contains(" " + filterWord.text + " ")) safe.set(false);
             else if(!filterWord.fullword && finalText.contains(filterWord.text)) safe.set(false);
         });

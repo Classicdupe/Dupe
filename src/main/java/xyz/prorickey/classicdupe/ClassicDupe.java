@@ -38,15 +38,16 @@ public class ClassicDupe extends JavaPlugin {
         Config.getConfig().getStringList("blockFromPlacing").forEach(str -> BlockPlace.bannedToPlaceBcAnnoyingASF.add(Material.valueOf(str.toUpperCase())));
         Config.getConfig().getStringList("forbiddenDupes").forEach(str -> DupeCMD.forbiddenDupes.add(Material.valueOf(str.toUpperCase())));
         MemorySection sec = (MemorySection) Config.getConfig().get("suffix");
-        sec.getKeys(true).forEach((name) -> {
-            SuffixCMD.suffixes.put(name, Config.getConfig().getString("suffix." + name));
-        });
+        assert sec != null;
+        sec.getKeys(true).forEach((name) -> SuffixCMD.suffixes.put(name, Config.getConfig().getString("suffix." + name)));
 
         RegisteredServiceProvider<LuckPerms> provider = Bukkit.getServicesManager().getRegistration(LuckPerms.class);
         if (provider != null) { lpapi = provider.getProvider(); }
 
         enableNightVision();
         enabledTPATask();
+
+        if(Bukkit.getPluginManager().getPlugin("PlaceholderAPI") != null) new ClassicDupeExpansion(this).register();
 
         this.getCommand("dupe").setExecutor(new DupeCMD());
         this.getCommand("dupe").setTabCompleter(new DupeCMD());
@@ -75,6 +76,7 @@ public class ClassicDupe extends JavaPlugin {
         this.getCommand("chatcolor").setExecutor(new ChatColorCMD());
         this.getCommand("chatcolor").setTabCompleter(new ChatColorCMD());
         this.getCommand("gradient").setExecutor(new ChatGradientCMD());
+        this.getCommand("gradient").setTabCompleter(new ChatGradientCMD());
         this.getCommand("staffchat").setExecutor(new StaffChatCMD());
         this.getCommand("staffchat").setTabCompleter(new StaffChatCMD());
         this.getCommand("repair").setExecutor(new RepairCMD());
@@ -115,6 +117,10 @@ public class ClassicDupe extends JavaPlugin {
         this.getCommand("discord").setTabCompleter(new DiscordCMD());
         this.getCommand("enderchest").setExecutor(new EnderChestCMD());
         this.getCommand("enderchest").setTabCompleter(new EnderChestCMD());
+        this.getCommand("rename").setExecutor(new RenameCMD());
+        this.getCommand("rename").setTabCompleter(new RenameCMD());
+        this.getCommand("nickname").setExecutor(new NicknameCMD());
+        this.getCommand("nickname").setTabCompleter(new NicknameCMD());
 
         getServer().getPluginManager().registerEvents(new JoinEvent(), this);
         getServer().getPluginManager().registerEvents(new QuitEvent(), this);
@@ -127,6 +133,7 @@ public class ClassicDupe extends JavaPlugin {
         getServer().getPluginManager().registerEvents(new DeathEvent(), this);
         getServer().getPluginManager().registerEvents(new PlayerVaultCMD(), this);
         getServer().getPluginManager().registerEvents(new SuffixCMD(), this);
+        getServer().getPluginManager().registerEvents(new EntitySpawnEvent(), this);
 
         Bukkit.getScheduler().scheduleSyncDelayedTask(this, ClassicDupe::scheduleRestart, 20L * 60L * 60L * 24L);
     }
@@ -150,7 +157,7 @@ public class ClassicDupe extends JavaPlugin {
         @Override
         public void run() {
             TpaCMD.tpaRequestTimes.forEach((player, time) -> {
-                if(time + (1000*60) < System.currentTimeMillis()) {
+                if(time + (1000*60) < System.currentTimeMillis() && TpaCMD.tpaRequests.containsKey(player)) {
                     player.sendMessage(Utils.cmdMsg("&cTPA request to &e" + TpaCMD.tpaRequests.get(player).getName() + "&c has timed out"));
                     TpaCMD.tpaRequests.remove(player);
                     TpaCMD.tpaRequestTimes.remove(player);

@@ -8,6 +8,7 @@ author: Prorickey
 website: classicdupe.tebex.io
 depend:
   - LuckPerms
+  - PlaceholderAPI
 prefix: ClassicDupe
 commands:
   dupe:
@@ -156,6 +157,14 @@ commands:
     permission: perks.enderchest
     aliases:
       - ec
+  rename:
+    description: To rename an item in your main hand
+    usage: "Usage: /rename <itemname>"
+    permission: perks.rename
+  nickname:
+    description: To change your name in tab and in chat
+    usage: "Usage: /nickname <nickname>"
+    permission: perks.nickname
 permissions:
   default.spawn.others:
     description: Allows you to teleport others to spawn

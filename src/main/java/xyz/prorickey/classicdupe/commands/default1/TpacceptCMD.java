@@ -34,6 +34,7 @@ public class TpacceptCMD implements CommandExecutor, TabCompleter {
             recipient.sendMessage(Utils.cmdMsg("&aTeleported you to &e" + p.getName()));
             p.sendMessage(Utils.cmdMsg("&e" + recipient.getName() + "&a has teleported to you"));
             TpaCMD.tpaRequests.remove(recipient);
+            TpaCMD.tpaRequestTimes.remove(recipient);
         } else {
             p.sendMessage(Utils.cmdMsg("&cThat person has not requested to teleport to you"));
         }
