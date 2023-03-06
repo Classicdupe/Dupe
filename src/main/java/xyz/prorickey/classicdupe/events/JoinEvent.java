@@ -28,9 +28,9 @@ public class JoinEvent implements Listener {
             e.getPlayer().teleport(ClassicDupe.getDatabase().spawn);
             e.joinMessage(Component.text(Utils.format("&e" + e.getPlayer().getName() + " &aJust joined for the first time! Give them a warm welcome")));
             RandomItemTask task = new RandomItemTask(e.getPlayer());
-            task.runTaskTimer(ClassicDupe.getPlugin(), 0, 20*60);
             randomItemList.add(e.getPlayer());
             randomTaskMap.put(e.getPlayer(), task);
+            task.runTaskTimer(ClassicDupe.getPlugin(), 0, 20*60);
             e.getPlayer().sendMessage(Utils.cmdMsg("&aEvery &e60 &ayou will recieve a random item. Execute /random to disable or enable this"));
             return;
         }
