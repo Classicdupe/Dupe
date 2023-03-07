@@ -1,11 +1,15 @@
 package xyz.prorickey.classicdupe;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
+import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.configuration.MemorySection;
+import org.bukkit.entity.Player;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.potion.PotionEffect;
@@ -45,7 +49,9 @@ public class ClassicDupe extends JavaPlugin {
         if (provider != null) { lpapi = provider.getProvider(); }
 
         enableNightVision();
-        enabledTPATask();
+        enableTPATask();
+        enableCombatTask();
+        enableLeaderBoardTask();
 
         if(Bukkit.getPluginManager().getPlugin("PlaceholderAPI") != null) new ClassicDupeExpansion(this).register();
 
@@ -134,6 +140,7 @@ public class ClassicDupe extends JavaPlugin {
         getServer().getPluginManager().registerEvents(new PlayerVaultCMD(), this);
         getServer().getPluginManager().registerEvents(new SuffixCMD(), this);
         getServer().getPluginManager().registerEvents(new EntitySpawnEvent(), this);
+        getServer().getPluginManager().registerEvents(new Combat(), this);
 
         Bukkit.getScheduler().scheduleSyncDelayedTask(this, ClassicDupe::scheduleRestart, 20L * 60L * 60L * 24L);
     }
@@ -148,16 +155,47 @@ public class ClassicDupe extends JavaPlugin {
         task.runTaskTimer(ClassicDupe.getPlugin(), 0, 20*5);
     }
 
-    private static void enabledTPATask() {
+    private static void enableTPATask() {
         TPATask task = new TPATask();
         task.runTaskTimer(ClassicDupe.getPlugin(), 0, 20);
+    }
+
+    private static void enableCombatTask() {
+        CombatTask task = new CombatTask();
+        task.runTaskTimer(ClassicDupe.getPlugin(), 0, 10);
+    }
+
+    private static void enableLeaderBoardTask() {
+        LeaderBoardTask task = new LeaderBoardTask();
+        task.runTaskTimer(ClassicDupe.getPlugin(), 0, 20*60);
+    }
+
+    private static class LeaderBoardTask extends BukkitRunnable {
+        @Override
+        public void run() {
+            database.getPlayerDatabase().reloadLeaderboards();
+        }
+    }
+
+    private static class CombatTask extends BukkitRunnable {
+        @Override
+        public void run() {
+            Map<Player, Long> tempInCombat = Combat.inCombat;
+            tempInCombat.forEach((player, time) -> {
+                if((time + (1000*15)) < System.currentTimeMillis() && Combat.inCombat.containsKey(player)) {
+                    Combat.inCombat.remove(player);
+                    player.sendActionBar(Component.text(Utils.format("&aYou are no longer in combat")));
+                } else player.sendActionBar(Component.text(Utils.format("&cYou are currently in combat")));
+            });
+        }
     }
 
     private static class TPATask extends BukkitRunnable {
         @Override
         public void run() {
-            TpaCMD.tpaRequestTimes.forEach((player, time) -> {
-                if(time + (1000*60) < System.currentTimeMillis() && TpaCMD.tpaRequests.containsKey(player)) {
+            Map<Player, Long> tempTpaRequestTimes = TpaCMD.tpaRequestTimes;
+            tempTpaRequestTimes.forEach((player, time) -> {
+                if((time + (1000*60)) < System.currentTimeMillis() && TpaCMD.tpaRequests.containsKey(player)) {
                     player.sendMessage(Utils.cmdMsg("&cTPA request to &e" + TpaCMD.tpaRequests.get(player).getName() + "&c has timed out"));
                     TpaCMD.tpaRequests.remove(player);
                     TpaCMD.tpaRequestTimes.remove(player);

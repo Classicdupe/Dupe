@@ -9,6 +9,8 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.HashMap;
+import java.util.Map;
 
 public class PlayerDatabase {
 
@@ -52,6 +54,50 @@ public class PlayerDatabase {
             gradient = gradient1;
             gradientfrom = gradientfrom1;
             gradientto = gradientto1;
+        }
+    }
+
+    public static Map<Integer, PlayerData> killsLeaderboard = new HashMap<>();
+    public static Map<Integer, PlayerData> deathsLeaderboard = new HashMap<>();
+
+    public void reloadLeaderboards() {
+        try {
+            ResultSet killsSet = conn.prepareStatement("SELECT * FROM players ORDER BY kills ASC").executeQuery();
+            for(int i = 0; i < 10; i++) {
+                if(killsSet.next()) {
+                    killsLeaderboard.put(i+1, new PlayerData(
+                            killsSet.getString("uuid"),
+                            killsSet.getString("name"),
+                            killsSet.getString("nickname"),
+                            killsSet.getLong("timesjoined"),
+                            killsSet.getLong("playtime"),
+                            killsSet.getBoolean("randomitem"),
+                            killsSet.getString("chatcolor"),
+                            killsSet.getBoolean("gradient"),
+                            killsSet.getString("gradientfrom"),
+                            killsSet.getString("gradientto")
+                    ));
+                }
+            }
+            ResultSet deathsSet = conn.prepareStatement("SELECT * FROM players ORDER BY deaths ASC").executeQuery();
+            for(int i = 0; i < 10; i++) {
+                if(deathsSet.next()) {
+                    deathsLeaderboard .put(i+1, new PlayerData(
+                            deathsSet.getString("uuid"),
+                            deathsSet.getString("name"),
+                            deathsSet.getString("nickname"),
+                            deathsSet.getLong("timesjoined"),
+                            deathsSet.getLong("playtime"),
+                            deathsSet.getBoolean("randomitem"),
+                            deathsSet.getString("chatcolor"),
+                            deathsSet.getBoolean("gradient"),
+                            deathsSet.getString("gradientfrom"),
+                            deathsSet.getString("gradientto")
+                    ));
+                }
+            }
+        } catch (SQLException e) {
+            Bukkit.getLogger().severe(e.toString());
         }
     }
 

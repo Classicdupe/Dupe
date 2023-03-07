@@ -5,12 +5,17 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerMoveEvent;
 
 import xyz.prorickey.classicdupe.ClassicDupe;
+import xyz.prorickey.classicdupe.Utils;
 
 public class VoidTeleport implements Listener {
     
     @EventHandler
     public void onPlayerMove(PlayerMoveEvent e) {
         if(e.getPlayer().getLocation().getY() < -64) {
+            if(Combat.inCombat.containsKey(e.getPlayer())) {
+                ClassicDupe.rawBroadcast("&e" + e.getPlayer().getName() + "&c just jumped into the void while in combat");
+                ClassicDupe.getDatabase().getPlayerDatabase().addDeath(e.getPlayer().getUniqueId().toString());
+            }
             e.getPlayer().teleport(ClassicDupe.getDatabase().spawn);
         }
     }

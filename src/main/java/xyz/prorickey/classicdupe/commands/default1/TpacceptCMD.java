@@ -9,6 +9,7 @@ import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import xyz.prorickey.classicdupe.Utils;
+import xyz.prorickey.classicdupe.events.Combat;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,6 +31,10 @@ public class TpacceptCMD implements CommandExecutor, TabCompleter {
             return true;
         }
         if(TpaCMD.tpaRequests.containsKey(recipient) && TpaCMD.tpaRequests.get(recipient) == p) {
+            if(Combat.inCombat.containsKey(recipient)) {
+                p.sendMessage(Utils.cmdMsg("&cThat player is currently in combat and cannot teleport"));
+                return true;
+            }
             recipient.teleport(p.getLocation());
             recipient.sendMessage(Utils.cmdMsg("&aTeleported you to &e" + p.getName()));
             p.sendMessage(Utils.cmdMsg("&e" + recipient.getName() + "&a has teleported to you"));

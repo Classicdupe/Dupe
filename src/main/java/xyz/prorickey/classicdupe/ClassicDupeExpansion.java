@@ -2,8 +2,12 @@ package xyz.prorickey.classicdupe;
 
 import me.clip.placeholderapi.expansion.PlaceholderExpansion;
 import org.bukkit.OfflinePlayer;
+import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import xyz.prorickey.classicdupe.database.PlayerDatabase;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class ClassicDupeExpansion extends PlaceholderExpansion {
 
@@ -35,4 +39,5 @@ public class ClassicDupeExpansion extends PlaceholderExpansion {
         }
         return null;
     }
+
 }

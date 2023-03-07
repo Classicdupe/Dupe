@@ -26,7 +26,13 @@ public class QuitEvent implements Listener {
                         ClassicDupe.getLPAPI().getUserManager().getUser(e.getPlayer().getUniqueId()).getCachedData().getMetaData().getPrefix() +
                         e.getPlayer().getName())
         ));
-
+        if(Combat.inCombat.containsKey(e.getPlayer())) {
+            ClassicDupe.rawBroadcast("&8[&c-&8] " +
+                    ClassicDupe.getLPAPI().getUserManager().getUser(e.getPlayer().getUniqueId()).getCachedData().getMetaData().getPrefix() +
+                    e.getPlayer().getName() +
+                    " &8| &c&lCOMBAT LOG");
+            ClassicDupe.getDatabase().getPlayerDatabase().addDeath(e.getPlayer().getUniqueId().toString());
+        }
     }
 
 }

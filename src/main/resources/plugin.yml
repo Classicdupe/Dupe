@@ -10,6 +10,8 @@ depend:
   - LuckPerms
   - PlaceholderAPI
 prefix: ClassicDupe
+libraries:
+  - com.h2database:h2:2.1.214
 commands:
   dupe:
     description: To dupe items. Can dupe up to 6 times

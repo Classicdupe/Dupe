@@ -7,6 +7,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import xyz.prorickey.classicdupe.ClassicDupe;
 import xyz.prorickey.classicdupe.Utils;
+import xyz.prorickey.classicdupe.events.Combat;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,6 +18,10 @@ public class SpawnCMD implements CommandExecutor, TabCompleter {
         if(args.length == 0) {
             if(!(sender instanceof Player player)) {
                 sender.sendMessage(Utils.cmdMsg("&cYou cannot execute this command from console"));
+                return true;
+            }
+            if(Combat.inCombat.containsKey(player)) {
+                player.sendMessage(Utils.cmdMsg("&cYou cannot execute this command in combat"));
                 return true;
             }
             player.teleport(ClassicDupe.getDatabase().spawn);
