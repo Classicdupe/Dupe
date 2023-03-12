@@ -1,12 +1,15 @@
 package xyz.prorickey.classicdupe.events;
 
 import net.kyori.adventure.text.Component;
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.potion.PotionEffect;
+import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
 import xyz.prorickey.classicdupe.ClassicDupe;
 import xyz.prorickey.classicdupe.Utils;
@@ -62,9 +65,14 @@ public class JoinEvent implements Listener {
 
     }
 
-    public static class NakedProtection extends BukkitRunnable {
+    public static class JoinEventTasks extends BukkitRunnable {
         @Override
         public void run() {
+            Bukkit.getOnlinePlayers().forEach(p -> p.addPotionEffect(new PotionEffect(
+                    PotionEffectType.NIGHT_VISION,
+                    999999999,
+                    1
+            )));
             for(int i = 0; i < nakedProtection.size(); i++) {
                 Player player = nakedProtection.keySet().stream().toList().get(i);
                 Long time = nakedProtection.get(player);

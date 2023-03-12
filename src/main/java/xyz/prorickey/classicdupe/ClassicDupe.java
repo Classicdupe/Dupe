@@ -2,18 +2,12 @@ package xyz.prorickey.classicdupe;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.event.ClickEvent;
 import org.bukkit.Bukkit;
-import org.bukkit.Material;
-import org.bukkit.configuration.MemorySection;
-import org.bukkit.entity.Player;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
-import org.bukkit.potion.PotionEffect;
-import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import net.luckperms.api.LuckPerms;
@@ -41,25 +35,18 @@ public class ClassicDupe extends JavaPlugin {
         database = new Database();
         pvdatabase = new PlayerVaultDatabase(this);
 
-        Config.getConfig().getStringList("blockFromPlacing").forEach(str -> BlockPlace.bannedToPlaceBcAnnoyingASF.add(Material.valueOf(str.toUpperCase())));
-        Config.getConfig().getStringList("forbiddenDupes").forEach(str -> DupeCMD.forbiddenDupes.add(Material.valueOf(str.toUpperCase())));
-        MemorySection sec = (MemorySection) Config.getConfig().get("suffix");
-        assert sec != null;
-        sec.getKeys(true).forEach((name) -> SuffixCMD.suffixes.put(name, Config.getConfig().getString("suffix." + name)));
-
         RegisteredServiceProvider<LuckPerms> provider = Bukkit.getServicesManager().getRegistration(LuckPerms.class);
         if (provider != null) { lpapi = provider.getProvider(); }
+        if(Bukkit.getPluginManager().getPlugin("PlaceholderAPI") != null) new ClassicDupeExpansion(this).register();
 
         bot = new ClassicDupeBot(this);
 
-        enableNightVision();
-        enableTPATask();
-        enableCombatTask();
-        enableLeaderBoardTask();
-        enableBroadcastTask();
-        enableNakedProtectionTask();
-
-        if(Bukkit.getPluginManager().getPlugin("PlaceholderAPI") != null) new ClassicDupeExpansion(this).register();
+        new JoinEvent.JoinEventTasks().runTaskTimer(ClassicDupe.getPlugin(), 0, 20);
+        new TpaCMD.TPATask().runTaskTimer(ClassicDupe.getPlugin(), 0, 20);
+        new Combat.CombatTask().runTaskTimer(ClassicDupe.getPlugin(), 0, 10);
+        new LeaderBoardTask().runTaskTimer(ClassicDupe.getPlugin(), 0, 20*60);
+        new BroadcastTask().runTaskTimer(ClassicDupe.getPlugin(), 0, 20*90);
+        new LinkCMD.LinkCodeTask().runTaskTimer(ClassicDupe.getPlugin(), 0, 20);
 
         this.getCommand("dupe").setExecutor(new DupeCMD());
         this.getCommand("dupe").setTabCompleter(new DupeCMD());
@@ -137,6 +124,8 @@ public class ClassicDupe extends JavaPlugin {
         this.getCommand("rules").setTabCompleter(new RulesCMD());
         this.getCommand("nakedoff").setExecutor(new NakedOffCMD());
         this.getCommand("nakedoff").setTabCompleter(new NakedOffCMD());
+        this.getCommand("link").setExecutor(new LinkCMD());
+        this.getCommand("link").setTabCompleter(new LinkCMD());
 
         getServer().getPluginManager().registerEvents(new JoinEvent(), this);
         getServer().getPluginManager().registerEvents(new QuitEvent(), this);
@@ -160,36 +149,6 @@ public class ClassicDupe extends JavaPlugin {
     @Override
     public void onDisable() {
         bot.jda.shutdown();
-    }
-
-    private static void enableNightVision() {
-        NightVisionTask task = new NightVisionTask();
-        task.runTaskTimer(ClassicDupe.getPlugin(), 0, 20*5);
-    }
-
-    private static void enableTPATask() {
-        TPATask task = new TPATask();
-        task.runTaskTimer(ClassicDupe.getPlugin(), 0, 20);
-    }
-
-    private static void enableCombatTask() {
-        CombatTask task = new CombatTask();
-        task.runTaskTimer(ClassicDupe.getPlugin(), 0, 10);
-    }
-
-    private static void enableLeaderBoardTask() {
-        LeaderBoardTask task = new LeaderBoardTask();
-        task.runTaskTimer(ClassicDupe.getPlugin(), 0, 20*60);
-    }
-
-    private static void enableBroadcastTask() {
-        BroadcastTask task = new BroadcastTask();
-        task.runTaskTimer(ClassicDupe.getPlugin(), 0, 20*60);
-    }
-
-    private static void enableNakedProtectionTask() {
-        JoinEvent.NakedProtection task = new JoinEvent.NakedProtection();
-        task.runTaskTimer(ClassicDupe.getPlugin(), 0, 20*5);
     }
 
     private enum LastBroadcast {
@@ -236,45 +195,6 @@ public class ClassicDupe extends JavaPlugin {
         @Override
         public void run() {
             database.getPlayerDatabase().reloadLeaderboards();
-        }
-    }
-
-    private static class CombatTask extends BukkitRunnable {
-        @Override
-        public void run() {
-            for(int i = 0; i < Combat.inCombat.size(); i++) {
-                Player player = (new ArrayList<>(Combat.inCombat.keySet())).get(i);
-                Long time = (new ArrayList<>(Combat.inCombat.values())).get(i);
-                if((time + (1000*15)) < System.currentTimeMillis() && Combat.inCombat.containsKey(player)) {
-                    Combat.inCombat.remove(player);
-                    player.sendActionBar(Component.text(Utils.format("&aYou are no longer in combat")));
-                } else player.sendActionBar(Component.text(Utils.format("&cYou are currently in combat")));
-            }
-        }
-    }
-
-    private static class TPATask extends BukkitRunnable {
-        @Override
-        public void run() {
-            Map<Player, Long> tempTpaRequestTimes = TpaCMD.tpaRequestTimes;
-            tempTpaRequestTimes.forEach((player, time) -> {
-                if((time + (1000*60)) < System.currentTimeMillis() && TpaCMD.tpaRequests.containsKey(player)) {
-                    player.sendMessage(Utils.cmdMsg("&cTPA request to &e" + TpaCMD.tpaRequests.get(player).getName() + "&c has timed out"));
-                    TpaCMD.tpaRequests.remove(player);
-                    TpaCMD.tpaRequestTimes.remove(player);
-                }
-            });
-        }
-    }
-
-    private static class NightVisionTask extends BukkitRunnable {
-        @Override
-        public void run() {
-            Bukkit.getOnlinePlayers().forEach(p -> p.addPotionEffect(new PotionEffect(
-                    PotionEffectType.NIGHT_VISION,
-                    999999999,
-                    1
-            )));
         }
     }
 

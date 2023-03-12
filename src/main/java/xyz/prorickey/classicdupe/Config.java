@@ -2,9 +2,14 @@ package xyz.prorickey.classicdupe;
 
 import java.io.File;
 
+import org.bukkit.Material;
+import org.bukkit.configuration.MemorySection;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
+import xyz.prorickey.classicdupe.commands.default1.DupeCMD;
+import xyz.prorickey.classicdupe.commands.perk.SuffixCMD;
+import xyz.prorickey.classicdupe.events.BlockPlace;
 
 public class Config {
 
@@ -17,6 +22,11 @@ public class Config {
             p.saveResource("config.yml", false);
         }
         reloadConfig();
+        Config.getConfig().getStringList("blockFromPlacing").forEach(str -> BlockPlace.bannedToPlaceBcAnnoyingASF.add(Material.valueOf(str.toUpperCase())));
+        Config.getConfig().getStringList("forbiddenDupes").forEach(str -> DupeCMD.forbiddenDupes.add(Material.valueOf(str.toUpperCase())));
+        MemorySection sec = (MemorySection) Config.getConfig().get("suffix");
+        assert sec != null;
+        sec.getKeys(true).forEach((name) -> SuffixCMD.suffixes.put(name, Config.getConfig().getString("suffix." + name)));
     }
 
     public static void reloadConfig() { config = YamlConfiguration.loadConfiguration(configFile);}

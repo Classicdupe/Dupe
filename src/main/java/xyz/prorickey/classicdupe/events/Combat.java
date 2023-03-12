@@ -1,5 +1,6 @@
 package xyz.prorickey.classicdupe.events;
 
+import net.kyori.adventure.text.Component;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
@@ -7,9 +8,11 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
+import org.bukkit.scheduler.BukkitRunnable;
 import xyz.prorickey.classicdupe.ClassicDupe;
 import xyz.prorickey.classicdupe.Utils;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -32,6 +35,20 @@ public class Combat implements Listener {
         }
         if(e.getEntity() instanceof Player player && !e.getCause().equals(EntityDamageEvent.DamageCause.FALL)) inCombat.put(player, System.currentTimeMillis());
         if(e.getDamager() instanceof Player player) inCombat.put(player, System.currentTimeMillis());
+    }
+
+    public static class CombatTask extends BukkitRunnable {
+        @Override
+        public void run() {
+            for(int i = 0; i < Combat.inCombat.size(); i++) {
+                Player player = (new ArrayList<>(Combat.inCombat.keySet())).get(i);
+                Long time = (new ArrayList<>(Combat.inCombat.values())).get(i);
+                if((time + (1000*15)) < System.currentTimeMillis() && Combat.inCombat.containsKey(player)) {
+                    Combat.inCombat.remove(player);
+                    player.sendActionBar(Component.text(Utils.format("&aYou are no longer in combat")));
+                } else player.sendActionBar(Component.text(Utils.format("&cYou are currently in combat")));
+            }
+        }
     }
 
 }
