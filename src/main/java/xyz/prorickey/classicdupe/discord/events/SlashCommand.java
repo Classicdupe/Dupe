@@ -2,6 +2,8 @@ package xyz.prorickey.classicdupe.discord.events;
 
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
+import xyz.prorickey.classicdupe.discord.commands.ExecuteDCMD;
+import xyz.prorickey.classicdupe.discord.commands.LinkDCMD;
 import xyz.prorickey.classicdupe.discord.commands.StatsDCMD;
 
 public class SlashCommand extends ListenerAdapter {
@@ -10,6 +12,9 @@ public class SlashCommand extends ListenerAdapter {
     public void onSlashCommandInteraction(SlashCommandInteractionEvent event) {
         switch (event.getName()) {
             case "stats": StatsDCMD.execute(event);
+            case "execute": ExecuteDCMD.execute(event);
+            case "link": LinkDCMD.execute(event);
+            case "unlink":
         }
     }
 

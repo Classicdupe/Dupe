@@ -35,6 +35,10 @@ public class LinkCMD implements CommandExecutor, TabCompleter {
             LinkCode linkCode = linkCodes.get(code);
             if(linkCode.player.equals(player)) linkCodes.remove(code);
         }
+        if(ClassicDupe.getDatabase().getLinkingDatabase().getLinkFromUUID(player.getUniqueId().toString()) != null) {
+            player.sendMessage(Utils.cmdMsg("&cYou must unlink your account with /unlink before you can link again"));
+            return true;
+        }
         String code = genCode();
         linkCodes.put(code, new LinkCode(code, player, System.currentTimeMillis()));
         player.sendMessage(Component.text(Utils.cmdMsg("&aPlease go onto the ClassicDupe discord and execute the command "))

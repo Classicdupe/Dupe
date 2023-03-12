@@ -15,7 +15,7 @@ import xyz.prorickey.classicdupe.discord.events.SlashCommand;
 public class ClassicDupeBot extends ListenerAdapter {
 
     ClassicDupe plugin;
-    public JDA jda;
+    public static JDA jda;
 
     public ClassicDupeBot(ClassicDupe p) {
         plugin = p;
@@ -32,13 +32,16 @@ public class ClassicDupeBot extends ListenerAdapter {
                         .setDefaultPermissions(DefaultMemberPermissions.enabledFor(Permission.ADMINISTRATOR))
                         .addOption(OptionType.STRING, "command", "The command you would like to execute", true),
                 Commands.slash("link", "To link your minecraft account")
-                        .addOption(OptionType.STRING, "code", "The link code you were provided", true)
+                        .addOption(OptionType.STRING, "code", "The link code you were provided", true),
+                Commands.slash("unlink", "To unlink your discord account")
 
         ).queue();
 
         ServerStatsUpdater task = new ServerStatsUpdater();
         task.runTaskTimer(plugin, 0, 20*60*5);
     }
+
+    public static JDA getJDA() { return jda; }
 
     public class ServerStatsUpdater extends BukkitRunnable {
         @Override

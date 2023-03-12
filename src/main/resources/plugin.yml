@@ -175,6 +175,12 @@ commands:
   nakedoff:
     description: To turn off naked protection
     usage: "Usage: /nakedoff"
+  link:
+    description: To link your account to your discord account
+    usage: "Usage: /link"
+  unlink:
+    description: To unlink your minecraft account to your discord account
+    usage: "Usage: /unlink"
 permissions:
   default.spawn.others:
     description: Allows you to teleport others to spawn

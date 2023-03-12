@@ -126,6 +126,8 @@ public class ClassicDupe extends JavaPlugin {
         this.getCommand("nakedoff").setTabCompleter(new NakedOffCMD());
         this.getCommand("link").setExecutor(new LinkCMD());
         this.getCommand("link").setTabCompleter(new LinkCMD());
+        this.getCommand("unlink").setExecutor(new UnlinkCMD());
+        this.getCommand("unlink").setTabCompleter(new UnlinkCMD());
 
         getServer().getPluginManager().registerEvents(new JoinEvent(), this);
         getServer().getPluginManager().registerEvents(new QuitEvent(), this);

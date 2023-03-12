@@ -11,8 +11,10 @@ public class Database {
 
     static Connection playerConn;
     static Connection serverConn;
+    static Connection linkingConn;
     private FilterDatabase filterDatabase;
     private PlayerDatabase playerDatabase;
+    private LinkingDatabase linkingDatabase;
     public Location spawn;
 
     public Database() {
@@ -20,12 +22,15 @@ public class Database {
             Class.forName("org.h2.Driver");
             playerConn = DriverManager.getConnection ("jdbc:h2:" + ClassicDupe.getPlugin().getDataFolder().getAbsolutePath() + File.separator + "playerData");
             serverConn = DriverManager.getConnection ("jdbc:h2:" + ClassicDupe.getPlugin().getDataFolder().getAbsolutePath() + File.separator + "serverData");
+            linkingConn = DriverManager.getConnection ("jdbc:h2:" + ClassicDupe.getPlugin().getDataFolder().getAbsolutePath() + File.separator + "linkData");
             playerConn.prepareStatement("CREATE TABLE IF NOT EXISTS players(uuid varchar, name varchar, nickname varchar, timesjoined long, playtime long, randomitem BOOLEAN, chatcolor VARCHAR, gradient BOOLEAN, gradientfrom VARCHAR, gradientto VARCHAR)").execute();
             serverConn.prepareStatement("CREATE TABLE IF NOT EXISTS filter(text varchar, fullword BOOLEAN)").execute();
             serverConn.prepareStatement("CREATE TABLE IF NOT EXISTS spawn(spawn varchar, x DOUBLE, y DOUBLE, z DOUBLE, pitch FLOAT, yaw FLOAT, world varchar)").execute();
             playerConn.prepareStatement("CREATE TABLE IF NOT EXISTS stats(uuid VARCHAR, kills INT, deaths INT)").execute();
+            linkingConn.prepareStatement("CREATE TABLE IF NOT EXISTS link(uuid VARCHAR, dscid Long)").execute();
             filterDatabase = new FilterDatabase(serverConn);
             playerDatabase = new PlayerDatabase(playerConn);
+            linkingDatabase = new LinkingDatabase(linkingConn);
         } catch (SQLException | ClassNotFoundException e) {
             Bukkit.getLogger().severe(e.toString());
         }
@@ -73,14 +78,14 @@ public class Database {
         return filterDatabase;
     }
 
-    public PlayerDatabase getPlayerDatabase() {
-        return playerDatabase;
-    }
+    public PlayerDatabase getPlayerDatabase() { return playerDatabase; }
+    public LinkingDatabase getLinkingDatabase() { return linkingDatabase; }
 
     public void shutdown() {
         try {
             playerConn.close();
             serverConn.close();
+            linkingConn.close();
         } catch (SQLException e) {
             Bukkit.getLogger().severe(e.toString());
         }
