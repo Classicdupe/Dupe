@@ -1,11 +1,11 @@
 package xyz.prorickey.classicdupe;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.event.ClickEvent;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.configuration.MemorySection;
@@ -23,11 +23,13 @@ import xyz.prorickey.classicdupe.commands.moderator.*;
 import xyz.prorickey.classicdupe.commands.perk.*;
 import xyz.prorickey.classicdupe.database.Database;
 import xyz.prorickey.classicdupe.database.PlayerVaultDatabase;
+import xyz.prorickey.classicdupe.discord.ClassicDupeBot;
 import xyz.prorickey.classicdupe.events.*;
 
 public class ClassicDupe extends JavaPlugin {
 
     public static JavaPlugin plugin;
+    public static ClassicDupeBot bot;
     public static LuckPerms lpapi;
     public static Database database;
     public static PlayerVaultDatabase pvdatabase;
@@ -48,10 +50,14 @@ public class ClassicDupe extends JavaPlugin {
         RegisteredServiceProvider<LuckPerms> provider = Bukkit.getServicesManager().getRegistration(LuckPerms.class);
         if (provider != null) { lpapi = provider.getProvider(); }
 
+        bot = new ClassicDupeBot(this);
+
         enableNightVision();
         enableTPATask();
         enableCombatTask();
         enableLeaderBoardTask();
+        enableBroadcastTask();
+        enableNakedProtectionTask();
 
         if(Bukkit.getPluginManager().getPlugin("PlaceholderAPI") != null) new ClassicDupeExpansion(this).register();
 
@@ -127,6 +133,10 @@ public class ClassicDupe extends JavaPlugin {
         this.getCommand("rename").setTabCompleter(new RenameCMD());
         this.getCommand("nickname").setExecutor(new NicknameCMD());
         this.getCommand("nickname").setTabCompleter(new NicknameCMD());
+        this.getCommand("rules").setExecutor(new RulesCMD());
+        this.getCommand("rules").setTabCompleter(new RulesCMD());
+        this.getCommand("nakedoff").setExecutor(new NakedOffCMD());
+        this.getCommand("nakedoff").setTabCompleter(new NakedOffCMD());
 
         getServer().getPluginManager().registerEvents(new JoinEvent(), this);
         getServer().getPluginManager().registerEvents(new QuitEvent(), this);
@@ -141,13 +151,15 @@ public class ClassicDupe extends JavaPlugin {
         getServer().getPluginManager().registerEvents(new SuffixCMD(), this);
         getServer().getPluginManager().registerEvents(new EntitySpawnEvent(), this);
         getServer().getPluginManager().registerEvents(new Combat(), this);
+        getServer().getPluginManager().registerEvents(new FlowEvent(), this);
+        getServer().getPluginManager().registerEvents(new GoldenAppleCooldown(), this);
 
         Bukkit.getScheduler().scheduleSyncDelayedTask(this, ClassicDupe::scheduleRestart, 20L * 60L * 60L * 24L);
     }
 
     @Override
     public void onDisable() {
-        database.shutdown();
+        bot.jda.shutdown();
     }
 
     private static void enableNightVision() {
@@ -170,6 +182,56 @@ public class ClassicDupe extends JavaPlugin {
         task.runTaskTimer(ClassicDupe.getPlugin(), 0, 20*60);
     }
 
+    private static void enableBroadcastTask() {
+        BroadcastTask task = new BroadcastTask();
+        task.runTaskTimer(ClassicDupe.getPlugin(), 0, 20*60);
+    }
+
+    private static void enableNakedProtectionTask() {
+        JoinEvent.NakedProtection task = new JoinEvent.NakedProtection();
+        task.runTaskTimer(ClassicDupe.getPlugin(), 0, 20*5);
+    }
+
+    private enum LastBroadcast {
+        DISCORD,
+        STORE
+    }
+
+    private static LastBroadcast lastBroadcast;
+
+    private static class BroadcastTask extends BukkitRunnable {
+        @Override
+        public void run() {
+            if(lastBroadcast != null && lastBroadcast.equals(LastBroadcast.DISCORD)) {
+                lastBroadcast = LastBroadcast.STORE;
+                ClassicDupe.getPlugin().getServer().getOnlinePlayers().forEach(player -> {
+                    player.sendMessage(Component.text(Utils.format("")));
+                    player.sendMessage(Utils.format("&a-----------------------------------------------------"));
+                    player.sendMessage(Component.text(Utils.format("&b&lSTORE &8| &aCheck out our store at "))
+                            .append(Component.text(Utils.format("&ehttps://classicdupe.tebex.io"))
+                                    .clickEvent(ClickEvent.clickEvent(ClickEvent.Action.OPEN_URL, "https://classicdupe.tebex.io")))
+                            .append(Component.text(Utils.format(" &aor by executing ")))
+                            .append(Component.text(Utils.format("&e/buy"))
+                                    .clickEvent(ClickEvent.clickEvent(ClickEvent.Action.SUGGEST_COMMAND, "/buy"))));
+                    player.sendMessage(Utils.format("&a-----------------------------------------------------"));
+                });
+            } else {
+                lastBroadcast = LastBroadcast.DISCORD;
+                ClassicDupe.getPlugin().getServer().getOnlinePlayers().forEach(player -> {
+                    player.sendMessage(Component.text(Utils.format("")));
+                    player.sendMessage(Utils.format("&a-----------------------------------------------------"));
+                    player.sendMessage(Component.text(Utils.format("&b&lDISCORD &8| &aCheck out our discord at "))
+                            .append(Component.text(Utils.format("&ehttps://discord.gg/FZtcF3pBu6"))
+                                    .clickEvent(ClickEvent.clickEvent(ClickEvent.Action.OPEN_URL, "https://discord.gg/FZtcF3pBu6")))
+                            .append(Component.text(Utils.format(" &aor by executing ")))
+                            .append(Component.text(Utils.format("&e/discord"))
+                                    .clickEvent(ClickEvent.clickEvent(ClickEvent.Action.SUGGEST_COMMAND, "/discord"))));
+                    player.sendMessage(Utils.format("&a-----------------------------------------------------"));
+                });
+            }
+        }
+    }
+
     private static class LeaderBoardTask extends BukkitRunnable {
         @Override
         public void run() {
@@ -180,13 +242,14 @@ public class ClassicDupe extends JavaPlugin {
     private static class CombatTask extends BukkitRunnable {
         @Override
         public void run() {
-            Map<Player, Long> tempInCombat = Combat.inCombat;
-            tempInCombat.forEach((player, time) -> {
+            for(int i = 0; i < Combat.inCombat.size(); i++) {
+                Player player = (new ArrayList<>(Combat.inCombat.keySet())).get(i);
+                Long time = (new ArrayList<>(Combat.inCombat.values())).get(i);
                 if((time + (1000*15)) < System.currentTimeMillis() && Combat.inCombat.containsKey(player)) {
                     Combat.inCombat.remove(player);
                     player.sendActionBar(Component.text(Utils.format("&aYou are no longer in combat")));
                 } else player.sendActionBar(Component.text(Utils.format("&cYou are currently in combat")));
-            });
+            }
         }
     }
 

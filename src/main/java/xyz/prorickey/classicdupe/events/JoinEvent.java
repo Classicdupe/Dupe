@@ -15,11 +15,13 @@ import xyz.prorickey.classicdupe.commands.perk.ChatGradientCMD;
 import xyz.prorickey.classicdupe.database.PlayerDatabase;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class JoinEvent implements Listener {
 
     public static Map<Player, RandomItemTask> randomTaskMap = new HashMap<>();
     public static List<Player> randomItemList = new ArrayList<>();
+    public static Map<Player, Long> nakedProtection = new HashMap<>();
 
     @EventHandler
     public void onPlayerJoin(PlayerJoinEvent e) {
@@ -32,6 +34,9 @@ public class JoinEvent implements Listener {
             randomTaskMap.put(e.getPlayer(), task);
             task.runTaskTimer(ClassicDupe.getPlugin(), 0, 20*60);
             e.getPlayer().sendMessage(Utils.cmdMsg("&aEvery &e60 &ayou will recieve a random item. Execute /random to disable or enable this"));
+            ChatColorCMD.colorProfiles.put(e.getPlayer().getUniqueId().toString(), "&7");
+            nakedProtection.put(e.getPlayer(), System.currentTimeMillis());
+            e.getPlayer().sendMessage(Utils.cmdMsg("&aYou currently have naked protection on. This means you cannot pvp but you are safe for 10 minutes. To turn this off execute /nakedoff"));
             return;
         }
         PlayerDatabase.PlayerData playerData = ClassicDupe.getDatabase().getPlayerDatabase().getPlayer(e.getPlayer().getUniqueId().toString());
@@ -55,6 +60,20 @@ public class JoinEvent implements Listener {
                         e.getPlayer().getName())
         ));
 
+    }
+
+    public static class NakedProtection extends BukkitRunnable {
+        @Override
+        public void run() {
+            for(int i = 0; i < nakedProtection.size(); i++) {
+                Player player = nakedProtection.keySet().stream().toList().get(i);
+                Long time = nakedProtection.get(player);
+                if(time + (10*60*1000) < System.currentTimeMillis()) {
+                    nakedProtection.remove(player);
+                    if(player.isOnline()) player.sendMessage(Utils.cmdMsg("&cYou are no longer protected by naked protection"));
+                }
+            }
+        }
     }
 
     public static class RandomItemTask extends BukkitRunnable {

@@ -51,7 +51,7 @@ public class SuffixCMD implements CommandExecutor, TabCompleter, Listener {
                 p.sendMessage(Utils.cmdMsg("&aDisabled your suffix"));
                 return true;
             }
-            if(!suffixes.containsKey(args[0].toLowerCase()) || !p.hasPermission("perk.suffix." + args[0].toLowerCase())) {
+            if(!suffixes.containsKey(args[0].toLowerCase()) || !p.hasPermission("perks.suffix." + args[0].toLowerCase())) {
                 p.sendMessage(Utils.cmdMsg("&cYou do not have that suffix or it does not exist"));
                 return true;
             }
@@ -63,7 +63,7 @@ public class SuffixCMD implements CommandExecutor, TabCompleter, Listener {
         } else {
             Map<String, String> suffixesAccessTo = new HashMap<>();
             suffixes.forEach((name, value) -> {
-                if(p.hasPermission("perk.suffix." + name)) suffixesAccessTo.put(name, value);
+                if(p.hasPermission("perks.suffix." + name)) suffixesAccessTo.put(name, value);
             });
             int invNum;
             if(suffixesAccessTo.size() <= 9) invNum = 9;

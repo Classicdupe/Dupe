@@ -1,6 +1,7 @@
 package xyz.prorickey.classicdupe.database;
 
 import org.bukkit.Bukkit;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.Nullable;
 import xyz.prorickey.classicdupe.commands.perk.ChatGradientCMD;
@@ -57,43 +58,27 @@ public class PlayerDatabase {
         }
     }
 
-    public static Map<Integer, PlayerData> killsLeaderboard = new HashMap<>();
-    public static Map<Integer, PlayerData> deathsLeaderboard = new HashMap<>();
+    public static Map<Integer, String> killsLeaderboard = new HashMap<>();
+    public static Map<Integer, Integer> killsLeaderboardK = new HashMap<>();
+    public static Map<Integer, String> deathsLeaderboard = new HashMap<>();
+    public static Map<Integer, Integer> deathsLeaderboardD = new HashMap<>();
 
     public void reloadLeaderboards() {
         try {
-            ResultSet killsSet = conn.prepareStatement("SELECT * FROM players ORDER BY kills ASC").executeQuery();
+            ResultSet killsSet = conn.prepareStatement("SELECT * FROM stats ORDER BY kills DESC").executeQuery();
             for(int i = 0; i < 10; i++) {
                 if(killsSet.next()) {
-                    killsLeaderboard.put(i+1, new PlayerData(
-                            killsSet.getString("uuid"),
-                            killsSet.getString("name"),
-                            killsSet.getString("nickname"),
-                            killsSet.getLong("timesjoined"),
-                            killsSet.getLong("playtime"),
-                            killsSet.getBoolean("randomitem"),
-                            killsSet.getString("chatcolor"),
-                            killsSet.getBoolean("gradient"),
-                            killsSet.getString("gradientfrom"),
-                            killsSet.getString("gradientto")
-                    ));
+                    PlayerData data = getPlayer(killsSet.getString("uuid"));
+                    killsLeaderboard.put(i+1, data.name);
+                    killsLeaderboardK.put(i+1, killsSet.getInt("kills"));
                 }
             }
-            ResultSet deathsSet = conn.prepareStatement("SELECT * FROM players ORDER BY deaths ASC").executeQuery();
+            ResultSet deathsSet = conn.prepareStatement("SELECT * FROM stats ORDER BY deaths DESC").executeQuery();
             for(int i = 0; i < 10; i++) {
                 if(deathsSet.next()) {
-                    deathsLeaderboard .put(i+1, new PlayerData(
-                            deathsSet.getString("uuid"),
-                            deathsSet.getString("name"),
-                            deathsSet.getString("nickname"),
-                            deathsSet.getLong("timesjoined"),
-                            deathsSet.getLong("playtime"),
-                            deathsSet.getBoolean("randomitem"),
-                            deathsSet.getString("chatcolor"),
-                            deathsSet.getBoolean("gradient"),
-                            deathsSet.getString("gradientfrom"),
-                            deathsSet.getString("gradientto")
-                    ));
+                    PlayerData data = getPlayer(deathsSet.getString("uuid"));
+                    deathsLeaderboard.put(i+1, data.name);
+                    deathsLeaderboardD.put(i+1, deathsSet.getInt("deaths"));
                 }
             }
         } catch (SQLException e) {
@@ -239,9 +224,9 @@ public class PlayerDatabase {
     }
 
     public static class PlayerStats {
-        public static int kills;
-        public static int deaths;
-        public static String kdr;
+        public int kills;
+        public int deaths;
+        public String kdr;
         public PlayerStats(int kills1, int deaths1) {
             kills = kills1;
             deaths = deaths1;

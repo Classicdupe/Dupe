@@ -9,9 +9,11 @@ website: classicdupe.tebex.io
 depend:
   - LuckPerms
   - PlaceholderAPI
+  - WorldGuard
 prefix: ClassicDupe
 libraries:
   - com.h2database:h2:2.1.214
+  - net.dv8tion:JDA:5.0.0-beta.5
 commands:
   dupe:
     description: To dupe items. Can dupe up to 6 times
@@ -159,6 +161,9 @@ commands:
     permission: perks.enderchest
     aliases:
       - ec
+  rules:
+    description: To get the rules of the server
+    usage: "Usage: /rules"
   rename:
     description: To rename an item in your main hand
     usage: "Usage: /rename <itemname>"
@@ -167,6 +172,9 @@ commands:
     description: To change your name in tab and in chat
     usage: "Usage: /nickname <nickname>"
     permission: perks.nickname
+  nakedoff:
+    description: To turn off naked protection
+    usage: "Usage: /nakedoff"
 permissions:
   default.spawn.others:
     description: Allows you to teleport others to spawn

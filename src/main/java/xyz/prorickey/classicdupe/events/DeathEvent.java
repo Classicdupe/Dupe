@@ -1,14 +1,24 @@
 package xyz.prorickey.classicdupe.events;
 
 import net.kyori.adventure.text.Component;
+import org.bukkit.Bukkit;
+import org.bukkit.Material;
+import org.bukkit.OfflinePlayer;
+import org.bukkit.entity.EnderCrystal;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.PlayerRespawnEvent;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.SkullMeta;
 import xyz.prorickey.classicdupe.ClassicDupe;
 import xyz.prorickey.classicdupe.Utils;
+
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.List;
 
 public class DeathEvent implements Listener {
 
@@ -20,9 +30,24 @@ public class DeathEvent implements Listener {
     @EventHandler
     public void onPlayerDeath(PlayerDeathEvent e) {
         Player player = e.getEntity();
+        Combat.inCombat.remove(player);
         Player killer = e.getEntity().getKiller();
         ClassicDupe.getDatabase().getPlayerDatabase().addDeath(e.getEntity().getUniqueId().toString());
-        if(e.getEntity().getKiller() != null) ClassicDupe.getDatabase().getPlayerDatabase().addKill(killer.getUniqueId().toString());
+        if(e.getEntity().getKiller() != null && e.getEntity().getKiller() != player) {
+            ClassicDupe.getDatabase().getPlayerDatabase().addKill(killer.getUniqueId().toString());
+            ItemStack skull = new ItemStack(Material.PLAYER_HEAD);
+            SkullMeta meta = (SkullMeta) Bukkit.getItemFactory().getItemMeta(Material.PLAYER_HEAD);
+            meta.setOwningPlayer(e.getEntity());
+            meta.displayName(Component.text(Utils.format("&e" + e.getEntity().getName() + "'s Head")));
+            DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");
+            LocalDateTime now = LocalDateTime.now();
+            meta.lore(List.of(
+                    Component.text(Utils.format("&cKilled by &6" + killer.getName())),
+                    Component.text(Utils.format("&cKilled on " + dtf.format(now)))
+            ));
+            skull.setItemMeta(meta);
+            e.getPlayer().getWorld().dropItem(e.getPlayer().getLocation(), skull);
+        }
         EntityDamageEvent.DamageCause damageCause = player.getLastDamageCause().getCause();
         switch(damageCause) {
             case BLOCK_EXPLOSION -> {

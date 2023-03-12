@@ -37,6 +37,16 @@ public class ClassicDupeExpansion extends PlaceholderExpansion {
             if(data.nickname == null) return player.getName();
             else return data.nickname;
         }
+        for(int i = 0; i < 10; i++) {
+            if(ClassicDupe.getDatabase().getPlayerDatabase().killsLeaderboard.size() < i+1) return " ";
+            if(params.equalsIgnoreCase("top_kills_" + (i+1) + "_name")) return ClassicDupe.getDatabase().getPlayerDatabase().killsLeaderboard.get(i+1);
+            else if(params.equalsIgnoreCase("top_kills_" + (i+1) + "_kills")) return ClassicDupe.getDatabase().getPlayerDatabase().killsLeaderboardK.get(i+1).toString();
+        }
+        for(int i = 0; i < 10; i++) {
+            if(ClassicDupe.getDatabase().getPlayerDatabase().deathsLeaderboard.size() < i+1) return " ";
+            if(params.equalsIgnoreCase("top_deaths_" + (i+1) + "_name")) return ClassicDupe.getDatabase().getPlayerDatabase().deathsLeaderboard.get(i+1);
+            else if(params.equalsIgnoreCase("top_deaths_" + (i+1) + "_deaths")) return ClassicDupe.getDatabase().getPlayerDatabase().deathsLeaderboardD.get(i+1).toString();
+        }
         return null;
     }
 
