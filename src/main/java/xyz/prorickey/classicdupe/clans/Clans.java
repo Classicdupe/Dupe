@@ -10,6 +10,7 @@ import org.jetbrains.annotations.Nullable;
 import xyz.prorickey.classicdupe.ClassicDupe;
 import xyz.prorickey.classicdupe.Utils;
 import xyz.prorickey.classicdupe.clans.commands.CreateCCMD;
+import xyz.prorickey.classicdupe.clans.commands.DeleteCCMD;
 
 import java.util.*;
 
@@ -25,6 +26,7 @@ public class Clans implements CommandExecutor, TabCompleter {
         data = new ClansData();
 
         register(new CreateCCMD());
+        register(new DeleteCCMD());
 
     }
 
