@@ -4,7 +4,9 @@ version: 1.0.0-beta
 description: The core plugin behind everything that happens in ClassicDupe
 api-version: 1.19
 load: POSTWORLD
-author: Prorickey
+authors:
+  - Prorickey
+  - Sixstatistic
 website: classicdupe.tebex.io
 depend:
   - LuckPerms
