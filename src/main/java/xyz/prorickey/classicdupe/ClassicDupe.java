@@ -150,7 +150,11 @@ public class ClassicDupe extends JavaPlugin {
 
     @Override
     public void onDisable() {
-        ClassicDupeBot.jda.shutdown();
+        bot.jda.shutdown();
+    }
+
+    public static void executeConsoleCommand(String cmd) {
+        ClassicDupe.getPlugin().getServer().dispatchCommand(ClassicDupe.getPlugin().getServer().getConsoleSender(), cmd);
     }
 
     private enum LastBroadcast {

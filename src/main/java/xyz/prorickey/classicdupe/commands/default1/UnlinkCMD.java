@@ -34,7 +34,7 @@ public class UnlinkCMD implements CommandExecutor, TabCompleter {
                 ClassicDupeBot.getJDA().getUserById(link.id),
                 ClassicDupeBot.getJDA().getRoleById(1078109485144473620L)
                 ).queue();
-        player.sendMessage(Utils.cmdMsg("Unlinked your account from " + ClassicDupeBot.getJDA().getUserById(link.id).getAsTag()));
+        player.sendMessage(Utils.cmdMsg("&aUnlinked your account from " + ClassicDupeBot.getJDA().getUserById(link.id).getAsTag()));
         return true;
     }
 
