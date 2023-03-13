@@ -150,7 +150,7 @@ public class ClassicDupe extends JavaPlugin {
 
     @Override
     public void onDisable() {
-        bot.jda.shutdown();
+        ClassicDupeBot.jda.shutdown();
     }
 
     private enum LastBroadcast {
