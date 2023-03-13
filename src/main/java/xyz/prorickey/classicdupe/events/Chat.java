@@ -4,6 +4,7 @@ import io.papermc.paper.event.player.AsyncChatEvent;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import xyz.prorickey.classicdupe.ClassicDupe;
@@ -13,9 +14,14 @@ import xyz.prorickey.classicdupe.commands.perk.ChatColorCMD;
 import xyz.prorickey.classicdupe.commands.perk.ChatGradientCMD;
 import xyz.prorickey.classicdupe.database.PlayerDatabase;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public class Chat implements Listener {
 
     public static Boolean mutedChat = false;
+
+    public static Map<Player, Long> chatCooldown = new HashMap<>();
 
     @EventHandler
     public void onChat(AsyncChatEvent e) {
@@ -29,6 +35,18 @@ public class Chat implements Listener {
             e.getPlayer().sendMessage(Utils.cmdMsg("&cThe chat is currently muted"));
             return;
         }
+        if(chatCooldown.containsKey(e.getPlayer()) && chatCooldown.get(e.getPlayer()) > System.currentTimeMillis()) {
+            e.setCancelled(true);
+            Long timeLeft = chatCooldown.get(e.getPlayer())-System.currentTimeMillis();
+            e.getPlayer().sendMessage(Utils.cmdMsg("&cYou are currently on chat cooldown for " + Math.round(timeLeft/1000) + " second(s)"));
+            return;
+        }
+
+        String pgroup = ClassicDupe.getLPAPI().getUserManager().getUser(e.getPlayer().getUniqueId()).getPrimaryGroup();
+        if(pgroup.equalsIgnoreCase("default")) chatCooldown.put(e.getPlayer(), System.currentTimeMillis()+4000);
+        else if(pgroup.equalsIgnoreCase("vip")) chatCooldown.put(e.getPlayer(), System.currentTimeMillis()+3000);
+        else if(pgroup.equalsIgnoreCase("mvp")) chatCooldown.put(e.getPlayer(), System.currentTimeMillis()+2000);
+        else if(pgroup.equalsIgnoreCase("legend")) chatCooldown.put(e.getPlayer(), System.currentTimeMillis()+1000);
 
         if(StaffChatCMD.staffChatPlayers.contains(e.getPlayer())) {
             e.setCancelled(true);
