@@ -100,6 +100,7 @@ public class Chat implements Listener {
                     PlainTextComponentSerializer.plainText().serialize(message) + "</gradient>"
             )));
         }
+
     }
 
     private enum ChatType {
