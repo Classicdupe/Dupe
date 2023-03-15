@@ -4,7 +4,7 @@ plugins {
 }
 
 group 'xyz.prorickey.classicdupe'
-version '1.0-SNAPSHOT'
+version '2.0.0'
 
 repositories {
     maven { url = uri("https://repo.papermc.io/repository/maven-public/") }
