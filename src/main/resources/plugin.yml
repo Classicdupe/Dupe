@@ -183,6 +183,14 @@ commands:
   unlink:
     description: To unlink your minecraft account to your discord account
     usage: "Usage: /unlink"
+  feed:
+    description: To feed yourself
+    usage: "Usage: /feed"
+    permission: perks.feed
 permissions:
   default.spawn.others:
     description: Allows you to teleport others to spawn
+  perks.feed.legend:
+    description: Reduced cooldown for legend
+  perks.feed.mvp:
+    description: Reduced cooldown for mvp

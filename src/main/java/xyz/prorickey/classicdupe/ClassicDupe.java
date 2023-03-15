@@ -128,6 +128,8 @@ public class ClassicDupe extends JavaPlugin {
         this.getCommand("link").setTabCompleter(new LinkCMD());
         this.getCommand("unlink").setExecutor(new UnlinkCMD());
         this.getCommand("unlink").setTabCompleter(new UnlinkCMD());
+        this.getCommand("feed").setExecutor(new FeedCMD());
+        this.getCommand("feed").setTabCompleter(new FeedCMD());
 
         getServer().getPluginManager().registerEvents(new JoinEvent(), this);
         getServer().getPluginManager().registerEvents(new QuitEvent(), this);
