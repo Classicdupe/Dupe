@@ -7,21 +7,55 @@ group 'xyz.prorickey.classicdupe'
 version '2.0.0'
 
 repositories {
-    maven { url = uri("https://repo.papermc.io/repository/maven-public/") }
-    maven { url = 'https://repo.extendedclip.com/content/repositories/placeholderapi/' }
     mavenCentral()
+    maven { url "https://repo.papermc.io/repository/maven-public/" }
+    maven { url 'https://repo.extendedclip.com/content/repositories/placeholderapi/' }
     maven { url "https://maven.enginehub.org/repo/" }
+    maven { url 'https://prorickey.xyz/repository/maven-public'}
 }
 
 dependencies {
     compileOnly 'io.papermc.paper:paper-api:1.19.3-R0.1-SNAPSHOT'
     compileOnly 'net.luckperms:api:5.4'
-    compileOnly 'com.h2database:h2:2.1.214'
     compileOnly 'me.clip:placeholderapi:2.11.2'
     compileOnly 'com.sk89q.worldguard:worldguard-bukkit:7.0.7'
+
+    compileOnly 'com.h2database:h2:2.1.214'
     compileOnly 'net.dv8tion:JDA:5.0.0-beta.5'
+
+    implementation 'xyz.prorickey:proutils:1.0.1'
 }
 
+shadowJar {
+    archiveClassifier = null
+}
+
+jar {
+    enabled = false
+    dependsOn(shadowJar)
+}
+
+def targetJavaVersion = 17
 java {
-    toolchain.languageVersion.set(JavaLanguageVersion.of(17))
+    def javaVersion = JavaVersion.toVersion(targetJavaVersion)
+    sourceCompatibility = javaVersion
+    targetCompatibility = javaVersion
+    if (JavaVersion.current() < javaVersion) {
+        toolchain.languageVersion = JavaLanguageVersion.of(targetJavaVersion)
+    }
+}
+
+tasks.withType(JavaCompile).configureEach {
+    if (targetJavaVersion >= 10 || JavaVersion.current().isJava10Compatible()) {
+        options.release = targetJavaVersion
+    }
+}
+
+processResources {
+    def props = [version: version]
+    inputs.properties props
+    filteringCharset 'UTF-8'
+    filesMatching('plugin.yml') {
+        expand props
+    }
 }

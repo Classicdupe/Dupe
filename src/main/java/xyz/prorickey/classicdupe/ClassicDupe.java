@@ -31,13 +31,14 @@ public class ClassicDupe extends JavaPlugin {
     @Override
     public void onEnable() {
         plugin = this;
+
+        RegisteredServiceProvider<LuckPerms> provider = Bukkit.getServicesManager().getRegistration(LuckPerms.class);
+        if(provider != null) { lpapi = provider.getProvider(); }
+        if(Bukkit.getPluginManager().getPlugin("PlaceholderAPI") != null) new ClassicDupeExpansion(this).register();
+
         Config.init(this);
         database = new Database();
         pvdatabase = new PlayerVaultDatabase(this);
-
-        RegisteredServiceProvider<LuckPerms> provider = Bukkit.getServicesManager().getRegistration(LuckPerms.class);
-        if (provider != null) { lpapi = provider.getProvider(); }
-        if(Bukkit.getPluginManager().getPlugin("PlaceholderAPI") != null) new ClassicDupeExpansion(this).register();
 
         bot = new ClassicDupeBot(this);
 
