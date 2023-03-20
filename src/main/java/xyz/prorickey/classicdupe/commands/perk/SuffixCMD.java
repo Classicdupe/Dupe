@@ -22,6 +22,8 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import xyz.prorickey.classicdupe.ClassicDupe;
 import xyz.prorickey.classicdupe.Utils;
+import xyz.prorickey.proutils.ChatFormat;
+import xyz.prorickey.proutils.TabComplete;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -69,18 +71,18 @@ public class SuffixCMD implements CommandExecutor, TabCompleter, Listener {
             if(suffixesAccessTo.size() <= 9) invNum = 9;
             else if(suffixesAccessTo.size() <= 27) invNum = 27;
             else invNum = 54;
-            Inventory gui = Bukkit.createInventory(null, invNum, Component.text(Utils.format("&9&lSuffix Menu")));
+            Inventory gui = Bukkit.createInventory(null, invNum, Component.text(ChatFormat.format("&9&lSuffix Menu")));
             for(int i = 0; i < invNum; i++) gui.setItem(i, new ItemStack(Material.RED_STAINED_GLASS_PANE));
             Map<Integer, String> slotData = new HashMap<>();
 
             ItemStack clear = new ItemStack(Material.BARRIER);
-            clear.editMeta(meta -> meta.displayName(Component.text(Utils.format("&cClear Suffix"))));
+            clear.editMeta(meta -> meta.displayName(Component.text(ChatFormat.format("&cClear Suffix"))));
             gui.setItem(0, clear);
 
             AtomicInteger i = new AtomicInteger(1);
             suffixesAccessTo.forEach((name, value) -> {
                 ItemStack item = new ItemStack(Material.NAME_TAG);
-                item.editMeta(meta -> meta.displayName(Component.text(Utils.format(value))));
+                item.editMeta(meta -> meta.displayName(Component.text(ChatFormat.format(value))));
                 gui.setItem(i.get(), item);
                 slotData.put(i.get(), name);
                 i.getAndIncrement();
@@ -123,7 +125,7 @@ public class SuffixCMD implements CommandExecutor, TabCompleter, Listener {
     public @Nullable List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
         List<String> list = new ArrayList<>(suffixes.keySet());
         list.add("clear");
-        if(args.length == 1) return Utils.tabCompletionsSearch(args[0], list);
+        if(args.length == 1) return TabComplete.tabCompletionsSearch(args[0], list);
         return new ArrayList<>();
     }
 }

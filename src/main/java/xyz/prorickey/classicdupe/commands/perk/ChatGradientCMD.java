@@ -21,6 +21,7 @@ import org.jetbrains.annotations.Nullable;
 import xyz.prorickey.classicdupe.ClassicDupe;
 import xyz.prorickey.classicdupe.Utils;
 import xyz.prorickey.classicdupe.database.PlayerDatabase;
+import xyz.prorickey.proutils.ChatFormat;
 
 import java.util.*;
 
@@ -52,14 +53,14 @@ public class ChatGradientCMD implements CommandExecutor, TabCompleter, Listener 
 
         PlayerDatabase.PlayerData pdata = ClassicDupe.getDatabase().getPlayerDatabase().getPlayer(p.getUniqueId().toString());
 
-        Inventory gui = Bukkit.createInventory(null, 27, Component.text(Utils.format("&aChatGradient Menu")));
+        Inventory gui = Bukkit.createInventory(null, 27, Component.text(ChatFormat.format("&aChatGradient Menu")));
         List.of(3, 4, 5, 12, 14, 21, 22, 23).forEach(n -> gui.setItem(n, new ItemStack(Material.RED_STAINED_GLASS_PANE)));
 
         //Toggle
         ItemStack star = new ItemStack(Material.NETHER_STAR);
         star.editMeta(meta -> {
-            if(pdata.gradient) meta.displayName(Component.text(Utils.format("&cTurn Gradient Chat Off")));
-            else meta.displayName(Component.text(Utils.format("&aTurn Gradient Chat On")));
+            if(pdata.gradient) meta.displayName(Component.text(ChatFormat.format("&cTurn Gradient Chat Off")));
+            else meta.displayName(Component.text(ChatFormat.format("&aTurn Gradient Chat On")));
         });
         gui.setItem(13, star);
 
@@ -86,13 +87,13 @@ public class ChatGradientCMD implements CommandExecutor, TabCompleter, Listener 
             ItemStack wool = new ItemStack(mat);
             wool.editMeta(meta -> meta.displayName(mm.deserialize("<" + opt + ">" + name.substring(0, 1).toUpperCase() + name.substring(1))));
             wool.editMeta(meta -> {
-                if(Objects.equals(pdata.gradientfrom, opt)) meta.lore(List.of(Component.text(Utils.format("&aEnabled"))));
-                else meta.lore(List.of(Component.text(Utils.format("&cDisabled"))));
+                if(Objects.equals(pdata.gradientfrom, opt)) meta.lore(List.of(Component.text(ChatFormat.format("&aEnabled"))));
+                else meta.lore(List.of(Component.text(ChatFormat.format("&cDisabled"))));
             });
             gui.setItem(firstSec.get(i), wool);
             wool.editMeta(meta -> {
-                if(Objects.equals(pdata.gradientto, opt)) meta.lore(List.of(Component.text(Utils.format("&aEnabled"))));
-                else meta.lore(List.of(Component.text(Utils.format("&cDisabled"))));
+                if(Objects.equals(pdata.gradientto, opt)) meta.lore(List.of(Component.text(ChatFormat.format("&aEnabled"))));
+                else meta.lore(List.of(Component.text(ChatFormat.format("&cDisabled"))));
             });
             gui.setItem(secondSec.get(i), wool);
         }

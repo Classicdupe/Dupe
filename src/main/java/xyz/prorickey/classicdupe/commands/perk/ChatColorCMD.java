@@ -15,6 +15,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import xyz.prorickey.classicdupe.ClassicDupe;
 import xyz.prorickey.classicdupe.Utils;
+import xyz.prorickey.proutils.ChatFormat;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -36,86 +37,86 @@ public class ChatColorCMD implements CommandExecutor, Listener, TabCompleter {
         String currentColor;
         currentColor = colorProfiles.getOrDefault(p.getUniqueId().toString(), "&7");
         if(args.length == 0) {
-            Inventory gui = Bukkit.createInventory(null, 9, Component.text(Utils.format("&aChatColor Menu")));
+            Inventory gui = Bukkit.createInventory(null, 9, Component.text(ChatFormat.format("&aChatColor Menu")));
 
             //White
             ItemStack whiteWool = new ItemStack(Material.WHITE_WOOL);
             whiteWool.editMeta(meta -> {
-                meta.displayName(Component.text(Utils.format("&fWhite Chat Color")));
-                if(currentColor.equals("&f")) meta.lore(List.of(Component.text(Utils.format("&aEnabled"))));
-                else meta.lore(List.of(Component.text(Utils.format("&cDisabled"))));
+                meta.displayName(Component.text(ChatFormat.format("&fWhite Chat Color")));
+                if(currentColor.equals("&f")) meta.lore(List.of(Component.text(ChatFormat.format("&aEnabled"))));
+                else meta.lore(List.of(Component.text(ChatFormat.format("&cDisabled"))));
             });
             gui.setItem(0, whiteWool);
 
             //Pink
             ItemStack pinkWool = new ItemStack(Material.PINK_WOOL);
             pinkWool.editMeta(meta -> {
-                meta.displayName(Component.text(Utils.format("&dPink Chat Color")));
-                if(currentColor.equals("&d")) meta.lore(List.of(Component.text(Utils.format("&aEnabled"))));
-                else meta.lore(List.of(Component.text(Utils.format("&cDisabled"))));
+                meta.displayName(Component.text(ChatFormat.format("&dPink Chat Color")));
+                if(currentColor.equals("&d")) meta.lore(List.of(Component.text(ChatFormat.format("&aEnabled"))));
+                else meta.lore(List.of(Component.text(ChatFormat.format("&cDisabled"))));
             });
             gui.setItem(1, pinkWool);
 
             //Red
             ItemStack redWool = new ItemStack(Material.RED_WOOL);
             redWool.editMeta(meta -> {
-                meta.displayName(Component.text(Utils.format("&dRed Chat Color")));
-                if(currentColor.equals("&c")) meta.lore(List.of(Component.text(Utils.format("&aEnabled"))));
-                else meta.lore(List.of(Component.text(Utils.format("&cDisabled"))));
+                meta.displayName(Component.text(ChatFormat.format("&dRed Chat Color")));
+                if(currentColor.equals("&c")) meta.lore(List.of(Component.text(ChatFormat.format("&aEnabled"))));
+                else meta.lore(List.of(Component.text(ChatFormat.format("&cDisabled"))));
             });
             gui.setItem(2, redWool);
 
             //Aqua
             ItemStack aquaWool = new ItemStack(Material.LIGHT_BLUE_WOOL);
             aquaWool.editMeta(meta -> {
-                meta.displayName(Component.text(Utils.format("&bAqua Chat Color")));
-                if(currentColor.equals("&b")) meta.lore(List.of(Component.text(Utils.format("&aEnabled"))));
-                else meta.lore(List.of(Component.text(Utils.format("&cDisabled"))));
+                meta.displayName(Component.text(ChatFormat.format("&bAqua Chat Color")));
+                if(currentColor.equals("&b")) meta.lore(List.of(Component.text(ChatFormat.format("&aEnabled"))));
+                else meta.lore(List.of(Component.text(ChatFormat.format("&cDisabled"))));
             });
             gui.setItem(3, aquaWool);
 
             //Blue
             ItemStack blueWool = new ItemStack(Material.BLUE_WOOL);
             blueWool.editMeta(meta -> {
-                meta.displayName(Component.text(Utils.format("&9Blue Chat Color")));
-                if(currentColor.equals("&9")) meta.lore(List.of(Component.text(Utils.format("&aEnabled"))));
-                else meta.lore(List.of(Component.text(Utils.format("&cDisabled"))));
+                meta.displayName(Component.text(ChatFormat.format("&9Blue Chat Color")));
+                if(currentColor.equals("&9")) meta.lore(List.of(Component.text(ChatFormat.format("&aEnabled"))));
+                else meta.lore(List.of(Component.text(ChatFormat.format("&cDisabled"))));
             });
             gui.setItem(4, blueWool);
 
             //Green
             ItemStack greenWool = new ItemStack(Material.GREEN_WOOL);
             greenWool.editMeta(meta -> {
-                meta.displayName(Component.text(Utils.format("&aGreen Chat Color")));
-                if(currentColor.equals("&a")) meta.lore(List.of(Component.text(Utils.format("&aEnabled"))));
-                else meta.lore(List.of(Component.text(Utils.format("&cDisabled"))));
+                meta.displayName(Component.text(ChatFormat.format("&aGreen Chat Color")));
+                if(currentColor.equals("&a")) meta.lore(List.of(Component.text(ChatFormat.format("&aEnabled"))));
+                else meta.lore(List.of(Component.text(ChatFormat.format("&cDisabled"))));
             });
             gui.setItem(5, greenWool);
 
             //Yellow
             ItemStack yellowWool = new ItemStack(Material.YELLOW_WOOL);
             yellowWool.editMeta(meta -> {
-                meta.displayName(Component.text(Utils.format("&eYellow Chat Color")));
-                if(currentColor.equals("&e")) meta.lore(List.of(Component.text(Utils.format("&aEnabled"))));
-                else meta.lore(List.of(Component.text(Utils.format("&cDisabled"))));
+                meta.displayName(Component.text(ChatFormat.format("&eYellow Chat Color")));
+                if(currentColor.equals("&e")) meta.lore(List.of(Component.text(ChatFormat.format("&aEnabled"))));
+                else meta.lore(List.of(Component.text(ChatFormat.format("&cDisabled"))));
             });
             gui.setItem(6, yellowWool);
 
             //Gold
             ItemStack goldWool = new ItemStack(Material.ORANGE_WOOL);
             goldWool.editMeta(meta -> {
-                meta.displayName(Component.text(Utils.format("&6Gold Chat Color")));
-                if(currentColor.equals("&6")) meta.lore(List.of(Component.text(Utils.format("&aEnabled"))));
-                else meta.lore(List.of(Component.text(Utils.format("&cDisabled"))));
+                meta.displayName(Component.text(ChatFormat.format("&6Gold Chat Color")));
+                if(currentColor.equals("&6")) meta.lore(List.of(Component.text(ChatFormat.format("&aEnabled"))));
+                else meta.lore(List.of(Component.text(ChatFormat.format("&cDisabled"))));
             });
             gui.setItem(7, goldWool);
 
             //Gray
             ItemStack grayWool = new ItemStack(Material.LIGHT_GRAY_WOOL);
             grayWool.editMeta(meta -> {
-                meta.displayName(Component.text(Utils.format("&7Gray Chat Color")));
-                if(currentColor.equals("&7")) meta.lore(List.of(Component.text(Utils.format("&aEnabled"))));
-                else meta.lore(List.of(Component.text(Utils.format("&cDisabled"))));
+                meta.displayName(Component.text(ChatFormat.format("&7Gray Chat Color")));
+                if(currentColor.equals("&7")) meta.lore(List.of(Component.text(ChatFormat.format("&aEnabled"))));
+                else meta.lore(List.of(Component.text(ChatFormat.format("&cDisabled"))));
             });
             gui.setItem(8, grayWool);
 

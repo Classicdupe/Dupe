@@ -15,6 +15,8 @@ import org.jetbrains.annotations.Nullable;
 import xyz.prorickey.classicdupe.ClassicDupe;
 import xyz.prorickey.classicdupe.Utils;
 import xyz.prorickey.classicdupe.events.Combat;
+import xyz.prorickey.proutils.ChatFormat;
+import xyz.prorickey.proutils.TabComplete;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -49,13 +51,13 @@ public class TpaCMD implements CommandExecutor, TabCompleter {
         }
         recipient.sendMessage(
                 Component.text(Utils.cmdMsg("&e" + p.getName() + "&a is asking to teleport to you "))
-                        .append(Component.text(Utils.format("&8[&a&lACCEPT&8]"))
+                        .append(Component.text(ChatFormat.format("&8[&a&lACCEPT&8]"))
                                 .clickEvent(ClickEvent.clickEvent(ClickEvent.Action.RUN_COMMAND, "/tpaccept " + p.getName()))
-                                .hoverEvent(HoverEvent.hoverEvent(HoverEvent.Action.SHOW_TEXT, Component.text(Utils.format("&aClick to accept teleport request")))))
+                                .hoverEvent(HoverEvent.hoverEvent(HoverEvent.Action.SHOW_TEXT, Component.text(ChatFormat.format("&aClick to accept teleport request")))))
                         .append(Component.text(" "))
-                        .append(Component.text(Utils.format("&8[&c&lDECLINE&8]"))
+                        .append(Component.text(ChatFormat.format("&8[&c&lDECLINE&8]"))
                                 .clickEvent(ClickEvent.clickEvent(ClickEvent.Action.RUN_COMMAND, "/tpadecline " + p.getName()))
-                                .hoverEvent(HoverEvent.hoverEvent(HoverEvent.Action.SHOW_TEXT, Component.text(Utils.format("&aClick to decline teleport request")))))
+                                .hoverEvent(HoverEvent.hoverEvent(HoverEvent.Action.SHOW_TEXT, Component.text(ChatFormat.format("&aClick to decline teleport request")))))
         );
         p.sendMessage(Utils.cmdMsg("&aTPA request has been send to &e" + recipient.getName()));
         tpaRequests.put(p, recipient);
@@ -65,7 +67,7 @@ public class TpaCMD implements CommandExecutor, TabCompleter {
 
     @Override
     public @Nullable List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
-        if(args.length == 1) return Utils.tabCompletionsSearch(args[0], ClassicDupe.getOnlinePlayerUsernames());
+        if(args.length == 1) return TabComplete.tabCompletionsSearch(args[0], ClassicDupe.getOnlinePlayerUsernames());
         return new ArrayList<>();
     }
 

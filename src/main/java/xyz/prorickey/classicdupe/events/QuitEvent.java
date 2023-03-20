@@ -10,6 +10,7 @@ import xyz.prorickey.classicdupe.commands.default1.PrivateMessageCMD;
 import xyz.prorickey.classicdupe.commands.moderator.StaffChatCMD;
 import xyz.prorickey.classicdupe.commands.perk.ChatColorCMD;
 import xyz.prorickey.classicdupe.commands.perk.ChatGradientCMD;
+import xyz.prorickey.proutils.ChatFormat;
 
 public class QuitEvent implements Listener {
 
@@ -22,13 +23,13 @@ public class QuitEvent implements Listener {
         PrivateMessageCMD.lastInConvo.remove(e.getPlayer());
         if(PrivateMessageCMD.lastInConvo.containsValue(e.getPlayer())) PrivateMessageCMD.lastInConvo.forEach((sender, recipient) -> PrivateMessageCMD.lastInConvo.remove(sender));
         e.quitMessage(Component.text(
-                Utils.format("&8[&c-&8] " +
+                ChatFormat.format("&8[&c-&8] " +
                         ClassicDupe.getLPAPI().getUserManager().getUser(e.getPlayer().getUniqueId()).getCachedData().getMetaData().getPrefix() +
                         e.getPlayer().getName())
         ));
         if(Combat.inCombat.containsKey(e.getPlayer())) {
             e.quitMessage(Component.text(
-                    Utils.format("&8[&c-&8] " +
+                    ChatFormat.format("&8[&c-&8] " +
                             ClassicDupe.getLPAPI().getUserManager().getUser(e.getPlayer().getUniqueId()).getCachedData().getMetaData().getPrefix() +
                             e.getPlayer().getName() +
                             " &8| &c&lCOMBAT LOG")));

@@ -9,6 +9,7 @@ import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import xyz.prorickey.classicdupe.Utils;
+import xyz.prorickey.proutils.TabComplete;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -46,7 +47,7 @@ public class TpadeclineCMD implements CommandExecutor, TabCompleter {
             TpaCMD.tpaRequests.forEach((send, recipient) -> {
                 if(recipient == sender) tpareqs.add(send.getName());
             });
-            return Utils.tabCompletionsSearch(args[0], tpareqs);
+            return TabComplete.tabCompletionsSearch(args[0], tpareqs);
         }
         return new ArrayList<>();
     }

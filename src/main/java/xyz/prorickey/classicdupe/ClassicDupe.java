@@ -19,6 +19,7 @@ import xyz.prorickey.classicdupe.database.Database;
 import xyz.prorickey.classicdupe.database.PlayerVaultDatabase;
 import xyz.prorickey.classicdupe.discord.ClassicDupeBot;
 import xyz.prorickey.classicdupe.events.*;
+import xyz.prorickey.proutils.ChatFormat;
 
 public class ClassicDupe extends JavaPlugin {
 
@@ -173,28 +174,28 @@ public class ClassicDupe extends JavaPlugin {
             if(lastBroadcast != null && lastBroadcast.equals(LastBroadcast.DISCORD)) {
                 lastBroadcast = LastBroadcast.STORE;
                 ClassicDupe.getPlugin().getServer().getOnlinePlayers().forEach(player -> {
-                    player.sendMessage(Component.text(Utils.format("")));
-                    player.sendMessage(Utils.format("&a-----------------------------------------------------"));
-                    player.sendMessage(Component.text(Utils.format("&b&lSTORE &8| &aCheck out our store at "))
-                            .append(Component.text(Utils.format("&ehttps://classicdupe.tebex.io"))
+                    player.sendMessage(Component.text(ChatFormat.format("")));
+                    player.sendMessage(ChatFormat.format("&a-----------------------------------------------------"));
+                    player.sendMessage(Component.text(ChatFormat.format("&b&lSTORE &8| &aCheck out our store at "))
+                            .append(Component.text(ChatFormat.format("&ehttps://classicdupe.tebex.io"))
                                     .clickEvent(ClickEvent.clickEvent(ClickEvent.Action.OPEN_URL, "https://classicdupe.tebex.io")))
-                            .append(Component.text(Utils.format(" &aor by executing ")))
-                            .append(Component.text(Utils.format("&e/buy"))
+                            .append(Component.text(ChatFormat.format(" &aor by executing ")))
+                            .append(Component.text(ChatFormat.format("&e/buy"))
                                     .clickEvent(ClickEvent.clickEvent(ClickEvent.Action.SUGGEST_COMMAND, "/buy"))));
-                    player.sendMessage(Utils.format("&a-----------------------------------------------------"));
+                    player.sendMessage(ChatFormat.format("&a-----------------------------------------------------"));
                 });
             } else {
                 lastBroadcast = LastBroadcast.DISCORD;
                 ClassicDupe.getPlugin().getServer().getOnlinePlayers().forEach(player -> {
-                    player.sendMessage(Component.text(Utils.format("")));
-                    player.sendMessage(Utils.format("&a-----------------------------------------------------"));
-                    player.sendMessage(Component.text(Utils.format("&b&lDISCORD &8| &aCheck out our discord at "))
-                            .append(Component.text(Utils.format("&ehttps://discord.gg/FZtcF3pBu6"))
+                    player.sendMessage(Component.text(ChatFormat.format("")));
+                    player.sendMessage(ChatFormat.format("&a-----------------------------------------------------"));
+                    player.sendMessage(Component.text(ChatFormat.format("&b&lDISCORD &8| &aCheck out our discord at "))
+                            .append(Component.text(ChatFormat.format("&ehttps://discord.gg/FZtcF3pBu6"))
                                     .clickEvent(ClickEvent.clickEvent(ClickEvent.Action.OPEN_URL, "https://discord.gg/FZtcF3pBu6")))
-                            .append(Component.text(Utils.format(" &aor by executing ")))
-                            .append(Component.text(Utils.format("&e/discord"))
+                            .append(Component.text(ChatFormat.format(" &aor by executing ")))
+                            .append(Component.text(ChatFormat.format("&e/discord"))
                                     .clickEvent(ClickEvent.clickEvent(ClickEvent.Action.SUGGEST_COMMAND, "/discord"))));
-                    player.sendMessage(Utils.format("&a-----------------------------------------------------"));
+                    player.sendMessage(ChatFormat.format("&a-----------------------------------------------------"));
                 });
             }
         }
@@ -219,7 +220,7 @@ public class ClassicDupe extends JavaPlugin {
     }
 
     public static void rawBroadcast(String text) {
-        plugin.getServer().getOnlinePlayers().forEach(player -> player.sendMessage(Utils.format(text)));
+        plugin.getServer().getOnlinePlayers().forEach(player -> player.sendMessage(ChatFormat.format(text)));
     }
 
     public static Boolean scheduledRestartCanceled = false;

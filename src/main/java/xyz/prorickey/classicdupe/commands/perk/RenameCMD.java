@@ -10,6 +10,7 @@ import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import xyz.prorickey.classicdupe.Utils;
+import xyz.prorickey.proutils.ChatFormat;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -31,7 +32,7 @@ public class RenameCMD implements CommandExecutor, TabCompleter {
         }
         StringBuilder msg = new StringBuilder();
         for (String arg : args) msg.append(arg).append(" ");
-        p.getInventory().getItemInMainHand().editMeta(meta -> meta.displayName(Component.text(Utils.format(msg.toString()))));
+        p.getInventory().getItemInMainHand().editMeta(meta -> meta.displayName(Component.text(ChatFormat.format(msg.toString()))));
         p.sendMessage(Utils.cmdMsg("&aRenamed the item in your hand to " + msg));
         return true;
     }

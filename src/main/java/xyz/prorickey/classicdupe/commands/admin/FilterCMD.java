@@ -9,6 +9,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import xyz.prorickey.classicdupe.ClassicDupe;
 import xyz.prorickey.classicdupe.Utils;
+import xyz.prorickey.proutils.ChatFormat;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,7 +18,7 @@ public class FilterCMD implements CommandExecutor, TabCompleter {
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
         if(args.length == 0) {
-            Component message = Component.text(Utils.format("&aCurrent Filter Items&7(Fullword in red, Partword in green): "));
+            Component message = Component.text(ChatFormat.format("&aCurrent Filter Items&7(Fullword in red, Partword in green): "));
             StringBuilder sb = new StringBuilder();
             if(ClassicDupe.getDatabase().getFilterDatabase().getWordsFromFilter().size() == 0) {
                 sender.sendMessage(Utils.cmdMsg("&aThe filter is currently empty"));
@@ -28,13 +29,13 @@ public class FilterCMD implements CommandExecutor, TabCompleter {
                 else sb.append("&a").append(filterWord.text).append("&7, ");
             });
             sb.delete(sb.length() - 4, sb.length() - 1);
-            message = message.append(Component.text(Utils.format(sb.toString())));
+            message = message.append(Component.text(ChatFormat.format(sb.toString())));
             sender.sendMessage(message);
             return true;
         }
         switch (args[0].toLowerCase()) {
             case "list" -> {
-                Component message = Component.text(Utils.format("&aCurrent Filter Items&7(Fullword in red, Partword in green): "));
+                Component message = Component.text(ChatFormat.format("&aCurrent Filter Items&7(Fullword in red, Partword in green): "));
                 StringBuilder sb = new StringBuilder();
                 if (ClassicDupe.getDatabase().getFilterDatabase().getWordsFromFilter().size() == 0) {
                     sender.sendMessage(Utils.cmdMsg("&aThe filter is currently empty"));
@@ -45,7 +46,7 @@ public class FilterCMD implements CommandExecutor, TabCompleter {
                     else sb.append("&a").append(filterWord.text).append("&7, ");
                 });
                 sb.delete(sb.length() - 4, sb.length() - 1);
-                message = message.append(Component.text(Utils.format(sb.toString())));
+                message = message.append(Component.text(ChatFormat.format(sb.toString())));
                 sender.sendMessage(message);
             }
             case "add" -> {

@@ -11,6 +11,8 @@ import org.jetbrains.annotations.Nullable;
 import xyz.prorickey.classicdupe.ClassicDupe;
 import xyz.prorickey.classicdupe.Utils;
 import xyz.prorickey.classicdupe.database.PlayerDatabase;
+import xyz.prorickey.proutils.ChatFormat;
+import xyz.prorickey.proutils.TabComplete;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -29,15 +31,15 @@ public class StatsCMD implements CommandExecutor, TabCompleter {
             return true;
         }
         sender.sendMessage(Utils.cmdMsg("&aStats of &e" + tarj.getName()));
-        sender.sendMessage(Utils.format("&7- &aKills: &e" + stats.kills));
-        sender.sendMessage(Utils.format("&7- &aDeaths: &e" + stats.deaths));
-        sender.sendMessage(Utils.format("&7- &aKDR: &e" + stats.kdr));
+        sender.sendMessage(ChatFormat.format("&7- &aKills: &e" + stats.kills));
+        sender.sendMessage(ChatFormat.format("&7- &aDeaths: &e" + stats.deaths));
+        sender.sendMessage(ChatFormat.format("&7- &aKDR: &e" + stats.kdr));
         return true;
     }
 
     @Override
     public @Nullable List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
-        if(args.length == 1) return Utils.tabCompletionsSearch(args[0], ClassicDupe.getOnlinePlayerUsernames());
+        if(args.length == 1) return TabComplete.tabCompletionsSearch(args[0], ClassicDupe.getOnlinePlayerUsernames());
         return new ArrayList<>();
     }
 }

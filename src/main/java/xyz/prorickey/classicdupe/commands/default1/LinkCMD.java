@@ -14,6 +14,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import xyz.prorickey.classicdupe.ClassicDupe;
 import xyz.prorickey.classicdupe.Utils;
+import xyz.prorickey.proutils.ChatFormat;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -42,9 +43,9 @@ public class LinkCMD implements CommandExecutor, TabCompleter {
         String code = genCode();
         linkCodes.put(code, new LinkCode(code, player, System.currentTimeMillis()));
         player.sendMessage(Component.text(Utils.cmdMsg("&aPlease go onto the ClassicDupe discord and execute the command "))
-                .append(Component.text(Utils.format("&e/link " + code))
+                .append(Component.text(ChatFormat.format("&e/link " + code))
                         .clickEvent(ClickEvent.clickEvent(ClickEvent.Action.COPY_TO_CLIPBOARD, "/link " + code))
-                        .hoverEvent(HoverEvent.hoverEvent(HoverEvent.Action.SHOW_TEXT, Component.text(Utils.format("&7Copy this command into discord"))))));
+                        .hoverEvent(HoverEvent.hoverEvent(HoverEvent.Action.SHOW_TEXT, Component.text(ChatFormat.format("&7Copy this command into discord"))))));
         return true;
     }
 

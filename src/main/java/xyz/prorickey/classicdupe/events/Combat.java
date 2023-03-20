@@ -11,6 +11,7 @@ import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.scheduler.BukkitRunnable;
 import xyz.prorickey.classicdupe.ClassicDupe;
 import xyz.prorickey.classicdupe.Utils;
+import xyz.prorickey.proutils.ChatFormat;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -45,8 +46,8 @@ public class Combat implements Listener {
                 Long time = (new ArrayList<>(Combat.inCombat.values())).get(i);
                 if((time + (1000*15)) < System.currentTimeMillis() && Combat.inCombat.containsKey(player)) {
                     Combat.inCombat.remove(player);
-                    player.sendActionBar(Component.text(Utils.format("&aYou are no longer in combat")));
-                } else player.sendActionBar(Component.text(Utils.format("&cYou are currently in combat")));
+                    player.sendActionBar(Component.text(ChatFormat.format("&aYou are no longer in combat")));
+                } else player.sendActionBar(Component.text(ChatFormat.format("&cYou are currently in combat")));
             }
         }
     }

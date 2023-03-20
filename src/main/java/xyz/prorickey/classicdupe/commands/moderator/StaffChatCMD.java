@@ -14,6 +14,7 @@ import org.jetbrains.annotations.Nullable;
 import net.kyori.adventure.text.Component;
 import xyz.prorickey.classicdupe.ClassicDupe;
 import xyz.prorickey.classicdupe.Utils;
+import xyz.prorickey.proutils.ChatFormat;
 
 public class StaffChatCMD implements CommandExecutor, TabCompleter {
 
@@ -21,7 +22,7 @@ public class StaffChatCMD implements CommandExecutor, TabCompleter {
 
     public static void sendToStaffChat(String text) {
         ClassicDupe.getPlugin().getServer().getOnlinePlayers().forEach(p -> {
-            if(p.hasPermission("mod.staffchat")) p.sendMessage(Utils.format(text));
+            if(p.hasPermission("mod.staffchat")) p.sendMessage(ChatFormat.format(text));
         });
     }
 

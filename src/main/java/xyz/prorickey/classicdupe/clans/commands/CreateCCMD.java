@@ -14,6 +14,7 @@ import xyz.prorickey.classicdupe.Utils;
 import xyz.prorickey.classicdupe.clans.ClanCommand;
 import xyz.prorickey.classicdupe.clans.Clans;
 import xyz.prorickey.classicdupe.clans.ClansData;
+import xyz.prorickey.proutils.ChatFormat;
 
 import java.util.ArrayList;
 
@@ -37,7 +38,7 @@ public class CreateCCMD implements ClanCommand {
         ClansData.ClanMember cmem = clans.getData().getPlayer(player.getUniqueId().toString());
         if(cmem.getClanID() != null) {
             player.sendMessage(Component.text(Utils.cmdMsg("&cYou cannot create a clan while you are in a clan. You must leave your clan using "))
-                    .append(Component.text(Utils.format("&e/clan leave"))
+                    .append(Component.text(ChatFormat.format("&e/clan leave"))
                             .clickEvent(ClickEvent.clickEvent(ClickEvent.Action.SUGGEST_COMMAND, "/clan leave"))));
             return;
         }
@@ -52,7 +53,7 @@ public class CreateCCMD implements ClanCommand {
         boolean success = clans.getData().createClan(args[0], player);
         if(success) {
             ClassicDupe.getPlugin().getServer().getOnlinePlayers().forEach(p -> {
-                p.sendMessage(Utils.format("&e" + player.getName() + "&a just created the clan &6" + args[0]));
+                p.sendMessage(ChatFormat.format("&e" + player.getName() + "&a just created the clan &6" + args[0]));
                 p.playSound(player, "block.note_block.pling", SoundCategory.MASTER, 1F, 0.5F);
             });
         } else {

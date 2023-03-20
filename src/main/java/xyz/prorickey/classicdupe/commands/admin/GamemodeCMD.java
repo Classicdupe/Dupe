@@ -8,6 +8,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import xyz.prorickey.classicdupe.ClassicDupe;
 import xyz.prorickey.classicdupe.Utils;
+import xyz.prorickey.proutils.TabComplete;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -169,8 +170,8 @@ public class GamemodeCMD implements CommandExecutor, TabCompleter {
 
     @Override
     public @Nullable List<String> onTabComplete(@NotNull CommandSender commandSender, @NotNull Command command, @NotNull String s, @NotNull String[] args) {
-        if(args.length == 1) return Utils.tabCompletionsSearch(args[0], List.of("creative", "survival", "spectator", "adventure"));
-        else if(args.length == 2) return Utils.tabCompletionsSearch(args[1], ClassicDupe.getOnlinePlayerUsernames());
+        if(args.length == 1) return TabComplete.tabCompletionsSearch(args[0], List.of("creative", "survival", "spectator", "adventure"));
+        else if(args.length == 2) return TabComplete.tabCompletionsSearch(args[1], ClassicDupe.getOnlinePlayerUsernames());
         return new ArrayList<>();
     }
 

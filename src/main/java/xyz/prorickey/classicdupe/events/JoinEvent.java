@@ -16,6 +16,7 @@ import xyz.prorickey.classicdupe.Utils;
 import xyz.prorickey.classicdupe.commands.perk.ChatColorCMD;
 import xyz.prorickey.classicdupe.commands.perk.ChatGradientCMD;
 import xyz.prorickey.classicdupe.database.PlayerDatabase;
+import xyz.prorickey.proutils.ChatFormat;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -31,7 +32,7 @@ public class JoinEvent implements Listener {
         if(ClassicDupe.getDatabase().getPlayerDatabase().getPlayer(e.getPlayer().getUniqueId().toString()) == null) {
             ClassicDupe.getDatabase().getPlayerDatabase().initPlayer(e.getPlayer());
             e.getPlayer().teleport(ClassicDupe.getDatabase().spawn);
-            e.joinMessage(Component.text(Utils.format("&e" + e.getPlayer().getName() + " &aJust joined for the first time! Give them a warm welcome")));
+            e.joinMessage(Component.text(ChatFormat.format("&e" + e.getPlayer().getName() + " &aJust joined for the first time! Give them a warm welcome")));
             RandomItemTask task = new RandomItemTask(e.getPlayer());
             randomItemList.add(e.getPlayer());
             randomTaskMap.put(e.getPlayer(), task);
@@ -58,7 +59,7 @@ public class JoinEvent implements Listener {
             ));
         }
         e.joinMessage(Component.text(
-                Utils.format("&8[&a+&8] " +
+                ChatFormat.format("&8[&a+&8] " +
                         ClassicDupe.getLPAPI().getUserManager().getUser(e.getPlayer().getUniqueId()).getCachedData().getMetaData().getPrefix() +
                         e.getPlayer().getName())
         ));

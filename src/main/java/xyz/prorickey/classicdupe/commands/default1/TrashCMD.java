@@ -11,6 +11,7 @@ import org.bukkit.inventory.Inventory;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import xyz.prorickey.classicdupe.Utils;
+import xyz.prorickey.proutils.ChatFormat;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,7 +23,7 @@ public class TrashCMD implements CommandExecutor, TabCompleter {
             sender.sendMessage(Utils.cmdMsg("&cYou cannot execute this command from console"));
             return true;
         }
-        Inventory trash = Bukkit.createInventory(null, 54, Component.text(Utils.format("&c&lTrash")));
+        Inventory trash = Bukkit.createInventory(null, 54, Component.text(ChatFormat.format("&c&lTrash")));
         p.openInventory(trash);
         return true;
     }

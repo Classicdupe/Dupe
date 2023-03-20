@@ -9,6 +9,7 @@ import org.bukkit.command.TabCompleter;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import xyz.prorickey.classicdupe.Utils;
+import xyz.prorickey.proutils.ChatFormat;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,7 +17,7 @@ import java.util.List;
 public class DiscordCMD implements CommandExecutor, TabCompleter {
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
-        sender.sendMessage(Component.text(Utils.format("&aYou can join our discord at &bhttps://discord.gg/FZtcF3pBu6"))
+        sender.sendMessage(Component.text(ChatFormat.format("&aYou can join our discord at &bhttps://discord.gg/FZtcF3pBu6"))
                 .clickEvent(ClickEvent.clickEvent(ClickEvent.Action.OPEN_URL, "https://discord.gg/FZtcF3pBu6")));
         return true;
     }

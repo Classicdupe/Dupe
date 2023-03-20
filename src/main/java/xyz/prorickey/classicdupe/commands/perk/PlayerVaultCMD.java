@@ -18,6 +18,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import xyz.prorickey.classicdupe.ClassicDupe;
 import xyz.prorickey.classicdupe.Utils;
+import xyz.prorickey.proutils.ChatFormat;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -44,7 +45,7 @@ public class PlayerVaultCMD implements CommandExecutor, TabCompleter, Listener {
             p.sendMessage(Utils.cmdMsg("&cYou do not have access to that vault"));
             return true;
         }
-        Inventory vaultGUI = Bukkit.createInventory(null, 54, Component.text(Utils.format("&9&lVault #" + vault)));
+        Inventory vaultGUI = Bukkit.createInventory(null, 54, Component.text(ChatFormat.format("&9&lVault #" + vault)));
         vaultMap.forEach(vaultGUI::setItem);
         p.openInventory(vaultGUI);
         vaultGuis.put(p.getUniqueId().toString(), vaultGUI);

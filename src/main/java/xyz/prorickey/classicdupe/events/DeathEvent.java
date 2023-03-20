@@ -15,6 +15,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.SkullMeta;
 import xyz.prorickey.classicdupe.ClassicDupe;
 import xyz.prorickey.classicdupe.Utils;
+import xyz.prorickey.proutils.ChatFormat;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -38,12 +39,12 @@ public class DeathEvent implements Listener {
             ItemStack skull = new ItemStack(Material.PLAYER_HEAD);
             SkullMeta meta = (SkullMeta) Bukkit.getItemFactory().getItemMeta(Material.PLAYER_HEAD);
             meta.setOwningPlayer(e.getEntity());
-            meta.displayName(Component.text(Utils.format("&e" + e.getEntity().getName() + "'s Head")));
+            meta.displayName(Component.text(ChatFormat.format("&e" + e.getEntity().getName() + "'s Head")));
             DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");
             LocalDateTime now = LocalDateTime.now();
             meta.lore(List.of(
-                    Component.text(Utils.format("&cKilled by &6" + killer.getName())),
-                    Component.text(Utils.format("&cKilled on " + dtf.format(now)))
+                    Component.text(ChatFormat.format("&cKilled by &6" + killer.getName())),
+                    Component.text(ChatFormat.format("&cKilled on " + dtf.format(now)))
             ));
             skull.setItemMeta(meta);
             e.getPlayer().getWorld().dropItem(e.getPlayer().getLocation(), skull);
@@ -51,42 +52,42 @@ public class DeathEvent implements Listener {
         EntityDamageEvent.DamageCause damageCause = player.getLastDamageCause().getCause();
         switch(damageCause) {
             case BLOCK_EXPLOSION -> {
-                if(player.getKiller() != null) e.deathMessage(Component.text(Utils.format("&c\u2620 &6" + player.getName() + "&e was exploded by &6" + killer.getName())));
-                else e.deathMessage(Component.text(Utils.format("&c\u2620 &6" + player.getName() + "&e exploded")));
+                if(player.getKiller() != null) e.deathMessage(Component.text(ChatFormat.format("&c\u2620 &6" + player.getName() + "&e was exploded by &6" + killer.getName())));
+                else e.deathMessage(Component.text(ChatFormat.format("&c\u2620 &6" + player.getName() + "&e exploded")));
             }
             case PROJECTILE -> {
-                if(player.getKiller() != null) e.deathMessage(Component.text(Utils.format("&c\u2620 &6" + player.getName() + "&e was sniped by &6" + killer.getName())));
-                else e.deathMessage(Component.text(Utils.format("&c\u2620 &6" + player.getName() + "&e died by a projectile")));
+                if(player.getKiller() != null) e.deathMessage(Component.text(ChatFormat.format("&c\u2620 &6" + player.getName() + "&e was sniped by &6" + killer.getName())));
+                else e.deathMessage(Component.text(ChatFormat.format("&c\u2620 &6" + player.getName() + "&e died by a projectile")));
             }
             case ENTITY_ATTACK, ENTITY_SWEEP_ATTACK -> {
-                if(player.getKiller() != null) e.deathMessage(Component.text(Utils.format("&c\u2620 &6" + player.getName() + "&e was slain by &6" + killer.getName())));
-                else e.deathMessage(Component.text(Utils.format("&c\u2620 &6" + player.getName() + "&e was slain")));
+                if(player.getKiller() != null) e.deathMessage(Component.text(ChatFormat.format("&c\u2620 &6" + player.getName() + "&e was slain by &6" + killer.getName())));
+                else e.deathMessage(Component.text(ChatFormat.format("&c\u2620 &6" + player.getName() + "&e was slain")));
             }
-            case FALL -> e.deathMessage(Component.text(Utils.format("&c\u2620 &6" + player.getName() + "&e fell to his death")));
-            case LAVA -> e.deathMessage(Component.text(Utils.format("&c\u2620 &6" + player.getName() + "&e took a swim in lava")));
-            case VOID -> e.deathMessage(Component.text(Utils.format("&c\u2620 &6" + player.getName() + "&e jumped into the abyss")));
-            case FIRE -> e.deathMessage(Component.text(Utils.format("&c\u2620 &6" + player.getName() + "&e was cremated")));
-            case MAGIC -> e.deathMessage(Component.text(Utils.format("&c\u2620 &6" + player.getName() + "&e died to a magic spell")));
-            case DRYOUT -> e.deathMessage(Component.text(Utils.format("&c\u2620 &6" + player.getName() + "&e dried out?")));
-            case FREEZE -> e.deathMessage(Component.text(Utils.format("&c\u2620 &6" + player.getName() + "&e froze to death")));
-            case POISON -> e.deathMessage(Component.text(Utils.format("&c\u2620 &6" + player.getName() + "&e was poisoned")));
-            case THORNS -> e.deathMessage(Component.text(Utils.format("&c\u2620 &6" + player.getName() + "&e was pricked by too many thorns")));
-            case WITHER -> e.deathMessage(Component.text(Utils.format("&c\u2620 &6" + player.getName() + "&e withered away")));
-            case MELTING -> e.deathMessage(Component.text(Utils.format("&c\u2620 &6" + player.getName() + "&e melted?")));
-            case SUICIDE -> e.deathMessage(Component.text(Utils.format("&c\u2620 &6" + player.getName() + "&e killed himself")));
-            case CRAMMING -> e.deathMessage(Component.text(Utils.format("&c\u2620 &6" + player.getName() + "&e got Astroworlded")));
-            case DROWNING -> e.deathMessage(Component.text(Utils.format("&c\u2620 &6" + player.getName() + "&e drowned")));
-            case FIRE_TICK -> e.deathMessage(Component.text(Utils.format("&c\u2620 &6" + player.getName() + "&e burned alive")));
-            case HOT_FLOOR -> e.deathMessage(Component.text(Utils.format("&c\u2620 &6" + player.getName() + "&e failed the floor is lava challenge")));
-            case LIGHTNING -> e.deathMessage(Component.text(Utils.format("&c\u2620 &6" + player.getName() + "&e got struck by lightning")));
-            case SONIC_BOOM -> e.deathMessage(Component.text(Utils.format("&c\u2620 &6" + player.getName() + "&e died from a sonic boom")));
-            case STARVATION -> e.deathMessage(Component.text(Utils.format("&c\u2620 &6" + player.getName() + "&e starved to death")));
-            case SUFFOCATION -> e.deathMessage(Component.text(Utils.format("&c\u2620 &6" + player.getName() + "&e suffocated")));
-            case DRAGON_BREATH -> e.deathMessage(Component.text(Utils.format("&c\u2620 &6" + player.getName() + "&e died from the dragon's breath")));
-            case FALLING_BLOCK -> e.deathMessage(Component.text(Utils.format("&c\u2620 &6" + player.getName() + "&e died by a falling block")));
-            case FLY_INTO_WALL -> e.deathMessage(Component.text(Utils.format("&c\u2620 &6" + player.getName() + "&e flew into a wall")));
-            case ENTITY_EXPLOSION -> e.deathMessage(Component.text(Utils.format("&c\u2620 &6" + player.getName() + "&e died from an explosion")));
-            default -> e.deathMessage(Component.text(Utils.format("&c\u2620 &6" + player.getName() + "&e died")));
+            case FALL -> e.deathMessage(Component.text(ChatFormat.format("&c\u2620 &6" + player.getName() + "&e fell to his death")));
+            case LAVA -> e.deathMessage(Component.text(ChatFormat.format("&c\u2620 &6" + player.getName() + "&e took a swim in lava")));
+            case VOID -> e.deathMessage(Component.text(ChatFormat.format("&c\u2620 &6" + player.getName() + "&e jumped into the abyss")));
+            case FIRE -> e.deathMessage(Component.text(ChatFormat.format("&c\u2620 &6" + player.getName() + "&e was cremated")));
+            case MAGIC -> e.deathMessage(Component.text(ChatFormat.format("&c\u2620 &6" + player.getName() + "&e died to a magic spell")));
+            case DRYOUT -> e.deathMessage(Component.text(ChatFormat.format("&c\u2620 &6" + player.getName() + "&e dried out?")));
+            case FREEZE -> e.deathMessage(Component.text(ChatFormat.format("&c\u2620 &6" + player.getName() + "&e froze to death")));
+            case POISON -> e.deathMessage(Component.text(ChatFormat.format("&c\u2620 &6" + player.getName() + "&e was poisoned")));
+            case THORNS -> e.deathMessage(Component.text(ChatFormat.format("&c\u2620 &6" + player.getName() + "&e was pricked by too many thorns")));
+            case WITHER -> e.deathMessage(Component.text(ChatFormat.format("&c\u2620 &6" + player.getName() + "&e withered away")));
+            case MELTING -> e.deathMessage(Component.text(ChatFormat.format("&c\u2620 &6" + player.getName() + "&e melted?")));
+            case SUICIDE -> e.deathMessage(Component.text(ChatFormat.format("&c\u2620 &6" + player.getName() + "&e killed himself")));
+            case CRAMMING -> e.deathMessage(Component.text(ChatFormat.format("&c\u2620 &6" + player.getName() + "&e got Astroworlded")));
+            case DROWNING -> e.deathMessage(Component.text(ChatFormat.format("&c\u2620 &6" + player.getName() + "&e drowned")));
+            case FIRE_TICK -> e.deathMessage(Component.text(ChatFormat.format("&c\u2620 &6" + player.getName() + "&e burned alive")));
+            case HOT_FLOOR -> e.deathMessage(Component.text(ChatFormat.format("&c\u2620 &6" + player.getName() + "&e failed the floor is lava challenge")));
+            case LIGHTNING -> e.deathMessage(Component.text(ChatFormat.format("&c\u2620 &6" + player.getName() + "&e got struck by lightning")));
+            case SONIC_BOOM -> e.deathMessage(Component.text(ChatFormat.format("&c\u2620 &6" + player.getName() + "&e died from a sonic boom")));
+            case STARVATION -> e.deathMessage(Component.text(ChatFormat.format("&c\u2620 &6" + player.getName() + "&e starved to death")));
+            case SUFFOCATION -> e.deathMessage(Component.text(ChatFormat.format("&c\u2620 &6" + player.getName() + "&e suffocated")));
+            case DRAGON_BREATH -> e.deathMessage(Component.text(ChatFormat.format("&c\u2620 &6" + player.getName() + "&e died from the dragon's breath")));
+            case FALLING_BLOCK -> e.deathMessage(Component.text(ChatFormat.format("&c\u2620 &6" + player.getName() + "&e died by a falling block")));
+            case FLY_INTO_WALL -> e.deathMessage(Component.text(ChatFormat.format("&c\u2620 &6" + player.getName() + "&e flew into a wall")));
+            case ENTITY_EXPLOSION -> e.deathMessage(Component.text(ChatFormat.format("&c\u2620 &6" + player.getName() + "&e died from an explosion")));
+            default -> e.deathMessage(Component.text(ChatFormat.format("&c\u2620 &6" + player.getName() + "&e died")));
         }
     }
 

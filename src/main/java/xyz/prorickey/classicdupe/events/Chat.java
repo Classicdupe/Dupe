@@ -13,6 +13,7 @@ import xyz.prorickey.classicdupe.commands.moderator.StaffChatCMD;
 import xyz.prorickey.classicdupe.commands.perk.ChatColorCMD;
 import xyz.prorickey.classicdupe.commands.perk.ChatGradientCMD;
 import xyz.prorickey.classicdupe.database.PlayerDatabase;
+import xyz.prorickey.proutils.ChatFormat;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -54,7 +55,7 @@ public class Chat implements Listener {
                 "&8[&cSC&8] " +
                 ((Utils.getPrefix(e.getPlayer()) != null) ? Utils.getPrefix(e.getPlayer()) : "") +
                 e.getPlayer().getName() +
-                Utils.format(" &7\u00BB &a") + 
+                ChatFormat.format(" &7\u00BB &a") +
                 PlainTextComponentSerializer.plainText().serialize(e.message())
             );
             return;
@@ -71,29 +72,29 @@ public class Chat implements Listener {
         if(chatType.equals(ChatType.DEFAULT)) {
             String finalName = name;
             e.renderer((player, sourceDisplayName, message, viewer) -> Component.text(
-                    Utils.format((Utils.getPrefix(player) != null) ? Utils.getPrefix(player) : "") +
-                            Utils.format(finalName) +
-                            Utils.format((Utils.getSuffix(player) != null) ? " " + Utils.getSuffix(player)  : "") +
-                            Utils.format(" &7\u00BB &7")
+                    ChatFormat.format((Utils.getPrefix(player) != null) ? Utils.getPrefix(player) : "") +
+                            ChatFormat.format(finalName) +
+                            ChatFormat.format((Utils.getSuffix(player) != null) ? " " + Utils.getSuffix(player)  : "") +
+                            ChatFormat.format(" &7\u00BB &7")
 
             ).append(message));
         } else if(chatType.equals(ChatType.COLOR)) {
             String finalName1 = name;
             e.renderer((player, sourceDisplayName, message, viewer) -> Component.text(
-                    Utils.format((Utils.getPrefix(player) != null) ? Utils.getPrefix(player) : "") +
-                            Utils.format(finalName1) +
-                            Utils.format((Utils.getSuffix(player) != null) ? " " + Utils.getSuffix(player)  : "") +
-                            Utils.format(" &7\u00BB " + ChatColorCMD.colorProfiles.get(e.getPlayer().getUniqueId().toString())) +
+                    ChatFormat.format((Utils.getPrefix(player) != null) ? Utils.getPrefix(player) : "") +
+                            ChatFormat.format(finalName1) +
+                            ChatFormat.format((Utils.getSuffix(player) != null) ? " " + Utils.getSuffix(player)  : "") +
+                            ChatFormat.format(" &7\u00BB " + ChatColorCMD.colorProfiles.get(e.getPlayer().getUniqueId().toString())) +
                             PlainTextComponentSerializer.plainText().serialize(message)
             ));
         } else {
             MiniMessage mm = MiniMessage.miniMessage();
             String finalName2 = name;
             e.renderer((player, sourceDisplayName, message, viewer) -> Component.text(
-                    Utils.format((Utils.getPrefix(player) != null) ? Utils.getPrefix(player) : "") +
-                            Utils.format(finalName2) +
-                            Utils.format((Utils.getSuffix(player) != null) ? " " + Utils.getSuffix(player)  : "") +
-                            Utils.format(" &7\u00BB ")
+                    ChatFormat.format((Utils.getPrefix(player) != null) ? Utils.getPrefix(player) : "") +
+                            ChatFormat.format(finalName2) +
+                            ChatFormat.format((Utils.getSuffix(player) != null) ? " " + Utils.getSuffix(player)  : "") +
+                            ChatFormat.format(" &7\u00BB ")
             ).append(mm.deserialize( "<gradient:" +
                     ChatGradientCMD.gradientProfiles.get(e.getPlayer().getUniqueId().toString()).gradientFrom + ":" +
                     ChatGradientCMD.gradientProfiles.get(e.getPlayer().getUniqueId().toString()).gradientTo + ">" +

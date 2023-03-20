@@ -8,6 +8,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import xyz.prorickey.classicdupe.ClassicDupe;
 import xyz.prorickey.classicdupe.Utils;
+import xyz.prorickey.proutils.ChatFormat;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,10 +19,10 @@ public class BroadcastCMD implements CommandExecutor, TabCompleter {
         StringBuilder msg = new StringBuilder();
         for (String arg : args) msg.append(arg).append(" ");
         ClassicDupe.getPlugin().getServer().getOnlinePlayers().forEach(p -> {
-            p.sendMessage(Utils.format("&a-----------------------------------------------------"));
-            p.sendMessage(Utils.centerText(Utils.format("&eAnnouncement")));
-            p.sendMessage(Utils.format(msg.toString()));
-            p.sendMessage(Utils.format("&a-----------------------------------------------------"));
+            p.sendMessage(ChatFormat.format("&a-----------------------------------------------------"));
+            p.sendMessage(Utils.centerText(ChatFormat.format("&eAnnouncement")));
+            p.sendMessage(ChatFormat.format(msg.toString()));
+            p.sendMessage(ChatFormat.format("&a-----------------------------------------------------"));
         });
         return true;
     }
