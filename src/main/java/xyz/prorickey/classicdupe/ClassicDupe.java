@@ -1,6 +1,7 @@
 package xyz.prorickey.classicdupe;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import net.kyori.adventure.text.Component;
@@ -11,6 +12,10 @@ import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import net.luckperms.api.LuckPerms;
+import org.bukkit.scoreboard.Criteria;
+import org.bukkit.scoreboard.DisplaySlot;
+import org.bukkit.scoreboard.Objective;
+import org.bukkit.scoreboard.ScoreboardManager;
 import xyz.prorickey.classicdupe.commands.admin.*;
 import xyz.prorickey.classicdupe.commands.default1.*;
 import xyz.prorickey.classicdupe.commands.moderator.*;
@@ -28,6 +33,7 @@ public class ClassicDupe extends JavaPlugin {
     public static LuckPerms lpapi;
     public static Database database;
     public static PlayerVaultDatabase pvdatabase;
+    public static int tps;
 
     @Override
     public void onEnable() {
@@ -43,12 +49,13 @@ public class ClassicDupe extends JavaPlugin {
 
         bot = new ClassicDupeBot(this);
 
-        new JoinEvent.JoinEventTasks().runTaskTimer(ClassicDupe.getPlugin(), 0, 20);
-        new TpaCMD.TPATask().runTaskTimer(ClassicDupe.getPlugin(), 0, 20);
-        new Combat.CombatTask().runTaskTimer(ClassicDupe.getPlugin(), 0, 10);
-        new LeaderBoardTask().runTaskTimer(ClassicDupe.getPlugin(), 0, 20*60);
-        new BroadcastTask().runTaskTimer(ClassicDupe.getPlugin(), 0, 20*90);
-        new LinkCMD.LinkCodeTask().runTaskTimer(ClassicDupe.getPlugin(), 0, 20);
+        new JoinEvent.JoinEventTasks().runTaskTimer(this, 0, 20);
+        new TpaCMD.TPATask().runTaskTimer(this, 0, 20);
+        new Combat.CombatTask().runTaskTimer(this, 0, 10);
+        new LeaderBoardTask().runTaskTimer(this, 0, 20*60);
+        new BroadcastTask().runTaskTimer(this, 0, 20*90);
+        new LinkCMD.LinkCodeTask().runTaskTimer(this, 0, 20);
+        new Scoreboard.ScoreboardTask().runTaskTimer(this, 0, 10);
 
         this.getCommand("dupe").setExecutor(new DupeCMD());
         this.getCommand("dupe").setTabCompleter(new DupeCMD());
@@ -132,6 +139,8 @@ public class ClassicDupe extends JavaPlugin {
         this.getCommand("unlink").setTabCompleter(new UnlinkCMD());
         this.getCommand("feed").setExecutor(new FeedCMD());
         this.getCommand("feed").setTabCompleter(new FeedCMD());
+        this.getCommand("configreload").setExecutor(new ConfigReload());
+        this.getCommand("configreload").setTabCompleter(new ConfigReload());
 
         getServer().getPluginManager().registerEvents(new JoinEvent(), this);
         getServer().getPluginManager().registerEvents(new QuitEvent(), this);
@@ -150,6 +159,24 @@ public class ClassicDupe extends JavaPlugin {
         getServer().getPluginManager().registerEvents(new GoldenAppleCooldown(), this);
 
         Bukkit.getScheduler().scheduleSyncDelayedTask(this, ClassicDupe::scheduleRestart, 20L * 60L * 60L * 24L);
+        getServer().getScheduler().scheduleSyncRepeatingTask(this, new Runnable() {
+            long sec;
+            long currentSec;
+            int ticks;
+            int delay;
+
+            @Override
+            public void run() {
+                sec = (System.currentTimeMillis() / 1000);
+                if(currentSec == sec) ticks++;
+                else {
+                    currentSec = sec;
+                    tps = (tps == 0 ? ticks : ((tps + ticks) / 2));
+                    ticks = 0;
+                    if((++delay % 300) == 0) delay = 0;
+                }
+            }
+        }, 0, 1);
     }
 
     @Override

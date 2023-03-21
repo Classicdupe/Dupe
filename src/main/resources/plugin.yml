@@ -187,6 +187,10 @@ commands:
     description: To feed yourself
     usage: "Usage: /feed"
     permission: perks.feed
+  configreload:
+    description: To reload the config
+    usage: "Usage: /configreload"
+    permission: admin.reload
 permissions:
   default.spawn.others:
     description: Allows you to teleport others to spawn
