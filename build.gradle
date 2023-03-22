@@ -24,6 +24,7 @@ dependencies {
     compileOnly 'net.dv8tion:JDA:5.0.0-beta.5'
 
     implementation 'xyz.prorickey:proutils:1.0.1'
+    implementation 'xyz.xenondevs:particle:1.8.3'
 }
 
 shadowJar {

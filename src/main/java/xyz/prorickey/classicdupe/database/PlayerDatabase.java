@@ -12,6 +12,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 
 public class PlayerDatabase {
 
@@ -55,6 +56,46 @@ public class PlayerDatabase {
             gradient = gradient1;
             gradientfrom = gradientfrom1;
             gradientto = gradientto1;
+        }
+    }
+
+    public String getParticleEffect(UUID uuid) {
+        try {
+            ResultSet set = conn.prepareStatement("SELECT * FROM particleEffects WHERE uuid='" + uuid + "'").executeQuery();
+            if(set.next()) return set.getString("particleEffect");
+            return null;
+        } catch (SQLException e) {
+            Bukkit.getLogger().severe(e.toString());
+            return null;
+        }
+    }
+
+    public String getKillEffect(UUID uuid) {
+        try {
+            ResultSet set = conn.prepareStatement("SELECT * FROM particleEffects WHERE uuid='" + uuid + "'").executeQuery();
+            if(set.next()) return set.getString("killEffect");
+            return null;
+        } catch (SQLException e) {
+            Bukkit.getLogger().severe(e.toString());
+            return null;
+        }
+    }
+
+    public void setParticleEffect(UUID uuid, @Nullable String particleEffect) {
+        if(particleEffect == null) particleEffect = "none";
+        try {
+            conn.prepareStatement("UPDATE particleEffects SET particleEffect='" + particleEffect + "' WHERE uuid='" + uuid + "'").execute();
+        } catch (SQLException e) {
+            Bukkit.getLogger().severe(e.toString());
+        }
+    }
+
+    public void setKillEffect(UUID uuid, @Nullable String killEffect) {
+        if(killEffect == null) killEffect = "none";
+        try {
+            conn.prepareStatement("UPDATE particleEffects SET killEffect='" + killEffect + "' WHERE uuid='" + uuid + "'").execute();
+        } catch (SQLException e) {
+            Bukkit.getLogger().severe(e.toString());
         }
     }
 
@@ -245,6 +286,7 @@ public class PlayerDatabase {
             stat.setString(2, player.getName());
             stat.execute();
             conn.prepareStatement("INSERT INTO stats(uuid, kills, deaths) VALUES('" + player.getUniqueId() + "', 0, 0)").execute();
+            conn.prepareStatement("INSERT INTO particleEffects(uuid, killEffect, particleEffect) VALUES('" + player.getUniqueId() + "', 'none', 'none')").execute();
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
