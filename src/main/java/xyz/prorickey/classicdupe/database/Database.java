@@ -37,11 +37,48 @@ public class Database {
         spawn = getSpawn();
     }
 
+    public void setNetherSpawn(Location loc) {
+        try {
+            spawn = loc;
+            serverConn.prepareStatement("DELETE FROM spawn WHERE spawn='nether'").execute();
+            PreparedStatement stat = serverConn.prepareStatement("INSERT INTO spawn(spawn, x, y, z, pitch, yaw, world) VALUES('nether', ?, ?, ?, ?, ?, ?)");
+            stat.setDouble(1, loc.getX());
+            stat.setDouble(2, loc.getY());
+            stat.setDouble(3, loc.getZ());
+            stat.setFloat(4, loc.getPitch());
+            stat.setFloat(5, loc.getYaw());
+            stat.setString(6, loc.getWorld().getName());
+            stat.execute();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public Location getNetherSpawn() {
+        try {
+            ResultSet set = serverConn.prepareStatement("SELECT * FROM spawn WHERE spawn='nether'").executeQuery();
+            if(set.next()) {
+                return new Location(
+                        ClassicDupe.getPlugin().getServer().getWorld(set.getString("world")),
+                        set.getDouble("x"),
+                        set.getDouble("y"),
+                        set.getDouble("z"),
+                        set.getFloat("yaw"),
+                        set.getFloat("pitch")
+                );
+            } else {
+                return ClassicDupe.getPlugin().getServer().getWorld("world_nether").getSpawnLocation();
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
     public void setSpawn(Location loc) {
         try {
             spawn = loc;
-            serverConn.prepareStatement("DELETE FROM spawn WHERE spawn='spawn'").execute();
-            PreparedStatement stat = serverConn.prepareStatement("INSERT INTO spawn(spawn, x, y, z, pitch, yaw, world) VALUES('spawn', ?, ?, ?, ?, ?, ?)");
+            serverConn.prepareStatement("DELETE FROM spawn WHERE spawn='overworld'").execute();
+            PreparedStatement stat = serverConn.prepareStatement("INSERT INTO spawn(spawn, x, y, z, pitch, yaw, world) VALUES('overworld', ?, ?, ?, ?, ?, ?)");
             stat.setDouble(1, loc.getX());
             stat.setDouble(2, loc.getY());
             stat.setDouble(3, loc.getZ());
@@ -56,7 +93,7 @@ public class Database {
 
     public Location getSpawn() {
         try {
-            ResultSet set = serverConn.prepareStatement("SELECT * FROM spawn WHERE spawn='spawn'").executeQuery();
+            ResultSet set = serverConn.prepareStatement("SELECT * FROM spawn WHERE spawn='overworld'").executeQuery();
             if(set.next()) {
                 return new Location(
                         ClassicDupe.getPlugin().getServer().getWorld(set.getString("world")),

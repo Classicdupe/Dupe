@@ -191,9 +191,18 @@ commands:
     description: To reload the config
     usage: "Usage: /configreload"
     permission: admin.reload
+  setnetherspawn:
+    description: To set the spawn of the nether
+    usage: "Usage: /setnetherspawn"
+    permission: admin.setnetherspawn
+  nether:
+    description: To go to the nether
+    usage: "Usage: /nether"
 permissions:
   default.spawn.others:
     description: Allows you to teleport others to spawn
+  default.nether.others:
+    description: Allows you to teleport others to the nether
   perks.feed.legend:
     description: Reduced cooldown for legend
   perks.feed.mvp:
