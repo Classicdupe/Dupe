@@ -14,7 +14,6 @@ import org.bukkit.event.player.PlayerRespawnEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.SkullMeta;
 import xyz.prorickey.classicdupe.ClassicDupe;
-import xyz.prorickey.classicdupe.Utils;
 import xyz.prorickey.proutils.ChatFormat;
 
 import java.time.LocalDateTime;

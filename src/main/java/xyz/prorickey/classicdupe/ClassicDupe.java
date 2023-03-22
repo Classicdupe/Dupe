@@ -1,7 +1,6 @@
 package xyz.prorickey.classicdupe;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 import net.kyori.adventure.text.Component;
@@ -12,10 +11,6 @@ import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import net.luckperms.api.LuckPerms;
-import org.bukkit.scoreboard.Criteria;
-import org.bukkit.scoreboard.DisplaySlot;
-import org.bukkit.scoreboard.Objective;
-import org.bukkit.scoreboard.ScoreboardManager;
 import xyz.prorickey.classicdupe.commands.admin.*;
 import xyz.prorickey.classicdupe.commands.default1.*;
 import xyz.prorickey.classicdupe.commands.moderator.*;
@@ -24,6 +19,7 @@ import xyz.prorickey.classicdupe.database.Database;
 import xyz.prorickey.classicdupe.database.PlayerVaultDatabase;
 import xyz.prorickey.classicdupe.discord.ClassicDupeBot;
 import xyz.prorickey.classicdupe.events.*;
+import xyz.prorickey.classicdupe.metrics.Metrics;
 import xyz.prorickey.proutils.ChatFormat;
 
 public class ClassicDupe extends JavaPlugin {
@@ -38,6 +34,8 @@ public class ClassicDupe extends JavaPlugin {
     @Override
     public void onEnable() {
         plugin = this;
+
+        Metrics.init(this);
 
         RegisteredServiceProvider<LuckPerms> provider = Bukkit.getServicesManager().getRegistration(LuckPerms.class);
         if(provider != null) { lpapi = provider.getProvider(); }
@@ -141,6 +139,10 @@ public class ClassicDupe extends JavaPlugin {
         this.getCommand("feed").setTabCompleter(new FeedCMD());
         this.getCommand("configreload").setExecutor(new ConfigReload());
         this.getCommand("configreload").setTabCompleter(new ConfigReload());
+        this.getCommand("nether").setExecutor(new NetherCMD());
+        this.getCommand("nether").setTabCompleter(new NetherCMD());
+        this.getCommand("setnetherspawn").setExecutor(new SetNetherSpawnCMD());
+        this.getCommand("setnetherspawn").setTabCompleter(new SetNetherSpawnCMD());
 
         getServer().getPluginManager().registerEvents(new JoinEvent(), this);
         getServer().getPluginManager().registerEvents(new QuitEvent(), this);
