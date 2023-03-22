@@ -1,11 +1,14 @@
 package xyz.prorickey.classicdupe;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.event.ClickEvent;
 import org.bukkit.Bukkit;
+import org.bukkit.block.Block;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -60,6 +63,7 @@ public class ClassicDupe extends JavaPlugin {
         new BroadcastTask().runTaskTimer(this, 0, 20*90);
         new LinkCMD.LinkCodeTask().runTaskTimer(this, 0, 20);
         new Scoreboard.ScoreboardTask().runTaskTimer(this, 0, 10);
+        new ClearSpawn.ClearSpawnTask().runTaskTimer(this, 0, 20);
 
         this.getCommand("dupe").setExecutor(new DupeCMD());
         this.getCommand("dupe").setTabCompleter(new DupeCMD());
@@ -167,6 +171,8 @@ public class ClassicDupe extends JavaPlugin {
         getServer().getPluginManager().registerEvents(new Combat(), this);
         getServer().getPluginManager().registerEvents(new FlowEvent(), this);
         getServer().getPluginManager().registerEvents(new GoldenAppleCooldown(), this);
+        getServer().getPluginManager().registerEvents(new ClearSpawn(), this);
+        getServer().getPluginManager().registerEvents(new PearlCooldown(), this);
 
         Bukkit.getScheduler().scheduleSyncDelayedTask(this, ClassicDupe::scheduleRestart, 20L * 60L * 60L * 24L);
         getServer().getScheduler().scheduleSyncRepeatingTask(this, new Runnable() {
