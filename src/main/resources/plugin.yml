@@ -198,6 +198,10 @@ commands:
   nether:
     description: To go to the nether
     usage: "Usage: /nether"
+  hat:
+    description: To put on a hat
+    usage: "Usage: /hat"
+    permissions: perks.hat
 permissions:
   default.spawn.others:
     description: Allows you to teleport others to spawn

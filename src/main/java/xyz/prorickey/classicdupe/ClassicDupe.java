@@ -143,6 +143,8 @@ public class ClassicDupe extends JavaPlugin {
         this.getCommand("nether").setTabCompleter(new NetherCMD());
         this.getCommand("setnetherspawn").setExecutor(new SetNetherSpawnCMD());
         this.getCommand("setnetherspawn").setTabCompleter(new SetNetherSpawnCMD());
+        this.getCommand("hat").setExecutor(new HatCMD());
+        this.getCommand("hat").setTabCompleter(new HatCMD());
 
         getServer().getPluginManager().registerEvents(new JoinEvent(), this);
         getServer().getPluginManager().registerEvents(new QuitEvent(), this);
