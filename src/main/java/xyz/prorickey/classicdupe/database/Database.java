@@ -19,7 +19,6 @@ public class Database {
 
     public Database() {
         try {
-            Class.forName("org.h2.Driver");
             playerConn = DriverManager.getConnection ("jdbc:h2:" + ClassicDupe.getPlugin().getDataFolder().getAbsolutePath() + File.separator + "playerData");
             serverConn = DriverManager.getConnection ("jdbc:h2:" + ClassicDupe.getPlugin().getDataFolder().getAbsolutePath() + File.separator + "serverData");
             linkingConn = DriverManager.getConnection ("jdbc:h2:" + ClassicDupe.getPlugin().getDataFolder().getAbsolutePath() + File.separator + "linkData");
@@ -31,7 +30,7 @@ public class Database {
             filterDatabase = new FilterDatabase(serverConn);
             playerDatabase = new PlayerDatabase(playerConn);
             linkingDatabase = new LinkingDatabase(linkingConn);
-        } catch (SQLException | ClassNotFoundException e) {
+        } catch (SQLException e) {
             Bukkit.getLogger().severe(e.toString());
         }
         spawn = getSpawn();

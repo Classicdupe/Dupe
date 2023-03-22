@@ -35,6 +35,12 @@ public class ClassicDupe extends JavaPlugin {
     public void onEnable() {
         plugin = this;
 
+        try {
+            Class.forName("org.h2.Driver");
+        } catch (ClassNotFoundException e) {
+            throw new RuntimeException(e);
+        }
+
         Metrics.init(this);
 
         RegisteredServiceProvider<LuckPerms> provider = Bukkit.getServicesManager().getRegistration(LuckPerms.class);

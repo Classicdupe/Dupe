@@ -41,7 +41,7 @@ public class Scoreboard {
         replaceScore(obj, 14, ChatFormat.format("&6\u2022 &eName &a" + player.getName()));
         replaceScore(obj, 13, ChatFormat.format("&6\u2022 &eClan &aComingSoon"));
         replaceScore(obj, 12, ChatFormat.format("&6\u2022 &eRank " + Utils.getPrefix(player)));
-        replaceScore(obj, 11, ChatFormat.format("&6\u2022 &eSuffix " + Utils.getSuffix(player) != null ? Utils.getSuffix(player) : "&bUnset"));
+        replaceScore(obj, 11, ChatFormat.format("&6\u2022 &eSuffix " + (Utils.getSuffix(player) != null ? Utils.getSuffix(player) : "&bUnset")));
         replaceScore(obj, 10, ChatFormat.format("&6\u2022 &ePing &e" + player.getPing() + "ms"));
 
         PlayerDatabase.PlayerStats stats = ClassicDupe.getDatabase().getPlayerDatabase().getStats(player.getUniqueId().toString());
