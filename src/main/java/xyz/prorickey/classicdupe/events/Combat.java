@@ -9,7 +9,6 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.scheduler.BukkitRunnable;
-import xyz.prorickey.classicdupe.ClassicDupe;
 import xyz.prorickey.classicdupe.Utils;
 import xyz.prorickey.proutils.ChatFormat;
 
@@ -20,7 +19,7 @@ import java.util.Map;
 public class Combat implements Listener {
 
     public static Map<Player, Long> inCombat = new HashMap<>();
-    public static Map<Entity, Player> menaces = new HashMap<>();
+    public static Map<Player, Player> whoHitWho = new HashMap<>();
 
     @EventHandler
     public void onEntityDamageByEntity(EntityDamageByEntityEvent e) {
@@ -36,6 +35,10 @@ public class Combat implements Listener {
         }
         if(e.getEntity() instanceof Player player && !e.getCause().equals(EntityDamageEvent.DamageCause.FALL)) inCombat.put(player, System.currentTimeMillis());
         if(e.getDamager() instanceof Player player) inCombat.put(player, System.currentTimeMillis());
+        if(e.getEntity() instanceof Player victim && e.getDamager() instanceof Player attacker) {
+            whoHitWho.put(victim, attacker);
+            whoHitWho.put(attacker, victim);
+        }
     }
 
     public static class CombatTask extends BukkitRunnable {
@@ -46,6 +49,7 @@ public class Combat implements Listener {
                 Long time = (new ArrayList<>(Combat.inCombat.values())).get(i);
                 if((time + (1000*15)) < System.currentTimeMillis() && Combat.inCombat.containsKey(player)) {
                     Combat.inCombat.remove(player);
+                    whoHitWho.remove(player);
                     player.sendActionBar(Component.text(ChatFormat.format("&aYou are no longer in combat")));
                 } else player.sendActionBar(Component.text(ChatFormat.format("&cYou are currently in combat")));
             }

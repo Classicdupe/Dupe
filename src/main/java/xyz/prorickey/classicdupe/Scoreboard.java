@@ -8,8 +8,11 @@ import org.bukkit.scoreboard.Criteria;
 import org.bukkit.scoreboard.DisplaySlot;
 import org.bukkit.scoreboard.Objective;
 import xyz.prorickey.classicdupe.database.PlayerDatabase;
+import xyz.prorickey.classicdupe.events.Combat;
+import xyz.prorickey.classicdupe.metrics.Metrics;
 import xyz.prorickey.proutils.ChatFormat;
 
+import java.time.Duration;
 import java.util.List;
 
 public class Scoreboard {
@@ -38,7 +41,7 @@ public class Scoreboard {
         replaceScore(obj, 14, ChatFormat.format("&6\u2022 &eName &a" + player.getName()));
         replaceScore(obj, 13, ChatFormat.format("&6\u2022 &eClan &aComingSoon"));
         replaceScore(obj, 12, ChatFormat.format("&6\u2022 &eRank " + Utils.getPrefix(player)));
-        replaceScore(obj, 11, ChatFormat.format("&6\u2022 &eSuffix " + Utils.getSuffix(player)));
+        replaceScore(obj, 11, ChatFormat.format("&6\u2022 &eSuffix " + Utils.getSuffix(player) != null ? Utils.getSuffix(player) : "&bUnset"));
         replaceScore(obj, 10, ChatFormat.format("&6\u2022 &ePing &e" + player.getPing() + "ms"));
 
         PlayerDatabase.PlayerStats stats = ClassicDupe.getDatabase().getPlayerDatabase().getStats(player.getUniqueId().toString());
@@ -51,15 +54,35 @@ public class Scoreboard {
 
         // Server Stats
 
-        String tpsStr;
-        if(ClassicDupe.tps > 18) tpsStr = "&a" + ClassicDupe.tps;
-        else if(ClassicDupe.tps > 12) tpsStr = "&e" + ClassicDupe.tps;
-        else tpsStr = "&c" + ClassicDupe.tps;
+        if(Combat.inCombat.containsKey(player)) {
+            // Combat Stats
 
-        replaceScore(obj, 5, ChatFormat.format("&6\u2022 &eTPS " + tpsStr));
-        replaceScore(obj, 4, ChatFormat.format("&6\u2022 &eOnline &a" + Bukkit.getOnlinePlayers().size()));
-        replaceScore(obj, 3, ChatFormat.format("&6\u2022 &eUptime &a20 Hours"));
-        replaceScore(obj, 2, ChatFormat.format("&6\u2022 &ePlaytime &a4d 20h 5m"));
+            PlayerDatabase.PlayerStats menaceStats = ClassicDupe.getDatabase().getPlayerDatabase().getStats(Combat.whoHitWho.get(player).getUniqueId().toString());
+
+            Duration duration = Duration.ofMillis(Combat.inCombat.get(player));
+            long seconds = duration.getSeconds();
+            long HH = seconds / 3600;
+            long MM = (seconds % 3600) / 60;
+            long SS = seconds % 60;
+            String time = String.format("%02d:%02d:%02d", HH, MM, SS);
+
+            replaceScore(obj, 5, ChatFormat.format("&6\u2022 &cFighting &e" + Combat.whoHitWho.get(player)));
+            replaceScore(obj, 4, ChatFormat.format("&6\u2022 &cStats &e" + menaceStats.kills + "K " + menaceStats.deaths + "D"));
+            replaceScore(obj, 3, ChatFormat.format("&6\u2022 &cKDR &e" + menaceStats.kdr));
+            replaceScore(obj, 2, ChatFormat.format("&6\u2022 &cTimer &e" + time));
+        } else {
+            // Server Stats
+
+            String tpsStr;
+            if(ClassicDupe.tps > 18) tpsStr = "&a" + ClassicDupe.tps;
+            else if(ClassicDupe.tps > 12) tpsStr = "&e" + ClassicDupe.tps;
+            else tpsStr = "&c" + ClassicDupe.tps;
+
+            replaceScore(obj, 5, ChatFormat.format("&6\u2022 &eTPS " + tpsStr));
+            replaceScore(obj, 4, ChatFormat.format("&6\u2022 &eOnline &a" + Bukkit.getOnlinePlayers().size()));
+            replaceScore(obj, 3, ChatFormat.format("&6\u2022 &eUptime &a" + Metrics.getServerMetrics().getServerUptimeFormatted()));
+            replaceScore(obj, 2, ChatFormat.format("&6\u2022 &ePlaytime &a" + Metrics.getPlayerMetrics().getPlaytimeFormatted(player.getUniqueId())));
+        }
 
         replaceScore(obj, 1, ChatFormat.format("&1&6&m----------------------"));
 
