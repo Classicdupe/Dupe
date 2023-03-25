@@ -1,14 +1,11 @@
 package xyz.prorickey.classicdupe;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.event.ClickEvent;
 import org.bukkit.Bukkit;
-import org.bukkit.block.Block;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -33,7 +30,6 @@ public class ClassicDupe extends JavaPlugin {
     public static LuckPerms lpapi;
     public static Database database;
     public static PlayerVaultDatabase pvdatabase;
-    public static int tps;
 
     @Override
     public void onEnable() {
@@ -178,24 +174,6 @@ public class ClassicDupe extends JavaPlugin {
         getServer().getPluginManager().registerEvents(new PearlCooldown(), this);
 
         Bukkit.getScheduler().scheduleSyncDelayedTask(this, ClassicDupe::scheduleRestart, 20L * 60L * 60L * 24L);
-        getServer().getScheduler().scheduleSyncRepeatingTask(this, new Runnable() {
-            long sec;
-            long currentSec;
-            int ticks;
-            int delay;
-
-            @Override
-            public void run() {
-                sec = (System.currentTimeMillis() / 1000);
-                if(currentSec == sec) ticks++;
-                else {
-                    currentSec = sec;
-                    tps = (tps == 0 ? ticks : ((tps + ticks) / 2));
-                    ticks = 0;
-                    if((++delay % 300) == 0) delay = 0;
-                }
-            }
-        }, 0, 1);
     }
 
     @Override

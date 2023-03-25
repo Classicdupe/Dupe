@@ -12,6 +12,7 @@ repositories {
     maven { url 'https://repo.extendedclip.com/content/repositories/placeholderapi/' }
     maven { url "https://maven.enginehub.org/repo/" }
     maven { url 'https://prorickey.xyz/repository/maven-public'}
+    maven { url 'https://oss.sonatype.org/content/repositories/snapshots/' }
 }
 
 dependencies {
@@ -19,6 +20,7 @@ dependencies {
     compileOnly 'net.luckperms:api:5.4'
     compileOnly 'me.clip:placeholderapi:2.11.2'
     compileOnly 'com.sk89q.worldguard:worldguard-bukkit:7.0.7'
+    compileOnly 'me.lucko:spark-api:0.1-SNAPSHOT'
 
     compileOnly 'com.h2database:h2:2.1.214'
     compileOnly 'net.dv8tion:JDA:5.0.0-beta.5'

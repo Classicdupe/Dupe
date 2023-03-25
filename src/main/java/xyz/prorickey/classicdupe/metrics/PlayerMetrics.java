@@ -29,19 +29,19 @@ public class PlayerMetrics implements Listener {
     public PlayerMetrics(JavaPlugin plugin) {
         this.plugin = plugin;
         try {
-            conn = DriverManager.getConnection ("jdbc:h2:" + ClassicDupe.getPlugin().getDataFolder().getAbsolutePath() + File.separator + "metrics" + File.separator + "player");
-
+            conn = DriverManager.getConnection("jdbc:h2:" + ClassicDupe.getPlugin().getDataFolder().getAbsolutePath() + File.separator + "metrics" + File.separator + "player");
             conn.prepareStatement("CREATE TABLE IF NOT EXISTS playtime(uuid VARCHAR, alltime INT, season INT)").execute();
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
+        plugin.getServer().getPluginManager().registerEvents(this, plugin);
     }
 
     @Nullable
     public Long getPlaytime(UUID uuid) {
         try {
-            ResultSet set = conn.prepareStatement("SELECT * FROM playtime WHERE uuid = '" + uuid + "'").executeQuery();
-            if(set.next()) return Long.getLong(String.valueOf(set.getInt("alltime")));
+            ResultSet set = conn.prepareStatement("SELECT * FROM playtime WHERE uuid='" + uuid + "'").executeQuery();
+            if(set.next()) return (long) set.getInt("alltime");
             return null;
         } catch (SQLException e) {
             throw new RuntimeException(e);
@@ -64,6 +64,13 @@ public class PlayerMetrics implements Listener {
 
     @EventHandler
     public void onPlayerJoin(PlayerJoinEvent e) {
+        if(getPlaytime(e.getPlayer().getUniqueId()) == null) {
+            try {
+                conn.prepareStatement("INSERT INTO playtime(uuid, alltime, season) VALUES('" + e.getPlayer().getUniqueId() + "', 0, 0)").execute();
+            } catch (SQLException ex) {
+                throw new RuntimeException(ex);
+            }
+        }
         final Long[] lastUpdate = {System.currentTimeMillis()};
         BukkitTask task = new BukkitRunnable() {
             @Override

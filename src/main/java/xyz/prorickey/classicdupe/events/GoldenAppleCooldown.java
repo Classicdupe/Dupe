@@ -19,11 +19,9 @@ public class GoldenAppleCooldown implements Listener {
     public void onPlayerItemConsume(PlayerItemConsumeEvent e) {
         if(e.getItem().getType() != Material.ENCHANTED_GOLDEN_APPLE) return;
         int cooldown = 45;
-        switch(ClassicDupe.getLPAPI().getUserManager().getUser(e.getPlayer().getUniqueId()).getPrimaryGroup()) {
-            case "legend" -> cooldown = 10;
-            case "mvp" -> cooldown = 20;
-            case "vip" -> cooldown = 30;
-        }
+        if(e.getPlayer().hasPermission("perks.godAppleCooldown.vip")) cooldown = 30;
+        else if(e.getPlayer().hasPermission("perks.godAppleCooldown.mvp")) cooldown = 20;
+        else if(e.getPlayer().hasPermission("perks.godAppleCooldown.legend")) cooldown = 10;
         if(lastGappEaten.containsKey(e.getPlayer()) && lastGappEaten.get(e.getPlayer()) + (cooldown*1000) > System.currentTimeMillis()) {
             Long wait = (lastGappEaten.get(e.getPlayer()) + (cooldown*1000))-System.currentTimeMillis();
             e.getPlayer().sendMessage(Utils.cmdMsg("&cYou must wait " + Math.round(wait/1000) + " second(s) before you can eat another Golden Apple"));

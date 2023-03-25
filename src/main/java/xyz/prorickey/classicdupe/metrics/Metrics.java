@@ -10,7 +10,6 @@ public class Metrics {
     public static void init(JavaPlugin plugin) {
         serverMetrics = new ServerMetrics();
         playerMetrics = new PlayerMetrics(plugin);
-        plugin.getServer().getPluginManager().registerEvents(playerMetrics, plugin);
     }
 
     public static ServerMetrics getServerMetrics() { return serverMetrics; }

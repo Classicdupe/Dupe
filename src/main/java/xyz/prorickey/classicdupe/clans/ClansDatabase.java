@@ -28,6 +28,10 @@ public class ClansDatabase {
     public static YamlConfiguration globalConfig;
     private static Connection main;
 
+    private static Map<String, Clan> clansById = new HashMap<>();
+    private static Map<String, Clan> clansByName = new HashMap<>();
+    private static Map<UUID, ClanMember> clanMembers = new HashMap<>();
+
     public static void init(JavaPlugin plugin) {
         dataDir = new File(plugin.getDataFolder() + "/clansData/");
         if(!dataDir.exists()) dataDir.mkdir();
@@ -42,7 +46,6 @@ public class ClansDatabase {
         globalConfig = YamlConfiguration.loadConfiguration(globalConfigFile);
         try {
             main = DriverManager.getConnection("jdbc:h2:" + ClassicDupe.getPlugin().getDataFolder().getAbsolutePath() + "/clansData/main");
-            main.prepareStatement("CREATE TABLE IF NOT EXISTS clans(clanId VARCHAR, clanName VARCHAR, clanKills INT)").execute();
             /*
             Level 0 = Default
             Level 1 = Vip
@@ -50,7 +53,14 @@ public class ClansDatabase {
             Level 3 = Admin
             Level 4 = Owner
             */
-            main.prepareStatement("CREATE TABLE IF NOT EXISTS players(uuid VARCHAR, name VARCHAR, clanId VARCHAR, clanName VARCHAR, level INT, boosts INT)").execute();
+            Bukkit.getScheduler().runTaskAsynchronously(plugin, () -> {
+                try {
+                    main.prepareStatement("CREATE TABLE IF NOT EXISTS clans(clanId VARCHAR, clanName VARCHAR, clanKills INT)").execute();
+                    main.prepareStatement("CREATE TABLE IF NOT EXISTS players(uuid VARCHAR, name VARCHAR, clanId VARCHAR, clanName VARCHAR, level INT, boosts INT)").execute();
+                } catch (SQLException e) {
+                    throw new RuntimeException(e);
+                }
+            });
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
@@ -69,10 +79,16 @@ public class ClansDatabase {
         }
         try {
             Connection conn = DriverManager.getConnection("jdbc:h2:" + ClassicDupe.getPlugin().getDataFolder().getAbsolutePath() + "/clansData/clans/" + id + "/data");
-            conn.prepareStatement("CREATE TABLE warps(name VARCHAR, location VARCHAR, levelReq INT)").execute();
-            conn.prepareStatement("CREATE TABLE perks(name VARCHAR, active BOOLEAN)").execute();
-            conn.prepareStatement("CREATE TABLE players(uuid VARCHAR)").execute();
-            conn.prepareStatement("INSERT INTO players(uuid) VALUES('" + owner.getUniqueId() + "')").execute();
+            Bukkit.getScheduler().runTaskAsynchronously(ClassicDupe.getPlugin(), () -> {
+                try {
+                    conn.prepareStatement("CREATE TABLE warps(name VARCHAR, location VARCHAR, levelReq INT)").execute();
+                    conn.prepareStatement("CREATE TABLE perks(name VARCHAR, active BOOLEAN)").execute();
+                    conn.prepareStatement("CREATE TABLE players(uuid VARCHAR)").execute();
+                    conn.prepareStatement("INSERT INTO players(uuid) VALUES('" + owner.getUniqueId() + "')").execute();
+                } catch (SQLException e) {
+                    throw new RuntimeException(e);
+                }
+            });
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
@@ -102,10 +118,14 @@ public class ClansDatabase {
 
     @Nullable
     public static Clan getClanByID(String id) {
+        if(clansById.containsKey(id)) return clansById.get(id);
         try {
-            ResultSet clan = main.prepareStatement("SELECT * FROM clans WHERE clanId='" + id + "'").executeQuery();
-            if(!clan.next()) return null;
-            return new Clan(clan.getString("clanId"));
+            ResultSet clans = main.prepareStatement("SELECT * FROM clans WHERE clanId='" + id + "'").executeQuery();
+            if(!clans.next()) return null;
+            Clan clan = new Clan(clans.getString("clanId"));
+            clansById.put(id, clan);
+            clansByName.put(clan.getClanName(), clan);
+            return clan;
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
@@ -113,27 +133,36 @@ public class ClansDatabase {
 
     @Nullable
     public static Clan getClanByName(String name) {
+        if(clansByName.containsKey(name)) return clansByName.get(name);
         try {
-            ResultSet clan = main.prepareStatement("SELECT * FROM clans WHERE clanName='" + name + "'").executeQuery();
-            if(!clan.next()) return null;
-            return new Clan(clan.getString("clanId"));
+            ResultSet clans = main.prepareStatement("SELECT * FROM clans WHERE clanName='" + name + "'").executeQuery();
+            if(!clans.next()) return null;
+            Clan clan = new Clan(clans.getString("clanId"));
+            clansByName.put(name, clan);
+            clansById.put(clan.getClanId(), clan);
+            return clan;
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
     }
 
     public static ClanMember getClanMember(UUID uuid) {
-        return new ClanMember(uuid.toString());
+        if(clanMembers.containsKey(uuid)) return clanMembers.get(uuid);
+        ClanMember member = new ClanMember(uuid.toString());
+        clanMembers.put(uuid, member);
+        return member;
     }
 
     public static void createIfNotExists(Player player) {
-        try {
-            ResultSet set = main.prepareStatement("SELECT * FROM players WHERE uuid='" + player.getUniqueId() + "'").executeQuery();
-            if(!set.next()) main.prepareStatement("INSERT INTO players(uuid, name, clanId, clanName, level, boosts) VALUES('" + player.getUniqueId() + "', '" + player.getName() + "', null, null, null, 0)").execute();
-            else main.prepareStatement("UPDATE players SET name='" + player.getName() + "' WHERE uuid='" + player.getUniqueId() + "'").execute();
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
+        Bukkit.getScheduler().runTaskAsynchronously(ClassicDupe.getPlugin(), () -> {
+            try {
+                ResultSet set = main.prepareStatement("SELECT * FROM players WHERE uuid='" + player.getUniqueId() + "'").executeQuery();
+                if(!set.next()) main.prepareStatement("INSERT INTO players(uuid, name, clanId, clanName, level, boosts) VALUES('" + player.getUniqueId() + "', '" + player.getName() + "', null, null, null, 0)").execute();
+                else main.prepareStatement("UPDATE players SET name='" + player.getName() + "' WHERE uuid='" + player.getUniqueId() + "'").execute();
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
+        });
     }
 
     public static class Clan {
@@ -184,6 +213,8 @@ public class ClansDatabase {
             } catch (SQLException e) {
                 throw new RuntimeException(e);
             }
+            clansById.remove(this.clanId);
+            clansByName.remove(this.clanName);
             Path path = Paths.get(ClassicDupe.getPlugin().getDataFolder().getAbsolutePath() + "/clansData/clans/" + this.clanId);
             try (Stream<Path> walk = Files.walk(path)) {
                 walk
@@ -236,31 +267,37 @@ public class ClansDatabase {
             this.clanId = null;
             this.clanName = null;
             this.level = null;
-            try {
-                main.prepareStatement("UPDATE players SET clanId=null, clanName=null, level=null WHERE uuid='" + this.offPlayer.getUniqueId() + "'").execute();
-            } catch (SQLException e) {
-                throw new RuntimeException(e);
-            }
+            Bukkit.getScheduler().runTaskAsynchronously(ClassicDupe.getPlugin(), () -> {
+                try {
+                    main.prepareStatement("UPDATE players SET clanId=null, clanName=null, level=null WHERE uuid='" + this.offPlayer.getUniqueId() + "'").execute();
+                } catch (SQLException e) {
+                    throw new RuntimeException(e);
+                }
+            });
         }
 
         public void setLevel(Integer level) {
             this.level = level;
-            try {
-                main.prepareStatement("UPDATE players SET level=" + level + " WHERE uuid='" + this.offPlayer.getUniqueId() + "'").execute();
-            } catch (SQLException e) {
-                throw new RuntimeException(e);
-            }
+            Bukkit.getScheduler().runTaskAsynchronously(ClassicDupe.getPlugin(), () -> {
+                try {
+                    main.prepareStatement("UPDATE players SET level=" + level + " WHERE uuid='" + this.offPlayer.getUniqueId() + "'").execute();
+                } catch (SQLException e) {
+                    throw new RuntimeException(e);
+                }
+            });
         }
 
         public void setClan(Clan clan, Integer level) {
             this.clanId = clan.getClanId();
             this.clanName = clan.getClanName();
             this.level = level;
-            try {
-                main.prepareStatement("UPDATE players SET clanId='" + clan.getClanId() + "', clanName='" + clan.getClanName() + "', level=" + level + " WHERE uuid='" + this.offPlayer.getUniqueId() + "'").execute();
-            } catch (SQLException e) {
-                throw new RuntimeException(e);
-            }
+            Bukkit.getScheduler().runTaskAsynchronously(ClassicDupe.getPlugin(), () -> {
+                try {
+                    main.prepareStatement("UPDATE players SET clanId='" + clan.getClanId() + "', clanName='" + clan.getClanName() + "', level=" + level + " WHERE uuid='" + this.offPlayer.getUniqueId() + "'").execute();
+                } catch (SQLException e) {
+                    throw new RuntimeException(e);
+                }
+            });
         }
 
     }
