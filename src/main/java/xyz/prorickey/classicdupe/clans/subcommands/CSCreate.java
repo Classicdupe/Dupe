@@ -1,0 +1,41 @@
+package xyz.prorickey.classicdupe.clans.subcommands;
+
+import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
+import xyz.prorickey.classicdupe.Utils;
+import xyz.prorickey.classicdupe.clans.ClanSub;
+import xyz.prorickey.classicdupe.clans.ClansDatabase;
+import xyz.prorickey.proutils.ChatFormat;
+
+import java.util.ArrayList;
+import java.util.List;
+
+public class CSCreate extends ClanSub {
+    @Override
+    public void execute(CommandSender sender, String[] args) {
+        if(!(sender instanceof Player player)) {
+            sender.sendMessage(ChatFormat.format("&cYou cannot execute this command from console"));
+            return;
+        }
+        ClansDatabase.ClanMember cmem = ClansDatabase.getClanMember(player.getUniqueId());
+        if(cmem.getClanId() != null) {
+            player.sendMessage(Utils.cmdMsg("&cYou are already in a clan! You must leave it before creating another one"));
+            return;
+        }
+        if(args.length == 0) {
+            player.sendMessage(Utils.cmdMsg("&cYou must provide a clan name"));
+            return;
+        }
+        if(args[0].length() > ClansDatabase.getGlobalConfig().getInt("clans.maxChar")) {
+            player.sendMessage(Utils.cmdMsg("&cYour clan name can only be " + ClansDatabase.getGlobalConfig().getInt("clans.maxChar") + " characters long"));
+            return;
+        }
+        ClansDatabase.Clan clan = ClansDatabase.createClan(args[0], player);
+        player.sendMessage(Utils.cmdMsg("&eCreated the clan &6" + clan.getClanName()));
+    }
+
+    @Override
+    public List<String> tabComplete(CommandSender sender, String[] args) {
+        return new ArrayList<>();
+    }
+}

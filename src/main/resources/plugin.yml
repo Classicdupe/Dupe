@@ -202,6 +202,13 @@ commands:
     description: To put on a hat
     usage: "Usage: /hat"
     permissions: perks.hat
+  clan:
+    description: The main clans command for the server
+    usage: "Usage: /clan"
+    aliases:
+      - clans
+      - guild
+      - guilds
 permissions:
   default.spawn.others:
     description: Allows you to teleport others to spawn
