@@ -30,8 +30,13 @@ public class CSCreate extends ClanSub {
             player.sendMessage(Utils.cmdMsg("&cYour clan name can only be " + ClansDatabase.getGlobalConfig().getInt("clans.maxChar") + " characters long"));
             return;
         }
-        ClansDatabase.Clan clan = ClansDatabase.createClan(args[0], player);
-        player.sendMessage(Utils.cmdMsg("&eCreated the clan &6" + clan.getClanName()));
+        ClansDatabase.Clan clan = ClansDatabase.getClanByName(args[0]);
+        if(clan != null) {
+            player.sendMessage(Utils.cmdMsg("&cThat clan already exists! Please pick a unique name"));
+            return;
+        }
+        ClansDatabase.createClan(args[0], player);
+        player.sendMessage(Utils.cmdMsg("&eCreated the clan &6" + args[0]));
     }
 
     @Override

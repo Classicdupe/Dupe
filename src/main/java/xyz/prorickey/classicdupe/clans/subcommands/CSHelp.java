@@ -24,7 +24,6 @@ public class CSHelp extends ClanSub {
 
     @Override
     public List<String> tabComplete(@NotNull CommandSender sender, @NotNull String[] args) {
-
         return new ArrayList<>();
     }
 }

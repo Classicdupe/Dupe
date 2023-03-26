@@ -44,12 +44,14 @@ public class ClearSpawn implements Listener {
     public static class ClearSpawnTask extends BukkitRunnable {
         @Override
         public void run() {
-            blockMap.forEach((block, time) -> {
+            for(int i = 0; i < blockMap.size(); i++) {
+                Block block = blockMap.keySet().stream().toList().get(i);
+                Long time = blockMap.get(block);
                 if((time + timeBeforeDestroy) < System.currentTimeMillis()) {
                     block.setType(Material.AIR);
                     blockMap.remove(block);
                 }
-            });
+            }
         }
     }
 

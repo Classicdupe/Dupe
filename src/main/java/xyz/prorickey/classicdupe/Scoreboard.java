@@ -16,15 +16,14 @@ import xyz.prorickey.classicdupe.events.Combat;
 import xyz.prorickey.classicdupe.metrics.Metrics;
 import xyz.prorickey.proutils.ChatFormat;
 
-import java.time.Duration;
-import java.util.List;
-
 public class Scoreboard {
 
     public static class ScoreboardTask extends BukkitRunnable {
         @Override
         public void run() {
-            Bukkit.getServer().getOnlinePlayers().forEach(Scoreboard::scoreboard);
+            Bukkit.getServer().getOnlinePlayers().forEach(player -> {
+                scoreboard(player);
+            });
         }
     }
 
@@ -37,18 +36,17 @@ public class Scoreboard {
         if(obj.getDisplaySlot() != DisplaySlot.SIDEBAR) obj.setDisplaySlot(DisplaySlot.SIDEBAR);
         obj.displayName(Component.text(ChatFormat.format("&a&lClassicDupe")));
 
-        /*List<String> scores = Config.getConfig().getStringList("scoreboard");
-        for(int i = 0; i < 15; i++) updateScore(obj, 15-i, ChatFormat.format(scores.get(i)));*/
-
         String clanName = ClansDatabase.getClanMember(player.getUniqueId()).getClanName();
+        String clanColor = "&e";
+        if(clanName != null) clanColor = ClansDatabase.getClanByID(ClansDatabase.getClanMember(player.getUniqueId()).getClanId()).getClanSettings().getClanColor();
 
         updateScore(obj, 15, ChatFormat.format("&0&6&m----------------------"));
 
         updateScore(obj, 14, ChatFormat.format("&6\u2022 &eName &a" + player.getName()));
-        updateScore(obj, 13, ChatFormat.format("&6\u2022 &eClan " + (clanName != null ? "&8[&e" + clanName + "&8]" : "&eNo Clan")));
-        updateScore(obj, 12, ChatFormat.format("&6\u2022 &eRank " + Utils.getPrefix(player)));
+        updateScore(obj, 13, ChatFormat.format("&6\u2022 &eClan " + (clanName != null ? "&8[" + clanColor + clanName + "&8]" : "&eNo Clan")));
+        updateScore(obj, 12, ChatFormat.format(("&6\u2022 &eRank " + (Utils.getPrefix(player).equals("") ? "&7Default" : Utils.getPrefix(player)))));
         updateScore(obj, 11, ChatFormat.format("&6\u2022 &eSuffix " + (Utils.getSuffix(player) != null ? Utils.getSuffix(player) : "&bUnset")));
-        updateScore(obj, 10, ChatFormat.format("&6\u2022 &ePing &e" + player.getPing() + "ms"));
+        updateScore(obj, 10, ChatFormat.format("&6\u2022 &ePing &a" + player.getPing() + "ms"));
 
         PlayerDatabase.PlayerStats stats = ClassicDupe.getDatabase().getPlayerDatabase().getStats(player.getUniqueId().toString());
 
@@ -65,17 +63,12 @@ public class Scoreboard {
 
             PlayerDatabase.PlayerStats menaceStats = ClassicDupe.getDatabase().getPlayerDatabase().getStats(Combat.whoHitWho.get(player).getUniqueId().toString());
 
-            Duration duration = Duration.ofMillis(Combat.inCombat.get(player));
-            long seconds = duration.getSeconds();
-            long HH = seconds / 3600;
-            long MM = (seconds % 3600) / 60;
-            long SS = seconds % 60;
-            String time = String.format("%02d:%02d:%02d", HH, MM, SS);
+            long timeLeft = 15-(Math.round((System.currentTimeMillis()-Combat.inCombat.get(player))/1000));
 
-            updateScore(obj, 5, ChatFormat.format("&6\u2022 &cFighting &e" + Combat.whoHitWho.get(player)));
+            updateScore(obj, 5, ChatFormat.format("&6\u2022 &cFighting &e" + Combat.whoHitWho.get(player).getName()));
             updateScore(obj, 4, ChatFormat.format("&6\u2022 &cStats &e" + menaceStats.kills + "K " + menaceStats.deaths + "D"));
             updateScore(obj, 3, ChatFormat.format("&6\u2022 &cKDR &e" + menaceStats.kdr));
-            updateScore(obj, 2, ChatFormat.format("&6\u2022 &cTimer &e" + time));
+            updateScore(obj, 2, ChatFormat.format("&6\u2022 &cTimer &e" + timeLeft));
         } else {
             // Server Stats
 

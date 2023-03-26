@@ -9,7 +9,9 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import xyz.prorickey.classicdupe.clans.events.PlayerJoin;
 import xyz.prorickey.classicdupe.clans.subcommands.CSCreate;
+import xyz.prorickey.classicdupe.clans.subcommands.CSDelete;
 import xyz.prorickey.classicdupe.clans.subcommands.CSHelp;
+import xyz.prorickey.classicdupe.clans.subcommands.CSSettings;
 import xyz.prorickey.proutils.TabComplete;
 
 import java.util.*;
@@ -26,6 +28,8 @@ public class MainCommand implements CommandExecutor, TabCompleter {
 
         clanSubs.put("help", new CSHelp());
         clanSubs.put("create", new CSCreate());
+        clanSubs.put("delete", new CSDelete());
+        clanSubs.put("setting", new CSSettings());
     }
 
     @Override

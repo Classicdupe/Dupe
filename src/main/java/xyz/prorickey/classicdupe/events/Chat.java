@@ -9,6 +9,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import xyz.prorickey.classicdupe.ClassicDupe;
 import xyz.prorickey.classicdupe.Utils;
+import xyz.prorickey.classicdupe.clans.ClansDatabase;
 import xyz.prorickey.classicdupe.commands.moderator.StaffChatCMD;
 import xyz.prorickey.classicdupe.commands.perk.ChatColorCMD;
 import xyz.prorickey.classicdupe.commands.perk.ChatGradientCMD;
@@ -43,6 +44,10 @@ public class Chat implements Listener {
             return;
         }
 
+        String clanName = ClansDatabase.getClanMember(e.getPlayer().getUniqueId()).getClanName();
+        String clanColor = "&e";
+        if(clanName != null) clanColor = ClansDatabase.getClanByID(ClansDatabase.getClanMember(e.getPlayer().getUniqueId()).getClanId()).getClanSettings().getClanColor();
+
         String pgroup = ClassicDupe.getLPAPI().getUserManager().getUser(e.getPlayer().getUniqueId()).getPrimaryGroup();
         if(pgroup.equalsIgnoreCase("default")) chatCooldown.put(e.getPlayer(), System.currentTimeMillis()+4000);
         else if(pgroup.equalsIgnoreCase("vip")) chatCooldown.put(e.getPlayer(), System.currentTimeMillis()+3000);
@@ -71,30 +76,36 @@ public class Chat implements Listener {
 
         if(chatType.equals(ChatType.DEFAULT)) {
             String finalName = name;
+            String finalClanColor = clanColor;
             e.renderer((player, sourceDisplayName, message, viewer) -> Component.text(
-                    ChatFormat.format((Utils.getPrefix(player) != null) ? Utils.getPrefix(player) : "") +
-                            ChatFormat.format(finalName) +
-                            ChatFormat.format((Utils.getSuffix(player) != null) ? " " + Utils.getSuffix(player)  : "") +
-                            ChatFormat.format(" &7\u00BB &7")
+        ChatFormat.format((clanName != null ? "&8[" + finalClanColor + clanName + "&8] " : "")) +
+                ChatFormat.format((Utils.getPrefix(player) != null) ? Utils.getPrefix(player) : "") +
+                ChatFormat.format(finalName) +
+                ChatFormat.format((Utils.getSuffix(player) != null) ? " " + Utils.getSuffix(player)  : "") +
+                ChatFormat.format(" &7\u00BB &7")
 
             ).append(message));
         } else if(chatType.equals(ChatType.COLOR)) {
             String finalName1 = name;
+            String finalClanColor1 = clanColor;
             e.renderer((player, sourceDisplayName, message, viewer) -> Component.text(
-                    ChatFormat.format((Utils.getPrefix(player) != null) ? Utils.getPrefix(player) : "") +
-                            ChatFormat.format(finalName1) +
-                            ChatFormat.format((Utils.getSuffix(player) != null) ? " " + Utils.getSuffix(player)  : "") +
-                            ChatFormat.format(" &7\u00BB " + ChatColorCMD.colorProfiles.get(e.getPlayer().getUniqueId().toString())) +
-                            PlainTextComponentSerializer.plainText().serialize(message)
+        ChatFormat.format((clanName != null ? "&8[" + finalClanColor1 + clanName + "&8] " : "")) +
+                ChatFormat.format((Utils.getPrefix(player) != null) ? Utils.getPrefix(player) : "") +
+                ChatFormat.format(finalName1) +
+                ChatFormat.format((Utils.getSuffix(player) != null) ? " " + Utils.getSuffix(player)  : "") +
+                ChatFormat.format(" &7\u00BB " + ChatColorCMD.colorProfiles.get(e.getPlayer().getUniqueId().toString())) +
+                PlainTextComponentSerializer.plainText().serialize(message)
             ));
         } else {
             MiniMessage mm = MiniMessage.miniMessage();
             String finalName2 = name;
+            String finalClanColor2 = clanColor;
             e.renderer((player, sourceDisplayName, message, viewer) -> Component.text(
-                    ChatFormat.format((Utils.getPrefix(player) != null) ? Utils.getPrefix(player) : "") +
-                            ChatFormat.format(finalName2) +
-                            ChatFormat.format((Utils.getSuffix(player) != null) ? " " + Utils.getSuffix(player)  : "") +
-                            ChatFormat.format(" &7\u00BB ")
+        ChatFormat.format((clanName != null ? "&8[" + finalClanColor2 + clanName + "&8] " : "")) +
+                ChatFormat.format((Utils.getPrefix(player) != null) ? Utils.getPrefix(player) : "") +
+                ChatFormat.format(finalName2) +
+                ChatFormat.format((Utils.getSuffix(player) != null) ? " " + Utils.getSuffix(player)  : "") +
+                ChatFormat.format(" &7\u00BB ")
             ).append(mm.deserialize( "<gradient:" +
                     ChatGradientCMD.gradientProfiles.get(e.getPlayer().getUniqueId().toString()).gradientFrom + ":" +
                     ChatGradientCMD.gradientProfiles.get(e.getPlayer().getUniqueId().toString()).gradientTo + ">" +
