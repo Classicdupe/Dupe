@@ -1,5 +1,6 @@
 package xyz.prorickey.classicdupe.clans;
 
+import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -7,11 +8,9 @@ import org.bukkit.command.TabCompleter;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import xyz.prorickey.classicdupe.ClassicDupe;
 import xyz.prorickey.classicdupe.clans.events.PlayerJoin;
-import xyz.prorickey.classicdupe.clans.subcommands.CSCreate;
-import xyz.prorickey.classicdupe.clans.subcommands.CSDelete;
-import xyz.prorickey.classicdupe.clans.subcommands.CSHelp;
-import xyz.prorickey.classicdupe.clans.subcommands.CSSettings;
+import xyz.prorickey.classicdupe.clans.subcommands.*;
 import xyz.prorickey.proutils.TabComplete;
 
 import java.util.*;
@@ -30,6 +29,11 @@ public class MainCommand implements CommandExecutor, TabCompleter {
         clanSubs.put("create", new CSCreate());
         clanSubs.put("delete", new CSDelete());
         clanSubs.put("setting", new CSSettings());
+        clanSubs.put("invite", new CSInvite());
+        clanSubs.put("accept", new CSAccept());
+        clanSubs.put("decline", new CSDecline());
+
+        new CSInvite.InviteTask().runTaskTimer(ClassicDupe.getPlugin(), 0, 20);
     }
 
     @Override
