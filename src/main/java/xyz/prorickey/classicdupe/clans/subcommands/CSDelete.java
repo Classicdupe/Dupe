@@ -28,7 +28,7 @@ public class CSDelete extends ClanSub {
             player.sendMessage(Utils.cmdMsg("&cYou are not in a clan. You can't delete a clan that doesn't exist"));
             return;
         }
-        if(cmem.getLevel() != 4) {
+        if(cmem.getLevel() != 3) {
             player.sendMessage(Utils.cmdMsg("&cYou must be the owner to delete a clan"));
             return;
         }

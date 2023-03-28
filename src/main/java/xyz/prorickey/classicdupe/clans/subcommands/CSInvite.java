@@ -62,7 +62,9 @@ public class CSInvite extends ClanSub {
 
     @Override
     public List<String> tabComplete(CommandSender sender, String[] args) {
-        if(args.length == 1) return TabComplete.tabCompletionsSearch(args[0], ClassicDupe.getOnlinePlayerUsernames());
+        List<String> tabs = ClassicDupe.getOnlinePlayerUsernames();
+        tabs.add("confirm");
+        if(args.length == 1) return TabComplete.tabCompletionsSearch(args[0], tabs);
         return new ArrayList<>();
     }
 

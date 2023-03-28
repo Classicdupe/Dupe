@@ -51,9 +51,8 @@ public class ClansDatabase {
             /*
             Level 0 = Default
             Level 1 = Vip
-            Level 2 = Mod
-            Level 3 = Admin
-            Level 4 = Owner
+            Level 2 = Admin
+            Level 3 = Owner
             */
             Bukkit.getScheduler().runTaskAsynchronously(plugin, () -> {
                 try {
@@ -96,7 +95,7 @@ public class ClansDatabase {
                     conn.prepareStatement("INSERT INTO players(uuid) VALUES('" + owner.getUniqueId() + "')").execute();
                     Clan clan = new Clan(id);
                     ClanMember cmem = getClanMember(owner.getUniqueId());
-                    cmem.setClan(clan, 4);
+                    cmem.setClan(clan, 3);
                 } catch (SQLException e) {
                     throw new RuntimeException(e);
                 }

@@ -45,7 +45,7 @@ public class CSSettings extends ClanSub {
             player.sendMessage(Utils.cmdMsg("&cYou are not in a clan. You can't change the settings of a clan that doesn't exist"));
             return;
         }
-        if(cmem.getLevel() < 3) {
+        if(cmem.getLevel() < 2) {
             player.sendMessage(Utils.cmdMsg("&cYou must either be an admin or the owner of the clan to execute this command"));
             return;
         }

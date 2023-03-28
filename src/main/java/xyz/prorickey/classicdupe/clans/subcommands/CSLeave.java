@@ -22,7 +22,7 @@ public class CSLeave extends ClanSub {
             player.sendMessage(Utils.cmdMsg("&cYou aren't in a clan"));
             return;
         }
-        if(cmem.getLevel() == 4) {
+        if(cmem.getLevel() == 3) {
             player.sendMessage(Utils.cmdMsg("&cYou cannot leave a clan that you own. You must promote someone else to owner before you can leave"));
             return;
         }

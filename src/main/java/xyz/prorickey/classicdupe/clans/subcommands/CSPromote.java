@@ -6,10 +6,12 @@ import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import xyz.prorickey.classicdupe.ClassicDupe;
 import xyz.prorickey.classicdupe.Utils;
 import xyz.prorickey.classicdupe.clans.ClanSub;
 import xyz.prorickey.classicdupe.clans.ClansDatabase;
 import xyz.prorickey.proutils.ChatFormat;
+import xyz.prorickey.proutils.TabComplete;
 
 import java.util.*;
 
@@ -63,24 +65,24 @@ public class CSPromote extends ClanSub {
             player.sendMessage(Utils.cmdMsg("&cThat player is not in your clan"));
             return;
         }
-        if(pmem.getLevel() < 2) {
-            if(cmem.getLevel() < 3) {
+        if(pmem.getLevel() < 1) {
+            if(cmem.getLevel() < 2) {
                 player.sendMessage(Utils.cmdMsg("&cYou must be at least an admin to promote players"));
                 return;
             }
             pmem.setLevel(pmem.getLevel()+1);
             player.sendMessage(Utils.cmdMsg("&ePromoted &6" + pmem.getOffPlayer().getName()));
             if(offPlayer.isOnline()) offPlayer.getPlayer().sendMessage(Utils.cmdMsg("&eYou have been promoted in your clan by &6" + player.getName()));
-        } else if(pmem.getLevel() == 2) {
-            if(cmem.getLevel() < 4) {
+        } else if(pmem.getLevel() == 1) {
+            if(cmem.getLevel() < 3) {
                 player.sendMessage(Utils.cmdMsg("&cYou must be the owner of the clan to promote people to admin"));
                 return;
             }
-            pmem.setLevel(3);
+            pmem.setLevel(2);
             player.sendMessage(Utils.cmdMsg("&ePromoted &6" + pmem.getOffPlayer().getName()));
             if(offPlayer.isOnline()) offPlayer.getPlayer().sendMessage(Utils.cmdMsg("&eYou have been promoted in your clan by &6" + player.getName()));
-        } else if(pmem.getLevel() == 3) {
-            if(cmem.getLevel() != 4) {
+        } else if(pmem.getLevel() == 2) {
+            if(cmem.getLevel() != 3) {
                 player.sendMessage(Utils.cmdMsg("&cYou must be the owner to transfer ownership of the clan to someone"));
                 return;
             }
@@ -92,6 +94,9 @@ public class CSPromote extends ClanSub {
 
     @Override
     public List<String> tabComplete(CommandSender sender, String[] args) {
-        return null;
+        List<String> tabs = ClassicDupe.getOnlinePlayerUsernames();
+        tabs.add("confirm");
+        if(args.length == 1) return TabComplete.tabCompletionsSearch(args[0], tabs);
+        return new ArrayList<>();
     }
 }

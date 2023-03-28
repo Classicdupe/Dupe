@@ -34,6 +34,7 @@ public class MainCommand implements CommandExecutor, TabCompleter {
         clanSubs.put("decline", new CSDecline());
         clanSubs.put("leave", new CSLeave());
         clanSubs.put("promote", new CSPromote());
+        clanSubs.put("kick", new CSKick());
 
         new CSInvite.InviteTask().runTaskTimer(ClassicDupe.getPlugin(), 0, 20);
     }
