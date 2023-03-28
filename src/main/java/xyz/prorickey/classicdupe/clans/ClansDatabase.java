@@ -200,9 +200,13 @@ public class ClansDatabase {
             clanConfig = YamlConfiguration.loadConfiguration(clanFile);
             clanName = clanConfig.getString("name");
             this.clanSettings = new ClanSettings(clanFile);
+            try {
+                conn = DriverManager.getConnection("jdbc:h2:" + ClassicDupe.getPlugin().getDataFolder().getAbsolutePath() + "/clansData/clans/" + id + "/data");
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
             Bukkit.getScheduler().runTaskAsynchronously(ClassicDupe.getPlugin(), () -> {
                 try {
-                    conn = DriverManager.getConnection("jdbc:h2:" + ClassicDupe.getPlugin().getDataFolder().getAbsolutePath() + "/clansData/clans/" + id + "/data");
                     ResultSet warpSet = conn.prepareStatement("SELECT * FROM warps").executeQuery();
                     while(warpSet.next()) {
                         warps.put(
