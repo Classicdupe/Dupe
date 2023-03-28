@@ -10,11 +10,13 @@ import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.scheduler.BukkitRunnable;
 import xyz.prorickey.classicdupe.Utils;
+import xyz.prorickey.classicdupe.clans.ClansDatabase;
 import xyz.prorickey.proutils.ChatFormat;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 public class Combat implements Listener {
 
@@ -31,6 +33,12 @@ public class Combat implements Listener {
         if(e.getDamager() instanceof Player player && JoinEvent.nakedProtection.containsKey(player)) {
             e.setCancelled(true);
             player.sendMessage(Utils.cmdMsg("&cYou cannot attack other people while in naked protection. To disable naked protection execute /nakedoff"));
+            return;
+        }
+        if(e.getEntity() instanceof Player player && e.getDamager() instanceof Player attacker) {
+            ClansDatabase.ClanMember pmem = ClansDatabase.getClanMember(player.getUniqueId());
+            ClansDatabase.ClanMember amem = ClansDatabase.getClanMember(attacker.getUniqueId());
+            if(Objects.equals(pmem.getClanId(), amem.getClanId())) e.setCancelled(true);
             return;
         }
         if(e.getEntity() instanceof Player player && !e.getCause().equals(EntityDamageEvent.DamageCause.FALL)) inCombat.put(player, System.currentTimeMillis());
