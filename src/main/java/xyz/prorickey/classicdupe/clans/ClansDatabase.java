@@ -8,7 +8,6 @@ import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.h2.util.IOUtils;
 import org.jetbrains.annotations.Nullable;
-import org.yaml.snakeyaml.Yaml;
 import xyz.prorickey.classicdupe.ClassicDupe;
 
 import java.io.*;
@@ -123,6 +122,8 @@ public class ClansDatabase {
         return randomClanId;
     }
 
+    public static List<String> getLoadedClanNames() { return clansById.keySet().stream().toList(); }
+
     @Nullable
     public static Clan getClanByID(String id) {
         if(clansById.containsKey(id)) return clansById.get(id);
@@ -188,6 +189,11 @@ public class ClansDatabase {
         private String clanName;
         private ClanSettings clanSettings;
 
+        private OfflinePlayer owner;
+        private List<OfflinePlayer> admins;
+        private List<OfflinePlayer> vips;
+        private List<OfflinePlayer> defaults;
+
         public Clan(String id) {
             this.clanId = id;
             clanFile = new File(ClassicDupe.getPlugin().getDataFolder() + "/clansData/clans/" + id + "/config.yml");
@@ -211,7 +217,16 @@ public class ClansDatabase {
                     ResultSet perkSet = conn.prepareStatement("SELECT * FROM perks").executeQuery();
                     while(perkSet.next()) perks.put(perkSet.getString("name"), perkSet.getBoolean("active"));
                     ResultSet uuids = conn.prepareStatement("SELECT * FROM players").executeQuery();
-                    while(uuids.next()) this.clanMemberUUIDs.add(UUID.fromString(uuids.getString("uuid")));
+                    while(uuids.next()) {
+                        this.clanMemberUUIDs.add(UUID.fromString(uuids.getString("uuid")));
+                        ResultSet set = main.prepareStatement("SELECT * FROM players WHERE uuid='" + uuids.getString("uuid") + "'").executeQuery();
+                        switch(set.getInt("level")) {
+                            case 0 -> this.defaults.add(Bukkit.getOfflinePlayer(UUID.fromString(uuids.getString("uuid"))));
+                            case 1 -> this.vips.add(Bukkit.getOfflinePlayer(UUID.fromString(uuids.getString("uuid"))));
+                            case 2 -> this.admins.add(Bukkit.getOfflinePlayer(UUID.fromString(uuids.getString("uuid"))));
+                            case 3 -> this.owner = Bukkit.getOfflinePlayer(UUID.fromString(uuids.getString("uuid")));
+                        }
+                    }
                 } catch (SQLException e) {
                     throw new RuntimeException(e);
                 }
@@ -230,6 +245,31 @@ public class ClansDatabase {
                 try {
                     ResultSet uuids = conn.prepareStatement("SELECT * FROM players").executeQuery();
                     while(uuids.next()) this.clanMemberUUIDs.add(UUID.fromString(uuids.getString("uuid")));
+                } catch (SQLException e) {
+                    throw new RuntimeException(e);
+                }
+            });
+        }
+
+        public OfflinePlayer getClanOwner() { return this.owner; }
+        public List<OfflinePlayer> getClanAdmins() { return this.admins; }
+        public List<OfflinePlayer> getClanVips() { return this.vips; }
+        public List<OfflinePlayer> getClanDefaults() { return this.defaults; }
+
+        public void updatePlayers() {
+            Bukkit.getScheduler().runTaskAsynchronously(ClassicDupe.getPlugin(), () -> {
+                try {
+                    ResultSet uuids = conn.prepareStatement("SELECT * FROM players").executeQuery();
+                    while(uuids.next()) {
+                        this.clanMemberUUIDs.add(UUID.fromString(uuids.getString("uuid")));
+                        ResultSet set = main.prepareStatement("SELECT * FROM players WHERE uuid='" + uuids.getString("uuid") + "'").executeQuery();
+                        switch(set.getInt("level")) {
+                            case 0 -> this.defaults.add(Bukkit.getOfflinePlayer(UUID.fromString(uuids.getString("uuid"))));
+                            case 1 -> this.vips.add(Bukkit.getOfflinePlayer(UUID.fromString(uuids.getString("uuid"))));
+                            case 2 -> this.admins.add(Bukkit.getOfflinePlayer(UUID.fromString(uuids.getString("uuid"))));
+                            case 3 -> this.owner = Bukkit.getOfflinePlayer(UUID.fromString(uuids.getString("uuid")));
+                        }
+                    }
                 } catch (SQLException e) {
                     throw new RuntimeException(e);
                 }
@@ -391,6 +431,7 @@ public class ClansDatabase {
             Bukkit.getScheduler().runTaskAsynchronously(ClassicDupe.getPlugin(), () -> {
                 try {
                     main.prepareStatement("UPDATE players SET level=" + level + " WHERE uuid='" + this.offPlayer.getUniqueId() + "'").execute();
+                    ClansDatabase.getClanByID(this.clanId).updatePlayers();
                 } catch (SQLException e) {
                     throw new RuntimeException(e);
                 }

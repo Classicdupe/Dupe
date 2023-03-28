@@ -38,6 +38,8 @@ public class MainCommand implements CommandExecutor, TabCompleter {
         clanSubs.put("home", new CSHome());
         clanSubs.put("sethome", new CSSethome());
         clanSubs.put("delhome", new CSDelHome());
+        clanSubs.put("info", new CSInfo());
+        clanSubs.put("demote", new CSDemote());
 
         new CSInvite.InviteTask().runTaskTimer(ClassicDupe.getPlugin(), 0, 20);
     }
