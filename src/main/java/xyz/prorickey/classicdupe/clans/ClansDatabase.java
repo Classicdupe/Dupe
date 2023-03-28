@@ -184,6 +184,7 @@ public class ClansDatabase {
 
         private Map<String, Warp> warps = new HashMap<>();
         private Map<String, Boolean> perks = new HashMap<>();
+        private List<UUID> clanMemberUUIDs = new ArrayList<>();
 
         private String clanName;
         private ClanSettings clanSettings;
@@ -194,31 +195,45 @@ public class ClansDatabase {
             clanConfig = YamlConfiguration.loadConfiguration(clanFile);
             clanName = clanConfig.getString("name");
             this.clanSettings = new ClanSettings(clanFile);
-            try {
-                conn = DriverManager.getConnection("jdbc:h2:" + ClassicDupe.getPlugin().getDataFolder().getAbsolutePath() + "/clansData/clans/" + id + "/data");
-                ResultSet warpSet = conn.prepareStatement("SELECT * FROM warps").executeQuery();
-                while(warpSet.next()) {
-                    warps.put(
-                            warpSet.getString("name"),
-                            new Warp(
-                                    warpSet.getString("name"),
-                                    (Location) warpSet.getObject("location"),
-                                    warpSet.getInt("levelReq")
-                            )
-                    );
+            Bukkit.getScheduler().runTaskAsynchronously(ClassicDupe.getPlugin(), () -> {
+                try {
+                    conn = DriverManager.getConnection("jdbc:h2:" + ClassicDupe.getPlugin().getDataFolder().getAbsolutePath() + "/clansData/clans/" + id + "/data");
+                    ResultSet warpSet = conn.prepareStatement("SELECT * FROM warps").executeQuery();
+                    while(warpSet.next()) {
+                        warps.put(
+                                warpSet.getString("name"),
+                                new Warp(
+                                        warpSet.getString("name"),
+                                        (Location) warpSet.getObject("location"),
+                                        warpSet.getInt("levelReq")
+                                )
+                        );
+                    }
+                    ResultSet perkSet = conn.prepareStatement("SELECT * FROM perks").executeQuery();
+                    while(perkSet.next()) perks.put(perkSet.getString("name"), perkSet.getBoolean("active"));
+                    ResultSet uuids = conn.prepareStatement("SELECT * FROM players").executeQuery();
+                    while(uuids.next()) this.clanMemberUUIDs.add(UUID.fromString(uuids.getString("uuid")));
+                } catch (SQLException e) {
+                    throw new RuntimeException(e);
                 }
-                ResultSet perkSet = conn.prepareStatement("SELECT * FROM perks").executeQuery();
-                while(perkSet.next()) {
-                    perks.put(perkSet.getString("name"), perkSet.getBoolean("active"));
-                }
-            } catch (SQLException e) {
-                throw new RuntimeException(e);
-            }
+            });
         }
 
         public String getClanId() { return this.clanId; }
         public String getClanName() { return this.clanName; }
         public ClanSettings getClanSettings() { return this.clanSettings; }
+        public Connection getConnection() { return this.conn; }
+        public List<UUID> getClanMemberUUIDs() { return this.clanMemberUUIDs; }
+        public void updateClanMemberUUIDs() {
+            Bukkit.getScheduler().runTaskAsynchronously(ClassicDupe.getPlugin(), () -> {
+                try {
+                    ResultSet uuids = conn.prepareStatement("SELECT * FROM players").executeQuery();
+                    while(uuids.next()) this.clanMemberUUIDs.add(UUID.fromString(uuids.getString("uuid")));
+                } catch (SQLException e) {
+                    throw new RuntimeException(e);
+                }
+            });
+        }
 
         public void deleteClan() {
             try {
@@ -329,12 +344,15 @@ public class ClansDatabase {
         public Integer getBoosts() { return this.boosts; }
 
         public void removeClan() {
+            Clan clan = getClanByID(this.clanId);
             this.clanId = null;
             this.clanName = null;
             this.level = null;
             Bukkit.getScheduler().runTaskAsynchronously(ClassicDupe.getPlugin(), () -> {
                 try {
+                    clan.getConnection().prepareStatement("DELETE FROM player WHERE uuid='" + this.offPlayer.getUniqueId() + "'").execute();
                     main.prepareStatement("UPDATE players SET clanId=null, clanName=null, level=null WHERE uuid='" + this.offPlayer.getUniqueId() + "'").execute();
+                    clan.updateClanMemberUUIDs();
                 } catch (SQLException e) {
                     throw new RuntimeException(e);
                 }
@@ -358,7 +376,9 @@ public class ClansDatabase {
             this.level = level;
             Bukkit.getScheduler().runTaskAsynchronously(ClassicDupe.getPlugin(), () -> {
                 try {
+                    clan.getConnection().prepareStatement("INSERT INTO players(uuid) VALUES('" + this.offPlayer.getUniqueId() + "')").execute();
                     main.prepareStatement("UPDATE players SET clanId='" + clan.getClanId() + "', clanName='" + clan.getClanName() + "', level=" + level + " WHERE uuid='" + this.offPlayer.getUniqueId() + "'").execute();
+                    clan.updateClanMemberUUIDs();
                 } catch (SQLException e) {
                     Bukkit.getLogger().severe(e.toString());
                 }
