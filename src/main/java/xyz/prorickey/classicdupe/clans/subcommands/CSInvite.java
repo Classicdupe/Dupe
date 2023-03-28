@@ -31,8 +31,8 @@ public class CSInvite extends ClanSub {
             player.sendMessage(Utils.cmdMsg("&cYou can't invite people to your imaginary clan. You must create one with /clan create"));
             return;
         }
-        if(cmem.getLevel() < 2) {
-            player.sendMessage(Utils.cmdMsg("&cYou must at least be mod to invite people to a clan"));
+        if(cmem.getLevel() < 1) {
+            player.sendMessage(Utils.cmdMsg("&cYou must at least be vip to invite people to a clan"));
             return;
         }
         if(args.length == 0) {

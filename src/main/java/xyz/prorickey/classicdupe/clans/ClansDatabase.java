@@ -223,11 +223,39 @@ public class ClansDatabase {
         public ClanSettings getClanSettings() { return this.clanSettings; }
         public Connection getConnection() { return this.conn; }
         public List<UUID> getClanMemberUUIDs() { return this.clanMemberUUIDs; }
+        public List<String> getWarpNames() { return this.warps.keySet().stream().toList(); }
+        public Map<String, Warp> getWarpMap() { return this.warps; }
         public void updateClanMemberUUIDs() {
             Bukkit.getScheduler().runTaskAsynchronously(ClassicDupe.getPlugin(), () -> {
                 try {
                     ResultSet uuids = conn.prepareStatement("SELECT * FROM players").executeQuery();
                     while(uuids.next()) this.clanMemberUUIDs.add(UUID.fromString(uuids.getString("uuid")));
+                } catch (SQLException e) {
+                    throw new RuntimeException(e);
+                }
+            });
+        }
+
+        public void delWarp(String name) {
+            this.warps.remove(name);
+            Bukkit.getScheduler().runTaskAsynchronously(ClassicDupe.getPlugin(), () -> {
+                try {
+                    conn.prepareStatement("DELETE FROM warps WHERE name='" + name + "'").execute();
+                } catch (SQLException e) {
+                    throw new RuntimeException(e);
+                }
+            });
+        }
+
+        public void setWarp(String name, Location loc) {
+            this.warps.put(name, new Warp(
+                    name,
+                    loc,
+                    0
+            ));
+            Bukkit.getScheduler().runTaskAsynchronously(ClassicDupe.getPlugin(), () -> {
+                try {
+                    conn.prepareStatement("INSERT INTO warps(name, location, levelReq) VALUES('" + name + "', '" + loc.toString() + "', 0)").execute();
                 } catch (SQLException e) {
                     throw new RuntimeException(e);
                 }

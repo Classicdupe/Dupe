@@ -31,7 +31,7 @@ public class CSKick extends ClanSub {
             player.sendMessage(Utils.cmdMsg("&cYou must provide a player to kick"));
             return;
         }
-        if(cmem.getLevel() < 2) {
+        if(cmem.getLevel() < 1) {
             player.sendMessage(Utils.cmdMsg("&cYou must be either an admin or the owner to kick people from a clan"));
             return;
         }
