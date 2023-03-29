@@ -40,21 +40,21 @@ public class CSInfo extends ClanSub {
         if(clanAdmins != null) {
             StringBuilder admins = new StringBuilder();
             clanAdmins .forEach(offlinePlayer -> admins.append("&e").append(offlinePlayer.getName()).append("&7, "));
-            if(!admins.isEmpty()) comp = comp.append(Component.text(ChatFormat.format("&cClan Admins: &e" + admins.substring(admins.length(), admins.length()-2))));
+            if(!admins.isEmpty()) comp = comp.append(Component.text(ChatFormat.format("&cClan Admins: &e" + admins.substring(0, admins.length()-2) + "\n")));
         }
 
         List<OfflinePlayer> clanVips = clan.getClanVips();
         if(clanVips != null) {
             StringBuilder vips = new StringBuilder();
             clanVips.forEach(offlinePlayer -> vips.append("&e").append(offlinePlayer.getName()).append("&7, "));
-            if(!vips.isEmpty()) comp = comp.append(Component.text(ChatFormat.format("&aClan VIPs: &e" + vips.substring(vips.length(), vips.length()-2))));
+            if(!vips.isEmpty()) comp = comp.append(Component.text(ChatFormat.format("&aClan VIPs: &e" + vips.substring(0, vips.length()-2) + "\n")));
         }
 
         List<OfflinePlayer> clanDefaults = clan.getClanDefaults();
         if(clanDefaults != null) {
             StringBuilder defaults = new StringBuilder();
             clanDefaults.forEach(offlinePlayer -> defaults.append("&e").append(offlinePlayer.getName()).append("&7, "));
-            if(!defaults.isEmpty()) comp = comp.append(Component.text(ChatFormat.format("&7Clan Defaults: &e" + defaults.substring(defaults.length(), defaults.length()-2))));
+            if(!defaults.isEmpty()) comp = comp.append(Component.text(ChatFormat.format("&7Clan Defaults: &e" + defaults.substring(0, defaults.length()-2) + "\n")));
         }
 
         sender.sendMessage(comp);

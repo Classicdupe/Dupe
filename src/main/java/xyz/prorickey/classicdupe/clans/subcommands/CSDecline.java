@@ -31,7 +31,8 @@ public class CSDecline extends ClanSub {
             return;
         }
         AtomicBoolean success = new AtomicBoolean(false);
-        for (CSInvite.Invite inv : CSInvite.invites) {
+        final List<CSInvite.Invite> tempInvites = new ArrayList<>(CSInvite.invites);
+        for (CSInvite.Invite inv : tempInvites) {
             if(inv.inviteeUUID == player.getUniqueId() && inv.inviterUUID == inviter.getUniqueId()) {
                 player.sendMessage(Utils.cmdMsg("&eDeclined the invite to join &6" + inviter.getName() + "'s &eclan"));
                 inviter.sendMessage(Utils.cmdMsg("&6" + player.getName() + " &edeclined your invite to join your clan"));

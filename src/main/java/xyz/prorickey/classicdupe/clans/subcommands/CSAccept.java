@@ -30,7 +30,8 @@ public class CSAccept extends ClanSub {
             return;
         }
         AtomicBoolean success = new AtomicBoolean(false);
-        for (CSInvite.Invite inv : CSInvite.invites) {
+        final List<CSInvite.Invite> tempInvites = new ArrayList<>(CSInvite.invites);
+        for (CSInvite.Invite inv : tempInvites) {
             if(inv.inviteeUUID == player.getUniqueId() && inv.inviterUUID == inviter.getUniqueId()) {
                 ClansDatabase.Clan clan = ClansDatabase.getClanByID(ClansDatabase.getClanMember(inviter.getUniqueId()).getClanId());
                 ClansDatabase.getClanMember(player.getUniqueId()).setClan(clan, 0);

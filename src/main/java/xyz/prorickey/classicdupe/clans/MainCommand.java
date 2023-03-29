@@ -1,6 +1,5 @@
 package xyz.prorickey.classicdupe.clans;
 
-import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -9,7 +8,6 @@ import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import xyz.prorickey.classicdupe.ClassicDupe;
-import xyz.prorickey.classicdupe.clans.events.PlayerJoin;
 import xyz.prorickey.classicdupe.clans.subcommands.*;
 import xyz.prorickey.proutils.TabComplete;
 
@@ -23,7 +21,6 @@ public class MainCommand implements CommandExecutor, TabCompleter {
         ClansDatabase.init(p);
         p.getCommand("clan").setExecutor(this);
         p.getCommand("clan").setTabCompleter(this);
-        p.getServer().getPluginManager().registerEvents(new PlayerJoin(), p);
 
         clanSubs.put("help", new CSHelp());
         clanSubs.put("create", new CSCreate());

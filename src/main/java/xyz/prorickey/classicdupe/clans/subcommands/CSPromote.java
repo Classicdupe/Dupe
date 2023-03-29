@@ -48,8 +48,8 @@ public class CSPromote extends ClanSub {
                 promoterToPromotee.remove(player.getUniqueId());
                 return;
             }
-            cmem.setLevel(3);
-            pmem.setLevel(4);
+            cmem.setLevel(2);
+            pmem.setLevel(3);
             player.sendMessage(Utils.cmdMsg("&6" + offPlayer.getName() + "&e has been promoted to owner and you have been demoted to admin"));
             if(offPlayer.isOnline()) offPlayer.getPlayer().sendMessage(Utils.cmdMsg("&eYou have been promoted to owner of your clan by &6" + player.getName()));
             promoterToPromotee.remove(player.getUniqueId());
@@ -86,9 +86,10 @@ public class CSPromote extends ClanSub {
                 player.sendMessage(Utils.cmdMsg("&cYou must be the owner to transfer ownership of the clan to someone"));
                 return;
             }
-            player.sendMessage(Component.text(Utils.cmdMsg("&eYou are about to transfer ownership of your clan to &6" + offPlayer.getName() + "&e. Are you sure you want to do this?"))
+            player.sendMessage(Component.text(Utils.cmdMsg("&eYou are about to transfer ownership of your clan to &6" + offPlayer.getName() + "&e. Are you sure you want to do this? "))
                     .append(Component.text(ChatFormat.format("&8[&a&lYES&8]"))
                             .clickEvent(ClickEvent.clickEvent(ClickEvent.Action.SUGGEST_COMMAND, "/clan promote confirm"))));
+            promoterToPromotee.put(player.getUniqueId(), offPlayer);
         }
     }
 
