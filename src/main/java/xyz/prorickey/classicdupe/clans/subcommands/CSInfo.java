@@ -1,6 +1,7 @@
 package xyz.prorickey.classicdupe.clans.subcommands;
 
 import net.kyori.adventure.text.Component;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import xyz.prorickey.classicdupe.Utils;
@@ -32,20 +33,29 @@ public class CSInfo extends ClanSub {
             sender.sendMessage(Utils.cmdMsg("&cThat clan does not exist"));
             return;
         }
-        Component comp = Component.text(ChatFormat.format("&e\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u255D &e&l" + clan.getClanName() + " &a\u255A\u2550\u2550\u2550\u2550\u2550\u2550\u2550\n"));
-        comp.append(Component.text(ChatFormat.format("&6Clan Owner: &e" + clan.getClanOwner().getName() + "\n")));
+        Component comp = Component.text(ChatFormat.format("&e\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u255D &a&l" + clan.getClanName() + " &e\u255A\u2550\u2550\u2550\u2550\u2550\u2550\u2550\n"));
+        comp = comp.append(Component.text(ChatFormat.format("&6Clan Owner: &e" + clan.getClanOwner().getName() + "\n")));
 
-        StringBuilder admins = new StringBuilder();
-        clan.getClanAdmins().forEach(offlinePlayer -> admins.append("&e" + offlinePlayer.getName() + "&7, "));
-        if(!admins.isEmpty()) comp.append(Component.text(ChatFormat.format("&cClan Admins: &e" + admins.substring(admins.length(), admins.length()-2))));
+        List<OfflinePlayer> clanAdmins = clan.getClanAdmins();
+        if(clanAdmins != null) {
+            StringBuilder admins = new StringBuilder();
+            clanAdmins .forEach(offlinePlayer -> admins.append("&e").append(offlinePlayer.getName()).append("&7, "));
+            if(!admins.isEmpty()) comp = comp.append(Component.text(ChatFormat.format("&cClan Admins: &e" + admins.substring(admins.length(), admins.length()-2))));
+        }
 
-        StringBuilder vips = new StringBuilder();
-        clan.getClanVips().forEach(offlinePlayer -> vips.append("&e" + offlinePlayer.getName() + "&7, "));
-        if(!vips.isEmpty()) comp.append(Component.text(ChatFormat.format("&aClan VIPs: &e" + vips.substring(vips.length(), vips.length()-2))));
+        List<OfflinePlayer> clanVips = clan.getClanVips();
+        if(clanVips != null) {
+            StringBuilder vips = new StringBuilder();
+            clanVips.forEach(offlinePlayer -> vips.append("&e").append(offlinePlayer.getName()).append("&7, "));
+            if(!vips.isEmpty()) comp = comp.append(Component.text(ChatFormat.format("&aClan VIPs: &e" + vips.substring(vips.length(), vips.length()-2))));
+        }
 
-        StringBuilder defaults = new StringBuilder();
-        clan.getClanDefaults().forEach(offlinePlayer -> defaults.append("&e" + offlinePlayer.getName() + "&7, "));
-        if(!defaults.isEmpty()) comp.append(Component.text(ChatFormat.format("&7Clan Defaults: &e" + defaults.substring(defaults.length(), defaults.length()-2))));
+        List<OfflinePlayer> clanDefaults = clan.getClanDefaults();
+        if(clanDefaults != null) {
+            StringBuilder defaults = new StringBuilder();
+            clanDefaults.forEach(offlinePlayer -> defaults.append("&e").append(offlinePlayer.getName()).append("&7, "));
+            if(!defaults.isEmpty()) comp = comp.append(Component.text(ChatFormat.format("&7Clan Defaults: &e" + defaults.substring(defaults.length(), defaults.length()-2))));
+        }
 
         sender.sendMessage(comp);
     }

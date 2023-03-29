@@ -122,7 +122,7 @@ public class ClansDatabase {
         return randomClanId;
     }
 
-    public static List<String> getLoadedClanNames() { return clansById.keySet().stream().toList(); }
+    public static List<String> getLoadedClanNames() { return clansByName.keySet().stream().toList(); }
 
     @Nullable
     public static Clan getClanByID(String id) {
@@ -224,7 +224,7 @@ public class ClansDatabase {
                     while(uuids.next()) {
                         this.clanMemberUUIDs.add(UUID.fromString(uuids.getString("uuid")));
                         ResultSet set = main.prepareStatement("SELECT * FROM players WHERE uuid='" + uuids.getString("uuid") + "'").executeQuery();
-                        switch(set.getInt("level")) {
+                        if(set.next()) switch(set.getInt("level")) {
                             case 0 -> this.defaults.add(Bukkit.getOfflinePlayer(UUID.fromString(uuids.getString("uuid"))));
                             case 1 -> this.vips.add(Bukkit.getOfflinePlayer(UUID.fromString(uuids.getString("uuid"))));
                             case 2 -> this.admins.add(Bukkit.getOfflinePlayer(UUID.fromString(uuids.getString("uuid"))));
@@ -360,12 +360,14 @@ public class ClansDatabase {
 
         public String getClanColor() { return this.clanColor; }
         public void setClanColor(String color) {
+            this.clanColor = color;
             this.clanConfig.set("clanColor", color);
             save();
         }
 
         public boolean getPublicClan() { return this.publicClan; }
         public void setPublicClan(boolean setting) {
+            this.publicClan = setting;
             this.clanConfig.set("publicClan", setting);
             save();
         }
