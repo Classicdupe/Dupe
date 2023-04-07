@@ -3,6 +3,8 @@ package xyz.prorickey.classicdupe.clans.subcommands;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import xyz.prorickey.classicdupe.Utils;
+import xyz.prorickey.classicdupe.clans.Clan;
+import xyz.prorickey.classicdupe.clans.ClanMember;
 import xyz.prorickey.classicdupe.clans.ClanSub;
 import xyz.prorickey.classicdupe.clans.ClanDatabase;
 import xyz.prorickey.proutils.ChatFormat;
@@ -18,8 +20,8 @@ public class CSDelHome extends ClanSub {
             sender.sendMessage(ChatFormat.format("&cYou cannot execute this command from console"));
             return;
         }
-        ClanDatabase.ClanMember cmem = ClanDatabase.getClanMember(player.getUniqueId());
-        if(cmem.getClanId() == null) {
+        ClanMember cmem = ClanDatabase.getClanMember(player.getUniqueId());
+        if(cmem.getClanID() == null) {
             player.sendMessage(Utils.cmdMsg("&cYou must be in a clan to delete homes"));
             return;
         }
@@ -27,12 +29,13 @@ public class CSDelHome extends ClanSub {
             player.sendMessage(Utils.cmdMsg("&cYou must be either an admin or the owner to delete homes in a clan"));
             return;
         }
-        ClanDatabase.Clan clan = ClanDatabase.getClanByID(cmem.getClanId());
+        Clan clan = ClanDatabase.getClan(cmem.getClanID());
         if(args.length == 0) {
             if(!clan.getWarpNames().contains("default")) {
                 player.sendMessage(Utils.cmdMsg("&eThat home does not exist and cannot be deleted"));
                 return;
             }
+            ClanDatabase.delWarp(clan, "default");
             clan.delWarp("default");
             player.sendMessage(Utils.cmdMsg("&eDeleted the clans default home"));
         } else {
@@ -40,6 +43,7 @@ public class CSDelHome extends ClanSub {
                 player.sendMessage(Utils.cmdMsg("&eThat home does not exist and cannot be deleted"));
                 return;
             }
+            ClanDatabase.delWarp(clan, args[0].toLowerCase());
             clan.delWarp(args[0].toLowerCase());
             player.sendMessage(Utils.cmdMsg("&eDeleted &6" + args[0].toLowerCase()));
         }
@@ -47,9 +51,9 @@ public class CSDelHome extends ClanSub {
 
     @Override
     public List<String> tabComplete(CommandSender sender, String[] args) {
-        if(!(sender instanceof Player player) || ClanDatabase.getClanMember(player.getUniqueId()).getClanId() == null) return new ArrayList<>();
-        ClanDatabase.ClanMember cmem = ClanDatabase.getClanMember(player.getUniqueId());
-        if(args.length == 1) return TabComplete.tabCompletionsSearch(args[0], ClanDatabase.getClanByID(cmem.getClanId()).getWarpNames());
+        if(!(sender instanceof Player player) || ClanDatabase.getClanMember(player.getUniqueId()).getClanID() == null) return new ArrayList<>();
+        ClanMember cmem = ClanDatabase.getClanMember(player.getUniqueId());
+        if(args.length == 1) return TabComplete.tabCompletionsSearch(args[0], ClanDatabase.getClan(cmem.getClanName()).getWarpNames());
         return new ArrayList<>();
     }
 }

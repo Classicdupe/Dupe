@@ -30,7 +30,7 @@ public class ClanDatabase {
     private static Map<String, Clan> clansByName = new HashMap<>();
     private static Map<UUID, ClanMember> clanMembers = new HashMap<>();
 
-    public void init(JavaPlugin plugin) {
+    public static void init(JavaPlugin plugin) {
         dataDir = new File(plugin.getDataFolder() + "/clansData/");
         if(!dataDir.exists()) dataDir.mkdir();
         globalConfigFile = new File(plugin.getDataFolder() + "/clansData/global.yml");
@@ -150,6 +150,16 @@ public class ClanDatabase {
         });
     }
 
+    public static void removeClan(ClanMember cmem) {
+        Bukkit.getScheduler().runTaskAsynchronously(ClassicDupe.getPlugin(), () -> {
+            try {
+                main.prepareStatement("UPDATE players SET clanId=null, clanName=null, level=null WHERE uuid='" + cmem.getOffPlayer().getUniqueId() + "'").execute();
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
+        });
+    }
+
     public static void deleteClan(Clan clan) {
         UUID clanId = clan.getClanId();
         clanMembers.forEach((uuid, cmem) -> { if(cmem.getClanID() == clanId) cmem.removeClan(); });
@@ -171,6 +181,57 @@ public class ClanDatabase {
         Bukkit.getScheduler().runTaskAsynchronously(ClassicDupe.getPlugin(), () -> {
             try {
                 main.prepareStatement("UPDATE players SET clanId='" + clan.getClanId() + "', clanName='" + clan.getClanName() + "', level=3 WHERE uuid='" + uuid + "'").execute();
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
+        });
+    }
+
+    public static void setClanColor(Clan clan, String clanColor) {
+        Bukkit.getScheduler().runTaskAsynchronously(ClassicDupe.getPlugin(), () -> {
+            try {
+                main.prepareStatement("UPDATE clans SET clanColor='" + clanColor + "' WHERE clanId='" + clan.getClanId() + "'").execute();
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
+        });
+    }
+
+    public static void setPublicClan(Clan clan, boolean publicClan) {
+        Bukkit.getScheduler().runTaskAsynchronously(ClassicDupe.getPlugin(), () -> {
+            try {
+                main.prepareStatement("UPDATE clans SET publicClan=" + publicClan + " WHERE clanId='" + clan.getClanId() + "'").execute();
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
+        });
+    }
+
+    public static void setPlayerLevel(UUID uuid, Integer level) {
+        Bukkit.getScheduler().runTaskAsynchronously(ClassicDupe.getPlugin(), () -> {
+            try {
+                main.prepareStatement("UPDATE players SET level=" + level + " WHERE uuid='" + uuid + "'").execute();
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
+        });
+    }
+
+    public static void delWarp(Clan clan, String warp) {
+        Bukkit.getScheduler().runTaskAsynchronously(ClassicDupe.getPlugin(), () -> {
+            try {
+                main.prepareStatement("DELETE FROM clanWarps WHERE clanId='" + clan.getClanId() + "', name='" + warp + "'").execute();
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
+        });
+    }
+
+    public static void setWarp(Clan clan, Warp warp) {
+        Bukkit.getScheduler().runTaskAsynchronously(ClassicDupe.getPlugin(), () -> {
+            try {
+                String loc =  warp.location.getX() + "," + warp.location.getY() + "," + warp.location.getZ() + "," + warp.location.getPitch() + "," + warp.location.getYaw() + "," + warp.location.getWorld().getName();
+                main.prepareStatement("INSERT INTO clanWarps(clanId, name, loc, levelNeeded) VALUES('" + clan.getClanId() + "', '" + warp.name + "', '" + loc + "', " + warp.level + ")") .execute();
             } catch (SQLException e) {
                 throw new RuntimeException(e);
             }

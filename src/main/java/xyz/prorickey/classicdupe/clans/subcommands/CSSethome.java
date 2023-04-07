@@ -3,8 +3,7 @@ package xyz.prorickey.classicdupe.clans.subcommands;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import xyz.prorickey.classicdupe.Utils;
-import xyz.prorickey.classicdupe.clans.ClanSub;
-import xyz.prorickey.classicdupe.clans.ClanDatabase;
+import xyz.prorickey.classicdupe.clans.*;
 import xyz.prorickey.proutils.ChatFormat;
 
 import java.util.ArrayList;
@@ -17,8 +16,8 @@ public class CSSethome extends ClanSub {
             sender.sendMessage(ChatFormat.format("&cYou cannot execute this command from console"));
             return;
         }
-        ClanDatabase.ClanMember cmem = ClanDatabase.getClanMember(player.getUniqueId());
-        if(cmem.getClanId() == null) {
+        ClanMember cmem = ClanDatabase.getClanMember(player.getUniqueId());
+        if(cmem.getClanID() == null) {
             player.sendMessage(Utils.cmdMsg("&cYou must be in a clan to set homes"));
             return;
         }
@@ -26,20 +25,24 @@ public class CSSethome extends ClanSub {
             player.sendMessage(Utils.cmdMsg("&cYou must be either an admin or the owner to set homes in a clan"));
             return;
         }
-        ClanDatabase.Clan clan = ClanDatabase.getClanByID(cmem.getClanId());
+        Clan clan = ClanDatabase.getClan(cmem.getClanID());
         if(args.length == 0) {
             if(clan.getWarpNames().contains("default")) {
                 player.sendMessage(Utils.cmdMsg("&eYou must delete your default home with &6/clan delhome &ebefore you can set it again"));
                 return;
             }
-            clan.setWarp("default", player.getLocation());
+            Warp warp = new Warp("default", player.getLocation(), 0);
+            ClanDatabase.setWarp(clan, warp);
+            clan.setWarp(warp);
             player.sendMessage(Utils.cmdMsg("&eSet the clans default home to your location"));
         } else {
             if(clan.getWarpNames().contains(args[0].toLowerCase())) {
                 player.sendMessage(Utils.cmdMsg("&eYou must delete that home with &6/clan delhome " + args[0].toLowerCase() + " &ebefore you can set it again"));
                 return;
             }
-            clan.setWarp(args[0].toLowerCase(), player.getLocation());
+            Warp warp = new Warp(args[0].toLowerCase(), player.getLocation(), 0);
+            ClanDatabase.setWarp(clan, warp);
+            clan.setWarp(warp);
             player.sendMessage(Utils.cmdMsg("&eSet " + args[0].toLowerCase() + " to your location"));
         }
     }

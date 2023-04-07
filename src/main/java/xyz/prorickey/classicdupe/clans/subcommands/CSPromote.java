@@ -8,6 +8,8 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import xyz.prorickey.classicdupe.ClassicDupe;
 import xyz.prorickey.classicdupe.Utils;
+import xyz.prorickey.classicdupe.clans.Clan;
+import xyz.prorickey.classicdupe.clans.ClanMember;
 import xyz.prorickey.classicdupe.clans.ClanSub;
 import xyz.prorickey.classicdupe.clans.ClanDatabase;
 import xyz.prorickey.proutils.ChatFormat;
@@ -25,8 +27,8 @@ public class CSPromote extends ClanSub {
             sender.sendMessage(ChatFormat.format("&cYou cannot execute this command from console"));
             return;
         }
-        ClanDatabase.ClanMember cmem = ClanDatabase.getClanMember(player.getUniqueId());
-        if(cmem.getClanId() == null) {
+        ClanMember cmem = ClanDatabase.getClanMember(player.getUniqueId());
+        if(cmem.getClanID() == null) {
             player.sendMessage(Utils.cmdMsg("&cYou must be in a clan to promote players"));
             return;
         }
@@ -34,7 +36,7 @@ public class CSPromote extends ClanSub {
             player.sendMessage(Utils.cmdMsg("&cYou must provide a player to promote"));
             return;
         }
-        ClanDatabase.Clan clan = ClanDatabase.getClanByID(cmem.getClanId());
+        Clan clan = ClanDatabase.getClan(cmem.getClanID());
         if(args[0].equalsIgnoreCase("confirm")) {
             if(!promoterToPromotee.containsKey(player.getUniqueId())) {
                 player.sendMessage(Utils.cmdMsg("&cYou must first promote the player with the regular promote command before confirming"));
@@ -42,13 +44,15 @@ public class CSPromote extends ClanSub {
                 return;
             }
             OfflinePlayer offPlayer = promoterToPromotee.get(player.getUniqueId());
-            ClanDatabase.ClanMember pmem = ClanDatabase.getClanMember(offPlayer.getUniqueId());
-            if(!Objects.equals(pmem.getClanId(), cmem.getClanId())) {
+            ClanMember pmem = ClanDatabase.getClanMember(offPlayer.getUniqueId());
+            if(!Objects.equals(pmem.getClanID(), cmem.getClanID())) {
                 player.sendMessage(Utils.cmdMsg("&cThat player is not in your clan"));
                 promoterToPromotee.remove(player.getUniqueId());
                 return;
             }
+            ClanDatabase.setPlayerLevel(cmem.getOffPlayer().getUniqueId(), 2);
             cmem.setLevel(2);
+            ClanDatabase.setPlayerLevel(pmem.getOffPlayer().getUniqueId(), 3);
             pmem.setLevel(3);
             player.sendMessage(Utils.cmdMsg("&6" + offPlayer.getName() + "&e has been promoted to owner and you have been demoted to admin"));
             if(offPlayer.isOnline()) offPlayer.getPlayer().sendMessage(Utils.cmdMsg("&eYou have been promoted to owner of your clan by &6" + player.getName()));
@@ -56,12 +60,12 @@ public class CSPromote extends ClanSub {
             return;
         }
         OfflinePlayer offPlayer = Bukkit.getOfflinePlayer(args[0]);
-        if(!clan.getClanMemberUUIDs().contains(offPlayer.getUniqueId())) {
+        if(!clan.getMembers().contains(offPlayer)) {
             player.sendMessage(Utils.cmdMsg("&cThat player is not in your clan"));
             return;
         }
-        ClanDatabase.ClanMember pmem = ClanDatabase.getClanMember(offPlayer.getUniqueId());
-        if(!Objects.equals(pmem.getClanId(), cmem.getClanId())) {
+        ClanMember pmem = ClanDatabase.getClanMember(offPlayer.getUniqueId());
+        if(!Objects.equals(pmem.getClanID(), cmem.getClanID())) {
             player.sendMessage(Utils.cmdMsg("&cThat player is not in your clan"));
             return;
         }
@@ -70,6 +74,7 @@ public class CSPromote extends ClanSub {
                 player.sendMessage(Utils.cmdMsg("&cYou must be at least an admin to promote players"));
                 return;
             }
+            ClanDatabase.setPlayerLevel(pmem.getOffPlayer().getUniqueId(), pmem.getLevel()+1);
             pmem.setLevel(pmem.getLevel()+1);
             player.sendMessage(Utils.cmdMsg("&ePromoted &6" + pmem.getOffPlayer().getName()));
             if(offPlayer.isOnline()) offPlayer.getPlayer().sendMessage(Utils.cmdMsg("&eYou have been promoted in your clan by &6" + player.getName()));
@@ -78,6 +83,7 @@ public class CSPromote extends ClanSub {
                 player.sendMessage(Utils.cmdMsg("&cYou must be the owner of the clan to promote people to admin"));
                 return;
             }
+            ClanDatabase.setPlayerLevel(pmem.getOffPlayer().getUniqueId(), 2);
             pmem.setLevel(2);
             player.sendMessage(Utils.cmdMsg("&ePromoted &6" + pmem.getOffPlayer().getName()));
             if(offPlayer.isOnline()) offPlayer.getPlayer().sendMessage(Utils.cmdMsg("&eYou have been promoted in your clan by &6" + player.getName()));

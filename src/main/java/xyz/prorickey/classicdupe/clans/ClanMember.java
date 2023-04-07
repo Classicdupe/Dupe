@@ -29,8 +29,11 @@ public class ClanMember {
         this.level = null;
     }
 
+    public OfflinePlayer getOffPlayer() { return this.offPlayer; }
     public UUID getClanID() { return this.clanId; }
     public String getClanName() { return this.clanName; }
     public Integer getLevel() { return this.level; }
+
+    public void setLevel(Integer level) { this.level = level; }
 
 }

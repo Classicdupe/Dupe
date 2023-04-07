@@ -6,6 +6,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import xyz.prorickey.classicdupe.ClassicDupe;
 import xyz.prorickey.classicdupe.Utils;
+import xyz.prorickey.classicdupe.clans.ClanMember;
 import xyz.prorickey.classicdupe.clans.ClanSub;
 import xyz.prorickey.classicdupe.clans.ClanDatabase;
 import xyz.prorickey.proutils.ChatFormat;
@@ -22,8 +23,8 @@ public class CSKick extends ClanSub {
             sender.sendMessage(ChatFormat.format("&cYou cannot execute this command from console"));
             return;
         }
-        ClanDatabase.ClanMember cmem = ClanDatabase.getClanMember(player.getUniqueId());
-        if(cmem.getClanId() == null) {
+        ClanMember cmem = ClanDatabase.getClanMember(player.getUniqueId());
+        if(cmem.getClanID() == null) {
             player.sendMessage(Utils.cmdMsg("&cYou must be in a clan to kick players"));
             return;
         }
@@ -36,12 +37,12 @@ public class CSKick extends ClanSub {
             return;
         }
         OfflinePlayer offPlayer = Bukkit.getOfflinePlayer(args[0]);
-        if(!ClanDatabase.getClanByID(cmem.getClanId()).getClanMemberUUIDs().contains(offPlayer.getUniqueId())) {
+        if(!ClanDatabase.getClan(cmem.getClanID()).getMembers().contains(offPlayer)) {
             player.sendMessage(Utils.cmdMsg("&cThat player is not in your clan"));
             return;
         }
-        ClanDatabase.ClanMember pmem = ClanDatabase.getClanMember(offPlayer.getUniqueId());
-        if(!Objects.equals(pmem.getClanId(), cmem.getClanId())) {
+        ClanMember pmem = ClanDatabase.getClanMember(offPlayer.getUniqueId());
+        if(!Objects.equals(pmem.getClanID(), cmem.getClanID())) {
             player.sendMessage(Utils.cmdMsg("&cThat player is not in your clan"));
             return;
         }
@@ -50,6 +51,7 @@ public class CSKick extends ClanSub {
             return;
         }
         pmem.removeClan();
+        ClanDatabase.removeClan(pmem);
         if(offPlayer.isOnline()) offPlayer.getPlayer().sendMessage(Utils.cmdMsg("&eYou have been kicked from your clan by &6" + player.getName()));
         player.sendMessage(Utils.cmdMsg("&eKicked &6" + offPlayer.getName() + "&e from your clan"));
     }

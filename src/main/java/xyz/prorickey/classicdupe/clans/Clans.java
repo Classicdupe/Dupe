@@ -42,12 +42,12 @@ public class Clans implements CommandExecutor, TabCompleter {
 
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
-        if(args.length == 0) clanSubs.get("help").execute(sender, args, this);
+        if(args.length == 0) clanSubs.get("help").execute(sender, args);
         else {
             String[] subArgs = Arrays.copyOfRange(args, 1, args.length);
             ClanSub sub = clanSubs.get(args[0].toLowerCase());
-            if(sub == null) clanSubs.get("help").execute(sender, subArgs, this);
-            sub.execute(sender, subArgs, this);
+            if(sub == null) clanSubs.get("help").execute(sender, subArgs);
+            sub.execute(sender, subArgs);
         }
         return true;
     }
@@ -58,7 +58,7 @@ public class Clans implements CommandExecutor, TabCompleter {
         else if(args.length > 1) {
             String[] subArgs = Arrays.copyOfRange(args, 1, args.length);
             ClanSub sub = clanSubs.get(args[0].toLowerCase());
-            if(sub != null) return sub.tabComplete(sender, subArgs, this);
+            if(sub != null) return sub.tabComplete(sender, subArgs);
         }
         return new ArrayList<>();
     }

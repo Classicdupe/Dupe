@@ -11,7 +11,8 @@ import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import net.luckperms.api.LuckPerms;
-import xyz.prorickey.classicdupe.clans.MainCommand;
+import xyz.prorickey.classicdupe.clans.ClanDatabase;
+import xyz.prorickey.classicdupe.clans.Clans;
 import xyz.prorickey.classicdupe.commands.admin.*;
 import xyz.prorickey.classicdupe.commands.default1.*;
 import xyz.prorickey.classicdupe.commands.moderator.*;
@@ -48,6 +49,7 @@ public class ClassicDupe extends JavaPlugin {
         if(Bukkit.getPluginManager().getPlugin("PlaceholderAPI") != null) new ClassicDupeExpansion(this).register();
 
         Config.init(this);
+        ClanDatabase.init(this);
         database = new Database();
         pvdatabase = new PlayerVaultDatabase(this);
 
@@ -62,7 +64,7 @@ public class ClassicDupe extends JavaPlugin {
         new Scoreboard.ScoreboardTask().runTaskTimer(this, 0, 10);
         new ClearSpawn.ClearSpawnTask().runTaskTimer(this, 0, 20);
 
-        new MainCommand(this);
+        new Clans(this);
 
         this.getCommand("dupe").setExecutor(new DupeCMD());
         this.getCommand("dupe").setTabCompleter(new DupeCMD());

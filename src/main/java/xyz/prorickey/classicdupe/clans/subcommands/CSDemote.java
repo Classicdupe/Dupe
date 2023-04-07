@@ -6,6 +6,8 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import xyz.prorickey.classicdupe.ClassicDupe;
 import xyz.prorickey.classicdupe.Utils;
+import xyz.prorickey.classicdupe.clans.Clan;
+import xyz.prorickey.classicdupe.clans.ClanMember;
 import xyz.prorickey.classicdupe.clans.ClanSub;
 import xyz.prorickey.classicdupe.clans.ClanDatabase;
 import xyz.prorickey.proutils.ChatFormat;
@@ -22,8 +24,8 @@ public class CSDemote extends ClanSub {
             sender.sendMessage(ChatFormat.format("&cYou cannot execute this command from console"));
             return;
         }
-        ClanDatabase.ClanMember cmem = ClanDatabase.getClanMember(player.getUniqueId());
-        if(cmem.getClanId() == null) {
+        ClanMember cmem = ClanDatabase.getClanMember(player.getUniqueId());
+        if(cmem.getClanID() == null) {
             player.sendMessage(Utils.cmdMsg("&cYou must be in a clan to demote players"));
             return;
         }
@@ -31,14 +33,14 @@ public class CSDemote extends ClanSub {
             player.sendMessage(Utils.cmdMsg("&cYou must provide a player to demote"));
             return;
         }
-        ClanDatabase.Clan clan = ClanDatabase.getClanByID(cmem.getClanId());
+        Clan clan = ClanDatabase.getClan(cmem.getClanID());
         OfflinePlayer offPlayer = Bukkit.getOfflinePlayer(args[0]);
-        if(!clan.getClanMemberUUIDs().contains(offPlayer.getUniqueId())) {
+        if(!clan.getMembers().contains(offPlayer)) {
             player.sendMessage(Utils.cmdMsg("&cThat player is not in your clan"));
             return;
         }
-        ClanDatabase.ClanMember pmem = ClanDatabase.getClanMember(offPlayer.getUniqueId());
-        if(!Objects.equals(pmem.getClanId(), cmem.getClanId())) {
+        ClanMember pmem = ClanDatabase.getClanMember(offPlayer.getUniqueId());
+        if(!Objects.equals(pmem.getClanID(), cmem.getClanID())) {
             player.sendMessage(Utils.cmdMsg("&cThat player is not in your clan"));
             return;
         }
@@ -52,6 +54,7 @@ public class CSDemote extends ClanSub {
                 return;
             }
             pmem.setLevel(0);
+            ClanDatabase.setPlayerLevel(pmem.getOffPlayer().getUniqueId(), 0);
             player.sendMessage(Utils.cmdMsg("&eDemoted &6" + pmem.getOffPlayer().getName()));
             if(offPlayer.isOnline()) offPlayer.getPlayer().sendMessage(Utils.cmdMsg("&eYou have been demoted in your clan by &6" + player.getName()));
         } else if(pmem.getLevel() == 2) {
@@ -60,6 +63,7 @@ public class CSDemote extends ClanSub {
                 return;
             }
             pmem.setLevel(1);
+            ClanDatabase.setPlayerLevel(pmem.getOffPlayer().getUniqueId(), 1);
             player.sendMessage(Utils.cmdMsg("&eDemoted &6" + pmem.getOffPlayer().getName()));
             if(offPlayer.isOnline()) offPlayer.getPlayer().sendMessage(Utils.cmdMsg("&eYou have been demoted in your clan by &6" + player.getName()));
         } else if(pmem.getLevel() == 3) {
