@@ -13,14 +13,13 @@ import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
 import xyz.prorickey.classicdupe.ClassicDupe;
 import xyz.prorickey.classicdupe.Utils;
-import xyz.prorickey.classicdupe.clans.ClansDatabase;
+import xyz.prorickey.classicdupe.clans.ClanDatabase;
 import xyz.prorickey.classicdupe.commands.perk.ChatColorCMD;
 import xyz.prorickey.classicdupe.commands.perk.ChatGradientCMD;
 import xyz.prorickey.classicdupe.database.PlayerDatabase;
 import xyz.prorickey.proutils.ChatFormat;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 public class JoinEvent implements Listener {
 
@@ -30,7 +29,7 @@ public class JoinEvent implements Listener {
 
     @EventHandler
     public void onPlayerJoin(PlayerJoinEvent e) {
-        ClansDatabase.createIfNotExists(e.getPlayer());
+        ClanDatabase.createIfNotExists(e.getPlayer());
         if(ClassicDupe.getDatabase().getPlayerDatabase().getPlayer(e.getPlayer().getUniqueId().toString()) == null) {
             ClassicDupe.getDatabase().getPlayerDatabase().initPlayer(e.getPlayer());
             e.getPlayer().teleport(ClassicDupe.getDatabase().spawn);

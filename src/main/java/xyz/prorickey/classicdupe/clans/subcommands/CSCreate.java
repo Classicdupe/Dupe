@@ -4,7 +4,10 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import xyz.prorickey.classicdupe.Utils;
 import xyz.prorickey.classicdupe.clans.ClanSub;
-import xyz.prorickey.classicdupe.clans.ClansDatabase;
+import xyz.prorickey.classicdupe.clans.Clans;
+import xyz.prorickey.classicdupe.clans.Clan;
+import xyz.prorickey.classicdupe.clans.ClanMember;
+import xyz.prorickey.classicdupe.clans.ClanDatabase;
 import xyz.prorickey.proutils.ChatFormat;
 
 import java.util.ArrayList;
@@ -17,8 +20,8 @@ public class CSCreate extends ClanSub {
             sender.sendMessage(ChatFormat.format("&cYou cannot execute this command from console"));
             return;
         }
-        ClansDatabase.ClanMember cmem = ClansDatabase.getClanMember(player.getUniqueId());
-        if(cmem.getClanId() != null) {
+        ClanMember cmem = ClanDatabase.getClanMember(player.getUniqueId());
+        if(cmem.getClanID() != null) {
             player.sendMessage(Utils.cmdMsg("&cYou are already in a clan! You must leave it before creating another one"));
             return;
         }
@@ -26,16 +29,16 @@ public class CSCreate extends ClanSub {
             player.sendMessage(Utils.cmdMsg("&cYou must provide a clan name"));
             return;
         }
-        if(args[0].length() > ClansDatabase.getGlobalConfig().getInt("clans.maxChar")) {
-            player.sendMessage(Utils.cmdMsg("&cYour clan name can only be " + ClansDatabase.getGlobalConfig().getInt("clans.maxChar") + " characters long"));
+        if(args[0].length() > ClanDatabase.getGlobalConfig().getInt("clans.maxChar")) {
+            player.sendMessage(Utils.cmdMsg("&cYour clan name can only be " + ClanDatabase.getGlobalConfig().getInt("clans.maxChar") + " characters long"));
             return;
         }
-        ClansDatabase.Clan clan = ClansDatabase.getClanByName(args[0]);
+        Clan clan = ClanDatabase.getClan(args[0]);
         if(clan != null) {
             player.sendMessage(Utils.cmdMsg("&cThat clan already exists! Please pick a unique name"));
             return;
         }
-        ClansDatabase.createClan(args[0], player);
+        ClanDatabase.createClan(args[0], player);
         player.sendMessage(Utils.cmdMsg("&eCreated the clan &6" + args[0]));
     }
 

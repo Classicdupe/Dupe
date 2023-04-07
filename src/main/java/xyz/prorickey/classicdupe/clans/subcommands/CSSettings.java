@@ -4,7 +4,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import xyz.prorickey.classicdupe.Utils;
 import xyz.prorickey.classicdupe.clans.ClanSub;
-import xyz.prorickey.classicdupe.clans.ClansDatabase;
+import xyz.prorickey.classicdupe.clans.ClanDatabase;
 import xyz.prorickey.proutils.ChatFormat;
 import xyz.prorickey.proutils.TabComplete;
 
@@ -40,7 +40,7 @@ public class CSSettings extends ClanSub {
             sender.sendMessage(ChatFormat.format("&cYou cannot execute this command from console"));
             return;
         }
-        ClansDatabase.ClanMember cmem = ClansDatabase.getClanMember(player.getUniqueId());
+        ClanDatabase.ClanMember cmem = ClanDatabase.getClanMember(player.getUniqueId());
         if(cmem.getClanId() == null) {
             player.sendMessage(Utils.cmdMsg("&cYou are not in a clan. You can't change the settings of a clan that doesn't exist"));
             return;
@@ -49,7 +49,7 @@ public class CSSettings extends ClanSub {
             player.sendMessage(Utils.cmdMsg("&cYou must either be an admin or the owner of the clan to execute this command"));
             return;
         }
-        ClansDatabase.ClanSettings settings = ClansDatabase.getClanByID(cmem.getClanId()).getClanSettings();
+        ClanDatabase.ClanSettings settings = ClanDatabase.getClanByID(cmem.getClanId()).getClanSettings();
         if(args.length == 0) {
             player.sendMessage(ChatFormat.format("&e&lClan Settings"));
             player.sendMessage(ChatFormat.format("&epublicClan: " + settings.getPublicClan()));

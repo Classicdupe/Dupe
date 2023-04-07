@@ -4,7 +4,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import xyz.prorickey.classicdupe.Utils;
 import xyz.prorickey.classicdupe.clans.ClanSub;
-import xyz.prorickey.classicdupe.clans.ClansDatabase;
+import xyz.prorickey.classicdupe.clans.ClanDatabase;
 import xyz.prorickey.proutils.ChatFormat;
 import xyz.prorickey.proutils.TabComplete;
 
@@ -18,7 +18,7 @@ public class CSDelHome extends ClanSub {
             sender.sendMessage(ChatFormat.format("&cYou cannot execute this command from console"));
             return;
         }
-        ClansDatabase.ClanMember cmem = ClansDatabase.getClanMember(player.getUniqueId());
+        ClanDatabase.ClanMember cmem = ClanDatabase.getClanMember(player.getUniqueId());
         if(cmem.getClanId() == null) {
             player.sendMessage(Utils.cmdMsg("&cYou must be in a clan to delete homes"));
             return;
@@ -27,7 +27,7 @@ public class CSDelHome extends ClanSub {
             player.sendMessage(Utils.cmdMsg("&cYou must be either an admin or the owner to delete homes in a clan"));
             return;
         }
-        ClansDatabase.Clan clan = ClansDatabase.getClanByID(cmem.getClanId());
+        ClanDatabase.Clan clan = ClanDatabase.getClanByID(cmem.getClanId());
         if(args.length == 0) {
             if(!clan.getWarpNames().contains("default")) {
                 player.sendMessage(Utils.cmdMsg("&eThat home does not exist and cannot be deleted"));
@@ -47,9 +47,9 @@ public class CSDelHome extends ClanSub {
 
     @Override
     public List<String> tabComplete(CommandSender sender, String[] args) {
-        if(!(sender instanceof Player player) || ClansDatabase.getClanMember(player.getUniqueId()).getClanId() == null) return new ArrayList<>();
-        ClansDatabase.ClanMember cmem = ClansDatabase.getClanMember(player.getUniqueId());
-        if(args.length == 1) return TabComplete.tabCompletionsSearch(args[0], ClansDatabase.getClanByID(cmem.getClanId()).getWarpNames());
+        if(!(sender instanceof Player player) || ClanDatabase.getClanMember(player.getUniqueId()).getClanId() == null) return new ArrayList<>();
+        ClanDatabase.ClanMember cmem = ClanDatabase.getClanMember(player.getUniqueId());
+        if(args.length == 1) return TabComplete.tabCompletionsSearch(args[0], ClanDatabase.getClanByID(cmem.getClanId()).getWarpNames());
         return new ArrayList<>();
     }
 }

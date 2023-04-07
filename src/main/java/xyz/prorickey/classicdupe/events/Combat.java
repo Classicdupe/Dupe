@@ -1,8 +1,6 @@
 package xyz.prorickey.classicdupe.events;
 
 import net.kyori.adventure.text.Component;
-import org.bukkit.entity.Entity;
-import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -10,7 +8,7 @@ import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.scheduler.BukkitRunnable;
 import xyz.prorickey.classicdupe.Utils;
-import xyz.prorickey.classicdupe.clans.ClansDatabase;
+import xyz.prorickey.classicdupe.clans.ClanDatabase;
 import xyz.prorickey.proutils.ChatFormat;
 
 import java.util.ArrayList;
@@ -36,8 +34,8 @@ public class Combat implements Listener {
             return;
         }
         if(e.getEntity() instanceof Player player && e.getDamager() instanceof Player attacker) {
-            ClansDatabase.ClanMember pmem = ClansDatabase.getClanMember(player.getUniqueId());
-            ClansDatabase.ClanMember amem = ClansDatabase.getClanMember(attacker.getUniqueId());
+            ClanDatabase.ClanMember pmem = ClanDatabase.getClanMember(player.getUniqueId());
+            ClanDatabase.ClanMember amem = ClanDatabase.getClanMember(attacker.getUniqueId());
             if(Objects.equals(pmem.getClanId(), amem.getClanId())) e.setCancelled(true);
             return;
         }

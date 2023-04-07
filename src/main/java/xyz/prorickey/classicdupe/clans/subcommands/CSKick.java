@@ -7,7 +7,7 @@ import org.bukkit.entity.Player;
 import xyz.prorickey.classicdupe.ClassicDupe;
 import xyz.prorickey.classicdupe.Utils;
 import xyz.prorickey.classicdupe.clans.ClanSub;
-import xyz.prorickey.classicdupe.clans.ClansDatabase;
+import xyz.prorickey.classicdupe.clans.ClanDatabase;
 import xyz.prorickey.proutils.ChatFormat;
 import xyz.prorickey.proutils.TabComplete;
 
@@ -22,7 +22,7 @@ public class CSKick extends ClanSub {
             sender.sendMessage(ChatFormat.format("&cYou cannot execute this command from console"));
             return;
         }
-        ClansDatabase.ClanMember cmem = ClansDatabase.getClanMember(player.getUniqueId());
+        ClanDatabase.ClanMember cmem = ClanDatabase.getClanMember(player.getUniqueId());
         if(cmem.getClanId() == null) {
             player.sendMessage(Utils.cmdMsg("&cYou must be in a clan to kick players"));
             return;
@@ -36,11 +36,11 @@ public class CSKick extends ClanSub {
             return;
         }
         OfflinePlayer offPlayer = Bukkit.getOfflinePlayer(args[0]);
-        if(!ClansDatabase.getClanByID(cmem.getClanId()).getClanMemberUUIDs().contains(offPlayer.getUniqueId())) {
+        if(!ClanDatabase.getClanByID(cmem.getClanId()).getClanMemberUUIDs().contains(offPlayer.getUniqueId())) {
             player.sendMessage(Utils.cmdMsg("&cThat player is not in your clan"));
             return;
         }
-        ClansDatabase.ClanMember pmem = ClansDatabase.getClanMember(offPlayer.getUniqueId());
+        ClanDatabase.ClanMember pmem = ClanDatabase.getClanMember(offPlayer.getUniqueId());
         if(!Objects.equals(pmem.getClanId(), cmem.getClanId())) {
             player.sendMessage(Utils.cmdMsg("&cThat player is not in your clan"));
             return;

@@ -7,7 +7,6 @@ import java.util.List;
 public abstract class ClanSub {
 
     public ClanSub() {
-
     }
 
     public abstract void execute(CommandSender sender, String[] args);

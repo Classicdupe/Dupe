@@ -9,7 +9,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import xyz.prorickey.classicdupe.ClassicDupe;
 import xyz.prorickey.classicdupe.Utils;
-import xyz.prorickey.classicdupe.clans.ClansDatabase;
+import xyz.prorickey.classicdupe.clans.ClanDatabase;
 import xyz.prorickey.classicdupe.commands.moderator.StaffChatCMD;
 import xyz.prorickey.classicdupe.commands.perk.ChatColorCMD;
 import xyz.prorickey.classicdupe.commands.perk.ChatGradientCMD;
@@ -44,9 +44,9 @@ public class Chat implements Listener {
             return;
         }
 
-        String clanName = ClansDatabase.getClanMember(e.getPlayer().getUniqueId()).getClanName();
+        String clanName = ClanDatabase.getClanMember(e.getPlayer().getUniqueId()).getClanName();
         String clanColor = "&e";
-        if(clanName != null) clanColor = ClansDatabase.getClanByID(ClansDatabase.getClanMember(e.getPlayer().getUniqueId()).getClanId()).getClanSettings().getClanColor();
+        if(clanName != null) clanColor = ClanDatabase.getClanByID(ClanDatabase.getClanMember(e.getPlayer().getUniqueId()).getClanId()).getClanSettings().getClanColor();
 
         String pgroup = ClassicDupe.getLPAPI().getUserManager().getUser(e.getPlayer().getUniqueId()).getPrimaryGroup();
         if(pgroup.equalsIgnoreCase("default")) chatCooldown.put(e.getPlayer(), System.currentTimeMillis()+4000);

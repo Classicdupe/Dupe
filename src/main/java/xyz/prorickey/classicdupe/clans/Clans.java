@@ -13,12 +13,11 @@ import xyz.prorickey.proutils.TabComplete;
 
 import java.util.*;
 
-public class MainCommand implements CommandExecutor, TabCompleter {
+public class Clans implements CommandExecutor, TabCompleter {
 
     public static Map<String, ClanSub> clanSubs = new HashMap<>();
 
-    public MainCommand(JavaPlugin p) {
-        ClansDatabase.init(p);
+    public Clans(JavaPlugin p) {
         p.getCommand("clan").setExecutor(this);
         p.getCommand("clan").setTabCompleter(this);
 
@@ -43,12 +42,12 @@ public class MainCommand implements CommandExecutor, TabCompleter {
 
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
-        if(args.length == 0) clanSubs.get("help").execute(sender, args);
+        if(args.length == 0) clanSubs.get("help").execute(sender, args, this);
         else {
             String[] subArgs = Arrays.copyOfRange(args, 1, args.length);
             ClanSub sub = clanSubs.get(args[0].toLowerCase());
-            if(sub == null) clanSubs.get("help").execute(sender, subArgs);
-            sub.execute(sender, subArgs);
+            if(sub == null) clanSubs.get("help").execute(sender, subArgs, this);
+            sub.execute(sender, subArgs, this);
         }
         return true;
     }
@@ -59,7 +58,7 @@ public class MainCommand implements CommandExecutor, TabCompleter {
         else if(args.length > 1) {
             String[] subArgs = Arrays.copyOfRange(args, 1, args.length);
             ClanSub sub = clanSubs.get(args[0].toLowerCase());
-            if(sub != null) return sub.tabComplete(sender, subArgs);
+            if(sub != null) return sub.tabComplete(sender, subArgs, this);
         }
         return new ArrayList<>();
     }

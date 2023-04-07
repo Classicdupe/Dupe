@@ -9,8 +9,9 @@ import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 import xyz.prorickey.classicdupe.ClassicDupe;
 import xyz.prorickey.classicdupe.Utils;
+import xyz.prorickey.classicdupe.clans.ClanMember;
 import xyz.prorickey.classicdupe.clans.ClanSub;
-import xyz.prorickey.classicdupe.clans.ClansDatabase;
+import xyz.prorickey.classicdupe.clans.ClanDatabase;
 import xyz.prorickey.proutils.ChatFormat;
 import xyz.prorickey.proutils.TabComplete;
 
@@ -26,8 +27,8 @@ public class CSInvite extends ClanSub {
             sender.sendMessage(ChatFormat.format("&cYou cannot execute this command from console"));
             return;
         }
-        ClansDatabase.ClanMember cmem = ClansDatabase.getClanMember(player.getUniqueId());
-        if(cmem.getClanId() == null) {
+        ClanMember cmem = ClanDatabase.getClanMember(player.getUniqueId());
+        if(cmem.getClanID() == null) {
             player.sendMessage(Utils.cmdMsg("&cYou can't invite people to your imaginary clan. You must create one with /clan create"));
             return;
         }
@@ -44,8 +45,8 @@ public class CSInvite extends ClanSub {
             player.sendMessage(Utils.cmdMsg("&cThat player is currently offline"));
             return;
         }
-        ClansDatabase.ClanMember pmem = ClansDatabase.getClanMember(p.getUniqueId());
-        if(pmem.getClanId() != null) {
+        ClanMember pmem = ClanDatabase.getClanMember(p.getUniqueId());
+        if(pmem.getClanID() != null) {
             player.sendMessage(Utils.cmdMsg("&cThat player is already in a clan"));
             return;
         }

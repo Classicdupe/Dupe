@@ -1,6 +1,5 @@
 package xyz.prorickey.classicdupe;
 
-import me.clip.placeholderapi.PlaceholderAPI;
 import me.lucko.spark.api.SparkProvider;
 import me.lucko.spark.api.statistic.StatisticWindow;
 import net.kyori.adventure.text.Component;
@@ -10,7 +9,7 @@ import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scoreboard.Criteria;
 import org.bukkit.scoreboard.DisplaySlot;
 import org.bukkit.scoreboard.Objective;
-import xyz.prorickey.classicdupe.clans.ClansDatabase;
+import xyz.prorickey.classicdupe.clans.ClanDatabase;
 import xyz.prorickey.classicdupe.database.PlayerDatabase;
 import xyz.prorickey.classicdupe.events.Combat;
 import xyz.prorickey.classicdupe.metrics.Metrics;
@@ -36,9 +35,9 @@ public class Scoreboard {
         if(obj.getDisplaySlot() != DisplaySlot.SIDEBAR) obj.setDisplaySlot(DisplaySlot.SIDEBAR);
         obj.displayName(Component.text(ChatFormat.format("&a&lClassicDupe")));
 
-        String clanName = ClansDatabase.getClanMember(player.getUniqueId()).getClanName();
+        String clanName = ClanDatabase.getClanMember(player.getUniqueId()).getClanName();
         String clanColor = "&e";
-        if(clanName != null) clanColor = ClansDatabase.getClanByID(ClansDatabase.getClanMember(player.getUniqueId()).getClanId()).getClanSettings().getClanColor();
+        if(clanName != null) clanColor = ClanDatabase.getClanByID(ClanDatabase.getClanMember(player.getUniqueId()).getClanId()).getClanSettings().getClanColor();
 
         updateScore(obj, 15, ChatFormat.format("&0&6&m----------------------"));
 

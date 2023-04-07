@@ -5,7 +5,7 @@ import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEve
 import net.dv8tion.jda.api.interactions.commands.OptionMapping;
 import org.bukkit.Bukkit;
 import xyz.prorickey.classicdupe.ClassicDupe;
-import xyz.prorickey.classicdupe.clans.ClansDatabase;
+import xyz.prorickey.classicdupe.clans.ClanDatabase;
 import xyz.prorickey.classicdupe.database.PlayerDatabase;
 import xyz.prorickey.classicdupe.metrics.Metrics;
 
@@ -17,7 +17,7 @@ public class StatsDCMD {
         String username = interaction.getOption("username", OptionMapping::getAsString);
         PlayerDatabase.PlayerData data = ClassicDupe.getDatabase().getPlayerDatabase().getPlayer(Bukkit.getOfflinePlayer(username).getUniqueId().toString());
         PlayerDatabase.PlayerStats stats = ClassicDupe.getDatabase().getPlayerDatabase().getStats(Bukkit.getOfflinePlayer(username).getUniqueId().toString());
-        String clanName = ClansDatabase.getClanMember(UUID.fromString(data.uuid)).getClanName();
+        String clanName = ClanDatabase.getClanMember(UUID.fromString(data.uuid)).getClanName();
         if(data == null || stats == null) {
             interaction.reply("That player isn't in our database").setEphemeral(true).queue();
             return;

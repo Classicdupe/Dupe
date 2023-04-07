@@ -5,15 +5,15 @@ import net.kyori.adventure.text.event.ClickEvent;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import xyz.prorickey.classicdupe.Utils;
+import xyz.prorickey.classicdupe.clans.Clan;
+import xyz.prorickey.classicdupe.clans.ClanMember;
 import xyz.prorickey.classicdupe.clans.ClanSub;
-import xyz.prorickey.classicdupe.clans.ClansDatabase;
+import xyz.prorickey.classicdupe.clans.ClanDatabase;
 import xyz.prorickey.proutils.ChatFormat;
 import xyz.prorickey.proutils.TabComplete;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 public class CSDelete extends ClanSub {
 
@@ -23,8 +23,8 @@ public class CSDelete extends ClanSub {
             sender.sendMessage(ChatFormat.format("&cYou cannot execute this command from console"));
             return;
         }
-        ClansDatabase.ClanMember cmem = ClansDatabase.getClanMember(player.getUniqueId());
-        if(cmem.getClanId() == null) {
+        ClanMember cmem = ClanDatabase.getClanMember(player.getUniqueId());
+        if(cmem.getClanID() == null) {
             player.sendMessage(Utils.cmdMsg("&cYou are not in a clan. You can't delete a clan that doesn't exist"));
             return;
         }
@@ -38,8 +38,8 @@ public class CSDelete extends ClanSub {
                     .append(Component.text(ChatFormat.format("&c&l/clan delete confirm"))
                             .clickEvent(ClickEvent.clickEvent(ClickEvent.Action.SUGGEST_COMMAND, "/clan delete confirm"))));
         } else if(args[0].equalsIgnoreCase("confirm")) {
-            ClansDatabase.Clan clan = ClansDatabase.getClanByID(cmem.getClanId());
-            clan.deleteClan();
+            Clan clan = ClanDatabase.getClan(cmem.getClanID());
+            ClanDatabase.deleteClan(clan);
             player.sendMessage(Utils.cmdMsg("&eYour clan has been deleted"));
         }
     }

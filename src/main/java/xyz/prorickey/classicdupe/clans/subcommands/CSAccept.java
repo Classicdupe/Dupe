@@ -4,8 +4,9 @@ import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import xyz.prorickey.classicdupe.Utils;
+import xyz.prorickey.classicdupe.clans.Clan;
 import xyz.prorickey.classicdupe.clans.ClanSub;
-import xyz.prorickey.classicdupe.clans.ClansDatabase;
+import xyz.prorickey.classicdupe.clans.ClanDatabase;
 import xyz.prorickey.proutils.ChatFormat;
 import xyz.prorickey.proutils.TabComplete;
 
@@ -33,8 +34,9 @@ public class CSAccept extends ClanSub {
         final List<CSInvite.Invite> tempInvites = new ArrayList<>(CSInvite.invites);
         for (CSInvite.Invite inv : tempInvites) {
             if(inv.inviteeUUID == player.getUniqueId() && inv.inviterUUID == inviter.getUniqueId()) {
-                ClansDatabase.Clan clan = ClansDatabase.getClanByID(ClansDatabase.getClanMember(inviter.getUniqueId()).getClanId());
-                ClansDatabase.getClanMember(player.getUniqueId()).setClan(clan, 0);
+                Clan clan = ClanDatabase.getClan(ClanDatabase.getClanMember(inviter.getUniqueId()).getClanID());
+                ClanDatabase.getClanMember(player.getUniqueId()).setClan(clan, 0);
+                ClanDatabase.setPlayerClan(player.getUniqueId(), clan);
                 player.sendMessage(Utils.cmdMsg("&eSuccessfully joined &6" + clan.getClanName()));
                 inviter.sendMessage(Utils.cmdMsg("&6" + player.getName() + " &eaccepted your invite and successfully joined the clan"));
                 CSInvite.invites.remove(inv);

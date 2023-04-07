@@ -4,7 +4,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import xyz.prorickey.classicdupe.Utils;
 import xyz.prorickey.classicdupe.clans.ClanSub;
-import xyz.prorickey.classicdupe.clans.ClansDatabase;
+import xyz.prorickey.classicdupe.clans.ClanDatabase;
 import xyz.prorickey.proutils.ChatFormat;
 
 import java.util.ArrayList;
@@ -17,7 +17,7 @@ public class CSLeave extends ClanSub {
             sender.sendMessage(ChatFormat.format("&cYou cannot execute this command from console"));
             return;
         }
-        ClansDatabase.ClanMember cmem = ClansDatabase.getClanMember(player.getUniqueId());
+        ClanDatabase.ClanMember cmem = ClanDatabase.getClanMember(player.getUniqueId());
         if(cmem.getClanId() == null) {
             player.sendMessage(Utils.cmdMsg("&cYou aren't in a clan"));
             return;
