@@ -7,6 +7,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import xyz.prorickey.classicdupe.Config;
 import xyz.prorickey.classicdupe.Utils;
+import xyz.prorickey.classicdupe.events.Combat;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -14,6 +15,7 @@ import java.util.List;
 public class DupeCMD implements CommandExecutor, TabCompleter {
 
     public static List<Material> forbiddenDupes = new ArrayList<>();
+    public static List<Material> forbiddenDupesInCombat = new ArrayList<>();
 
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
@@ -24,6 +26,10 @@ public class DupeCMD implements CommandExecutor, TabCompleter {
         }
         if(forbiddenDupes.contains(p.getInventory().getItemInMainHand().getType())) {
             p.sendMessage(Utils.cmdMsg("&cYou cannot dupe that item"));
+            return true;
+        }
+        if(Combat.inCombat.containsKey(p.getPlayer()) && forbiddenDupesInCombat.contains(p.getInventory().getItemInMainHand().getType())) {
+            p.sendMessage(Utils.cmdMsg("&cYou cannot dupe that item while in combat"));
             return true;
         }
         if(args.length > 0) {

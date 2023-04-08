@@ -24,7 +24,7 @@ public class PvAddCMD implements CommandExecutor, TabCompleter {
         }
         OfflinePlayer tarj = Bukkit.getOfflinePlayer(args[0]);
         ClassicDupe.getPVDatabase().addVault(tarj.getUniqueId().toString());
-        Utils.cmdMsg("&aGave &e" + tarj.getName() + "&a one vault");
+        sender.sendMessage(Utils.cmdMsg("&aGave &e" + tarj.getName() + "&a one vault"));
         return true;
     }
 

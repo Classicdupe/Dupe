@@ -6,6 +6,8 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
+import org.bukkit.event.entity.EntityToggleGlideEvent;
+import org.bukkit.event.player.PlayerCommandPreprocessEvent;
 import org.bukkit.scheduler.BukkitRunnable;
 import xyz.prorickey.classicdupe.Utils;
 import xyz.prorickey.classicdupe.clans.ClanDatabase;
@@ -45,6 +47,20 @@ public class Combat implements Listener {
         if(e.getEntity() instanceof Player victim && e.getDamager() instanceof Player attacker) {
             whoHitWho.put(victim, attacker);
             whoHitWho.put(attacker, victim);
+        }
+    }
+
+    @EventHandler
+    public void onPlayerCommandPreProcess(PlayerCommandPreprocessEvent e) {
+        if(Combat.inCombat.containsKey(e.getPlayer()) && e.getMessage().startsWith("/home")) e.setCancelled(true);
+    }
+
+    @EventHandler
+    public void onEntityToggleGlide(EntityToggleGlideEvent e) {
+        if(!(e.getEntity() instanceof Player player)) return;
+        if(Combat.inCombat.containsKey(player) && !player.isGliding()) {
+            e.setCancelled(true);
+            player.sendMessage(Utils.cmdMsg("&cYou cannot use an elytra while in combat"));
         }
     }
 

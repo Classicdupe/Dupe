@@ -159,6 +159,7 @@ public class PlayerDatabase {
         try {
             PreparedStatement stat = conn.prepareStatement("UPDATE players SET nickname=? WHERE uuid='" + uuid +  "'");
             stat.setString(1, nickname);
+            stat.execute();
         } catch (SQLException e) {
             Bukkit.getLogger().severe(e.toString());
         }

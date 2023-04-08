@@ -24,6 +24,7 @@ public class Config {
         reloadConfig();
         Config.getConfig().getStringList("blockFromPlacing").forEach(str -> BlockPlace.bannedToPlaceBcAnnoyingASF.add(Material.valueOf(str.toUpperCase())));
         Config.getConfig().getStringList("forbiddenDupes").forEach(str -> DupeCMD.forbiddenDupes.add(Material.valueOf(str.toUpperCase())));
+        Config.getConfig().getStringList("forbiddenDupesInCombat").forEach(str -> DupeCMD.forbiddenDupesInCombat.add(Material.valueOf(str.toUpperCase())));
         MemorySection sec = (MemorySection) Config.getConfig().get("suffix");
         assert sec != null;
         sec.getKeys(true).forEach((name) -> SuffixCMD.suffixes.put(name, Config.getConfig().getString("suffix." + name)));
