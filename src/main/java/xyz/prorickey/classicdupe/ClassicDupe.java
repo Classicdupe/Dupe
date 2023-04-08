@@ -174,8 +174,6 @@ public class ClassicDupe extends JavaPlugin {
         getServer().getPluginManager().registerEvents(new GoldenAppleCooldown(), this);
         getServer().getPluginManager().registerEvents(new ClearSpawn(), this);
         getServer().getPluginManager().registerEvents(new PearlCooldown(), this);
-
-        Bukkit.getScheduler().scheduleSyncDelayedTask(this, ClassicDupe::scheduleRestart, 20L * 60L * 60L * 24L);
     }
 
     @Override
