@@ -74,7 +74,7 @@ public class TpaCMD implements CommandExecutor, TabCompleter {
     public static class TPATask extends BukkitRunnable {
         @Override
         public void run() {
-            Map<Player, Long> tempTpaRequestTimes = TpaCMD.tpaRequestTimes;
+            Map<Player, Long> tempTpaRequestTimes = new HashMap<>(TpaCMD.tpaRequestTimes);
             tempTpaRequestTimes.forEach((player, time) -> {
                 if((time + (1000*60)) < System.currentTimeMillis() && TpaCMD.tpaRequests.containsKey(player)) {
                     player.sendMessage(Utils.cmdMsg("&cTPA request to &e" + TpaCMD.tpaRequests.get(player).getName() + "&c has timed out"));

@@ -70,7 +70,8 @@ public class CSInvite extends ClanSub {
     public static class InviteTask extends BukkitRunnable {
         @Override
         public void run() {
-            for (Invite invite : invites) {
+            List<Invite> tempInvites = new ArrayList<>(invites);
+            tempInvites.forEach(invite -> {
                 if((invite.inviteSent + (1000*60)) < System.currentTimeMillis()) {
                     invites.remove(invite);
                     OfflinePlayer inviter = Bukkit.getOfflinePlayer(invite.inviterUUID);
@@ -78,7 +79,7 @@ public class CSInvite extends ClanSub {
                     if(inviter.isOnline()) Bukkit.getPlayer(invite.inviterUUID).sendMessage(Utils.cmdMsg("&eInvite sent to &6" + invitee.getName() + " &ehas expired"));
                     if(invitee.isOnline()) Bukkit.getPlayer(invite.inviteeUUID).sendMessage(Utils.cmdMsg("&eInvite from &6" + invitee + "&e has expired"));
                 }
-            }
+            });
         }
     }
 

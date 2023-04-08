@@ -4,6 +4,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import xyz.prorickey.classicdupe.Utils;
 import xyz.prorickey.classicdupe.clans.*;
+import xyz.prorickey.classicdupe.events.Combat;
 import xyz.prorickey.proutils.ChatFormat;
 import xyz.prorickey.proutils.TabComplete;
 
@@ -15,6 +16,10 @@ public class CSHome extends ClanSub {
     public void execute(CommandSender sender, String[] args) {
         if(!(sender instanceof Player player)) {
             sender.sendMessage(ChatFormat.format("&cYou cannot execute this command from console"));
+            return;
+        }
+        if(Combat.inCombat.containsKey(player)) {
+            player.sendMessage(Utils.cmdMsg("&cYou cannot execute this command in combat"));
             return;
         }
         ClanMember cmem = ClanDatabase.getClanMember(player.getUniqueId());

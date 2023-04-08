@@ -45,9 +45,8 @@ public class Clans implements CommandExecutor, TabCompleter {
         if(args.length == 0) clanSubs.get("help").execute(sender, args);
         else {
             String[] subArgs = Arrays.copyOfRange(args, 1, args.length);
-            ClanSub sub = clanSubs.get(args[0].toLowerCase());
-            if(sub == null) clanSubs.get("help").execute(sender, subArgs);
-            sub.execute(sender, subArgs);
+            if(!clanSubs.containsKey(args[0].toLowerCase())) clanSubs.get("help").execute(sender, subArgs);
+            else clanSubs.get(args[0].toLowerCase()).execute(sender, subArgs);
         }
         return true;
     }

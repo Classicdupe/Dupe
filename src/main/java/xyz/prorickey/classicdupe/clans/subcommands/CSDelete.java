@@ -41,6 +41,11 @@ public class CSDelete extends ClanSub {
             Clan clan = ClanDatabase.getClan(cmem.getClanID());
             ClanDatabase.deleteClan(clan);
             player.sendMessage(Utils.cmdMsg("&eYour clan has been deleted"));
+        } else {
+            player.sendMessage(Utils.cmdMsg("&eYou are about to delete your clan. Are you sure you want to do this?"));
+            player.sendMessage(Component.text(ChatFormat.format("  &e- Confirm: "))
+                    .append(Component.text(ChatFormat.format("&c&l/clan delete confirm"))
+                            .clickEvent(ClickEvent.clickEvent(ClickEvent.Action.SUGGEST_COMMAND, "/clan delete confirm"))));
         }
     }
 
