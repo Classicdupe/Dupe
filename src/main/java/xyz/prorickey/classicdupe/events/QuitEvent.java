@@ -12,6 +12,8 @@ import xyz.prorickey.classicdupe.commands.perk.ChatColorCMD;
 import xyz.prorickey.classicdupe.commands.perk.ChatGradientCMD;
 import xyz.prorickey.proutils.ChatFormat;
 
+import java.util.HashMap;
+
 public class QuitEvent implements Listener {
 
     @EventHandler
@@ -21,7 +23,7 @@ public class QuitEvent implements Listener {
         ChatGradientCMD.gradientProfiles.remove(e.getPlayer().getUniqueId().toString());
         StaffChatCMD.staffChatPlayers.remove(e.getPlayer());
         PrivateMessageCMD.lastInConvo.remove(e.getPlayer());
-        if(PrivateMessageCMD.lastInConvo.containsValue(e.getPlayer())) PrivateMessageCMD.lastInConvo.forEach((sender, recipient) -> PrivateMessageCMD.lastInConvo.remove(sender));
+        if(PrivateMessageCMD.lastInConvo.containsValue(e.getPlayer())) new HashMap<>(PrivateMessageCMD.lastInConvo).forEach((sender, recipient) -> PrivateMessageCMD.lastInConvo.remove(sender));
         e.quitMessage(Component.text(
                 ChatFormat.format("&8[&c-&8] " +
                         ClassicDupe.getLPAPI().getUserManager().getUser(e.getPlayer().getUniqueId()).getCachedData().getMetaData().getPrefix() +
