@@ -37,6 +37,8 @@ public class CSAccept extends ClanSub {
                 Clan clan = ClanDatabase.getClan(ClanDatabase.getClanMember(inviter.getUniqueId()).getClanID());
                 ClanDatabase.getClanMember(player.getUniqueId()).setClan(clan, 0);
                 ClanDatabase.setPlayerClan(player.getUniqueId(), clan);
+                clan.addDefault(player);
+                clan.addPlayer(player);
                 player.sendMessage(Utils.cmdMsg("&eSuccessfully joined &6" + clan.getClanName()));
                 inviter.sendMessage(Utils.cmdMsg("&6" + player.getName() + " &eaccepted your invite and successfully joined the clan"));
                 CSInvite.invites.remove(inv);

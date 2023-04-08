@@ -6,6 +6,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import xyz.prorickey.classicdupe.ClassicDupe;
 import xyz.prorickey.classicdupe.Utils;
+import xyz.prorickey.classicdupe.clans.Clan;
 import xyz.prorickey.classicdupe.clans.ClanMember;
 import xyz.prorickey.classicdupe.clans.ClanSub;
 import xyz.prorickey.classicdupe.clans.ClanDatabase;
@@ -50,6 +51,8 @@ public class CSKick extends ClanSub {
             player.sendMessage(Utils.cmdMsg("&cYou must be the owner of the clan to kick that player"));
             return;
         }
+        Clan clan = ClanDatabase.getClan(cmem.getClanID());
+        clan.removePlayer(pmem.getOffPlayer());
         pmem.removeClan();
         ClanDatabase.removeClan(pmem);
         if(offPlayer.isOnline()) offPlayer.getPlayer().sendMessage(Utils.cmdMsg("&eYou have been kicked from your clan by &6" + player.getName()));

@@ -54,6 +54,8 @@ public class CSDemote extends ClanSub {
                 return;
             }
             pmem.setLevel(0);
+            clan.removeVip(pmem.getOffPlayer());
+            clan.addDefault(pmem.getOffPlayer());
             ClanDatabase.setPlayerLevel(pmem.getOffPlayer().getUniqueId(), 0);
             player.sendMessage(Utils.cmdMsg("&eDemoted &6" + pmem.getOffPlayer().getName()));
             if(offPlayer.isOnline()) offPlayer.getPlayer().sendMessage(Utils.cmdMsg("&eYou have been demoted in your clan by &6" + player.getName()));
@@ -63,6 +65,8 @@ public class CSDemote extends ClanSub {
                 return;
             }
             pmem.setLevel(1);
+            clan.removeAdmin(pmem.getOffPlayer());
+            clan.addVip(pmem.getOffPlayer());
             ClanDatabase.setPlayerLevel(pmem.getOffPlayer().getUniqueId(), 1);
             player.sendMessage(Utils.cmdMsg("&eDemoted &6" + pmem.getOffPlayer().getName()));
             if(offPlayer.isOnline()) offPlayer.getPlayer().sendMessage(Utils.cmdMsg("&eYou have been demoted in your clan by &6" + player.getName()));

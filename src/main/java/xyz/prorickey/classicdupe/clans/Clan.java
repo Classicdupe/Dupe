@@ -39,30 +39,32 @@ public class Clan {
     public List<OfflinePlayer> getMembers() { return this.members; }
     public void setOwner(OfflinePlayer offPlayer) {
         this.owner = offPlayer;
-        this.members.add(offPlayer);
     }
     public void addAdmin(OfflinePlayer offPlayer) {
         this.admins.add(offPlayer);
-        this.members.add(offPlayer);
     }
     public void addVip(OfflinePlayer offPlayer) {
         this.vips.add(offPlayer);
-        this.members.add(offPlayer);
     }
     public void addDefault(OfflinePlayer offPlayer) {
         this.defaults.add(offPlayer);
+    }
+    public void addPlayer(OfflinePlayer offPlayer) {
         this.members.add(offPlayer);
     }
     public void removeAdmin(OfflinePlayer offPlayer) {
         this.admins.remove(offPlayer);
-        this.members.remove(offPlayer);
     }
     public void removeVip(OfflinePlayer offPlayer) {
         this.vips.remove(offPlayer);
-        this.members.remove(offPlayer);
     }
     public void removeDefault(OfflinePlayer offPlayer) {
         this.defaults.remove(offPlayer);
+    }
+    public void removePlayer(OfflinePlayer offPlayer) {
+        this.defaults.remove(offPlayer);
+        this.vips.remove(offPlayer);
+        this.admins.remove(offPlayer);
         this.members.remove(offPlayer);
     }
 

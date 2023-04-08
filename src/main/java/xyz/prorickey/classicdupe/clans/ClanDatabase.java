@@ -80,6 +80,7 @@ public class ClanDatabase {
                             case 2 -> clan.addAdmin(offPlayer);
                             case 3 -> clan.setOwner(offPlayer);
                         }
+                        clan.addPlayer(offPlayer);
                         cmem.setClan(clan, players.getInt("level"));
                     }
                     clanMembers.put(offPlayer.getUniqueId(), cmem);
@@ -96,6 +97,7 @@ public class ClanDatabase {
         UUID id = genClanId();
         Clan clan = new Clan(id, name);
         clan.setOwner(owner);
+        clan.addPlayer(owner);
         ClanMember cmem = clanMembers.get(owner.getUniqueId());
         cmem.setClan(clan, 3);
         clansById.put(id, clan);

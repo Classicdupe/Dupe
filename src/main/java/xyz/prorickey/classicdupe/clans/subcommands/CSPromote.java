@@ -54,6 +54,9 @@ public class CSPromote extends ClanSub {
             cmem.setLevel(2);
             ClanDatabase.setPlayerLevel(pmem.getOffPlayer().getUniqueId(), 3);
             pmem.setLevel(3);
+            clan.setOwner(pmem.getOffPlayer());
+            clan.removeAdmin(pmem.getOffPlayer());
+            clan.addAdmin(cmem.getOffPlayer());
             player.sendMessage(Utils.cmdMsg("&6" + offPlayer.getName() + "&e has been promoted to owner and you have been demoted to admin"));
             if(offPlayer.isOnline()) offPlayer.getPlayer().sendMessage(Utils.cmdMsg("&eYou have been promoted to owner of your clan by &6" + player.getName()));
             promoterToPromotee.remove(player.getUniqueId());
@@ -76,6 +79,8 @@ public class CSPromote extends ClanSub {
             }
             ClanDatabase.setPlayerLevel(pmem.getOffPlayer().getUniqueId(), pmem.getLevel()+1);
             pmem.setLevel(pmem.getLevel()+1);
+            clan.removeDefault(pmem.getOffPlayer());
+            clan.addVip(pmem.getOffPlayer());
             player.sendMessage(Utils.cmdMsg("&ePromoted &6" + pmem.getOffPlayer().getName()));
             if(offPlayer.isOnline()) offPlayer.getPlayer().sendMessage(Utils.cmdMsg("&eYou have been promoted in your clan by &6" + player.getName()));
         } else if(pmem.getLevel() == 1) {
@@ -85,6 +90,8 @@ public class CSPromote extends ClanSub {
             }
             ClanDatabase.setPlayerLevel(pmem.getOffPlayer().getUniqueId(), 2);
             pmem.setLevel(2);
+            clan.removeVip(pmem.getOffPlayer());
+            clan.addAdmin(pmem.getOffPlayer());
             player.sendMessage(Utils.cmdMsg("&ePromoted &6" + pmem.getOffPlayer().getName()));
             if(offPlayer.isOnline()) offPlayer.getPlayer().sendMessage(Utils.cmdMsg("&eYou have been promoted in your clan by &6" + player.getName()));
         } else if(pmem.getLevel() == 2) {

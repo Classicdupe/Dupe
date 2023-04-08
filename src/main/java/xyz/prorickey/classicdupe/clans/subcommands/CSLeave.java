@@ -3,6 +3,7 @@ package xyz.prorickey.classicdupe.clans.subcommands;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import xyz.prorickey.classicdupe.Utils;
+import xyz.prorickey.classicdupe.clans.Clan;
 import xyz.prorickey.classicdupe.clans.ClanMember;
 import xyz.prorickey.classicdupe.clans.ClanSub;
 import xyz.prorickey.classicdupe.clans.ClanDatabase;
@@ -27,6 +28,8 @@ public class CSLeave extends ClanSub {
             player.sendMessage(Utils.cmdMsg("&cYou cannot leave a clan that you own. You must promote someone else to owner before you can leave"));
             return;
         }
+        Clan clan = ClanDatabase.getClan(cmem.getClanID());
+        clan.removePlayer(player);
         ClanDatabase.removeClan(cmem);
         cmem.removeClan();
         player.sendMessage(Utils.cmdMsg("&eYou have left your clan"));
