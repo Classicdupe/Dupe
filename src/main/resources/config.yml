@@ -7,6 +7,10 @@ blockFromPlacing:
 forbiddenDupes:
   - ender_dragon_spawn_egg
   - dragon_egg
+forbiddenDupesInCombat:
+  - totem_of_undying
+  - enchanted_golden_apple
+  - ender_pearl
 prefix: "&8[&ai&8]"
 discord:
   token: "MTA3ODEwMjgzNDg3NDE2NzM1Ng.GxuBo8.tcjGQ7mRT1cR6cg6QzSMk8kYYYjlx9TIArK7Hg"
@@ -22,19 +26,3 @@ suffix:
   special: "&a&lSPECIAL"
   lava: "&c&lLAVA"
   pvp: "&e&lPVP"
-scoreboard:
-  - "Hello15"
-  - "Hello14"
-  - "Hello13"
-  - "Hello12"
-  - "Hello11"
-  - "Hello10"
-  - "Hello9"
-  - "Hello8"
-  - "Hello7"
-  - "Hello6"
-  - "Hello5"
-  - "Hello4"
-  - "Hello3"
-  - "Hello2"
-  - "Hello1"

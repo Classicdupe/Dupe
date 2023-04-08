@@ -22,6 +22,7 @@ import xyz.prorickey.classicdupe.database.PlayerVaultDatabase;
 import xyz.prorickey.classicdupe.discord.ClassicDupeBot;
 import xyz.prorickey.classicdupe.events.*;
 import xyz.prorickey.classicdupe.metrics.Metrics;
+import xyz.prorickey.classicdupe.metrics.PlayerMetrics;
 import xyz.prorickey.proutils.ChatFormat;
 
 public class ClassicDupe extends JavaPlugin {

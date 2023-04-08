@@ -9,6 +9,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scoreboard.*;
 import xyz.prorickey.classicdupe.clans.ClanDatabase;
+import xyz.prorickey.classicdupe.clans.ClanMember;
 import xyz.prorickey.classicdupe.database.PlayerDatabase;
 import xyz.prorickey.classicdupe.events.Combat;
 import xyz.prorickey.classicdupe.metrics.Metrics;
@@ -31,7 +32,6 @@ public class Scoreboard {
                     player.setScoreboard(board);
                 }
                 scoreboard(player, scoreboards.get(player));
-
             });
         }
     }
@@ -44,9 +44,9 @@ public class Scoreboard {
         if(obj.getDisplaySlot() != DisplaySlot.SIDEBAR) obj.setDisplaySlot(DisplaySlot.SIDEBAR);
         if(!obj.displayName().equals(Component.text(ChatFormat.format("&a&lClassicDupe")))) obj.displayName(Component.text(ChatFormat.format("&a&lClassicDupe")));
 
-        String clanName = ClanDatabase.getClanMember(player.getUniqueId()).getClanName();
+        ClanMember cmem = ClanDatabase.getClanMember(player.getUniqueId());
         String clanColor = "&e";
-        if(clanName != null) clanColor = ClanDatabase.getClan(ClanDatabase.getClanMember(player.getUniqueId()).getClanID()).getClanColor();
+        if(cmem.getClanName() != null) clanColor = ClanDatabase.getClan(ClanDatabase.getClanMember(player.getUniqueId()).getClanID()).getClanColor();
 
         //updateScore(obj, 15, ChatFormat.format("&0&6&m----------------------"));
         //updateScore(obj, 14, ChatFormat.format("&6\u2022 &eName &a" + player.getName()));
@@ -57,7 +57,7 @@ public class Scoreboard {
 
         updateTeamScore(obj, board, 15, "&0&6&m----------------------");
         updateTeamScore(obj, board, 14, "&6\u2022 &eName &a" + player.getName());
-        updateTeamScore(obj, board, 13, "&6\u2022 &eClan " + (clanName != null ? "&8[" + clanColor + clanName + "&8]" : "&eNo Clan"));
+        updateTeamScore(obj, board, 13, "&6\u2022 &eClan " + (cmem.getClanName() != null ? "&8[" + clanColor + cmem.getClanName() + "&8]" : "&eNo Clan"));
         updateTeamScore(obj, board, 12, ("&6\u2022 &eRank " + (Utils.getPrefix(player).equals("") ? "&7Default" : Utils.getPrefix(player))));
         updateTeamScore(obj, board, 11, "&6\u2022 &eSuffix " + (Utils.getSuffix(player) != null ? Utils.getSuffix(player) : "&bUnset"));
         updateTeamScore(obj, board, 10, "&6\u2022 &ePing &a" + player.getPing() + "ms");

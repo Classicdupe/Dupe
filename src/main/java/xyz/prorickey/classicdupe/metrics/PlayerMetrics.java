@@ -1,6 +1,7 @@
 package xyz.prorickey.classicdupe.metrics;
 
 import org.bukkit.Bukkit;
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
@@ -34,7 +35,7 @@ public class PlayerMetrics implements Listener {
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
-        plugin.getServer().getPluginManager().registerEvents(this, plugin);
+        new PlayerMetrics.PlaytimeTask().runTaskTimer(plugin, 0, 20);
     }
 
     @Nullable
@@ -60,36 +61,26 @@ public class PlayerMetrics implements Listener {
         return String.format("%02d:%02d:%02d", HH, MM, SS);
     }
 
-    private Map<String, BukkitTask> tasks = new HashMap<>();
+    public class PlaytimeTask extends BukkitRunnable {
 
-    @EventHandler
-    public void onPlayerJoin(PlayerJoinEvent e) {
-        if(getPlaytime(e.getPlayer().getUniqueId()) == null) {
-            try {
-                conn.prepareStatement("INSERT INTO playtime(uuid, alltime, season) VALUES('" + e.getPlayer().getUniqueId() + "', 0, 0)").execute();
-            } catch (SQLException ex) {
-                throw new RuntimeException(ex);
-            }
+        private static Map<Player, Long> lastUpdate = new HashMap<>();
+
+        @Override
+        public void run() {
+            Bukkit.getOnlinePlayers().forEach(p -> {
+                if(!lastUpdate.containsKey(p)) lastUpdate.put(p, System.currentTimeMillis());
+                Bukkit.getScheduler().runTaskAsynchronously(ClassicDupe.getPlugin(), () -> {
+                    try {
+                        if(getPlaytime(p.getUniqueId()) == null) conn.prepareStatement("INSERT INTO playtime(uuid, alltime, season) VALUES('" + p.getUniqueId() + "', 0, 0)").execute();
+                        long timeToLog = System.currentTimeMillis() - lastUpdate.get(p);
+                        lastUpdate.put(p, System.currentTimeMillis());
+                        conn.prepareStatement("UPDATE playtime SET alltime=alltime+" + timeToLog + ", season=season+" + timeToLog + " WHERE uuid='" + p.getUniqueId() + "'").execute();
+                    } catch (SQLException ex) {
+                        throw new RuntimeException(ex);
+                    }
+                });
+            });
         }
-        final Long[] lastUpdate = {System.currentTimeMillis()};
-        BukkitTask task = new BukkitRunnable() {
-            @Override
-            public void run() {
-                long timeToLog = System.currentTimeMillis()- lastUpdate[0];
-                lastUpdate[0] = System.currentTimeMillis();
-                try {
-                    conn.prepareStatement("UPDATE playtime SET alltime=alltime+" + timeToLog + ", season=season+" + timeToLog + " WHERE uuid='" + e.getPlayer().getUniqueId() + "'").execute();
-                } catch (SQLException ex) {
-                    throw new RuntimeException(ex);
-                }
-            }
-        }.runTaskTimer(this.plugin, 0, 10);
-        tasks.put(e.getPlayer().getUniqueId().toString(), task);
-    }
-
-    @EventHandler
-    public void onPlayerQuit(PlayerQuitEvent e) {
-        tasks.remove(e.getPlayer().getUniqueId().toString());
     }
 
 }

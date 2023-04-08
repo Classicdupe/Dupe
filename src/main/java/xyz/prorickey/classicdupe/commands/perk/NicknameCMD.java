@@ -1,5 +1,6 @@
 package xyz.prorickey.classicdupe.commands.perk;
 
+import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -27,6 +28,10 @@ public class NicknameCMD implements CommandExecutor, TabCompleter {
         }
         StringBuilder msg = new StringBuilder();
         for (String arg : args) msg.append(arg).append(" ");
+        if(ChatColor.stripColor(msg.toString()).length() > 20) {
+            sender.sendMessage(Utils.cmdMsg("&cYour nickname must be under 20 characters"));
+            return true;
+        }
         ClassicDupe.getDatabase().getPlayerDatabase().setNickname(p.getUniqueId().toString(), msg.toString());
         p.sendMessage(Utils.cmdMsg("&aSet your nickname to " + msg));
         return true;
