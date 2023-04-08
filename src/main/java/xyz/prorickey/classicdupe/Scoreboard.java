@@ -48,13 +48,6 @@ public class Scoreboard {
         String clanColor = "&e";
         if(cmem.getClanName() != null) clanColor = ClanDatabase.getClan(ClanDatabase.getClanMember(player.getUniqueId()).getClanID()).getClanColor();
 
-        //updateScore(obj, 15, ChatFormat.format("&0&6&m----------------------"));
-        //updateScore(obj, 14, ChatFormat.format("&6\u2022 &eName &a" + player.getName()));
-        //updateScore(obj, 13, ChatFormat.format("&6\u2022 &eClan " + (clanName != null ? "&8[" + clanColor + clanName + "&8]" : "&eNo Clan")));
-        //updateScore(obj, 12, ChatFormat.format(("&6\u2022 &eRank " + (Utils.getPrefix(player).equals("") ? "&7Default" : Utils.getPrefix(player)))));
-        //updateScore(obj, 11, ChatFormat.format("&6\u2022 &eSuffix " + (Utils.getSuffix(player) != null ? Utils.getSuffix(player) : "&bUnset")));
-        //updateScore(obj, 10, ChatFormat.format("&6\u2022 &ePing &a" + player.getPing() + "ms"));
-
         updateTeamScore(obj, board, 15, "&0&6&m----------------------");
         updateTeamScore(obj, board, 14, "&6\u2022 &eName &a" + player.getName());
         updateTeamScore(obj, board, 13, "&6\u2022 &eClan " + (cmem.getClanName() != null ? "&8[" + clanColor + cmem.getClanName() + "&8]" : "&eNo Clan"));
@@ -64,29 +57,18 @@ public class Scoreboard {
 
         PlayerDatabase.PlayerStats stats = ClassicDupe.getDatabase().getPlayerDatabase().getStats(player.getUniqueId().toString());
 
-        //updateScore(obj, 9, ChatFormat.format("&6\u2022 &eKills &a" + stats.kills));
-        //updateScore(obj, 8, ChatFormat.format("&6\u2022 &eDeaths &a" + stats.deaths));
-        //updateScore(obj, 7, ChatFormat.format("&6\u2022 &eKDR &a" + stats.kdr));
-        //updateScore(obj, 6, " ");
-
         updateTeamScore(obj, board, 9, "&6\u2022 &eKills &a" + stats.kills);
         updateTeamScore(obj, board, 8, "&6\u2022 &eDeaths &a" + stats.deaths);
         updateTeamScore(obj, board, 7, "&6\u2022 &eKDR &a" + stats.kdr);
         updateTeamScore(obj, board, 6, " ");
 
         // Server Stats
-
         if(Combat.inCombat.containsKey(player) && Combat.whoHitWho.get(player) != null) {
             // Combat Stats
 
             PlayerDatabase.PlayerStats menaceStats = ClassicDupe.getDatabase().getPlayerDatabase().getStats(Combat.whoHitWho.get(player).getUniqueId().toString());
 
             long timeLeft = 15-(Math.round((System.currentTimeMillis()-Combat.inCombat.get(player))/1000));
-
-            //updateScore(obj, 5, ChatFormat.format("&6\u2022 &cFighting &e" + Combat.whoHitWho.get(player).getName()));
-            //updateScore(obj, 4, ChatFormat.format("&6\u2022 &cStats &e" + menaceStats.kills + "K " + menaceStats.deaths + "D"));
-            //updateScore(obj, 3, ChatFormat.format("&6\u2022 &cKDR &e" + menaceStats.kdr));
-            //updateScore(obj, 2, ChatFormat.format("&6\u2022 &cTimer &e" + timeLeft));
 
             updateTeamScore(obj, board, 5, "&6\u2022 &cFighting &e" + Combat.whoHitWho.get(player).getName());
             updateTeamScore(obj, board, 4, "&6\u2022 &cStats &e" + menaceStats.kills + "K " + menaceStats.deaths + "D");
@@ -101,18 +83,11 @@ public class Scoreboard {
             else if(tps > 12) tpsStr = "&e" + tps;
             else tpsStr = "&c" + tps;
 
-            //updateScore(obj, 5, ChatFormat.format("&6\u2022 &eTPS " + tpsStr));
-            //updateScore(obj, 4, ChatFormat.format("&6\u2022 &eOnline &a" + Bukkit.getOnlinePlayers().size()));
-            //updateScore(obj, 3, ChatFormat.format("&6\u2022 &eUptime &a" + Metrics.getServerMetrics().getServerUptimeFormatted()));
-            //updateScore(obj, 2, ChatFormat.format("&6\u2022 &ePlaytime &a" + Metrics.getPlayerMetrics().getPlaytimeFormatted(player.getUniqueId())));
-
             updateTeamScore(obj, board, 5, "&6\u2022 &eTPS " + tpsStr);
             updateTeamScore(obj, board, 4, "&6\u2022 &eOnline &a" + Bukkit.getOnlinePlayers().size());
             updateTeamScore(obj, board, 3, "&6\u2022 &eUptime &a" + Metrics.getServerMetrics().getServerUptimeFormatted());
             updateTeamScore(obj, board, 2, "&6\u2022 &ePlaytime &a" + Metrics.getPlayerMetrics().getPlaytimeFormatted(player.getUniqueId()));
         }
-
-        //updateScore(obj, 1, ChatFormat.format("&1&6&m----------------------"));
 
         updateTeamScore(obj, board, 1, "&1&6&m----------------------");
     }

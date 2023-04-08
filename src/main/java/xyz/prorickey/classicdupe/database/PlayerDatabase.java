@@ -4,6 +4,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.Nullable;
+import xyz.prorickey.classicdupe.ClassicDupe;
 import xyz.prorickey.classicdupe.commands.perk.ChatGradientCMD;
 
 import java.sql.Connection;
@@ -105,26 +106,28 @@ public class PlayerDatabase {
     public static Map<Integer, Integer> deathsLeaderboardD = new HashMap<>();
 
     public void reloadLeaderboards() {
-        try {
-            ResultSet killsSet = conn.prepareStatement("SELECT * FROM stats ORDER BY kills DESC").executeQuery();
-            for(int i = 0; i < 10; i++) {
-                if(killsSet.next()) {
-                    PlayerData data = getPlayer(killsSet.getString("uuid"));
-                    killsLeaderboard.put(i+1, data.name);
-                    killsLeaderboardK.put(i+1, killsSet.getInt("kills"));
+        Bukkit.getScheduler().runTaskAsynchronously(ClassicDupe.getPlugin(), () -> {
+            try {
+                ResultSet killsSet = conn.prepareStatement("SELECT * FROM stats ORDER BY kills DESC").executeQuery();
+                for(int i = 0; i < 10; i++) {
+                    if(killsSet.next()) {
+                        PlayerData data = getPlayer(killsSet.getString("uuid"));
+                        killsLeaderboard.put(i+1, data.name);
+                        killsLeaderboardK.put(i+1, killsSet.getInt("kills"));
+                    }
                 }
-            }
-            ResultSet deathsSet = conn.prepareStatement("SELECT * FROM stats ORDER BY deaths DESC").executeQuery();
-            for(int i = 0; i < 10; i++) {
-                if(deathsSet.next()) {
-                    PlayerData data = getPlayer(deathsSet.getString("uuid"));
-                    deathsLeaderboard.put(i+1, data.name);
-                    deathsLeaderboardD.put(i+1, deathsSet.getInt("deaths"));
+                ResultSet deathsSet = conn.prepareStatement("SELECT * FROM stats ORDER BY deaths DESC").executeQuery();
+                for(int i = 0; i < 10; i++) {
+                    if(deathsSet.next()) {
+                        PlayerData data = getPlayer(deathsSet.getString("uuid"));
+                        deathsLeaderboard.put(i+1, data.name);
+                        deathsLeaderboardD.put(i+1, deathsSet.getInt("deaths"));
+                    }
                 }
+            } catch (SQLException e) {
+                Bukkit.getLogger().severe(e.toString());
             }
-        } catch (SQLException e) {
-            Bukkit.getLogger().severe(e.toString());
-        }
+        });
     }
 
     public PlayerData getPlayer(String uuid) {
@@ -239,29 +242,46 @@ public class PlayerDatabase {
         }
     }
 
+    private Map<String, PlayerStats> stats = new HashMap<>();
+
     public void addKill(String uuid) {
-        try {
-            conn.prepareStatement("UPDATE stats SET kills=kills+1 WHERE uuid='" + uuid +  "'").execute();
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
+        Bukkit.getScheduler().runTaskAsynchronously(ClassicDupe.getPlugin(), () -> {
+            try {
+                conn.prepareStatement("UPDATE stats SET kills=kills+1 WHERE uuid='" + uuid +  "'").execute();
+                if(stats.containsKey(uuid)) stats.get(uuid).addKill();
+                else getStats(uuid);
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
+        });
     }
 
     public void addDeath(String uuid) {
-        try {
-            conn.prepareStatement("UPDATE stats SET deaths=deaths+1 WHERE uuid='" + uuid +  "'").execute();
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
+        Bukkit.getScheduler().runTaskAsynchronously(ClassicDupe.getPlugin(), () -> {
+            try {
+                conn.prepareStatement("UPDATE stats SET deaths=deaths+1 WHERE uuid='" + uuid +  "'").execute();
+                if(stats.containsKey(uuid)) stats.get(uuid).addDeath();
+                else getStats(uuid);
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
+        });
     }
 
     @Nullable
     public PlayerStats getStats(String uuid) {
-        try {
-            ResultSet set = conn.prepareStatement("SELECT * FROM stats WHERE uuid='" + uuid + "'").executeQuery();
-            if(set.next()) return new PlayerStats(set.getInt("kills"), set.getInt("deaths"));
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
+        if(stats.containsKey(uuid)) return stats.get(uuid);
+        else {
+            try {
+                ResultSet set = conn.prepareStatement("SELECT * FROM stats WHERE uuid='" + uuid + "'").executeQuery();
+                if(set.next()) {
+                    PlayerStats stat = new PlayerStats(set.getInt("kills"), set.getInt("deaths"));
+                    stats.put(uuid, stat);
+                    return stat;
+                }
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
         }
         return null;
     }
@@ -273,6 +293,23 @@ public class PlayerDatabase {
         public PlayerStats(int kills1, int deaths1) {
             kills = kills1;
             deaths = deaths1;
+            if(deaths == 0) {
+                kdr = "Infinity";
+            } else {
+                kdr = (kills/deaths) + "";
+            }
+        }
+
+        public void addKill() {
+            this.kills = this.kills+1;
+            if(deaths == 0) {
+                kdr = "Infinity";
+            } else {
+                kdr = (kills/deaths) + "";
+            }
+        }
+        public void addDeath() {
+            this.kills = this.kills+1;
             if(deaths == 0) {
                 kdr = "Infinity";
             } else {
