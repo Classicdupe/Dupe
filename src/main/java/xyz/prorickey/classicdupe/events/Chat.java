@@ -46,7 +46,7 @@ public class Chat implements Listener {
 
         String clanName = ClanDatabase.getClanMember(e.getPlayer().getUniqueId()).getClanName();
         String clanColor = "&e";
-        if(clanName != null) clanColor = ClanDatabase.getClanByID(ClanDatabase.getClanMember(e.getPlayer().getUniqueId()).getClanId()).getClanSettings().getClanColor();
+        if(clanName != null) clanColor = ClanDatabase.getClan(ClanDatabase.getClanMember(e.getPlayer().getUniqueId()).getClanID()).getClanColor();
 
         String pgroup = ClassicDupe.getLPAPI().getUserManager().getUser(e.getPlayer().getUniqueId()).getPrimaryGroup();
         if(pgroup.equalsIgnoreCase("default")) chatCooldown.put(e.getPlayer(), System.currentTimeMillis()+4000);

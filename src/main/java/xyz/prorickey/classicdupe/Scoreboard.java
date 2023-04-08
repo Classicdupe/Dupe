@@ -37,7 +37,7 @@ public class Scoreboard {
 
         String clanName = ClanDatabase.getClanMember(player.getUniqueId()).getClanName();
         String clanColor = "&e";
-        if(clanName != null) clanColor = ClanDatabase.getClanByID(ClanDatabase.getClanMember(player.getUniqueId()).getClanId()).getClanSettings().getClanColor();
+        if(clanName != null) clanColor = ClanDatabase.getClan(ClanDatabase.getClanMember(player.getUniqueId()).getClanID()).getClanColor();
 
         updateScore(obj, 15, ChatFormat.format("&0&6&m----------------------"));
 

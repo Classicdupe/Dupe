@@ -47,7 +47,7 @@ public class ClanDatabase {
                 main = DriverManager.getConnection("jdbc:h2:" + ClassicDupe.getPlugin().getDataFolder().getAbsolutePath() + "/clansData/main");
                 // x y z pitch yaw world
                 main.prepareStatement("CREATE TABLE IF NOT EXISTS clans(clanId VARCHAR, clanName VARCHAR, clanKills INT, publicClan BOOLEAN, clanColor VARCHAR)").execute();
-                main.prepareStatement("CREATE TABLE IF NOT EXISTS clanWarps(clanId VARCHAR, name VARCHAR, loc VARCHAR, levelNeeded INT)").execute();
+                main.prepareStatement("CREATE TABLE IF NOT EXISTS clanWarps(clanId VARCHAR, name VARCHAR, levelNeeded INT, x INT, y INT, z INT, pitch FLOAT, yaw FLOAT, world VARCHAR)").execute();
 
                 main.prepareStatement("CREATE TABLE IF NOT EXISTS players(uuid VARCHAR, name VARCHAR, clanId VARCHAR, clanName VARCHAR, level INT, boosts INT)").execute();
 
@@ -56,13 +56,15 @@ public class ClanDatabase {
                     Clan clan = new Clan(UUID.fromString(clanSet.getString("clanId")), clanSet.getString("clanName"));
                     clan.setClanColor(clanSet.getString("clanColor"));
                     clan.setPublicClan(clanSet.getBoolean("publicClan"));
+                    clansById.put(clan.getClanId(), clan);
+                    clansByName.put(clan.getClanName(), clan);
+                    clanNames.add(clan.getClanName());
                 }
 
                 ResultSet warpSet = main.prepareStatement("SELECT * FROM clanWarps").executeQuery();
                 while(warpSet.next()) {
                     Clan clan = clansById.get(UUID.fromString(warpSet.getString("clanId")));
-                    String[] str = warpSet.getString("loc").split(",");
-                    Location loc = new Location(Bukkit.getWorld(str[5]), Integer.getInteger(str[0]), Integer.getInteger(str[1]), Integer.getInteger(str[2]), Float.parseFloat(str[3]), Float.parseFloat(str[4]));
+                    Location loc = new Location(Bukkit.getWorld(warpSet.getString("world")), warpSet.getInt("x"), warpSet.getInt("y"), warpSet.getInt("z"), warpSet.getFloat("yaw"), warpSet.getFloat("pitch"));
                     clan.setWarp(new Warp(warpSet.getString("name"), loc, warpSet.getInt("levelNeeded")));
                 }
 
@@ -91,11 +93,14 @@ public class ClanDatabase {
     public static YamlConfiguration getGlobalConfig() { return globalConfig; }
 
     public static void createClan(String name, Player owner) {
-        String id = genClanId();
-        Clan clan = new Clan(UUID.fromString(id), name);
+        UUID id = genClanId();
+        Clan clan = new Clan(id, name);
         clan.setOwner(owner);
         ClanMember cmem = clanMembers.get(owner.getUniqueId());
         cmem.setClan(clan, 3);
+        clansById.put(id, clan);
+        clansByName.put(clan.getClanName(), clan);
+        clanNames.add(clan.getClanName());
         Bukkit.getScheduler().runTaskAsynchronously(ClassicDupe.getPlugin(), () -> {
             try {
                 main.prepareStatement("INSERT INTO clans(clanId, clanName, clanKills, publicClan, clanColor) VALUES('" + id + "', '" + name + "', 0, false, '&e')").execute();
@@ -106,8 +111,8 @@ public class ClanDatabase {
         });
     }
 
-    private static String genClanId() {
-        String upperAlphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+    private static UUID genClanId() {
+        /*String upperAlphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
         String lowerAlphabet = "abcdefghijklmnopqrstuvwxyz";
         String numbers = "0123456789";
         String alphaNumeric = upperAlphabet + lowerAlphabet + numbers;
@@ -121,7 +126,10 @@ public class ClanDatabase {
         }
         String randomClanId = sb.toString();
         if(getClan(UUID.fromString(randomClanId)) != null) return genClanId();
-        return randomClanId;
+        return randomClanId;*/
+        UUID uuid = UUID.randomUUID();
+        if(getClan(uuid) != null) return genClanId();
+        return uuid;
     }
 
     public static List<String> getLoadedClanNames() { return clanNames; }
@@ -220,7 +228,7 @@ public class ClanDatabase {
     public static void delWarp(Clan clan, String warp) {
         Bukkit.getScheduler().runTaskAsynchronously(ClassicDupe.getPlugin(), () -> {
             try {
-                main.prepareStatement("DELETE FROM clanWarps WHERE clanId='" + clan.getClanId() + "', name='" + warp + "'").execute();
+                main.prepareStatement("DELETE FROM clanWarps WHERE clanId='" + clan.getClanId() + "' AND name='" + warp + "'").execute();
             } catch (SQLException e) {
                 throw new RuntimeException(e);
             }
@@ -230,8 +238,7 @@ public class ClanDatabase {
     public static void setWarp(Clan clan, Warp warp) {
         Bukkit.getScheduler().runTaskAsynchronously(ClassicDupe.getPlugin(), () -> {
             try {
-                String loc =  warp.location.getX() + "," + warp.location.getY() + "," + warp.location.getZ() + "," + warp.location.getPitch() + "," + warp.location.getYaw() + "," + warp.location.getWorld().getName();
-                main.prepareStatement("INSERT INTO clanWarps(clanId, name, loc, levelNeeded) VALUES('" + clan.getClanId() + "', '" + warp.name + "', '" + loc + "', " + warp.level + ")") .execute();
+                main.prepareStatement("INSERT INTO clanWarps(clanId, name, levelNeeded, x, y, z, pitch, yaw, world) VALUES('" + clan.getClanId() + "', '" + warp.name + "', " + warp.level + ", " + warp.location.getX() + ", " + warp.location.getY() + ", " + warp.location.getZ() + ", " + warp.location.getPitch() + ", " + warp.location.getYaw() + ", '" + warp.location.getWorld().getName() + "')") .execute();
             } catch (SQLException e) {
                 throw new RuntimeException(e);
             }

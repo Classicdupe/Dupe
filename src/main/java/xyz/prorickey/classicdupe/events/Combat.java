@@ -9,6 +9,7 @@ import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.scheduler.BukkitRunnable;
 import xyz.prorickey.classicdupe.Utils;
 import xyz.prorickey.classicdupe.clans.ClanDatabase;
+import xyz.prorickey.classicdupe.clans.ClanMember;
 import xyz.prorickey.proutils.ChatFormat;
 
 import java.util.ArrayList;
@@ -34,9 +35,9 @@ public class Combat implements Listener {
             return;
         }
         if(e.getEntity() instanceof Player player && e.getDamager() instanceof Player attacker) {
-            ClanDatabase.ClanMember pmem = ClanDatabase.getClanMember(player.getUniqueId());
-            ClanDatabase.ClanMember amem = ClanDatabase.getClanMember(attacker.getUniqueId());
-            if(Objects.equals(pmem.getClanId(), amem.getClanId())) e.setCancelled(true);
+            ClanMember pmem = ClanDatabase.getClanMember(player.getUniqueId());
+            ClanMember amem = ClanDatabase.getClanMember(attacker.getUniqueId());
+            if(Objects.equals(pmem.getClanID(), amem.getClanID())) e.setCancelled(true);
             return;
         }
         if(e.getEntity() instanceof Player player && !e.getCause().equals(EntityDamageEvent.DamageCause.FALL)) inCombat.put(player, System.currentTimeMillis());
