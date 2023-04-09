@@ -132,7 +132,8 @@ public class ClassicDupe extends JavaPlugin {
         this.getCommand("tpadecline").setTabCompleter(new TpadeclineCMD());
         this.getCommand("stats").setExecutor(new StatsCMD());
         this.getCommand("stats").setTabCompleter(new StatsCMD());
-
+        this.getCommand("cspy").setExecutor(new CspyCMD());
+        this.getCommand("cspy").setTabCompleter(new CspyCMD());
         PluginCommand discordCmd = plugin.getServer().getPluginCommand("discord");
         if(discordCmd.getPlugin().getPluginMeta().getName().equals("DiscordSRV")) {
             discordCmd.setExecutor(new DiscordCMD());
@@ -141,7 +142,6 @@ public class ClassicDupe extends JavaPlugin {
             this.getCommand("dc").setExecutor(new DiscordCMD());
             this.getCommand("dc").setTabCompleter(new DiscordCMD());
         }
-
         this.getCommand("enderchest").setExecutor(new EnderChestCMD());
         this.getCommand("enderchest").setTabCompleter(new EnderChestCMD());
         this.getCommand("rename").setExecutor(new RenameCMD());
@@ -184,6 +184,7 @@ public class ClassicDupe extends JavaPlugin {
         getServer().getPluginManager().registerEvents(new GoldenAppleCooldown(), this);
         getServer().getPluginManager().registerEvents(new ClearSpawn(), this);
         getServer().getPluginManager().registerEvents(new PearlCooldown(), this);
+        getServer().getPluginManager().registerEvents(new CSPY(), this);
     }
 
     @Override

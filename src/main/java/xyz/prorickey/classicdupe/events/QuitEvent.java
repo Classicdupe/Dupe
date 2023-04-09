@@ -7,6 +7,7 @@ import org.bukkit.event.player.PlayerQuitEvent;
 import xyz.prorickey.classicdupe.ClassicDupe;
 import xyz.prorickey.classicdupe.Utils;
 import xyz.prorickey.classicdupe.commands.default1.PrivateMessageCMD;
+import xyz.prorickey.classicdupe.commands.moderator.CspyCMD;
 import xyz.prorickey.classicdupe.commands.moderator.StaffChatCMD;
 import xyz.prorickey.classicdupe.commands.perk.ChatColorCMD;
 import xyz.prorickey.classicdupe.commands.perk.ChatGradientCMD;
@@ -23,6 +24,7 @@ public class QuitEvent implements Listener {
         ChatGradientCMD.gradientProfiles.remove(e.getPlayer().getUniqueId().toString());
         StaffChatCMD.staffChatPlayers.remove(e.getPlayer());
         PrivateMessageCMD.lastInConvo.remove(e.getPlayer());
+        CspyCMD.cspyList.remove(e.getPlayer());
         if(PrivateMessageCMD.lastInConvo.containsValue(e.getPlayer())) new HashMap<>(PrivateMessageCMD.lastInConvo).forEach((sender, recipient) -> PrivateMessageCMD.lastInConvo.remove(sender));
         e.quitMessage(Component.text(
                 ChatFormat.format("&8[&c-&8] " +

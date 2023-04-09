@@ -210,6 +210,12 @@ commands:
       - clans
       - guild
       - guilds
+  cspy:
+    description: To toggle command spy
+    usage: "Usage: /cspy"
+    aliases:
+      - commandspy
+      - cmdspy
 permissions:
   default.spawn.others:
     description: Allows you to teleport others to spawn
