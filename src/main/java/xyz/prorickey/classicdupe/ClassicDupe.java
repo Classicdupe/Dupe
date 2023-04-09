@@ -6,6 +6,7 @@ import java.util.List;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.event.ClickEvent;
 import org.bukkit.Bukkit;
+import org.bukkit.command.PluginCommand;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -131,8 +132,16 @@ public class ClassicDupe extends JavaPlugin {
         this.getCommand("tpadecline").setTabCompleter(new TpadeclineCMD());
         this.getCommand("stats").setExecutor(new StatsCMD());
         this.getCommand("stats").setTabCompleter(new StatsCMD());
-        this.getCommand("discord").setExecutor(new DiscordCMD());
-        this.getCommand("discord").setTabCompleter(new DiscordCMD());
+
+        PluginCommand discordCmd = plugin.getServer().getPluginCommand("discord");
+        if(discordCmd.getPlugin().getPluginMeta().getName().equals("DiscordSRV")) {
+            discordCmd.setExecutor(new DiscordCMD());
+            discordCmd.setTabCompleter(new DiscordCMD());
+        } else {
+            this.getCommand("dc").setExecutor(new DiscordCMD());
+            this.getCommand("dc").setTabCompleter(new DiscordCMD());
+        }
+
         this.getCommand("enderchest").setExecutor(new EnderChestCMD());
         this.getCommand("enderchest").setTabCompleter(new EnderChestCMD());
         this.getCommand("rename").setExecutor(new RenameCMD());
