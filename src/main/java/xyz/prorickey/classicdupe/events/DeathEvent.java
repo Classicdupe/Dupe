@@ -26,7 +26,10 @@ public class DeathEvent implements Listener {
 
     @EventHandler
     public void onPlayerRespawn(PlayerRespawnEvent e) {
-        if(!e.isBedSpawn() && !e.isAnchorSpawn()) e.setRespawnLocation(ClassicDupe.getDatabase().getSpawn());
+        if(!e.isBedSpawn() && !e.isAnchorSpawn()) {
+            if(e.getPlayer().getWorld().getName().equals("world_nether")) e.setRespawnLocation(ClassicDupe.getDatabase().getNetherSpawn());
+            else e.setRespawnLocation(ClassicDupe.getDatabase().getSpawn());
+        }
     }
 
     @EventHandler
