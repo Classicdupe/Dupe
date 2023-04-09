@@ -12,6 +12,11 @@ forbiddenDupesInCombat:
   - enchanted_golden_apple
   - ender_pearl
 prefix: "&8[&ai&8]"
+events:
+  koth:
+    timeInBetween: 43200000
+    schems:
+      - jungle
 discord:
   guild: 1068991438391623836
   staffchat: 1094672777287585832

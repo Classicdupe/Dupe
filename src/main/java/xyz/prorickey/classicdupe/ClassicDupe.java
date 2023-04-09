@@ -24,6 +24,7 @@ import xyz.prorickey.classicdupe.discord.ClassicDupeBot;
 import xyz.prorickey.classicdupe.events.*;
 import xyz.prorickey.classicdupe.metrics.Metrics;
 import xyz.prorickey.classicdupe.metrics.PlayerMetrics;
+import xyz.prorickey.classicdupe.playerevents.KOTHEventManager;
 import xyz.prorickey.proutils.ChatFormat;
 
 public class ClassicDupe extends JavaPlugin {
@@ -67,6 +68,7 @@ public class ClassicDupe extends JavaPlugin {
         new ClearSpawn.ClearSpawnTask().runTaskTimer(this, 0, 20);
 
         new Clans(this);
+        KOTHEventManager.init(this);
 
         this.getCommand("dupe").setExecutor(new DupeCMD());
         this.getCommand("dupe").setTabCompleter(new DupeCMD());

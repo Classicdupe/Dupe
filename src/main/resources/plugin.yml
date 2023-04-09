@@ -1,6 +1,6 @@
 main: xyz.prorickey.classicdupe.ClassicDupe
 name: ClassicDupe
-version: 2.3.4
+version: 3.0.0-beta
 description: The core plugin behind everything that happens in ClassicDupe
 api-version: 1.19
 load: POSTWORLD
@@ -213,9 +213,14 @@ commands:
   cspy:
     description: To toggle command spy
     usage: "Usage: /cspy"
+    permission: mod.cspy
     aliases:
       - commandspy
       - cmdspy
+  koth:
+    description: To manage KOTH events
+    usage: "Usage: /koth"
+    permission: events.koth
 permissions:
   default.spawn.others:
     description: Allows you to teleport others to spawn
