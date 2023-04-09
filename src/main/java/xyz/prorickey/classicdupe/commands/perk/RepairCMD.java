@@ -19,9 +19,11 @@ public class RepairCMD implements CommandExecutor {
             return true;
         }
         p.getInventory().forEach(item -> {
-            ItemMeta meta = item.getItemMeta();
-            if(meta instanceof Damageable dmeta) dmeta.setDamage(0);
-            item.setItemMeta(meta);
+            if(item != null) {
+                ItemMeta meta = item.getItemMeta();
+                if(meta instanceof Damageable dmeta) dmeta.setDamage(0);
+                item.setItemMeta(meta);
+            }
         });
         p.sendMessage(Utils.cmdMsg("&aRepaired all items in your inventory"));
         return true;
