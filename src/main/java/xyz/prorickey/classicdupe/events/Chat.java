@@ -67,7 +67,7 @@ public class Chat implements Listener {
                 PlainTextComponentSerializer.plainText().serialize(e.message())
             );
             ClassicDupeBot.getJDA().getChannelById(TextChannel.class, Config.getConfig().getLong("discord.staffchat"))
-                    .sendMessage("**" + e.getPlayer().getName() + "** » " + PlainTextComponentSerializer.plainText().serialize(e.message()));
+                    .sendMessage("**" + e.getPlayer().getName() + "** \u00BB " + PlainTextComponentSerializer.plainText().serialize(e.message())).queue();
             return;
         }
 

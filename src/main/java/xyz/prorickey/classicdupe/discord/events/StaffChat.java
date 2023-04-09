@@ -11,9 +11,10 @@ public class StaffChat extends ListenerAdapter {
 
     @Override
     public void onMessageReceived(@NotNull MessageReceivedEvent event) {
-        if(Config.getConfig().getLong("discord.staffchat") != event.getChannel().getIdLong()) return;
+        if(Config.getConfig().getLong("discord.staffchat") != event.getChannel().getIdLong() || event.getAuthor().isBot()) return;
+
         StaffChatCMD.sendToStaffChat(
-                "&8[&cSC&bDSC&8] " +
+                "&8[&cSC&bDSC&8] &e" +
                         event.getAuthor().getName() +
                         ChatFormat.format(" &7\u00BB &a") +
                         event.getMessage().getContentRaw()

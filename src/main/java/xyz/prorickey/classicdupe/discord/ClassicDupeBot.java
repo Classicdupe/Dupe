@@ -7,6 +7,7 @@ import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import net.dv8tion.jda.api.interactions.commands.DefaultMemberPermissions;
 import net.dv8tion.jda.api.interactions.commands.OptionType;
 import net.dv8tion.jda.api.interactions.commands.build.Commands;
+import net.dv8tion.jda.api.requests.GatewayIntent;
 import org.bukkit.scheduler.BukkitRunnable;
 import xyz.prorickey.classicdupe.ClassicDupe;
 import xyz.prorickey.classicdupe.Config;
@@ -22,6 +23,7 @@ public class ClassicDupeBot extends ListenerAdapter {
         plugin = p;
         jda = JDABuilder
                 .createDefault(Config.getConfig().getString("discord.token"))
+                .enableIntents(GatewayIntent.MESSAGE_CONTENT)
                 .addEventListeners(
                         new SlashCommand(),
                         new StaffChat()
