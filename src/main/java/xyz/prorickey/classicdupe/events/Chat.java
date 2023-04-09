@@ -1,6 +1,7 @@
 package xyz.prorickey.classicdupe.events;
 
 import io.papermc.paper.event.player.AsyncChatEvent;
+import net.dv8tion.jda.api.entities.channel.concrete.TextChannel;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
@@ -8,12 +9,14 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import xyz.prorickey.classicdupe.ClassicDupe;
+import xyz.prorickey.classicdupe.Config;
 import xyz.prorickey.classicdupe.Utils;
 import xyz.prorickey.classicdupe.clans.ClanDatabase;
 import xyz.prorickey.classicdupe.commands.moderator.StaffChatCMD;
 import xyz.prorickey.classicdupe.commands.perk.ChatColorCMD;
 import xyz.prorickey.classicdupe.commands.perk.ChatGradientCMD;
 import xyz.prorickey.classicdupe.database.PlayerDatabase;
+import xyz.prorickey.classicdupe.discord.ClassicDupeBot;
 import xyz.prorickey.proutils.ChatFormat;
 
 import java.util.HashMap;
@@ -63,6 +66,8 @@ public class Chat implements Listener {
                 ChatFormat.format(" &7\u00BB &a") +
                 PlainTextComponentSerializer.plainText().serialize(e.message())
             );
+            ClassicDupeBot.getJDA().getChannelById(TextChannel.class, Config.getConfig().getLong("discord.staffchat"))
+                    .sendMessage("**" + e.getPlayer().getName() + "** » " + PlainTextComponentSerializer.plainText().serialize(e.message()));
             return;
         }
 

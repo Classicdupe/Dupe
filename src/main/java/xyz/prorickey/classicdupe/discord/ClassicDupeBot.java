@@ -11,6 +11,7 @@ import org.bukkit.scheduler.BukkitRunnable;
 import xyz.prorickey.classicdupe.ClassicDupe;
 import xyz.prorickey.classicdupe.Config;
 import xyz.prorickey.classicdupe.discord.events.SlashCommand;
+import xyz.prorickey.classicdupe.discord.events.StaffChat;
 
 public class ClassicDupeBot extends ListenerAdapter {
 
@@ -21,7 +22,10 @@ public class ClassicDupeBot extends ListenerAdapter {
         plugin = p;
         jda = JDABuilder
                 .createDefault(Config.getConfig().getString("discord.token"))
-                .addEventListeners(new SlashCommand())
+                .addEventListeners(
+                        new SlashCommand(),
+                        new StaffChat()
+                )
                 .build();
 
         jda.updateCommands().addCommands(
