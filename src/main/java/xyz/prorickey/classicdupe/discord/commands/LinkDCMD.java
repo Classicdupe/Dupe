@@ -4,6 +4,7 @@ import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEve
 import net.dv8tion.jda.api.interactions.commands.OptionMapping;
 import xyz.prorickey.classicdupe.ClassicDupe;
 import xyz.prorickey.classicdupe.commands.default1.LinkCMD;
+import xyz.prorickey.classicdupe.discord.LinkRewards;
 
 public class LinkDCMD {
 
@@ -22,6 +23,9 @@ public class LinkDCMD {
         inter.getGuild().addRoleToMember(inter.getUser(), inter.getGuild().getRoleById(1078109485144473620L)).queue();
         inter.reply("Successfully linked your account to " + linkCode.player.getName()).setEphemeral(true).queue();
         LinkCMD.linkCodes.remove(code);
+
+        LinkRewards.checkRewardsForLinking(linkCode.player);
+        LinkRewards.checkRewardsForBoosting(linkCode.player);
     }
 
 }

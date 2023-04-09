@@ -174,6 +174,8 @@ commands:
     description: To change your name in tab and in chat
     usage: "Usage: /nickname <nickname>"
     permission: perks.nickname
+    aliases:
+      - nick
   nakedoff:
     description: To turn off naked protection
     usage: "Usage: /nakedoff"

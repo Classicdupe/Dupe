@@ -17,6 +17,7 @@ import xyz.prorickey.classicdupe.clans.ClanDatabase;
 import xyz.prorickey.classicdupe.commands.perk.ChatColorCMD;
 import xyz.prorickey.classicdupe.commands.perk.ChatGradientCMD;
 import xyz.prorickey.classicdupe.database.PlayerDatabase;
+import xyz.prorickey.classicdupe.discord.LinkRewards;
 import xyz.prorickey.proutils.ChatFormat;
 
 import java.util.*;
@@ -59,6 +60,8 @@ public class JoinEvent implements Listener {
                     playerData.gradientto
             ));
         }
+        LinkRewards.checkRewardsForLinking(e.getPlayer());
+        LinkRewards.checkRewardsForBoosting(e.getPlayer());
         e.joinMessage(Component.text(
                 ChatFormat.format("&8[&a+&8] " +
                         ClassicDupe.getLPAPI().getUserManager().getUser(e.getPlayer().getUniqueId()).getCachedData().getMetaData().getPrefix() +

@@ -12,7 +12,7 @@ import java.util.Map;
 
 public class PearlCooldown implements Listener {
 
-    private static int cooldown = 30*1000;
+    private static int cooldown = 45*1000;
     private static Map<Player, Long> pearlCooldown = new HashMap<>();
 
     @EventHandler

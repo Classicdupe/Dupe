@@ -13,6 +13,7 @@ forbiddenDupesInCombat:
   - ender_pearl
 prefix: "&8[&ai&8]"
 discord:
+  guild: 1068991438391623836
   token: "MTA3ODEwMjgzNDg3NDE2NzM1Ng.GxuBo8.tcjGQ7mRT1cR6cg6QzSMk8kYYYjlx9TIArK7Hg"
   onlineplayers: 1084496172305092718
 suffix:
