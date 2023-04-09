@@ -4,6 +4,7 @@ import me.clip.placeholderapi.expansion.PlaceholderExpansion;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
+import xyz.prorickey.classicdupe.clans.ClanDatabase;
 import xyz.prorickey.classicdupe.database.PlayerDatabase;
 
 import java.util.HashMap;
@@ -34,8 +35,9 @@ public class ClassicDupeExpansion extends PlaceholderExpansion {
         if(params.equalsIgnoreCase("name")) {
             if(player == null) return null;
             PlayerDatabase.PlayerData data = ClassicDupe.getDatabase().getPlayerDatabase().getPlayer(player.getUniqueId().toString());
-            if(data.nickname == null) return player.getName();
-            else return data.nickname;
+            String clan = ClanDatabase.getClanMember(player.getUniqueId()).getClanName();
+            if(data.nickname == null) return (clan != null ? clan + " " + player.getName() : player.getName());
+            else return (clan != null ? clan + " " + data.nickname : data.nickname);
         }
         for(int i = 0; i < 10; i++) {
             if(ClassicDupe.getDatabase().getPlayerDatabase().killsLeaderboard.size() < i+1) return " ";
