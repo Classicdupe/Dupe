@@ -35,9 +35,14 @@ public class ClassicDupeExpansion extends PlaceholderExpansion {
         if(params.equalsIgnoreCase("name")) {
             if(player == null) return null;
             PlayerDatabase.PlayerData data = ClassicDupe.getDatabase().getPlayerDatabase().getPlayer(player.getUniqueId().toString());
-            String clan = ClanDatabase.getClanMember(player.getUniqueId()).getClanName();
-            if(data.nickname == null) return (clan != null ? clan + " " + player.getName() : player.getName());
-            else return (clan != null ? clan + " " + data.nickname : data.nickname);
+            if(ClanDatabase.getClanMember(player.getUniqueId()).getClanID() != null) {
+                String clan = ClanDatabase.getClanMember(player.getUniqueId()).getClanName();
+                String clanColor = ClanDatabase.getClan(ClanDatabase.getClanMember(player.getUniqueId()).getClanID()).getClanColor();
+                if(data.nickname == null) return player.getName() + " &8[" + clanColor + clan + "&8]";
+                else return data.nickname + " &8[" + clanColor + clan + "&8]";
+            }
+            if(data.nickname == null) return player.getName();
+            else return data.nickname;
         }
         for(int i = 0; i < 10; i++) {
             if(ClassicDupe.getDatabase().getPlayerDatabase().killsLeaderboard.size() < i+1) return " ";

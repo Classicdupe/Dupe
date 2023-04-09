@@ -16,15 +16,15 @@ public class LinkRewards {
             if(!player.hasPermission("perks.nickname")) {
                 ClassicDupe
                         .getLPAPI().getUserManager()
-                        .getUser(player.getUniqueId()).data().add(Node.builder("perks.nickname").build());
-                player.sendMessage(Utils.cmdMsg("&eThank you for linking your discord. You have recieved the nickname perk."));
+                        .getUser(player.getUniqueId()).data().add(Node.builder("perks.hat").build());
+                player.sendMessage(Utils.cmdMsg("&eThank you for linking your discord. You have recieved the hat perk."));
             }
         }
     }
 
     public static void checkRewardsForBoosting(Player player) {
         LinkingDatabase.Link link = ClassicDupe.getDatabase().getLinkingDatabase().getLinkFromUUID(player.getUniqueId().toString());
-        if(link != null && ClassicDupeBot.getJDA().getGuildById(Config.getConfig().getLong("discord.guild")).getMember(User.fromId(link.id)).isBoosting()) {
+        if(link != null && ClassicDupeBot.getJDA().getGuildById(Config.getConfig().getLong("discord.guild")).getMemberById(link.id).isBoosting()) {
             if(ClassicDupe.getLPAPI().getUserManager().getUser(player.getUniqueId()).getPrimaryGroup().equals("default")) {
                 ClassicDupe
                         .getLPAPI().getUserManager()
