@@ -1,6 +1,6 @@
 main: xyz.prorickey.classicdupe.ClassicDupe
 name: ClassicDupe
-version: 2.3.1
+version: 2.3.2
 description: The core plugin behind everything that happens in ClassicDupe
 api-version: 1.19
 load: POSTWORLD
