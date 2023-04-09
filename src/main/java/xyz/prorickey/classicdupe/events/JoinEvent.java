@@ -3,6 +3,7 @@ package xyz.prorickey.classicdupe.events;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
+import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -35,13 +36,27 @@ public class JoinEvent implements Listener {
             ClassicDupe.getDatabase().getPlayerDatabase().initPlayer(e.getPlayer());
             e.getPlayer().teleport(ClassicDupe.getDatabase().spawn);
             e.joinMessage(Component.text(ChatFormat.format("&e" + e.getPlayer().getName() + " &aJust joined for the first time! Give them a warm welcome")));
+            e.getPlayer().sendMessage(Utils.cmdMsg("&aEvery &e60 &ayou will recieve a random item. Execute /random to disable or enable this"));
+            ChatColorCMD.colorProfiles.put(e.getPlayer().getUniqueId().toString(), "&7");
+            nakedProtection.put(e.getPlayer(), System.currentTimeMillis());
+
+            // Starting Gear
+            e.getPlayer().getInventory().setHelmet(new ItemStack(Material.IRON_HELMET));
+            e.getPlayer().getInventory().setChestplate(new ItemStack(Material.IRON_CHESTPLATE));
+            e.getPlayer().getInventory().setLeggings(new ItemStack(Material.IRON_LEGGINGS));
+            e.getPlayer().getInventory().setBoots(new ItemStack(Material.IRON_BOOTS));
+            e.getPlayer().getInventory().addItem(
+                    new ItemStack(Material.IRON_SWORD),
+                    new ItemStack(Material.IRON_PICKAXE),
+                    new ItemStack(Material.IRON_AXE),
+                    new ItemStack(Material.COOKED_BEEF, 16)
+            );
+
             RandomItemTask task = new RandomItemTask(e.getPlayer());
             randomItemList.add(e.getPlayer());
             randomTaskMap.put(e.getPlayer(), task);
             task.runTaskTimer(ClassicDupe.getPlugin(), 0, 20*60);
-            e.getPlayer().sendMessage(Utils.cmdMsg("&aEvery &e60 &ayou will recieve a random item. Execute /random to disable or enable this"));
-            ChatColorCMD.colorProfiles.put(e.getPlayer().getUniqueId().toString(), "&7");
-            nakedProtection.put(e.getPlayer(), System.currentTimeMillis());
+
             e.getPlayer().sendMessage(Utils.cmdMsg("&aYou currently have naked protection on. This means you cannot pvp but you are safe for 10 minutes. To turn this off execute /nakedoff"));
             return;
         }
