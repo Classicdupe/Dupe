@@ -5,6 +5,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import xyz.prorickey.classicdupe.Utils;
 import xyz.prorickey.classicdupe.clans.Clan;
+import xyz.prorickey.classicdupe.clans.ClanMember;
 import xyz.prorickey.classicdupe.clans.ClanSub;
 import xyz.prorickey.classicdupe.clans.ClanDatabase;
 import xyz.prorickey.proutils.ChatFormat;
@@ -28,6 +29,11 @@ public class CSAccept extends ClanSub {
         Player inviter = Bukkit.getPlayer(args[0]);
         if(inviter == null) {
             player.sendMessage(Utils.cmdMsg("&cThat player is currently offline"));
+            return;
+        }
+        ClanMember cmem = ClanDatabase.getClanMember(player.getUniqueId());
+        if(cmem.getClanID() != null) {
+            player.sendMessage(Utils.cmdMsg("&cYou are already in a clan. You must leave before joining another."));
             return;
         }
         AtomicBoolean success = new AtomicBoolean(false);

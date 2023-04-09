@@ -39,7 +39,13 @@ public class PlayerVaultCMD implements CommandExecutor, TabCompleter, Listener {
             p.sendMessage(Utils.cmdMsg("&cYou must include which vault you would like to open"));
             return true;
         }
-        int vault = Integer.parseInt(args[0]);
+        int vault;
+        try {
+            vault = Integer.parseInt(args[0]);
+        } catch(NumberFormatException e) {
+            p.sendMessage(Utils.cmdMsg("&cPlease provide a valid vault number to access"));
+            return true;
+        }
         Map<Integer, ItemStack> vaultMap = ClassicDupe.getPVDatabase().getVault(p.getUniqueId().toString(), vault);
         if(vaultMap == null) {
             p.sendMessage(Utils.cmdMsg("&cYou do not have access to that vault"));

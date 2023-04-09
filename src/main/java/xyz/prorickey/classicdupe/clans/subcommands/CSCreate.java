@@ -1,5 +1,6 @@
 package xyz.prorickey.classicdupe.clans.subcommands;
 
+import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import xyz.prorickey.classicdupe.Utils;
@@ -27,6 +28,10 @@ public class CSCreate extends ClanSub {
         }
         if(args.length == 0) {
             player.sendMessage(Utils.cmdMsg("&cYou must provide a clan name"));
+            return;
+        }
+        if(ChatColor.stripColor(ChatFormat.format(args[0])).length() != args[0].length()) {
+            player.sendMessage(Utils.cmdMsg("&cYour clan cannot include color codes in it's name"));
             return;
         }
         if(args[0].length() > ClanDatabase.getGlobalConfig().getInt("clans.maxChar")) {
