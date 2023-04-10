@@ -34,6 +34,8 @@ ranks:
     prefix: "<color:#3076F9><bold>MVP</bold> "
   vip:
     prefix: "<color:#16E91B><bold>VIP</bold> "
+  default:
+    prefix: "<color:#A7A7A7>"
 suffix:
   god: "&6&lGOD"
   duper: "&d&lDUPER"

@@ -20,6 +20,7 @@ import com.sk89q.worldguard.protection.flags.StateFlag;
 import com.sk89q.worldguard.protection.regions.ProtectedPolygonalRegion;
 import com.sk89q.worldguard.protection.regions.ProtectedRegion;
 import com.sk89q.worldguard.protection.regions.RegionContainer;
+import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.event.HoverEvent;
 import org.bukkit.Bukkit;
@@ -31,6 +32,7 @@ import org.bukkit.scheduler.BukkitTask;
 import xyz.prorickey.classicdupe.ClassicDupe;
 import xyz.prorickey.classicdupe.Config;
 import xyz.prorickey.classicdupe.Utils;
+import xyz.prorickey.classicdupe.playerevents.koth.KRunnable;
 import xyz.prorickey.classicdupe.playerevents.koth.commands.KothKCMD;
 import xyz.prorickey.classicdupe.playerevents.koth.events.KEPoints;
 
@@ -101,7 +103,7 @@ public class KOTHEventManager {
         region.setPriority(10);
         WorldGuard.getInstance().getPlatform().getRegionContainer()
                 .get(BukkitAdapter.adapt(Bukkit.getWorld("world"))).addRegion(region);
-        carpetTask = new KEPoints.CarpetTask().runTaskTimer(plugin, 0, 10);
+        carpetTask = new KRunnable().runTaskTimer(plugin, 0, 1);
         Bukkit.getOnlinePlayers().forEach(p -> p.sendMessage(Utils.format("<gold><bold>KOTH</bold> <gray>| <yellow>Koth event has started")));
         running = true;
         Bukkit.getScheduler().scheduleSyncDelayedTask(ClassicDupe.getPlugin(), KOTHEventManager::endKOTHEvent, 20*60*30);
@@ -110,6 +112,7 @@ public class KOTHEventManager {
     public static void endKOTHEvent() {
         if(!running) return;
         carpetTask.cancel();
+        KRunnable.bossBars.forEach(Audience::hideBossBar);
         WorldGuard.getInstance().getPlatform().getRegionContainer()
                 .get(BukkitAdapter.adapt(Bukkit.getWorld("world"))).removeRegion(region.getId());
         CuboidRegion rg = new CuboidRegion(BukkitAdapter.adapt(Bukkit.getWorld("world")), region.getMinimumPoint(), region.getMaximumPoint());

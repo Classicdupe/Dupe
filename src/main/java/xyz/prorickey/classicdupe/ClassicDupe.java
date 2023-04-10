@@ -139,8 +139,8 @@ public class ClassicDupe extends JavaPlugin {
             discordCmd.setExecutor(new DiscordCMD());
             discordCmd.setTabCompleter(new DiscordCMD());
         } else {
-            this.getCommand("dc").setExecutor(new DiscordCMD());
-            this.getCommand("dc").setTabCompleter(new DiscordCMD());
+            this.getCommand("discord").setExecutor(new DiscordCMD());
+            this.getCommand("discord").setTabCompleter(new DiscordCMD());
         }
         this.getCommand("enderchest").setExecutor(new EnderChestCMD());
         this.getCommand("enderchest").setTabCompleter(new EnderChestCMD());

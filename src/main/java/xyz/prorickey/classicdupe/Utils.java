@@ -2,7 +2,7 @@ package xyz.prorickey.classicdupe;
 
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.minimessage.MiniMessage;
-import org.bukkit.ChatColor;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 import org.codehaus.plexus.util.StringUtils;
 
@@ -22,7 +22,13 @@ public class Utils {
         return last[0];
     }
 
-    private static Map<String, String> codeToAdventure = new HashMap<>(){{
+    public static String convertAdventureToColorCodes(String text) {
+        final String[] last = {text};
+        codeToAdventure.forEach((code, adv) -> last[0] = last[0].replaceAll(adv, code));
+        return last[0];
+    }
+
+    public static Map<String, String> codeToAdventure = new HashMap<>(){{
         put("&0", "<black>");
         put("&1", "<dark_blue>");
         put("&2", "<dark_green>");
@@ -39,15 +45,15 @@ public class Utils {
         put("&d", "<light_purple>");
         put("&e", "<yellow>");
         put("&f", "<white>");
-        put("&k", "<b>");
-        put("&l", "<em>");
-        put("&m", "<u>");
-        put("&n", "<st>");
-        put("&o", "<obf>");
+        put("&k", "<obf>");
+        put("&l", "<b>");
+        put("&m", "<st>");
+        put("&n", "<u>");
+        put("&o", "<i>");
         put("&r", "<reset>");
     }};
 
-    public static String getPrefix(Player player) {
+    public static String getPrefix(OfflinePlayer player) {
         String rank = ClassicDupe.getLPAPI().getUserManager().getUser(player.getUniqueId()).getCachedData().getMetaData().getPrimaryGroup();
         if(Config.getConfig().getString("ranks." + rank + ".prefix") != null) return Config.getConfig().getString("ranks." + rank + ".prefix");
         return "";
@@ -56,7 +62,7 @@ public class Utils {
 
     public static String centerText(String text) {
         int maxWidth = 80,
-                spaces = (int) Math.round((maxWidth-1.4*ChatColor.stripColor(text).length())/2);
+                spaces = (int) Math.round((maxWidth-1.4*text.length())/2);
         return StringUtils.repeat(" ", spaces)+text;
     }
 }

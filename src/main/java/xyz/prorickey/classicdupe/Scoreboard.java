@@ -5,7 +5,6 @@ import me.lucko.spark.api.statistic.StatisticWindow;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scoreboard.*;
@@ -14,7 +13,6 @@ import xyz.prorickey.classicdupe.clans.ClanMember;
 import xyz.prorickey.classicdupe.database.PlayerDatabase;
 import xyz.prorickey.classicdupe.events.Combat;
 import xyz.prorickey.classicdupe.metrics.Metrics;
-import xyz.prorickey.proutils.ChatFormat;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -49,11 +47,11 @@ public class Scoreboard {
         String clanColor = "<yellow>";
         if(cmem.getClanName() != null) clanColor = ClanDatabase.getClan(ClanDatabase.getClanMember(player.getUniqueId()).getClanID()).getClanColor();
 
-        updateTeamScore(obj, board, 15, Utils.format("<gold><underlined>----------------------"));
+        updateTeamScore(obj, board, 15, Utils.format("<gold><st>\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500"));
         updateTeamScore(obj, board, 14, Utils.format("<gold>\u2022 <yellow>Name <green>" + player.getName()));
         updateTeamScore(obj, board, 13, Utils.format("<gold>\u2022 <yellow>Clan " + (cmem.getClanName() != null ? "<dark_gray>[" + clanColor + cmem.getClanName() + "<dark_gray>]" : "<yellow>No Clan")));
         updateTeamScore(obj, board, 12, MiniMessage.miniMessage().deserialize(("<gold>\u2022 <yellow>Rank " + (Utils.getPrefix(player).equals("") ? "<gray>Default" : Utils.getPrefix(player)))));
-        updateTeamScore(obj, board, 11, Utils.format("<gold>\u2022 <yellow>Suffix " + (Utils.getSuffix(player) != null ? Utils.getSuffix(player) : "<aqua>Unset")));
+        updateTeamScore(obj, board, 11, Utils.format("<gold>\u2022 <yellow>Suffix " + (Utils.getSuffix(player) != null ? Utils.convertColorCodesToAdventure(Utils.getSuffix(player)) : "<aqua>Unset")));
         updateTeamScore(obj, board, 10, Utils.format("<gold>\u2022 <yellow>Ping <green>" + player.getPing() + "ms"));
 
         PlayerDatabase.PlayerStats stats = ClassicDupe.getDatabase().getPlayerDatabase().getStats(player.getUniqueId().toString());
@@ -90,7 +88,7 @@ public class Scoreboard {
             updateTeamScore(obj, board, 2, Utils.format("<gold>\u2022 <yellow>Playtime <green>" + Metrics.getPlayerMetrics().getPlaytimeFormatted(player.getUniqueId())));
         }
 
-        updateTeamScore(obj, board, 1, Utils.format("<gold><underlined>----------------------"));
+        updateTeamScore(obj, board, 1, Utils.format("<gold><st>\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500"));
     }
 
     private static void updateTeamScore(Objective obj, org.bukkit.scoreboard.Scoreboard board, int score, Component value) {
@@ -115,21 +113,21 @@ public class Scoreboard {
     }
 
     private static Map<Integer, String> colors = new HashMap<>(){{
-        put(15, ChatColor.BLACK.toString());
-        put(14, ChatColor.DARK_BLUE.toString());
-        put(13, ChatColor.DARK_GREEN.toString());
-        put(12, ChatColor.DARK_AQUA.toString());
-        put(11, ChatColor.DARK_RED.toString());
-        put(10, ChatColor.DARK_PURPLE.toString());
-        put(9, ChatColor.GRAY.toString());
-        put(8, ChatColor.GOLD.toString());
-        put(7, ChatColor.DARK_GRAY.toString());
-        put(6, ChatColor.BLUE.toString());
-        put(5, ChatColor.GREEN.toString());
-        put(4, ChatColor.AQUA.toString());
-        put(3, ChatColor.RED.toString());
-        put(2, ChatColor.LIGHT_PURPLE.toString());
-        put(1, ChatColor.YELLOW.toString());
+        put(15, "\u00A70");
+        put(14, "\u00A71");
+        put(13, "\u00A72");
+        put(12, "\u00A73");
+        put(11, "\u00A74");
+        put(10, "\u00A75");
+        put(9, "\u00A76");
+        put(8, "\u00A77");
+        put(7, "\u00A78");
+        put(6, "\u00A79");
+        put(5, "\u00A7a");
+        put(4, "\u00A7b");
+        put(3, "\u00A7c");
+        put(2, "\u00A7d");
+        put(1, "\u00A7e");
     }};
 
 }

@@ -14,10 +14,9 @@ public class StaffChat extends ListenerAdapter {
         if(Config.getConfig().getLong("discord.staffchat") != event.getChannel().getIdLong() || event.getAuthor().isBot()) return;
 
         StaffChatCMD.sendToStaffChat(
-                "<dark_gray>[<red>SC<aqua>DSC<dark_gray>] <yellow>" +
+                Utils.format("<dark_gray>[<red>SC<aqua>DSC<dark_gray>] <yellow>" +
                         event.getAuthor().getName() +
-                        Utils.format(" <gray>\u00BB <green>") +
-                        event.getMessage().getContentRaw()
-        );
+                        " <gray>\u00BB <green> " +
+                        event.getMessage().getContentRaw()));
     }
 }

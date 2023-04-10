@@ -82,7 +82,7 @@ public class SuffixCMD implements CommandExecutor, TabCompleter, Listener {
             AtomicInteger i = new AtomicInteger(1);
             suffixesAccessTo.forEach((name, value) -> {
                 ItemStack item = new ItemStack(Material.NAME_TAG);
-                item.editMeta(meta -> meta.displayName(Utils.format(value)));
+                item.editMeta(meta -> meta.displayName(Utils.format(Utils.convertColorCodesToAdventure(value))));
                 gui.setItem(i.get(), item);
                 slotData.put(i.get(), name);
                 i.getAndIncrement();
@@ -110,7 +110,7 @@ public class SuffixCMD implements CommandExecutor, TabCompleter, Listener {
                 if(user.getCachedData().getMetaData().getSuffix() != null) user.data().remove(SuffixNode.builder(user.getCachedData().getMetaData().getSuffix(), 250).build());
                 user.data().add(SuffixNode.builder(suffixes.get(suffixName), 250).build());
             });
-            e.getWhoClicked().sendMessage(Utils.cmdMsg("<green>Enabled the " + suffixes.get(suffixName) + "<green> suffix"));
+            e.getWhoClicked().sendMessage(Utils.cmdMsg("<green>Enabled the " + Utils.convertColorCodesToAdventure(suffixes.get(suffixName)) + "<green> suffix"));
             e.getInventory().close();
         }
     }

@@ -38,11 +38,11 @@ public class ClassicDupeExpansion extends PlaceholderExpansion {
             if(ClanDatabase.getClanMember(player.getUniqueId()).getClanID() != null) {
                 String clan = ClanDatabase.getClanMember(player.getUniqueId()).getClanName();
                 String clanColor = ClanDatabase.getClan(ClanDatabase.getClanMember(player.getUniqueId()).getClanID()).getClanColor();
-                if(data.nickname == null) return player.getName() + " <dark_gray>[" + clanColor + clan + "<dark_gray>]";
-                else return data.nickname + " <dark_gray>[" + clanColor + clan + "<dark_gray>]";
+                if(data.nickname == null) return player.getName() + Utils.convertAdventureToColorCodes(" <dark_gray>[" + clanColor + clan + "<dark_gray>]");
+                else return Utils.convertAdventureToColorCodes(data.nickname) + Utils.convertAdventureToColorCodes(" <dark_gray>[" + clanColor + clan + "<dark_gray>]");
             }
             if(data.nickname == null) return player.getName();
-            else return data.nickname;
+            else return Utils.convertAdventureToColorCodes(data.nickname);
         }
         for(int i = 0; i < 10; i++) {
             if(PlayerDatabase.killsLeaderboard.size() < i+1) return " ";

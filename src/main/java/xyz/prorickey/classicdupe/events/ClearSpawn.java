@@ -23,7 +23,7 @@ public class ClearSpawn implements Listener {
         RegionContainer container = WorldGuard.getInstance().getPlatform().getRegionContainer();
         RegionManager regions = container.get(BukkitAdapter.adapt(e.getPlayer().getWorld()));
         ProtectedRegion region = regions.getRegion("clearspawn");
-        if(region.contains(BukkitAdapter.asBlockVector(e.getBlock().getLocation()))) {
+        if(region != null && region.contains(BukkitAdapter.asBlockVector(e.getBlock().getLocation()))) {
             blockMap.remove(e.getBlockReplacedState().getBlock());
             blockMap.put(e.getBlock(), System.currentTimeMillis());
         }
@@ -34,7 +34,7 @@ public class ClearSpawn implements Listener {
         RegionContainer container = WorldGuard.getInstance().getPlatform().getRegionContainer();
         RegionManager regions = container.get(BukkitAdapter.adapt(e.getPlayer().getWorld()));
         ProtectedRegion region = regions.getRegion("clearspawn");
-        if(region.contains(BukkitAdapter.asBlockVector(e.getBlock().getLocation()))) blockMap.remove(e.getBlock());
+        if(region != null && region.contains(BukkitAdapter.asBlockVector(e.getBlock().getLocation()))) blockMap.remove(e.getBlock());
     }
 
     private static int timeBeforeDestroy = 1000*60*5;
