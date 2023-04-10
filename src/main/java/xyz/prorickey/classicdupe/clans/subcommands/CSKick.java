@@ -10,7 +10,6 @@ import xyz.prorickey.classicdupe.clans.Clan;
 import xyz.prorickey.classicdupe.clans.ClanMember;
 import xyz.prorickey.classicdupe.clans.ClanSub;
 import xyz.prorickey.classicdupe.clans.ClanDatabase;
-import xyz.prorickey.proutils.ChatFormat;
 import xyz.prorickey.proutils.TabComplete;
 
 import java.util.ArrayList;
@@ -21,42 +20,42 @@ public class CSKick extends ClanSub {
     @Override
     public void execute(CommandSender sender, String[] args) {
         if(!(sender instanceof Player player)) {
-            sender.sendMessage(ChatFormat.format("&cYou cannot execute this command from console"));
+            sender.sendMessage(Utils.format("<red>You cannot execute this command from console"));
             return;
         }
         ClanMember cmem = ClanDatabase.getClanMember(player.getUniqueId());
         if(cmem.getClanID() == null) {
-            player.sendMessage(Utils.cmdMsg("&cYou must be in a clan to kick players"));
+            player.sendMessage(Utils.cmdMsg("<red>You must be in a clan to kick players"));
             return;
         }
         if(args.length == 0) {
-            player.sendMessage(Utils.cmdMsg("&cYou must provide a player to kick"));
+            player.sendMessage(Utils.cmdMsg("<red>You must provide a player to kick"));
             return;
         }
         if(cmem.getLevel() < 1) {
-            player.sendMessage(Utils.cmdMsg("&cYou must be either an admin or the owner to kick people from a clan"));
+            player.sendMessage(Utils.cmdMsg("<red>You must be either an admin or the owner to kick people from a clan"));
             return;
         }
         OfflinePlayer offPlayer = Bukkit.getOfflinePlayer(args[0]);
         if(!ClanDatabase.getClan(cmem.getClanID()).getMembers().contains(offPlayer)) {
-            player.sendMessage(Utils.cmdMsg("&cThat player is not in your clan"));
+            player.sendMessage(Utils.cmdMsg("<red>That player is not in your clan"));
             return;
         }
         ClanMember pmem = ClanDatabase.getClanMember(offPlayer.getUniqueId());
         if(!Objects.equals(pmem.getClanID(), cmem.getClanID())) {
-            player.sendMessage(Utils.cmdMsg("&cThat player is not in your clan"));
+            player.sendMessage(Utils.cmdMsg("<red>That player is not in your clan"));
             return;
         }
         if(cmem.getLevel() < 2 && pmem.getLevel() > 1) {
-            player.sendMessage(Utils.cmdMsg("&cYou must be the owner of the clan to kick that player"));
+            player.sendMessage(Utils.cmdMsg("<red>You must be the owner of the clan to kick that player"));
             return;
         }
         Clan clan = ClanDatabase.getClan(cmem.getClanID());
         clan.removePlayer(pmem.getOffPlayer());
         pmem.removeClan();
         ClanDatabase.removeClan(pmem);
-        if(offPlayer.isOnline()) offPlayer.getPlayer().sendMessage(Utils.cmdMsg("&eYou have been kicked from your clan by &6" + player.getName()));
-        player.sendMessage(Utils.cmdMsg("&eKicked &6" + offPlayer.getName() + "&e from your clan"));
+        if(offPlayer.isOnline()) offPlayer.getPlayer().sendMessage(Utils.cmdMsg("<yellow>You have been kicked from your clan by <gold>" + player.getName()));
+        player.sendMessage(Utils.cmdMsg("<yellow>Kicked <gold>" + offPlayer.getName() + "<yellow> from your clan"));
     }
 
     @Override

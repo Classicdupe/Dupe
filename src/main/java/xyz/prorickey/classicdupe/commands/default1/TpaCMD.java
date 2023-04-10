@@ -33,33 +33,32 @@ public class TpaCMD implements CommandExecutor, TabCompleter {
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
         if(!(sender instanceof Player p)) {
-            sender.sendMessage(Utils.cmdMsg("&cYou cannot execute this command from console"));
+            sender.sendMessage(Utils.cmdMsg("<red>You cannot execute this command from console"));
             return true;
         }
         if(args.length == 0) {
-            p.sendMessage(Utils.cmdMsg("&cYou must include who you would like to teleport to"));
+            p.sendMessage(Utils.cmdMsg("<red>You must include who you would like to teleport to"));
             return true;
         }
         if(Combat.inCombat.containsKey(p)) {
-            p.sendMessage(Utils.cmdMsg("&cYou cannot execute this command in combat"));
+            p.sendMessage(Utils.cmdMsg("<red>You cannot execute this command in combat"));
             return true;
         }
         Player recipient = Bukkit.getServer().getPlayer(args[0]);
         if(recipient == null || !recipient.isOnline()) {
-            sender.sendMessage(Utils.cmdMsg("&e" + args[0] + " &cis not currently online"));
+            sender.sendMessage(Utils.cmdMsg("<yellow>" + args[0] + " <red>is not currently online"));
             return true;
         }
         recipient.sendMessage(
-                Component.text(Utils.cmdMsg("&e" + p.getName() + "&a is asking to teleport to you "))
-                        .append(Component.text(ChatFormat.format("&8[&a&lACCEPT&8]"))
+                Utils.cmdMsg("<yellow>" + p.getName() + "<green> is asking to teleport to you ")
+                        .append(Utils.format("<dark_gray>[<green><b>ACCEPT<dark_gray>]")
                                 .clickEvent(ClickEvent.clickEvent(ClickEvent.Action.RUN_COMMAND, "/tpaccept " + p.getName()))
-                                .hoverEvent(HoverEvent.hoverEvent(HoverEvent.Action.SHOW_TEXT, Component.text(ChatFormat.format("&aClick to accept teleport request")))))
+                                .hoverEvent(HoverEvent.hoverEvent(HoverEvent.Action.SHOW_TEXT, Utils.format("<green>Click to accept teleport request"))))
                         .append(Component.text(" "))
-                        .append(Component.text(ChatFormat.format("&8[&c&lDECLINE&8]"))
+                        .append(Utils.format("<dark_gray>[<red><b>DECLINE<dark_gray>]"))
                                 .clickEvent(ClickEvent.clickEvent(ClickEvent.Action.RUN_COMMAND, "/tpadecline " + p.getName()))
-                                .hoverEvent(HoverEvent.hoverEvent(HoverEvent.Action.SHOW_TEXT, Component.text(ChatFormat.format("&aClick to decline teleport request")))))
-        );
-        p.sendMessage(Utils.cmdMsg("&aTPA request has been send to &e" + recipient.getName()));
+                                .hoverEvent(HoverEvent.hoverEvent(HoverEvent.Action.SHOW_TEXT, Utils.format("<green>Click to decline teleport request"))));
+        p.sendMessage(Utils.cmdMsg("<green>TPA request has been send to <yellow>" + recipient.getName()));
         tpaRequests.put(p, recipient);
         tpaRequestTimes.put(p, System.currentTimeMillis());
         return true;
@@ -77,7 +76,7 @@ public class TpaCMD implements CommandExecutor, TabCompleter {
             Map<Player, Long> tempTpaRequestTimes = new HashMap<>(TpaCMD.tpaRequestTimes);
             tempTpaRequestTimes.forEach((player, time) -> {
                 if((time + (1000*60)) < System.currentTimeMillis() && TpaCMD.tpaRequests.containsKey(player)) {
-                    player.sendMessage(Utils.cmdMsg("&cTPA request to &e" + TpaCMD.tpaRequests.get(player).getName() + "&c has timed out"));
+                    player.sendMessage(Utils.cmdMsg("<red>TPA request to <yellow>" + TpaCMD.tpaRequests.get(player).getName() + "<red> has timed out"));
                     TpaCMD.tpaRequests.remove(player);
                     TpaCMD.tpaRequestTimes.remove(player);
                 }

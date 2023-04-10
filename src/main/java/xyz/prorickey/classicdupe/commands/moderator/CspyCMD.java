@@ -20,15 +20,15 @@ public class CspyCMD implements CommandExecutor, TabCompleter {
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
         if(!(sender instanceof Player player)) {
-            sender.sendMessage(Utils.cmdMsg("&cYou cannot execute this command from console"));
+            sender.sendMessage(Utils.cmdMsg("<red>You cannot execute this command from console"));
             return true;
         }
         if(!cspyList.contains(player)) {
             cspyList.add(player);
-            player.sendMessage(Utils.cmdMsg("&aTurned on Command Spy"));
+            player.sendMessage(Utils.cmdMsg("<green>Turned on Command Spy"));
         } else {
             cspyList.remove(player);
-            player.sendMessage(Utils.cmdMsg("&cTurned off Command Spy"));
+            player.sendMessage(Utils.cmdMsg("<red>Turned off Command Spy"));
         }
         return true;
     }

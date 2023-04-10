@@ -18,11 +18,11 @@ public class ScheduleRestartCMD implements CommandExecutor, TabCompleter {
         if(args.length > 0 && args[0].equals("cancel") && ClassicDupe.restartInProgress) {
             ClassicDupe.scheduledRestartCanceled = true;
             ClassicDupe.restartInProgress = false;
-            ClassicDupe.rawBroadcast("&aThe server restart has been cancelled");
+            ClassicDupe.rawBroadcast("<green>The server restart has been cancelled");
             return true;
         }
         ClassicDupe.scheduleRestart();
-        sender.sendMessage(Utils.cmdMsg("&aThe server will restart in 60 seconds"));
+        sender.sendMessage(Utils.cmdMsg("<green>The server will restart in 60 seconds"));
         return true;
     }
 

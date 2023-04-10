@@ -28,7 +28,7 @@ public class LinkCMD implements CommandExecutor, TabCompleter {
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
         if(!(sender instanceof Player player)) {
-            sender.sendMessage(Utils.cmdMsg("&cYou cannot execute this command from console"));
+            sender.sendMessage(Utils.cmdMsg("<red>You cannot execute this command from console"));
             return true;
         }
         for(int i = 0; i < linkCodes.size(); i++) {
@@ -37,15 +37,15 @@ public class LinkCMD implements CommandExecutor, TabCompleter {
             if(linkCode.player.equals(player)) linkCodes.remove(code);
         }
         if(ClassicDupe.getDatabase().getLinkingDatabase().getLinkFromUUID(player.getUniqueId().toString()) != null) {
-            player.sendMessage(Utils.cmdMsg("&cYou must unlink your account with /unlink before you can link again"));
+            player.sendMessage(Utils.cmdMsg("<red>You must unlink your account with /unlink before you can link again"));
             return true;
         }
         String code = genCode();
         linkCodes.put(code, new LinkCode(code, player, System.currentTimeMillis()));
-        player.sendMessage(Component.text(Utils.cmdMsg("&aPlease go onto the ClassicDupe discord and execute the command "))
-                .append(Component.text(ChatFormat.format("&e/link " + code))
+        player.sendMessage(Utils.cmdMsg("<green>Please go onto the ClassicDupe discord and execute the command ")
+                .append(Utils.format("<yellow>/link " + code))
                         .clickEvent(ClickEvent.clickEvent(ClickEvent.Action.COPY_TO_CLIPBOARD, "/link " + code))
-                        .hoverEvent(HoverEvent.hoverEvent(HoverEvent.Action.SHOW_TEXT, Component.text(ChatFormat.format("&7Copy this command into discord"))))));
+                        .hoverEvent(HoverEvent.hoverEvent(HoverEvent.Action.SHOW_TEXT, Utils.format("<gray>Copy this command into discord"))));
         return true;
     }
 

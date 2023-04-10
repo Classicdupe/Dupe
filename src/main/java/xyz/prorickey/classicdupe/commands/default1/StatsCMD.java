@@ -21,19 +21,19 @@ public class StatsCMD implements CommandExecutor, TabCompleter {
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
         if(args.length == 0) {
-            sender.sendMessage(Utils.cmdMsg("&cPlease include a player to get the stats of"));
+            sender.sendMessage(Utils.cmdMsg("<red>Please include a player to get the stats of"));
             return true;
         }
         OfflinePlayer tarj = Bukkit.getOfflinePlayer(args[0]);
         PlayerDatabase.PlayerStats stats = ClassicDupe.getDatabase().getPlayerDatabase().getStats(tarj.getUniqueId().toString());
         if(stats == null) {
-            sender.sendMessage(Utils.cmdMsg("&cThat player has not joined the server before"));
+            sender.sendMessage(Utils.cmdMsg("<red>That player has not joined the server before"));
             return true;
         }
-        sender.sendMessage(Utils.cmdMsg("&aStats of &e" + tarj.getName()));
-        sender.sendMessage(ChatFormat.format("&7- &aKills: &e" + stats.kills));
-        sender.sendMessage(ChatFormat.format("&7- &aDeaths: &e" + stats.deaths));
-        sender.sendMessage(ChatFormat.format("&7- &aKDR: &e" + stats.kdr));
+        sender.sendMessage(Utils.cmdMsg("<green>Stats of <yellow>" + tarj.getName()));
+        sender.sendMessage(Utils.format("<gray>- <green>Kills: <yellow>" + stats.kills));
+        sender.sendMessage(Utils.format("<gray>- <green>Deaths: <yellow>" + stats.deaths));
+        sender.sendMessage(Utils.format("<gray>- <green>KDR: <yellow>" + stats.kdr));
         return true;
     }
 

@@ -21,7 +21,7 @@ public class PearlCooldown implements Listener {
             if(pearlCooldown.containsKey(e.getPlayer()) && (pearlCooldown.get(e.getPlayer())+30) > System.currentTimeMillis()) {
                 e.setCancelled(true);
                 Long wait = (pearlCooldown.get(e.getPlayer()) + (cooldown))-System.currentTimeMillis();
-                e.getPlayer().sendMessage(Utils.cmdMsg("&cYou cannot throw a pearl for another " + Math.round(wait/1000) + " second(s)"));
+                e.getPlayer().sendMessage(Utils.cmdMsg("<red>You cannot throw a pearl for another " + Math.round(wait/1000) + " second(s)"));
             } else pearlCooldown.put(e.getPlayer(), System.currentTimeMillis());
         }
     }

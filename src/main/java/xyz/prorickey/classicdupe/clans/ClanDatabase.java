@@ -105,7 +105,7 @@ public class ClanDatabase {
         clanNames.add(clan.getClanName());
         Bukkit.getScheduler().runTaskAsynchronously(ClassicDupe.getPlugin(), () -> {
             try {
-                main.prepareStatement("INSERT INTO clans(clanId, clanName, clanKills, publicClan, clanColor) VALUES('" + id + "', '" + name + "', 0, false, '&e')").execute();
+                main.prepareStatement("INSERT INTO clans(clanId, clanName, clanKills, publicClan, clanColor) VALUES('" + id + "', '" + name + "', 0, false, '<yellow>')").execute();
                 main.prepareStatement("UPDATE players SET clanId='" + id + "', clanName='" + name + "', level=3 WHERE uuid='" + owner.getUniqueId() + "'").execute();
             } catch (SQLException e) {
                 throw new RuntimeException(e);
@@ -446,7 +446,7 @@ public class ClanDatabase {
 
         public static void init(YamlConfiguration config) {
             config.set("publicClan", true);
-            config.set("clanColor", "&e");
+            config.set("clanColor", "<yellow>");
         }
 
         private void save() {

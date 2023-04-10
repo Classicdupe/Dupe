@@ -23,11 +23,11 @@ public class HeadCMD implements CommandExecutor, TabCompleter {
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
         if(!(sender instanceof Player p)) {
-            sender.sendMessage(Utils.cmdMsg("&cYou cannot execute this command from console"));
+            sender.sendMessage(Utils.cmdMsg("<red>You cannot execute this command from console"));
             return true;
         }
         if(args.length < 1) {
-            p.sendMessage(Utils.cmdMsg("&cYou need to provide a player's name"));
+            p.sendMessage(Utils.cmdMsg("<red>You need to provide a player's name"));
             return true;
         }
         OfflinePlayer tarj = Bukkit.getOfflinePlayer(args[0]);
@@ -36,7 +36,7 @@ public class HeadCMD implements CommandExecutor, TabCompleter {
         meta.setOwningPlayer(tarj);
         skull.setItemMeta(meta);
         p.getInventory().addItem(skull);
-        p.sendMessage(Utils.cmdMsg("&aHead of &e" + tarj.getName() + "&a given"));
+        p.sendMessage(Utils.cmdMsg("<green>Head of <yellow>" + tarj.getName() + "<green> given"));
         return true;
     }
 

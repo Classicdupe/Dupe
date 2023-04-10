@@ -18,10 +18,10 @@ public class MutechatCMD implements CommandExecutor, TabCompleter {
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
         if(Chat.mutedChat) {
             Chat.mutedChat = false;
-            ClassicDupe.rawBroadcast("&cThe chat has been unmuted");
+            ClassicDupe.rawBroadcast("<red>The chat has been unmuted");
         } else {
             Chat.mutedChat = true;
-            ClassicDupe.rawBroadcast("&cThe chat has been muted");
+            ClassicDupe.rawBroadcast("<red>The chat has been muted");
         }
         return true;
     }

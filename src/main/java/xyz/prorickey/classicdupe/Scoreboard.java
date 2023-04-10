@@ -3,6 +3,7 @@ package xyz.prorickey.classicdupe;
 import me.lucko.spark.api.SparkProvider;
 import me.lucko.spark.api.statistic.StatisticWindow;
 import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
@@ -42,25 +43,25 @@ public class Scoreboard {
                 board.getObjective(player.getUniqueId().toString());
 
         if(obj.getDisplaySlot() != DisplaySlot.SIDEBAR) obj.setDisplaySlot(DisplaySlot.SIDEBAR);
-        if(!obj.displayName().equals(Component.text(ChatFormat.format("&a&lClassicDupe")))) obj.displayName(Component.text(ChatFormat.format("&a&lClassicDupe")));
+        if(!obj.displayName().equals(Utils.format("<green><bold>ClassicDupe"))) obj.displayName(Utils.format("<green><bold>ClassicDupe"));
 
         ClanMember cmem = ClanDatabase.getClanMember(player.getUniqueId());
-        String clanColor = "&e";
+        String clanColor = "<yellow>";
         if(cmem.getClanName() != null) clanColor = ClanDatabase.getClan(ClanDatabase.getClanMember(player.getUniqueId()).getClanID()).getClanColor();
 
-        updateTeamScore(obj, board, 15, "&0&6&m----------------------");
-        updateTeamScore(obj, board, 14, "&6\u2022 &eName &a" + player.getName());
-        updateTeamScore(obj, board, 13, "&6\u2022 &eClan " + (cmem.getClanName() != null ? "&8[" + clanColor + cmem.getClanName() + "&8]" : "&eNo Clan"));
-        updateTeamScore(obj, board, 12, ("&6\u2022 &eRank " + (Utils.getPrefix(player).equals("") ? "&7Default" : Utils.getPrefix(player))));
-        updateTeamScore(obj, board, 11, "&6\u2022 &eSuffix " + (Utils.getSuffix(player) != null ? Utils.getSuffix(player) : "&bUnset"));
-        updateTeamScore(obj, board, 10, "&6\u2022 &ePing &a" + player.getPing() + "ms");
+        updateTeamScore(obj, board, 15, Utils.format("<gold><underlined>----------------------"));
+        updateTeamScore(obj, board, 14, Utils.format("<gold>\u2022 <yellow>Name <green>" + player.getName()));
+        updateTeamScore(obj, board, 13, Utils.format("<gold>\u2022 <yellow>Clan " + (cmem.getClanName() != null ? "<dark_gray>[" + clanColor + cmem.getClanName() + "<dark_gray>]" : "<yellow>No Clan")));
+        updateTeamScore(obj, board, 12, MiniMessage.miniMessage().deserialize(("<gold>\u2022 <yellow>Rank " + (Utils.getPrefix(player).equals("") ? "<gray>Default" : Utils.getPrefix(player)))));
+        updateTeamScore(obj, board, 11, Utils.format("<gold>\u2022 <yellow>Suffix " + (Utils.getSuffix(player) != null ? Utils.getSuffix(player) : "<aqua>Unset")));
+        updateTeamScore(obj, board, 10, Utils.format("<gold>\u2022 <yellow>Ping <green>" + player.getPing() + "ms"));
 
         PlayerDatabase.PlayerStats stats = ClassicDupe.getDatabase().getPlayerDatabase().getStats(player.getUniqueId().toString());
 
-        updateTeamScore(obj, board, 9, "&6\u2022 &eKills &a" + stats.kills);
-        updateTeamScore(obj, board, 8, "&6\u2022 &eDeaths &a" + stats.deaths);
-        updateTeamScore(obj, board, 7, "&6\u2022 &eKDR &a" + stats.kdr);
-        updateTeamScore(obj, board, 6, " ");
+        updateTeamScore(obj, board, 9, Utils.format("<gold>\u2022 <yellow>Kills <green>" + stats.kills));
+        updateTeamScore(obj, board, 8, Utils.format("<gold>\u2022 <yellow>Deaths <green>" + stats.deaths));
+        updateTeamScore(obj, board, 7, Utils.format("<gold>\u2022 <yellow>KDR <green>" + stats.kdr));
+        updateTeamScore(obj, board, 6, Component.text(" "));
 
         // Server Stats
         if(Combat.inCombat.containsKey(player) && Combat.whoHitWho.get(player) != null) {
@@ -70,35 +71,35 @@ public class Scoreboard {
 
             long timeLeft = 15-(Math.round((System.currentTimeMillis()-Combat.inCombat.get(player))/1000));
 
-            updateTeamScore(obj, board, 5, "&6\u2022 &cFighting &e" + Combat.whoHitWho.get(player).getName());
-            updateTeamScore(obj, board, 4, "&6\u2022 &cStats &e" + menaceStats.kills + "K " + menaceStats.deaths + "D");
-            updateTeamScore(obj, board, 3, "&6\u2022 &cKDR &e" + menaceStats.kdr);
-            updateTeamScore(obj, board, 2, "&6\u2022 &cTimer &e" + timeLeft);
+            updateTeamScore(obj, board, 5, Utils.format("<gold>\u2022 <red>Fighting <yellow>" + Combat.whoHitWho.get(player).getName()));
+            updateTeamScore(obj, board, 4, Utils.format("<gold>\u2022 <red>Stats <yellow>" + menaceStats.kills + "K " + menaceStats.deaths + "D"));
+            updateTeamScore(obj, board, 3, Utils.format("<gold>\u2022 <red>KDR <yellow>" + menaceStats.kdr));
+            updateTeamScore(obj, board, 2, Utils.format("<gold>\u2022 <red>Timer <yellow>" + timeLeft));
         } else {
             // Server Stats
 
             long tps = Math.round(SparkProvider.get().tps().poll(StatisticWindow.TicksPerSecond.MINUTES_5));
             String tpsStr;
-            if(tps > 18) tpsStr = "&a" + tps;
-            else if(tps > 12) tpsStr = "&e" + tps;
-            else tpsStr = "&c" + tps;
+            if(tps > 18) tpsStr = "<green>" + tps;
+            else if(tps > 12) tpsStr = "<yellow>" + tps;
+            else tpsStr = "<red>" + tps;
 
-            updateTeamScore(obj, board, 5, "&6\u2022 &eTPS " + tpsStr);
-            updateTeamScore(obj, board, 4, "&6\u2022 &eOnline &a" + Bukkit.getOnlinePlayers().size());
-            updateTeamScore(obj, board, 3, "&6\u2022 &eUptime &a" + Metrics.getServerMetrics().getServerUptimeFormatted());
-            updateTeamScore(obj, board, 2, "&6\u2022 &ePlaytime &a" + Metrics.getPlayerMetrics().getPlaytimeFormatted(player.getUniqueId()));
+            updateTeamScore(obj, board, 5, Utils.format("<gold>\u2022 <yellow>TPS " + tpsStr));
+            updateTeamScore(obj, board, 4, Utils.format("<gold>\u2022 <yellow>Online <green>" + Bukkit.getOnlinePlayers().size()));
+            updateTeamScore(obj, board, 3, Utils.format("<gold>\u2022 <yellow>Uptime <green>" + Metrics.getServerMetrics().getServerUptimeFormatted()));
+            updateTeamScore(obj, board, 2, Utils.format("<gold>\u2022 <yellow>Playtime <green>" + Metrics.getPlayerMetrics().getPlaytimeFormatted(player.getUniqueId())));
         }
 
-        updateTeamScore(obj, board, 1, "&1&6&m----------------------");
+        updateTeamScore(obj, board, 1, Utils.format("<gold><underlined>----------------------"));
     }
 
-    private static void updateTeamScore(Objective obj, org.bukkit.scoreboard.Scoreboard board, int score, String value) {
+    private static void updateTeamScore(Objective obj, org.bukkit.scoreboard.Scoreboard board, int score, Component value) {
         String color = colors.get(score);
         Team line = board.getTeam(color) == null ?
                 board.registerNewTeam(color) :
                 board.getTeam(color);
         line.addEntry(color);
-        line.prefix(Component.text(ChatFormat.format(value)));
+        line.prefix(value);
         obj.getScore(color).setScore(score);
     }
 

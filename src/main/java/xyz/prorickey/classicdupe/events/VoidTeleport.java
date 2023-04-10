@@ -13,7 +13,7 @@ public class VoidTeleport implements Listener {
     public void onPlayerMove(PlayerMoveEvent e) {
         if(e.getPlayer().getLocation().getY() < -64) {
             if(Combat.inCombat.containsKey(e.getPlayer())) {
-                ClassicDupe.rawBroadcast("&e" + e.getPlayer().getName() + "&c just jumped into the void while in combat");
+                ClassicDupe.rawBroadcast("<yellow>" + e.getPlayer().getName() + "<red> just jumped into the void while in combat");
                 ClassicDupe.getDatabase().getPlayerDatabase().addDeath(e.getPlayer().getUniqueId().toString());
             }
             e.getPlayer().teleport(ClassicDupe.getDatabase().spawn);

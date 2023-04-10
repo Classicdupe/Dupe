@@ -21,25 +21,25 @@ public class NetherCMD implements CommandExecutor, TabCompleter {
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
         if(args.length == 0) {
             if(!(sender instanceof Player player)) {
-                sender.sendMessage(Utils.cmdMsg("&cYou cannot execute this command from console"));
+                sender.sendMessage(Utils.cmdMsg("<red>You cannot execute this command from console"));
                 return true;
             }
             if(Combat.inCombat.containsKey(player)) {
-                player.sendMessage(Utils.cmdMsg("&cYou cannot execute this command in combat"));
+                player.sendMessage(Utils.cmdMsg("<red>You cannot execute this command in combat"));
                 return true;
             }
             player.teleport(ClassicDupe.getDatabase().getNetherSpawn());
-            Utils.cmdMsg("&aTeleported you to the nether");
+            Utils.cmdMsg("<green>Teleported you to the nether");
         } else {
             if(!sender.hasPermission("default.spawn.others")) return true;
             Player p = Bukkit.getServer().getPlayer(args[0]);
             if(p == null || !p.isOnline()) {
-                sender.sendMessage(Utils.cmdMsg("&cThat player is not currently on the server"));
+                sender.sendMessage(Utils.cmdMsg("<red>That player is not currently on the server"));
                 return true;
             }
             p.teleport(ClassicDupe.getDatabase().getNetherSpawn());
-            Utils.cmdMsg("&aYou were sent to the nether by &e" + sender.getName());
-            Utils.cmdMsg("&aSent &e" + p.getName() + "&a to the nether");
+            Utils.cmdMsg("<green>You were sent to the nether by <yellow>" + sender.getName());
+            Utils.cmdMsg("<green>Sent <yellow>" + p.getName() + "<green> to the nether");
         }
         return true;
     }

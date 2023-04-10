@@ -26,8 +26,6 @@ import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
-import org.bukkit.event.HandlerList;
-import org.bukkit.event.Listener;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitTask;
 import xyz.prorickey.classicdupe.ClassicDupe;
@@ -35,7 +33,6 @@ import xyz.prorickey.classicdupe.Config;
 import xyz.prorickey.classicdupe.Utils;
 import xyz.prorickey.classicdupe.playerevents.koth.commands.KothKCMD;
 import xyz.prorickey.classicdupe.playerevents.koth.events.KEPoints;
-import xyz.prorickey.proutils.ChatFormat;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -90,7 +87,7 @@ public class KOTHEventManager {
             Bukkit.getLogger().severe(e.getMessage());
             Bukkit.getOnlinePlayers().forEach(p -> {
                 if(p.hasPermission("koth.verbose")) p.sendMessage(Utils.cmdMsg(
-                        "&cKOTH Attempted to load schematic but failed. Canceling event."
+                        "<red>KOTH Attempted to load schematic but failed. Canceling event."
                 ));
             });
             return;
@@ -105,7 +102,7 @@ public class KOTHEventManager {
         WorldGuard.getInstance().getPlatform().getRegionContainer()
                 .get(BukkitAdapter.adapt(Bukkit.getWorld("world"))).addRegion(region);
         carpetTask = new KEPoints.CarpetTask().runTaskTimer(plugin, 0, 10);
-        Bukkit.getOnlinePlayers().forEach(p -> p.sendMessage(ChatFormat.format("&6&lKOTH &7| &eKoth event has started")));
+        Bukkit.getOnlinePlayers().forEach(p -> p.sendMessage(Utils.format("<gold><bold>KOTH</bold> <gray>| <yellow>Koth event has started")));
         running = true;
         Bukkit.getScheduler().scheduleSyncDelayedTask(ClassicDupe.getPlugin(), KOTHEventManager::endKOTHEvent, 20*60*30);
     }
@@ -144,34 +141,34 @@ public class KOTHEventManager {
             List<PlayerKothData> topPointsList = topPoints.values().stream().toList();
             List<PlayerKothData> topKillsList = topKills.values().stream().toList();
             Bukkit.getOnlinePlayers().forEach(p -> {
-                p.sendMessage(ChatFormat.format("&e&lThe KOTH event has ended"));
-                p.sendMessage(ChatFormat.format("&e--- &6Top Points &e---"));
-                p.sendMessage(Component.text(ChatFormat.format("&e1. " + topPointsList.get(0).getOffPlayer().getName() + " - " + topPointsList.get(0).getPoints()))
+                p.sendMessage(Utils.format("<yellow><b>The KOTH event has ended"));
+                p.sendMessage(Utils.format("<yellow>--- <gold>Top Points <yellow>---"));
+                p.sendMessage(Utils.format("<yellow>1. " + topPointsList.get(0).getOffPlayer().getName() + " - " + topPointsList.get(0).getPoints())
                         .hoverEvent(HoverEvent.showText(
-                                Component.text(ChatFormat.format("&eKOTH Stats\n&aKills &7- &e" + topPointsList.get(0).getKills() + "\n&aDeaths &7- &e" + topPointsList.get(0).getDeaths() + "\n&aPoints &7- &e" + topPointsList.get(0).getPoints()))
-                        )));
-                p.sendMessage(Component.text(ChatFormat.format("&e2. " + topPointsList.get(1).getOffPlayer().getName() + " - " + topPointsList.get(1).getPoints()))
+                                Utils.format("<yellow>KOTH Stats\n<green>Kills <gray>>- <yellow>" + topPointsList.get(0).getKills() + "\n<green>Deaths <gray>>- <yellow>" + topPointsList.get(0).getDeaths() + "\n<green>Points <gray>>- <yellow>" + topPointsList.get(0).getPoints()))
+                        ));
+                p.sendMessage(Utils.format("<yellow>2. " + topPointsList.get(1).getOffPlayer().getName() + " - " + topPointsList.get(1).getPoints())
                         .hoverEvent(HoverEvent.showText(
-                                Component.text(ChatFormat.format("&eKOTH Stats\n&aKills &7- &e" + topPointsList.get(1).getKills() + "\n&aDeaths &7- &e" + topPointsList.get(1).getDeaths() + "\n&aPoints &7- &e" + topPointsList.get(1).getPoints()))
-                        )));
-                p.sendMessage(Component.text(ChatFormat.format("&e3. " + topPointsList.get(2).getOffPlayer().getName() + " - " + topPointsList.get(2).getPoints()))
+                                Utils.format("<yellow>KOTH Stats\n<green>Kills <gray>>- <yellow>" + topPointsList.get(1).getKills() + "\n<green>Deaths <gray>>- <yellow>" + topPointsList.get(1).getDeaths() + "\n<green>Points <gray>>- <yellow>" + topPointsList.get(1).getPoints()))
+                        ));
+                p.sendMessage(Utils.format("<yellow>3. " + topPointsList.get(2).getOffPlayer().getName() + " - " + topPointsList.get(2).getPoints())
                         .hoverEvent(HoverEvent.showText(
-                                Component.text(ChatFormat.format("&eKOTH Stats\n&aKills &7- &e" + topPointsList.get(2).getKills() + "\n&aDeaths &7- &e" + topPointsList.get(2).getDeaths() + "\n&aPoints &7- &e" + topPointsList.get(2).getPoints()))
-                        )));
+                                Utils.format("<yellow>KOTH Stats\n<green>Kills <gray>>- <yellow>" + topPointsList.get(2).getKills() + "\n<green>Deaths <gray>>- <yellow>" + topPointsList.get(2).getDeaths() + "\n<green>Points <gray>>- <yellow>" + topPointsList.get(2).getPoints()))
+                        ));
                 p.sendMessage(" ");
-                p.sendMessage(ChatFormat.format("&e--- &6Top Kills &e---"));
-                p.sendMessage(Component.text(ChatFormat.format("&e1. " + topKillsList.get(0).getOffPlayer().getName() + " - " + topKillsList.get(0).getKills()))
+                p.sendMessage(Utils.format("<yellow>--- <gold>Top Kills <yellow>---"));
+                p.sendMessage(Utils.format("<yellow>1. " + topKillsList.get(0).getOffPlayer().getName() + " - " + topKillsList.get(0).getKills())
                         .hoverEvent(HoverEvent.showText(
-                                Component.text(ChatFormat.format("&eKOTH Stats\n&aKills &7- &e" + topKillsList.get(0).getKills() + "\n&aDeaths &7- &e" + topKillsList.get(0).getDeaths() + "\n&aPoints &7- &e" + topKillsList.get(0).getPoints()))
-                        )));
-                p.sendMessage(Component.text(ChatFormat.format("&e2. " + topKillsList.get(1).getOffPlayer().getName() + " - " + topKillsList.get(1).getKills()))
+                                Utils.format("<yellow>KOTH Stats\n<green>Kills <gray>>- <yellow>" + topKillsList.get(0).getKills() + "\n<green>Deaths <gray>>- <yellow>" + topKillsList.get(0).getDeaths() + "\n<green>Points <gray>>- <yellow>" + topKillsList.get(0).getPoints()))
+                        ));
+                p.sendMessage(Utils.format("<yellow>2. " + topKillsList.get(1).getOffPlayer().getName() + " - " + topKillsList.get(1).getKills())
                         .hoverEvent(HoverEvent.showText(
-                                Component.text(ChatFormat.format("&eKOTH Stats\n&aKills &7- &e" + topKillsList.get(1).getKills() + "\n&aDeaths &7- &e" + topKillsList.get(1).getDeaths() + "\n&aPoints &7- &e" + topKillsList.get(1).getPoints()))
-                        )));
-                p.sendMessage(Component.text(ChatFormat.format("&e3. " + topKillsList.get(2).getOffPlayer().getName() + " - " + topKillsList.get(2).getKills()))
+                                Utils.format("<yellow>KOTH Stats\n<green>Kills <gray>>- <yellow>" + topKillsList.get(1).getKills() + "\n<green>Deaths <gray>>- <yellow>" + topKillsList.get(1).getDeaths() + "\n<green>Points <gray>>- <yellow>" + topKillsList.get(1).getPoints()))
+                        ));
+                p.sendMessage(Utils.format("<yellow>3. " + topKillsList.get(2).getOffPlayer().getName() + " - " + topKillsList.get(2).getKills())
                         .hoverEvent(HoverEvent.showText(
-                                Component.text(ChatFormat.format("&eKOTH Stats\n&aKills &7- &e" + topKillsList.get(2).getKills() + "\n&aDeaths &7- &e" + topKillsList.get(2).getDeaths() + "\n&aPoints &7- &e" + topKillsList.get(2).getPoints()))
-                        )));
+                                Utils.format("<yellow>KOTH Stats\n<green>Kills <gray>>- <yellow>" + topKillsList.get(2).getKills() + "\n<green>Deaths <gray>>- <yellow>" + topKillsList.get(2).getDeaths() + "\n<green>Points <gray>>- <yellow>" + topKillsList.get(2).getPoints()))
+                        ));
             });
         }
         kothData = new HashMap<>();

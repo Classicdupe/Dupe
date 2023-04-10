@@ -22,39 +22,45 @@ public class StaffChatCMD implements CommandExecutor, TabCompleter {
 
     public static void sendToStaffChat(String text) {
         ClassicDupe.getPlugin().getServer().getOnlinePlayers().forEach(p -> {
-            if(p.hasPermission("mod.staffchat")) p.sendMessage(ChatFormat.format(text));
+            if(p.hasPermission("mod.staffchat")) p.sendMessage(Utils.format(text));
+        });
+    }
+
+    public static void sendToStaffChat(Component comp) {
+        ClassicDupe.getPlugin().getServer().getOnlinePlayers().forEach(p -> {
+            if(p.hasPermission("mod.staffchat")) p.sendMessage(comp);
         });
     }
 
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
         if(!(sender instanceof Player p)) {
-            sender.sendMessage(Utils.cmdMsg("&cYou cannot execute this command from console."));
+            sender.sendMessage(Utils.cmdMsg("<red>You cannot execute this command from console."));
             return true;
         }
         if(args.length == 0) {
             if(staffChatPlayers.contains(p)) {
                 staffChatPlayers.remove(p);
-                p.sendMessage(Utils.cmdMsg("&cTurned off StaffChat"));
+                p.sendMessage(Utils.cmdMsg("<red>Turned off StaffChat"));
             } else {
                 staffChatPlayers.add(p);
-                p.sendMessage(Utils.cmdMsg("&aTurned on StaffChat"));
+                p.sendMessage(Utils.cmdMsg("<green>Turned on StaffChat"));
             }
         } else {
             if(args[0].equalsIgnoreCase("on")) {
                 if(staffChatPlayers.contains(p)) {
-                    p.sendMessage(Utils.cmdMsg("&cYour staffchat is already on"));
+                    p.sendMessage(Utils.cmdMsg("<red>Your staffchat is already on"));
                     return true;
                 }
                 staffChatPlayers.add(p);
-                p.sendMessage(Component.text(Utils.cmdMsg("&aTurned your staffchat on")));
+                p.sendMessage(Utils.cmdMsg("<green>Turned your staffchat on"));
             } else if(args[0].equalsIgnoreCase("off")) {
                 if(!staffChatPlayers.contains(p)) {
-                    p.sendMessage(Utils.cmdMsg("&cYour staffchat is already off"));
+                    p.sendMessage(Utils.cmdMsg("<red>Your staffchat is already off"));
                     return true;
                 }
                 staffChatPlayers.remove(p);
-                p.sendMessage(Utils.cmdMsg("&aTurned your staffchat off"));
+                p.sendMessage(Utils.cmdMsg("<green>Turned your staffchat off"));
             }
         }
         return true;

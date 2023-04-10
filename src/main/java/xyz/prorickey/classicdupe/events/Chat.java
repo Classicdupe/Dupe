@@ -32,23 +32,23 @@ public class Chat implements Listener {
     public void onChat(AsyncChatEvent e) {
         if(!ClassicDupe.getDatabase().getFilterDatabase().checkMessage(PlainTextComponentSerializer.plainText().serialize(e.message()).toLowerCase())) {
             e.setCancelled(true);
-            e.getPlayer().sendMessage(Utils.cmdMsg("&cYour message has been blocked by the filter"));
+            e.getPlayer().sendMessage(Utils.cmdMsg("<red>Your message has been blocked by the filter"));
             return;
         }
         if(mutedChat && !e.getPlayer().hasPermission("mod.mutechat.bypass")) {
             e.setCancelled(true);
-            e.getPlayer().sendMessage(Utils.cmdMsg("&cThe chat is currently muted"));
+            e.getPlayer().sendMessage(Utils.cmdMsg("<red>The chat is currently muted"));
             return;
         }
         if(chatCooldown.containsKey(e.getPlayer()) && chatCooldown.get(e.getPlayer()) > System.currentTimeMillis()) {
             e.setCancelled(true);
             Long timeLeft = chatCooldown.get(e.getPlayer())-System.currentTimeMillis();
-            e.getPlayer().sendMessage(Utils.cmdMsg("&cYou are currently on chat cooldown for " + Math.round(timeLeft/1000) + " second(s)"));
+            e.getPlayer().sendMessage(Utils.cmdMsg("<red>You are currently on chat cooldown for " + Math.round(timeLeft/1000) + " second(s)"));
             return;
         }
 
         String clanName = ClanDatabase.getClanMember(e.getPlayer().getUniqueId()).getClanName();
-        String clanColor = "&e";
+        String clanColor = "<yellow>";
         if(clanName != null) clanColor = ClanDatabase.getClan(ClanDatabase.getClanMember(e.getPlayer().getUniqueId()).getClanID()).getClanColor();
 
         String pgroup = ClassicDupe.getLPAPI().getUserManager().getUser(e.getPlayer().getUniqueId()).getPrimaryGroup();
@@ -60,11 +60,10 @@ public class Chat implements Listener {
         if(StaffChatCMD.staffChatPlayers.contains(e.getPlayer())) {
             e.setCancelled(true);
             StaffChatCMD.sendToStaffChat(
-                "&8[&cSC&8] " +
-                ((Utils.getPrefix(e.getPlayer()) != null) ? Utils.getPrefix(e.getPlayer()) : "") +
-                e.getPlayer().getName() +
-                ChatFormat.format(" &7\u00BB &a") +
-                PlainTextComponentSerializer.plainText().serialize(e.message())
+                    Utils.format("<dark_gray>[<red>SC<dark_gray>] ")
+                            .append(MiniMessage.miniMessage().deserialize(((Utils.getPrefix(e.getPlayer()) != null) ? Utils.getPrefix(e.getPlayer()) : "") + e.getPlayer().getName()))
+                            .append(Utils.format(" <gray>\u00BB <green>"))
+                            .append(e.message())
             );
             ClassicDupeBot.getJDA().getChannelById(TextChannel.class, Config.getConfig().getLong("discord.staffchat"))
                     .sendMessage("**" + e.getPlayer().getName() + "** \u00BB " + PlainTextComponentSerializer.plainText().serialize(e.message())).queue();
@@ -79,43 +78,40 @@ public class Chat implements Listener {
         PlayerDatabase.PlayerData data = ClassicDupe.getDatabase().getPlayerDatabase().getPlayer(e.getPlayer().getUniqueId().toString());
         if(data.nickname != null) name = data.nickname;
 
+        MiniMessage mm = MiniMessage.miniMessage();
         if(chatType.equals(ChatType.DEFAULT)) {
             String finalName = name;
             String finalClanColor = clanColor;
-            e.renderer((player, sourceDisplayName, message, viewer) -> Component.text(
-        ChatFormat.format((clanName != null ? "&8[" + finalClanColor + clanName + "&8] " : "")) +
-                ChatFormat.format((Utils.getPrefix(player) != null) ? Utils.getPrefix(player) : "") +
-                ChatFormat.format(finalName) +
-                ChatFormat.format((Utils.getSuffix(player) != null) ? " " + Utils.getSuffix(player)  : "") +
-                ChatFormat.format(" &7\u00BB &7")
-
-            ).append(message));
+            e.renderer((player, sourceDisplayName, message, viewer) ->
+                    Utils.format((clanName != null ? "<dark_gray>[" + finalClanColor + clanName + "<dark_gray>] " : ""))
+                            .append(mm.deserialize(((Utils.getPrefix(player) != null) ? Utils.getPrefix(player) : "") + finalName))
+                            .append(Utils.format((Utils.getSuffix(player) != null) ? " " + Utils.getSuffix(player)  : ""))
+                            .append(Utils.format(" <gray>\u00BB <gray>"))
+                            .append(message));
         } else if(chatType.equals(ChatType.COLOR)) {
             String finalName1 = name;
             String finalClanColor1 = clanColor;
-            e.renderer((player, sourceDisplayName, message, viewer) -> Component.text(
-        ChatFormat.format((clanName != null ? "&8[" + finalClanColor1 + clanName + "&8] " : "")) +
-                ChatFormat.format((Utils.getPrefix(player) != null) ? Utils.getPrefix(player) : "") +
-                ChatFormat.format(finalName1) +
-                ChatFormat.format((Utils.getSuffix(player) != null) ? " " + Utils.getSuffix(player)  : "") +
-                ChatFormat.format(" &7\u00BB " + ChatColorCMD.colorProfiles.get(e.getPlayer().getUniqueId().toString())) +
-                PlainTextComponentSerializer.plainText().serialize(message)
-            ));
+            e.renderer((player, sourceDisplayName, message, viewer) ->
+                    Utils.format((clanName != null ? "<dark_gray>[" + finalClanColor1 + clanName + "<dark_gray>] " : ""))
+                            .append(mm.deserialize(((Utils.getPrefix(player) != null) ? Utils.getPrefix(player) : "") + finalName1))
+                            .append(Utils.format((Utils.getSuffix(player) != null) ? " " + Utils.getSuffix(player)  : ""))
+                            .append(Utils.format(" <gray>\u00BB <gray>"))
+                            .append(Utils.format(ChatColorCMD.colorProfiles.get(e.getPlayer().getUniqueId().toString()) +
+                                            PlainTextComponentSerializer.plainText().serialize(message)
+                            )));
         } else {
-            MiniMessage mm = MiniMessage.miniMessage();
             String finalName2 = name;
             String finalClanColor2 = clanColor;
-            e.renderer((player, sourceDisplayName, message, viewer) -> Component.text(
-        ChatFormat.format((clanName != null ? "&8[" + finalClanColor2 + clanName + "&8] " : "")) +
-                ChatFormat.format((Utils.getPrefix(player) != null) ? Utils.getPrefix(player) : "") +
-                ChatFormat.format(finalName2) +
-                ChatFormat.format((Utils.getSuffix(player) != null) ? " " + Utils.getSuffix(player)  : "") +
-                ChatFormat.format(" &7\u00BB ")
-            ).append(mm.deserialize( "<gradient:" +
-                    ChatGradientCMD.gradientProfiles.get(e.getPlayer().getUniqueId().toString()).gradientFrom + ":" +
-                    ChatGradientCMD.gradientProfiles.get(e.getPlayer().getUniqueId().toString()).gradientTo + ">" +
-                    PlainTextComponentSerializer.plainText().serialize(message) + "</gradient>"
-            )));
+            e.renderer((player, sourceDisplayName, message, viewer) ->
+                    Utils.format((clanName != null ? "<dark_gray>[" + finalClanColor2 + clanName + "<dark_gray>] " : ""))
+                            .append(mm.deserialize(((Utils.getPrefix(player) != null) ? Utils.getPrefix(player) : "") + finalName2))
+                            .append(Utils.format((Utils.getSuffix(player) != null) ? " " + Utils.getSuffix(player)  : ""))
+                            .append(Utils.format(" <gray>\u00BB <gray>"))
+                            .append(mm.deserialize( "<gradient:" +
+                                ChatGradientCMD.gradientProfiles.get(e.getPlayer().getUniqueId().toString()).gradientFrom + ":" +
+                                ChatGradientCMD.gradientProfiles.get(e.getPlayer().getUniqueId().toString()).gradientTo + ">" +
+                                PlainTextComponentSerializer.plainText().serialize(message) + "</gradient>"
+                            )));
         }
 
     }

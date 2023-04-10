@@ -4,8 +4,8 @@ import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import org.jetbrains.annotations.NotNull;
 import xyz.prorickey.classicdupe.Config;
+import xyz.prorickey.classicdupe.Utils;
 import xyz.prorickey.classicdupe.commands.moderator.StaffChatCMD;
-import xyz.prorickey.proutils.ChatFormat;
 
 public class StaffChat extends ListenerAdapter {
 
@@ -14,9 +14,9 @@ public class StaffChat extends ListenerAdapter {
         if(Config.getConfig().getLong("discord.staffchat") != event.getChannel().getIdLong() || event.getAuthor().isBot()) return;
 
         StaffChatCMD.sendToStaffChat(
-                "&8[&cSC&bDSC&8] &e" +
+                "<dark_gray>[<red>SC<aqua>DSC<dark_gray>] <yellow>" +
                         event.getAuthor().getName() +
-                        ChatFormat.format(" &7\u00BB &a") +
+                        Utils.format(" <gray>\u00BB <green>") +
                         event.getMessage().getContentRaw()
         );
     }

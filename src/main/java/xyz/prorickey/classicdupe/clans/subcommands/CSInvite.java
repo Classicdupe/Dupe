@@ -12,7 +12,6 @@ import xyz.prorickey.classicdupe.Utils;
 import xyz.prorickey.classicdupe.clans.ClanMember;
 import xyz.prorickey.classicdupe.clans.ClanSub;
 import xyz.prorickey.classicdupe.clans.ClanDatabase;
-import xyz.prorickey.proutils.ChatFormat;
 import xyz.prorickey.proutils.TabComplete;
 
 import java.util.*;
@@ -24,40 +23,40 @@ public class CSInvite extends ClanSub {
     @Override
     public void execute(CommandSender sender, String[] args) {
         if(!(sender instanceof Player player)) {
-            sender.sendMessage(ChatFormat.format("&cYou cannot execute this command from console"));
+            sender.sendMessage(Utils.format("<red>You cannot execute this command from console"));
             return;
         }
         ClanMember cmem = ClanDatabase.getClanMember(player.getUniqueId());
         if(cmem.getClanID() == null) {
-            player.sendMessage(Utils.cmdMsg("&cYou can't invite people to your imaginary clan. You must create one with /clan create"));
+            player.sendMessage(Utils.cmdMsg("<red>You can't invite people to your imaginary clan. You must create one with /clan create"));
             return;
         }
         if(cmem.getLevel() < 1) {
-            player.sendMessage(Utils.cmdMsg("&cYou must at least be vip to invite people to a clan"));
+            player.sendMessage(Utils.cmdMsg("<red>You must at least be vip to invite people to a clan"));
             return;
         }
         if(args.length == 0) {
-            player.sendMessage(Utils.cmdMsg("&cYou must provide a player to invite"));
+            player.sendMessage(Utils.cmdMsg("<red>You must provide a player to invite"));
             return;
         }
         Player p = Bukkit.getPlayer(args[0]);
         if(p == null) {
-            player.sendMessage(Utils.cmdMsg("&cThat player is currently offline"));
+            player.sendMessage(Utils.cmdMsg("<red>That player is currently offline"));
             return;
         }
         ClanMember pmem = ClanDatabase.getClanMember(p.getUniqueId());
         if(pmem.getClanID() != null) {
-            player.sendMessage(Utils.cmdMsg("&cThat player is already in a clan"));
+            player.sendMessage(Utils.cmdMsg("<red>That player is already in a clan"));
             return;
         }
         Invite invite = new Invite(player.getUniqueId(), p.getUniqueId());
         invites.add(invite);
-        player.sendMessage(Utils.cmdMsg("&eInvite sent to &6" + p.getName()));
-        p.sendMessage(Component.text(Utils.cmdMsg("&eRecieved an invite to join &6" + cmem.getClanName() + "&e from &6" + player.getName() + " "))
-                .append(Component.text(ChatFormat.format("&8[&a&lACCEPT&8]"))
+        player.sendMessage(Utils.cmdMsg("<yellow>Invite sent to <gold>" + p.getName()));
+        p.sendMessage(Utils.cmdMsg("<yellow>Recieved an invite to join <gold>" + cmem.getClanName() + "<yellow> from <gold>" + player.getName() + " ")
+                .append(Utils.format("<dark_gray>[<green><b>ACCEPT<dark_gray>]")
                         .clickEvent(ClickEvent.clickEvent(ClickEvent.Action.SUGGEST_COMMAND, "/clan accept " + player.getName())))
                 .append(Component.text(" "))
-                .append(Component.text(ChatFormat.format("&8[&c&lDECLINE&8]")))
+                .append(Utils.format("<dark_gray>[<red><b>DECLINE<dark_gray>]"))
                 .clickEvent(ClickEvent.clickEvent(ClickEvent.Action.SUGGEST_COMMAND, "/clan decline " + player.getName())));
     }
 
@@ -76,8 +75,8 @@ public class CSInvite extends ClanSub {
                     invites.remove(invite);
                     OfflinePlayer inviter = Bukkit.getOfflinePlayer(invite.inviterUUID);
                     OfflinePlayer invitee = Bukkit.getOfflinePlayer(invite.inviteeUUID);
-                    if(inviter.isOnline()) Bukkit.getPlayer(invite.inviterUUID).sendMessage(Utils.cmdMsg("&eInvite sent to &6" + invitee.getName() + " &ehas expired"));
-                    if(invitee.isOnline()) Bukkit.getPlayer(invite.inviteeUUID).sendMessage(Utils.cmdMsg("&eInvite from &6" + invitee + "&e has expired"));
+                    if(inviter.isOnline()) Bukkit.getPlayer(invite.inviterUUID).sendMessage(Utils.cmdMsg("<yellow>Invite sent to <gold>" + invitee.getName() + " <yellow>has expired"));
+                    if(invitee.isOnline()) Bukkit.getPlayer(invite.inviteeUUID).sendMessage(Utils.cmdMsg("<yellow>Invite from <gold>" + invitee + "<yellow> has expired"));
                 }
             });
         }

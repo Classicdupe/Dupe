@@ -38,21 +38,21 @@ public class ClassicDupeExpansion extends PlaceholderExpansion {
             if(ClanDatabase.getClanMember(player.getUniqueId()).getClanID() != null) {
                 String clan = ClanDatabase.getClanMember(player.getUniqueId()).getClanName();
                 String clanColor = ClanDatabase.getClan(ClanDatabase.getClanMember(player.getUniqueId()).getClanID()).getClanColor();
-                if(data.nickname == null) return player.getName() + " &8[" + clanColor + clan + "&8]";
-                else return data.nickname + " &8[" + clanColor + clan + "&8]";
+                if(data.nickname == null) return player.getName() + " <dark_gray>[" + clanColor + clan + "<dark_gray>]";
+                else return data.nickname + " <dark_gray>[" + clanColor + clan + "<dark_gray>]";
             }
             if(data.nickname == null) return player.getName();
             else return data.nickname;
         }
         for(int i = 0; i < 10; i++) {
-            if(ClassicDupe.getDatabase().getPlayerDatabase().killsLeaderboard.size() < i+1) return " ";
-            if(params.equalsIgnoreCase("top_kills_" + (i+1) + "_name")) return ClassicDupe.getDatabase().getPlayerDatabase().killsLeaderboard.get(i+1);
-            else if(params.equalsIgnoreCase("top_kills_" + (i+1) + "_kills")) return ClassicDupe.getDatabase().getPlayerDatabase().killsLeaderboardK.get(i+1).toString();
+            if(PlayerDatabase.killsLeaderboard.size() < i+1) return " ";
+            if(params.equalsIgnoreCase("top_kills_" + (i+1) + "_name")) return PlayerDatabase.killsLeaderboard.get(i+1);
+            else if(params.equalsIgnoreCase("top_kills_" + (i+1) + "_kills")) return PlayerDatabase.killsLeaderboardK.get(i+1).toString();
         }
         for(int i = 0; i < 10; i++) {
-            if(ClassicDupe.getDatabase().getPlayerDatabase().deathsLeaderboard.size() < i+1) return " ";
-            if(params.equalsIgnoreCase("top_deaths_" + (i+1) + "_name")) return ClassicDupe.getDatabase().getPlayerDatabase().deathsLeaderboard.get(i+1);
-            else if(params.equalsIgnoreCase("top_deaths_" + (i+1) + "_deaths")) return ClassicDupe.getDatabase().getPlayerDatabase().deathsLeaderboardD.get(i+1).toString();
+            if(PlayerDatabase.deathsLeaderboard.size() < i+1) return " ";
+            if(params.equalsIgnoreCase("top_deaths_" + (i+1) + "_name")) return PlayerDatabase.deathsLeaderboard.get(i+1);
+            else if(params.equalsIgnoreCase("top_deaths_" + (i+1) + "_deaths")) return PlayerDatabase.deathsLeaderboardD.get(i+1).toString();
         }
         return null;
     }

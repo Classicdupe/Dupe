@@ -9,7 +9,6 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import xyz.prorickey.classicdupe.ClassicDupe;
 import xyz.prorickey.classicdupe.Utils;
-import xyz.prorickey.proutils.ChatFormat;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,56 +17,56 @@ public class FilterCMD implements CommandExecutor, TabCompleter {
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
         if(args.length == 0) {
-            Component message = Component.text(ChatFormat.format("&aCurrent Filter Items&7(Fullword in red, Partword in green): "));
+            Component message = Utils.format("<green>Current Filter Items<gray>(Fullword in red, Partword in green): ");
             StringBuilder sb = new StringBuilder();
             if(ClassicDupe.getDatabase().getFilterDatabase().getWordsFromFilter().size() == 0) {
-                sender.sendMessage(Utils.cmdMsg("&aThe filter is currently empty"));
+                sender.sendMessage(Utils.cmdMsg("<green>The filter is currently empty"));
                 return true;
             }
             ClassicDupe.getDatabase().getFilterDatabase().getWordsFromFilter().forEach(filterWord -> {
-                if(filterWord.fullword) sb.append("&c").append(filterWord.text).append("&7, ");
-                else sb.append("&a").append(filterWord.text).append("&7, ");
+                if(filterWord.fullword) sb.append("<red>").append(filterWord.text).append("<gray>, ");
+                else sb.append("<green>").append(filterWord.text).append("<gray>, ");
             });
             sb.delete(sb.length() - 4, sb.length() - 1);
-            message = message.append(Component.text(ChatFormat.format(sb.toString())));
+            message = message.append(Utils.format(sb.toString()));
             sender.sendMessage(message);
             return true;
         }
         switch (args[0].toLowerCase()) {
             case "list" -> {
-                Component message = Component.text(ChatFormat.format("&aCurrent Filter Items&7(Fullword in red, Partword in green): "));
+                Component message = Utils.format("<green>Current Filter Items<gray>(Fullword in red, Partword in green): ");
                 StringBuilder sb = new StringBuilder();
                 if (ClassicDupe.getDatabase().getFilterDatabase().getWordsFromFilter().size() == 0) {
-                    sender.sendMessage(Utils.cmdMsg("&aThe filter is currently empty"));
+                    sender.sendMessage(Utils.cmdMsg("<green>The filter is currently empty"));
                     break;
                 }
                 ClassicDupe.getDatabase().getFilterDatabase().getWordsFromFilter().forEach(filterWord -> {
-                    if (filterWord.fullword) sb.append("&c").append(filterWord.text).append("&7, ");
-                    else sb.append("&a").append(filterWord.text).append("&7, ");
+                    if (filterWord.fullword) sb.append("<red>").append(filterWord.text).append("<gray>, ");
+                    else sb.append("<green>").append(filterWord.text).append("<gray>, ");
                 });
                 sb.delete(sb.length() - 4, sb.length() - 1);
-                message = message.append(Component.text(ChatFormat.format(sb.toString())));
+                message = message.append(Utils.format(sb.toString()));
                 sender.sendMessage(message);
             }
             case "add" -> {
                 if (args.length < 3) {
-                    sender.sendMessage(Utils.cmdMsg("&cYou must include a word to add to the filter and if it is the full word or part of a word"));
+                    sender.sendMessage(Utils.cmdMsg("<red>You must include a word to add to the filter and if it is the full word or part of a word"));
                     break;
                 }
                 boolean successful = ClassicDupe.getDatabase().getFilterDatabase().addWordToFilter(args[1].toLowerCase(), Boolean.parseBoolean(args[2]));
                 if (successful) {
-                    sender.sendMessage(Utils.cmdMsg("&aAdded &e" + args[1] + "&a to the filter as a &e" + (Boolean.parseBoolean(args[2]) ? "Fullword" : "Partword")));
+                    sender.sendMessage(Utils.cmdMsg("<green>Added <yellow>" + args[1] + "<green> to the filter as a <yellow>" + (Boolean.parseBoolean(args[2]) ? "Fullword" : "Partword")));
                 } else {
-                    sender.sendMessage(Utils.cmdMsg("&cThere was an error with adding this word to the filter. Most likely it's already on the filter"));
+                    sender.sendMessage(Utils.cmdMsg("<red>There was an error with adding this word to the filter. Most likely it's already on the filter"));
                 }
             }
             case "remove" -> {
                 if (args.length < 2) {
-                    sender.sendMessage(Utils.cmdMsg("&cYou must include a word to remove from the filter"));
+                    sender.sendMessage(Utils.cmdMsg("<red>You must include a word to remove from the filter"));
                     break;
                 }
                 ClassicDupe.getDatabase().getFilterDatabase().removeWordFromFilter(args[1].toLowerCase());
-                sender.sendMessage(Utils.cmdMsg("&aThat word has been removed from the filter"));
+                sender.sendMessage(Utils.cmdMsg("<green>That word has been removed from the filter"));
             }
         }
         return true;

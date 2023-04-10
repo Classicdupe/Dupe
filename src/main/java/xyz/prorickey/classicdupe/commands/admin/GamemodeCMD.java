@@ -22,77 +22,77 @@ public class GamemodeCMD implements CommandExecutor, TabCompleter {
 
         if(args.length < 1) {
             if(sender instanceof ConsoleCommandSender) {
-                sender.sendMessage(Utils.cmdMsg("&cYou cannot execute this command from console"));
+                sender.sendMessage(Utils.cmdMsg("<red>You cannot execute this command from console"));
             } else {
                 switch (((Player) sender).getGameMode()) {
-                    case CREATIVE -> sender.sendMessage(Utils.cmdMsg("&aYou are currently in &ecreative &amode"));
-                    case SURVIVAL -> sender.sendMessage(Utils.cmdMsg("&aYou are currently in &esurvival &amode"));
-                    case SPECTATOR -> sender.sendMessage(Utils.cmdMsg("&aYou are currently in &espectator &amode"));
-                    case ADVENTURE -> sender.sendMessage(Utils.cmdMsg("&aYou are currently in &eadventure &amode"));
+                    case CREATIVE -> sender.sendMessage(Utils.cmdMsg("<green>You are currently in <yellow>creative <green>mode"));
+                    case SURVIVAL -> sender.sendMessage(Utils.cmdMsg("<green>You are currently in <yellow>survival <green>mode"));
+                    case SPECTATOR -> sender.sendMessage(Utils.cmdMsg("<green>You are currently in <yellow>spectator <green>mode"));
+                    case ADVENTURE -> sender.sendMessage(Utils.cmdMsg("<green>You are currently in <yellow>adventure <green>mode"));
                 }
             }
             return true;
         } else if(args.length < 2) {
             if(sender instanceof ConsoleCommandSender) {
-                sender.sendMessage(Utils.cmdMsg("&cYou cannot execute this command from console"));
+                sender.sendMessage(Utils.cmdMsg("<red>You cannot execute this command from console"));
                 return true;
             } else {
                 Player p = (Player) sender;
                 switch (args[0]) {
                     case "creative" -> {
                         if (!p.hasPermission("admin.gamemode." + args[0])) {
-                            sender.sendMessage(Utils.cmdMsg("&cYou do not have permission to change your gamemode to " + args[0] + " mode"));
+                            sender.sendMessage(Utils.cmdMsg("<red>You do not have permission to change your gamemode to " + args[0] + " mode"));
                             return true;
                         }
                         if (p.getGameMode() == CREATIVE) {
-                            sender.sendMessage(Utils.cmdMsg("&cYou're already in creative mode"));
+                            sender.sendMessage(Utils.cmdMsg("<red>You're already in creative mode"));
                             return true;
                         }
                         p.setGameMode(CREATIVE);
-                        p.sendMessage(Utils.cmdMsg("&aSet your gamemode to &e" + args[0] + " &amode"));
+                        p.sendMessage(Utils.cmdMsg("<green>Set your gamemode to <yellow>" + args[0] + " <green>mode"));
                         return true;
                     }
                     case "survival" -> {
                         if (!p.hasPermission("admin.gamemode." + args[0])) {
-                            sender.sendMessage(Utils.cmdMsg("&cYou do not have permission to change your gamemode to " + args[0] + " mode"));
+                            sender.sendMessage(Utils.cmdMsg("<red>You do not have permission to change your gamemode to " + args[0] + " mode"));
                             return true;
                         }
                         if (p.getGameMode() == SURVIVAL) {
-                            sender.sendMessage(Utils.cmdMsg("&cYou're already in " + args[0] + " mode"));
+                            sender.sendMessage(Utils.cmdMsg("<red>You're already in " + args[0] + " mode"));
                             return true;
                         }
                         p.setGameMode(SURVIVAL);
-                        p.sendMessage(Utils.cmdMsg("&aSet your gamemode to &e" + args[0] + " &amode."));
+                        p.sendMessage(Utils.cmdMsg("<green>Set your gamemode to <yellow>" + args[0] + " <green>mode."));
                         return true;
                     }
                     case "adventure" -> {
                         if (!p.hasPermission("admin.gamemode." + args[0])) {
-                            sender.sendMessage(Utils.cmdMsg("&cYou do not have permission to change your gamemode to " + args[0] + " mode"));
+                            sender.sendMessage(Utils.cmdMsg("<red>You do not have permission to change your gamemode to " + args[0] + " mode"));
                             return true;
                         }
                         if (p.getGameMode() == GameMode.ADVENTURE) {
-                            sender.sendMessage(Utils.cmdMsg("&cYou're already in " + args[0] + " mode"));
+                            sender.sendMessage(Utils.cmdMsg("<red>You're already in " + args[0] + " mode"));
                             return true;
                         }
                         p.setGameMode(GameMode.ADVENTURE);
-                        p.sendMessage(Utils.cmdMsg("&aSet your gamemode to &e" + args[0] + " &amode"));
+                        p.sendMessage(Utils.cmdMsg("<green>Set your gamemode to <yellow>" + args[0] + " <green>mode"));
                         return true;
                     }
                     case "spectator" -> {
                         if (!p.hasPermission("admin.gamemode." + args[0])) {
-                            sender.sendMessage(Utils.cmdMsg("&cYou do not have permission to change your gamemode to " + args[0] + " mode"));
+                            sender.sendMessage(Utils.cmdMsg("<red>You do not have permission to change your gamemode to " + args[0] + " mode"));
                             return true;
                         }
                         if (p.getGameMode() == SPECTATOR) {
-                            sender.sendMessage(Utils.cmdMsg("&cYou're already in " + args[0] + " mode"));
+                            sender.sendMessage(Utils.cmdMsg("<red>You're already in " + args[0] + " mode"));
                             return true;
                         }
                         p.setGameMode(SPECTATOR);
-                        p.sendMessage(Utils.cmdMsg("&aSet your gamemode to &e" + args[0] + " &amode"));
+                        p.sendMessage(Utils.cmdMsg("<green>Set your gamemode to <yellow>" + args[0] + " <green>mode"));
                         return true;
                     }
                     default -> {
-                        sender.sendMessage(Utils.cmdMsg("&cThat gamemode does not exist"));
+                        sender.sendMessage(Utils.cmdMsg("<red>That gamemode does not exist"));
                         return true;
                     }
                 }
@@ -100,68 +100,68 @@ public class GamemodeCMD implements CommandExecutor, TabCompleter {
         } else {
             Player p = Bukkit.getServer().getPlayer(args[1]);
             if(p == null || !p.isOnline()) {
-                sender.sendMessage(Utils.cmdMsg("&c" + args[1] + " is not currently online"));
+                sender.sendMessage(Utils.cmdMsg("<red>" + args[1] + " is not currently online"));
                 return true;
             }
             switch (args[0]) {
                 case "creative" -> {
                     if (!sender.hasPermission("admin.gamemode." + args[0] + ".others") && !(sender instanceof ConsoleCommandSender)) {
-                        sender.sendMessage(Utils.cmdMsg("&cYou do not have permission to set other player's gamemode to " + args[0]));
+                        sender.sendMessage(Utils.cmdMsg("<red>You do not have permission to set other player's gamemode to " + args[0]));
                         return true;
                     }
                     if (p.getGameMode() == CREATIVE) {
-                        sender.sendMessage(Utils.cmdMsg("&e" + p.getName() + "'s &cgamemode is already " + args[0] + " mode"));
+                        sender.sendMessage(Utils.cmdMsg("<yellow>" + p.getName() + "'s <red>gamemode is already " + args[0] + " mode"));
                         return true;
                     }
                     p.setGameMode(CREATIVE);
-                    p.sendMessage(Utils.cmdMsg("&aYour gamemode has been set to &e" + args[0] + "&a mode by &e" + sender.getName()));
-                    sender.sendMessage(Utils.cmdMsg("&aSet &e" + p.getName() + "'s &agamemode to &e" + args[0]));
+                    p.sendMessage(Utils.cmdMsg("<green>Your gamemode has been set to <yellow>" + args[0] + "<green> mode by <yellow>" + sender.getName()));
+                    sender.sendMessage(Utils.cmdMsg("<green>Set <yellow>" + p.getName() + "'s <green>gamemode to <yellow>" + args[0]));
                     return true;
                 }
                 case "survival" -> {
                     if (!sender.hasPermission("admin.gamemode." + args[0] + ".others") && !(sender instanceof ConsoleCommandSender)) {
-                        sender.sendMessage(Utils.cmdMsg("&cYou do not have permission to set other player's gamemode to " + args[0]));
+                        sender.sendMessage(Utils.cmdMsg("<red>You do not have permission to set other player's gamemode to " + args[0]));
                         return true;
                     }
                     if (p.getGameMode() == SURVIVAL) {
-                        sender.sendMessage(Utils.cmdMsg("&e" + p.getName() + "'s &cgamemode is already " + args[0] + " mode"));
+                        sender.sendMessage(Utils.cmdMsg("<yellow>" + p.getName() + "'s <red>gamemode is already " + args[0] + " mode"));
                         return true;
                     }
                     p.setGameMode(SURVIVAL);
-                    p.sendMessage(Utils.cmdMsg("&aYour gamemode has been set to &e" + args[0] + "&a mode by &e" + sender.getName()));
-                    sender.sendMessage(Utils.cmdMsg("&aSet &e" + p.getName() + "'s &agamemode to &e" + args[0]));
+                    p.sendMessage(Utils.cmdMsg("<green>Your gamemode has been set to <yellow>" + args[0] + "<green> mode by <yellow>" + sender.getName()));
+                    sender.sendMessage(Utils.cmdMsg("<green>Set <yellow>" + p.getName() + "'s <green>gamemode to <yellow>" + args[0]));
                     return true;
                 }
                 case "adventure" -> {
                     if (!sender.hasPermission("admin.gamemode." + args[0] + ".others") && !(sender instanceof ConsoleCommandSender)) {
-                        sender.sendMessage(Utils.cmdMsg("&cYou do not have permission to set other player's gamemode to " + args[0]));
+                        sender.sendMessage(Utils.cmdMsg("<red>You do not have permission to set other player's gamemode to " + args[0]));
                         return true;
                     }
                     if (p.getGameMode() == GameMode.ADVENTURE) {
-                        sender.sendMessage(Utils.cmdMsg("&e" + p.getName() + "'s &cgamemode is already " + args[0] + " mode"));
+                        sender.sendMessage(Utils.cmdMsg("<yellow>" + p.getName() + "'s <red>gamemode is already " + args[0] + " mode"));
                         return true;
                     }
                     p.setGameMode(GameMode.ADVENTURE);
-                    p.sendMessage(Utils.cmdMsg("&aYour gamemode has been set to &e" + args[0] + "&a mode by &e" + sender.getName()));
-                    sender.sendMessage(Utils.cmdMsg("&aSet &e" + p.getName() + "'s &agamemode to &e" + args[0]));
+                    p.sendMessage(Utils.cmdMsg("<green>Your gamemode has been set to <yellow>" + args[0] + "<green> mode by <yellow>" + sender.getName()));
+                    sender.sendMessage(Utils.cmdMsg("<green>Set <yellow>" + p.getName() + "'s <green>gamemode to <yellow>" + args[0]));
                     return true;
                 }
                 case "spectator" -> {
                     if (!sender.hasPermission("admin.gamemode." + args[0] + ".others") && !(sender instanceof ConsoleCommandSender)) {
-                        sender.sendMessage(Utils.cmdMsg("&cYou do not have permission to set other player's gamemode to " + args[0]));
+                        sender.sendMessage(Utils.cmdMsg("<red>You do not have permission to set other player's gamemode to " + args[0]));
                         return true;
                     }
                     if (p.getGameMode() == SPECTATOR) {
-                        sender.sendMessage(Utils.cmdMsg("&e" + p.getName() + "'s &cgamemode is already " + args[0] + " mode"));
+                        sender.sendMessage(Utils.cmdMsg("<yellow>" + p.getName() + "'s <red>gamemode is already " + args[0] + " mode"));
                         return true;
                     }
                     p.setGameMode(SPECTATOR);
-                    p.sendMessage(Utils.cmdMsg("&aYour gamemode has been set to &e" + args[0] + "&a mode by &e" + sender.getName()));
-                    sender.sendMessage(Utils.cmdMsg("&aSet &e" + p.getName() + "'s &agamemode to &e" + args[0]));
+                    p.sendMessage(Utils.cmdMsg("<green>Your gamemode has been set to <yellow>" + args[0] + "<green> mode by <yellow>" + sender.getName()));
+                    sender.sendMessage(Utils.cmdMsg("<green>Set <yellow>" + p.getName() + "'s <green>gamemode to <yellow>" + args[0]));
                     return true;
                 }
                 default -> {
-                    sender.sendMessage(Utils.cmdMsg("&cThat gamemode does not exist"));
+                    sender.sendMessage(Utils.cmdMsg("<red>That gamemode does not exist"));
                     return true;
                 }
             }

@@ -26,32 +26,32 @@ public class FeedCMD implements CommandExecutor, TabCompleter {
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
         if (!(sender instanceof Player player)) {
-            sender.sendMessage(Utils.cmdMsg("&cYou cannot execute this command from console"));
+            sender.sendMessage(Utils.cmdMsg("<red>You cannot execute this command from console"));
             return true;
         }
         if (player.hasPermission("perks.feed.legend")) {
             player.setFoodLevel(20);
-            player.sendMessage(Utils.cmdMsg("&aYou have been fed"));
+            player.sendMessage(Utils.cmdMsg("<green>You have been fed"));
             player.playSound(player, "entity.generic.eat", SoundCategory.MASTER, 1F, 1F);
         } else if (player.hasPermission("perks.feed.mvp")) {
             if (feedCooldown.containsKey(player.getUniqueId()) && feedCooldown.get(player.getUniqueId()) + (1000 * 30) > System.currentTimeMillis()) {
                 long wait = feedCooldown.get(player.getUniqueId()) + (1000 * 30) - System.currentTimeMillis();
-                player.sendMessage(Utils.cmdMsg("&cYou cannot execute this command for " + (wait / 1000) + " seconds(s)"));
+                player.sendMessage(Utils.cmdMsg("<red>You cannot execute this command for " + (wait / 1000) + " seconds(s)"));
                 return true;
             }
             feedCooldown.put(player.getUniqueId(), System.currentTimeMillis());
             player.setFoodLevel(20);
-            player.sendMessage(Utils.cmdMsg("&aYou have been fed"));
+            player.sendMessage(Utils.cmdMsg("<green>You have been fed"));
             player.playSound(player, "entity.generic.eat", SoundCategory.MASTER, 1F, 1F);
         } else {
             if (feedCooldown.containsKey(player.getUniqueId()) && feedCooldown.get(player.getUniqueId()) + (1000 * 60) > System.currentTimeMillis()) {
                 long wait = feedCooldown.get(player.getUniqueId()) + (1000 * 60) - System.currentTimeMillis();
-                player.sendMessage(Utils.cmdMsg("&cYou cannot execute this command for " + (wait / 1000) + " seconds(s)"));
+                player.sendMessage(Utils.cmdMsg("<red>You cannot execute this command for " + (wait / 1000) + " seconds(s)"));
                 return true;
             }
             feedCooldown.put(player.getUniqueId(), System.currentTimeMillis());
             player.setFoodLevel(20);
-            player.sendMessage(Utils.cmdMsg("&aYou have been fed"));
+            player.sendMessage(Utils.cmdMsg("<green>You have been fed"));
             player.playSound(player, "entity.generic.eat", SoundCategory.MASTER, 1F, 1F);
         }
         return true;

@@ -18,10 +18,10 @@ public class RandomCMD implements CommandExecutor, TabCompleter {
         Player player = (Player) sender;
         Boolean to = ClassicDupe.getDatabase().getPlayerDatabase().swapRandomItem(player.getUniqueId().toString());
         if(to) {
-            player.sendMessage(Utils.cmdMsg("&aTurned on random items. You will now recieve a random item every 60 seconds."));
+            player.sendMessage(Utils.cmdMsg("<green>Turned on random items. You will now recieve a random item every 60 seconds."));
             JoinEvent.randomItemList.add(player);
         } else {
-            player.sendMessage(Utils.cmdMsg("&aTurned off random items. You will no longer recieve a random item every 60 seconds."));
+            player.sendMessage(Utils.cmdMsg("<green>Turned off random items. You will no longer recieve a random item every 60 seconds."));
             JoinEvent.randomItemList.remove(player);
         }
         return true;

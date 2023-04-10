@@ -17,7 +17,7 @@ public class LinkRewards {
                 ClassicDupe
                         .getLPAPI().getUserManager()
                         .getUser(player.getUniqueId()).data().add(Node.builder("perks.hat").build());
-                player.sendMessage(Utils.cmdMsg("&eThank you for linking your discord. You have recieved the hat perk."));
+                player.sendMessage(Utils.cmdMsg("<yellow>Thank you for linking your discord. You have recieved the hat perk."));
             }
         }
     }
@@ -31,7 +31,7 @@ public class LinkRewards {
                         .getUser(player.getUniqueId()).data().add(
                                 Node.builder("group.vip").build()
                         );
-                player.sendMessage(Utils.cmdMsg("&eThank you for boosting the discord. You have recieved the VIP rank."));
+                player.sendMessage(Utils.cmdMsg("<yellow>Thank you for boosting the discord. You have recieved the VIP rank."));
             }
         }
     }

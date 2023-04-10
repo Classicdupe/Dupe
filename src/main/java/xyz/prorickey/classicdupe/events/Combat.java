@@ -28,12 +28,12 @@ public class Combat implements Listener {
     public void onEntityDamageByEntity(EntityDamageByEntityEvent e) {
         if(e.getEntity() instanceof Player player && JoinEvent.nakedProtection.containsKey(player)) {
             e.setCancelled(true);
-            if(e.getDamager() instanceof Player attacker) attacker.sendMessage(Utils.cmdMsg("&cYou cannot attack that player, they are currently in naked protection"));
+            if(e.getDamager() instanceof Player attacker) attacker.sendMessage(Utils.cmdMsg("<red>You cannot attack that player, they are currently in naked protection"));
             return;
         }
         if(e.getDamager() instanceof Player player && JoinEvent.nakedProtection.containsKey(player)) {
             e.setCancelled(true);
-            player.sendMessage(Utils.cmdMsg("&cYou cannot attack other people while in naked protection. To disable naked protection execute /nakedoff"));
+            player.sendMessage(Utils.cmdMsg("<red>You cannot attack other people while in naked protection. To disable naked protection execute /nakedoff"));
             return;
         }
         if(e.getEntity() instanceof Player player && e.getDamager() instanceof Player attacker) {
@@ -60,7 +60,7 @@ public class Combat implements Listener {
         if(!(e.getEntity() instanceof Player player)) return;
         if(Combat.inCombat.containsKey(player) && !player.isGliding()) {
             e.setCancelled(true);
-            player.sendMessage(Utils.cmdMsg("&cYou cannot use an elytra while in combat"));
+            player.sendMessage(Utils.cmdMsg("<red>You cannot use an elytra while in combat"));
         }
     }
 
@@ -73,8 +73,8 @@ public class Combat implements Listener {
                 if((time + (1000*15)) < System.currentTimeMillis() && Combat.inCombat.containsKey(player)) {
                     Combat.inCombat.remove(player);
                     whoHitWho.remove(player);
-                    player.sendActionBar(Component.text(ChatFormat.format("&aYou are no longer in combat")));
-                } else player.sendActionBar(Component.text(ChatFormat.format("&cYou are currently in combat")));
+                    player.sendActionBar(Utils.format("<green>You are no longer in combat"));
+                } else player.sendActionBar(Utils.format("<red>You are currently in combat"));
             }
         }
     }

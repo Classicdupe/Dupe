@@ -12,8 +12,8 @@ import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
+import xyz.prorickey.classicdupe.Utils;
 import xyz.prorickey.classicdupe.playerevents.KOTHEventManager;
-import xyz.prorickey.proutils.ChatFormat;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -32,16 +32,16 @@ public class KEPoints implements Listener {
             KOTHEventManager.PlayerKothData killerData = KOTHEventManager.getPlayerKothData(killer);
             killerData.addKill();
             e.deathMessage(
-                    Component.text(ChatFormat.format("&c\u2620 "))
-                            .append(Component.text(ChatFormat.format("&6" + e.getPlayer().getName()))
+                    Utils.format("<red>\u2620 ")
+                            .append(Utils.format("<gold>>" + e.getPlayer().getName())
                                     .hoverEvent(HoverEvent.showText(
-                                            Component.text(ChatFormat.format("&eKOTH Stats\n&aKills &7- &e" + data.getKills() + "\n&aDeaths &7- &e" + data.getDeaths() + "\n&aPoints &7- &e" + data.getPoints()))
-                                    )))
-                            .append(Component.text(ChatFormat.format(" &ewas murdered by ")))
-                            .append(Component.text(ChatFormat.format("&6" + killer.getName()))
+                                            Utils.format("<yellow>KOTH Stats\n<green>Kills <gray>- <yellow>" + data.getKills() + "\n<green>Deaths <gray>- <yellow>" + data.getDeaths() + "\n<green>Points <gray>- <yellow>" + data.getPoints()))
+                                    ))
+                            .append(Utils.format(" <yellow>was murdered by "))
+                            .append(Utils.format("<gold>>" + killer.getName())
                                     .hoverEvent(HoverEvent.showText(
-                                            Component.text(ChatFormat.format("&eKOTH Stats\n&aKills &7- &e" + killerData.getKills() + "\n&aDeaths &7- &e" + killerData.getDeaths() + "\n&aPoints &7- &e" + killerData.getPoints()))
-                                    )))
+                                            Utils.format("<yellow>KOTH Stats\n<green>Kills <gray>- <yellow>" + killerData.getKills() + "\n<green>Deaths <gray>- <yellow>" + killerData.getDeaths() + "\n<green>Points <gray>- <yellow>" + killerData.getPoints()))
+                                    ))
             );
         }
     }

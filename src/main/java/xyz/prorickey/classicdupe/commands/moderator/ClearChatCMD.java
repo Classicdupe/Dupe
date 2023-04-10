@@ -15,7 +15,7 @@ public class ClearChatCMD implements CommandExecutor {
             if(!p.hasPermission("mod.clearchat.bypass")) {
                 for(int i = 0; i < 300; i++) p.sendMessage(" ");
             }
-            p.sendMessage(Utils.cmdMsg("&c&lThe chat has been cleared"));
+            p.sendMessage(Utils.cmdMsg("<red><b>The chat has been cleared"));
         });
         return true;
     }

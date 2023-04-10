@@ -11,7 +11,7 @@ forbiddenDupesInCombat:
   - totem_of_undying
   - enchanted_golden_apple
   - ender_pearl
-prefix: "&8[&ai&8]"
+prefix: "<dark_gray>[<green>i<gray>]"
 events:
   koth:
     timeInBetween: 43200000
@@ -23,6 +23,17 @@ discord:
   cspy: 1094679599742459994
   token: "MTA3ODEwMjgzNDg3NDE2NzM1Ng.GxuBo8.tcjGQ7mRT1cR6cg6QzSMk8kYYYjlx9TIArK7Hg"
   onlineplayers: 1084496172305092718
+ranks:
+  admin:
+    prefix: "<color:#EF4444><bold>ADMIN</bold> "
+  mod:
+    prefix: "<color:#28C5FF><bold>MOD</bold> "
+  legend:
+    prefix: "<color:#F9D830><bold>LEGEND</bold> "
+  mvp:
+    prefix: "<color:#3076F9><bold>MVP</bold> "
+  vip:
+    prefix: "<color:#16E91B><bold>VIP</bold> "
 suffix:
   god: "&6&lGOD"
   duper: "&d&lDUPER"

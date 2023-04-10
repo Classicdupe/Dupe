@@ -1,6 +1,7 @@
 package xyz.prorickey.classicdupe.events;
 
 import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Item;
@@ -35,9 +36,9 @@ public class JoinEvent implements Listener {
         if(ClassicDupe.getDatabase().getPlayerDatabase().getPlayer(e.getPlayer().getUniqueId().toString()) == null) {
             ClassicDupe.getDatabase().getPlayerDatabase().initPlayer(e.getPlayer());
             e.getPlayer().teleport(ClassicDupe.getDatabase().spawn);
-            e.joinMessage(Component.text(ChatFormat.format("&e" + e.getPlayer().getName() + " &aJust joined for the first time! Give them a warm welcome")));
-            e.getPlayer().sendMessage(Utils.cmdMsg("&aEvery &e60 &ayou will recieve a random item. Execute /random to disable or enable this"));
-            ChatColorCMD.colorProfiles.put(e.getPlayer().getUniqueId().toString(), "&7");
+            e.joinMessage(Utils.format("<yellow>" + e.getPlayer().getName() + " <green>Just joined for the first time! Give them a warm welcome"));
+            e.getPlayer().sendMessage(Utils.cmdMsg("<green>Every <yellow>60 <green>you will recieve a random item. Execute /random to disable or enable this"));
+            ChatColorCMD.colorProfiles.put(e.getPlayer().getUniqueId().toString(), "<gray>");
             nakedProtection.put(e.getPlayer(), System.currentTimeMillis());
 
             // Starting Gear
@@ -57,7 +58,7 @@ public class JoinEvent implements Listener {
             randomTaskMap.put(e.getPlayer(), task);
             task.runTaskTimer(ClassicDupe.getPlugin(), 0, 20*60);
 
-            e.getPlayer().sendMessage(Utils.cmdMsg("&aYou currently have naked protection on. This means you cannot pvp but you are safe for 10 minutes. To turn this off execute /nakedoff"));
+            e.getPlayer().sendMessage(Utils.cmdMsg("<green>You currently have naked protection on. This means you cannot pvp but you are safe for 10 minutes. To turn this off execute /nakedoff"));
             return;
         }
         PlayerDatabase.PlayerData playerData = ClassicDupe.getDatabase().getPlayerDatabase().getPlayer(e.getPlayer().getUniqueId().toString());
@@ -66,7 +67,7 @@ public class JoinEvent implements Listener {
         task.runTaskTimer(ClassicDupe.getPlugin(), 0, 20*60);
         if(playerData.randomitem) {
             randomItemList.add(e.getPlayer());
-            e.getPlayer().sendMessage(Utils.cmdMsg("&aEvery &e60 &ayou will recieve a random item. Execute /random to disable or enable this"));
+            e.getPlayer().sendMessage(Utils.cmdMsg("<green>Every <yellow>60 <green>you will recieve a random item. Execute /random to disable or enable this"));
         }
         ChatColorCMD.colorProfiles.put(e.getPlayer().getUniqueId().toString(), playerData.chatcolor);
         if(playerData.gradient) {
@@ -77,11 +78,8 @@ public class JoinEvent implements Listener {
         }
         LinkRewards.checkRewardsForLinking(e.getPlayer());
         LinkRewards.checkRewardsForBoosting(e.getPlayer());
-        e.joinMessage(Component.text(
-                ChatFormat.format("&8[&a+&8] " +
-                        ClassicDupe.getLPAPI().getUserManager().getUser(e.getPlayer().getUniqueId()).getCachedData().getMetaData().getPrefix() +
-                        e.getPlayer().getName())
-        ));
+        e.joinMessage(Utils.format("<dark_gray>[<green>+<dark_gray>] ")
+                .append(MiniMessage.miniMessage().deserialize(Utils.getPrefix(e.getPlayer()) + e.getPlayer().getName())));
 
     }
 
@@ -98,7 +96,7 @@ public class JoinEvent implements Listener {
                 Long time = nakedProtection.get(player);
                 if(time + (10*60*1000) < System.currentTimeMillis()) {
                     nakedProtection.remove(player);
-                    if(player.isOnline()) player.sendMessage(Utils.cmdMsg("&cYou are no longer protected by naked protection"));
+                    if(player.isOnline()) player.sendMessage(Utils.cmdMsg("<red>You are no longer protected by naked protection"));
                 }
             }
         }

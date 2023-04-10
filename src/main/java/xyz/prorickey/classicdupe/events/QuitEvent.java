@@ -1,6 +1,7 @@
 package xyz.prorickey.classicdupe.events;
 
 import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerQuitEvent;
@@ -26,17 +27,13 @@ public class QuitEvent implements Listener {
         PrivateMessageCMD.lastInConvo.remove(e.getPlayer());
         CspyCMD.cspyList.remove(e.getPlayer());
         if(PrivateMessageCMD.lastInConvo.containsValue(e.getPlayer())) new HashMap<>(PrivateMessageCMD.lastInConvo).forEach((sender, recipient) -> PrivateMessageCMD.lastInConvo.remove(sender));
-        e.quitMessage(Component.text(
-                ChatFormat.format("&8[&c-&8] " +
-                        ClassicDupe.getLPAPI().getUserManager().getUser(e.getPlayer().getUniqueId()).getCachedData().getMetaData().getPrefix() +
-                        e.getPlayer().getName())
-        ));
+        e.quitMessage(Utils.format("<dark_gray>[<red>-<dark_gray>] ")
+                .append(MiniMessage.miniMessage().deserialize(Utils.getPrefix(e.getPlayer())))
+                .append(Utils.format(e.getPlayer().getName())));
         if(Combat.inCombat.containsKey(e.getPlayer())) {
-            e.quitMessage(Component.text(
-                    ChatFormat.format("&8[&c-&8] " +
-                            ClassicDupe.getLPAPI().getUserManager().getUser(e.getPlayer().getUniqueId()).getCachedData().getMetaData().getPrefix() +
-                            e.getPlayer().getName() +
-                            " &8| &c&lCOMBAT LOG")));
+            e.quitMessage(Utils.format("<dark_gray>[<red>-<dark_gray>] ")
+                    .append(MiniMessage.miniMessage().deserialize(Utils.getPrefix(e.getPlayer()) + e.getPlayer().getName()))
+                    .append(Utils.format(" <dark_gray>| <red><bold>COMBAT LOG")));
             ClassicDupe.getDatabase().getPlayerDatabase().addDeath(e.getPlayer().getUniqueId().toString());
         }
     }

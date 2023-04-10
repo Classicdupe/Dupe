@@ -21,25 +21,25 @@ public class PrivateMessageCMD implements CommandExecutor, TabCompleter {
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
         if(args.length == 0) {
-            sender.sendMessage(Utils.cmdMsg("&cYou must include a recipient when privately messaging"));
+            sender.sendMessage(Utils.cmdMsg("<red>You must include a recipient when privately messaging"));
             return true;
         }
         if(args.length < 2) {
-            sender.sendMessage(Utils.cmdMsg("&cYou must include a message to send them"));
+            sender.sendMessage(Utils.cmdMsg("<red>You must include a message to send them"));
             return true;
         }
         Player recipient = Bukkit.getServer().getPlayer(args[0]);
         if(recipient == null || !recipient.isOnline()) {
-            sender.sendMessage(Utils.cmdMsg("&e" + args[0] + " &cis not currently online"));
+            sender.sendMessage(Utils.cmdMsg("<yellow>" + args[0] + " <red>is not currently online"));
             return true;
         }
         String nameOfSender;
-        if(!(sender instanceof Player player)) nameOfSender = "&cConsole&7";
+        if(!(sender instanceof Player player)) nameOfSender = "<red>Console<gray>";
         else nameOfSender = player.getName();
         StringBuilder msg = new StringBuilder();
         for(int i = 1; i < args.length; i++) { msg.append(args[i]).append(" "); }
-        recipient.sendMessage(Utils.cmdMsg("&7[PM] &e" + nameOfSender + " &7-> &e" + recipient.getName() + " &8\u00BB &7" + msg.toString().trim()));
-        sender.sendMessage(Utils.cmdMsg("&7[PM] &e" + nameOfSender + " &7-> &e" + recipient.getName() + " &8\u00BB &7" + msg.toString().trim()));
+        recipient.sendMessage(Utils.cmdMsg("<gray>[PM] <yellow>" + nameOfSender + " <gray>-> <yellow>" + recipient.getName() + " <dark_gray>\u00BB <gray>" + msg.toString().trim()));
+        sender.sendMessage(Utils.cmdMsg("<gray>[PM] <yellow>" + nameOfSender + " <gray>-> <yellow>" + recipient.getName() + " <dark_gray>\u00BB <gray>" + msg.toString().trim()));
         if(sender instanceof Player player) {
             lastInConvo.put(recipient, player);
             lastInConvo.put(player, recipient);

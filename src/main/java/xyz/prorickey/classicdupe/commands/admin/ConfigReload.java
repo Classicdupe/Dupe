@@ -16,7 +16,7 @@ public class ConfigReload implements CommandExecutor, TabCompleter {
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
         Config.reloadConfig();
-        sender.sendMessage(Utils.cmdMsg("&aThe config has been reloaded"));
+        sender.sendMessage(Utils.cmdMsg("<green>The config has been reloaded"));
         return true;
     }
 

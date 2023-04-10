@@ -19,30 +19,30 @@ public class TpacceptCMD implements CommandExecutor, TabCompleter {
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
         if(!(sender instanceof Player p)) {
-            sender.sendMessage(Utils.cmdMsg("&cYou cannot execute this command from console"));
+            sender.sendMessage(Utils.cmdMsg("<red>You cannot execute this command from console"));
             return true;
         }
         if(args.length == 0) {
-            sender.sendMessage(Utils.cmdMsg("&cYou must include who you are accepting"));
+            sender.sendMessage(Utils.cmdMsg("<red>You must include who you are accepting"));
             return true;
         }
         Player recipient = Bukkit.getServer().getPlayer(args[0]);
         if(recipient == null || !recipient.isOnline()) {
-            p.sendMessage(Utils.cmdMsg("&e" + args[0] + " &cis not currently online"));
+            p.sendMessage(Utils.cmdMsg("<yellow>" + args[0] + " <red>is not currently online"));
             return true;
         }
         if(TpaCMD.tpaRequests.containsKey(recipient) && TpaCMD.tpaRequests.get(recipient) == p) {
             if(Combat.inCombat.containsKey(recipient)) {
-                p.sendMessage(Utils.cmdMsg("&cThat player is currently in combat and cannot teleport"));
+                p.sendMessage(Utils.cmdMsg("<red>That player is currently in combat and cannot teleport"));
                 return true;
             }
             recipient.teleport(p.getLocation());
-            recipient.sendMessage(Utils.cmdMsg("&aTeleported you to &e" + p.getName()));
-            p.sendMessage(Utils.cmdMsg("&e" + recipient.getName() + "&a has teleported to you"));
+            recipient.sendMessage(Utils.cmdMsg("<green>Teleported you to <yellow>" + p.getName()));
+            p.sendMessage(Utils.cmdMsg("<yellow>" + recipient.getName() + "<green> has teleported to you"));
             TpaCMD.tpaRequests.remove(recipient);
             TpaCMD.tpaRequestTimes.remove(recipient);
         } else {
-            p.sendMessage(Utils.cmdMsg("&cThat person has not requested to teleport to you"));
+            p.sendMessage(Utils.cmdMsg("<red>That person has not requested to teleport to you"));
         }
         return true;
     }

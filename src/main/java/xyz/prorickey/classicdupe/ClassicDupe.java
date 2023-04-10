@@ -23,9 +23,7 @@ import xyz.prorickey.classicdupe.database.PlayerVaultDatabase;
 import xyz.prorickey.classicdupe.discord.ClassicDupeBot;
 import xyz.prorickey.classicdupe.events.*;
 import xyz.prorickey.classicdupe.metrics.Metrics;
-import xyz.prorickey.classicdupe.metrics.PlayerMetrics;
 import xyz.prorickey.classicdupe.playerevents.KOTHEventManager;
-import xyz.prorickey.proutils.ChatFormat;
 
 public class ClassicDupe extends JavaPlugin {
 
@@ -191,7 +189,7 @@ public class ClassicDupe extends JavaPlugin {
 
     @Override
     public void onDisable() {
-        bot.jda.shutdown();
+        ClassicDupeBot.jda.shutdown();
     }
 
     public static void executeConsoleCommand(String cmd) {
@@ -211,28 +209,26 @@ public class ClassicDupe extends JavaPlugin {
             if(lastBroadcast != null && lastBroadcast.equals(LastBroadcast.DISCORD)) {
                 lastBroadcast = LastBroadcast.STORE;
                 ClassicDupe.getPlugin().getServer().getOnlinePlayers().forEach(player -> {
-                    player.sendMessage(Component.text(ChatFormat.format("")));
-                    player.sendMessage(ChatFormat.format("&a-----------------------------------------------------"));
-                    player.sendMessage(Component.text(ChatFormat.format("&b&lSTORE &8| &aCheck out our store at "))
-                            .append(Component.text(ChatFormat.format("&ehttps://classicdupe.tebex.io"))
+                    player.sendMessage(Utils.format("<green>-----------------------------------------------------"));
+                    player.sendMessage(Utils.format("<aqua><bold>STORE</bold> <dark_gray>| <green>Check out our store at ")
+                            .append(Utils.format("<yellow>https://classicdupe.tebex.io")
                                     .clickEvent(ClickEvent.clickEvent(ClickEvent.Action.OPEN_URL, "https://classicdupe.tebex.io")))
-                            .append(Component.text(ChatFormat.format(" &aor by executing ")))
-                            .append(Component.text(ChatFormat.format("&e/buy"))
+                            .append(Utils.format(" <green>or by executing "))
+                            .append(Utils.format("<yellow>/buy")
                                     .clickEvent(ClickEvent.clickEvent(ClickEvent.Action.SUGGEST_COMMAND, "/buy"))));
-                    player.sendMessage(ChatFormat.format("&a-----------------------------------------------------"));
+                    player.sendMessage(Utils.format("<green>-----------------------------------------------------"));
                 });
             } else {
                 lastBroadcast = LastBroadcast.DISCORD;
                 ClassicDupe.getPlugin().getServer().getOnlinePlayers().forEach(player -> {
-                    player.sendMessage(Component.text(ChatFormat.format("")));
-                    player.sendMessage(ChatFormat.format("&a-----------------------------------------------------"));
-                    player.sendMessage(Component.text(ChatFormat.format("&b&lDISCORD &8| &aCheck out our discord at "))
-                            .append(Component.text(ChatFormat.format("&ehttps://discord.gg/FZtcF3pBu6"))
+                    player.sendMessage(Utils.format("<green>-----------------------------------------------------"));
+                    player.sendMessage(Utils.format("<aqua><bold>DISCORD</bold> <dark_gray>| <green>Check out our discord at ")
+                            .append(Utils.format("<yellow>https://discord.gg/FZtcF3pBu6")
                                     .clickEvent(ClickEvent.clickEvent(ClickEvent.Action.OPEN_URL, "https://discord.gg/FZtcF3pBu6")))
-                            .append(Component.text(ChatFormat.format(" &aor by executing ")))
-                            .append(Component.text(ChatFormat.format("&e/discord"))
+                            .append(Utils.format(" <green>or by executing "))
+                            .append(Utils.format("<yellow>/discord")
                                     .clickEvent(ClickEvent.clickEvent(ClickEvent.Action.SUGGEST_COMMAND, "/discord"))));
-                    player.sendMessage(ChatFormat.format("&a-----------------------------------------------------"));
+                    player.sendMessage(Utils.format("<green>-----------------------------------------------------"));
                 });
             }
         }
@@ -257,7 +253,7 @@ public class ClassicDupe extends JavaPlugin {
     }
 
     public static void rawBroadcast(String text) {
-        plugin.getServer().getOnlinePlayers().forEach(player -> player.sendMessage(ChatFormat.format(text)));
+        plugin.getServer().getOnlinePlayers().forEach(player -> player.sendMessage(Utils.format(text)));
     }
 
     public static Boolean scheduledRestartCanceled = false;
@@ -266,18 +262,18 @@ public class ClassicDupe extends JavaPlugin {
     public static void scheduleRestart() {
         scheduledRestartCanceled = false;
         restartInProgress = true;
-        rawBroadcast("&c&lThe server will restart in 60 seconds.");
+        rawBroadcast("<red><b>The server will restart in 60 seconds.");
         Bukkit.getScheduler().scheduleSyncDelayedTask(getPlugin(), () -> {
             if (scheduledRestartCanceled) return;
-            rawBroadcast("&c&lThe server will restart in 30 seconds.");
+            rawBroadcast("<red><b>The server will restart in 30 seconds.");
         }, 20L * 30L);
         Bukkit.getScheduler().scheduleSyncDelayedTask(getPlugin(), () -> {
             if (scheduledRestartCanceled) return;
-            rawBroadcast("&c&lThe server will restart in 10 seconds.");
+            rawBroadcast("<red><b>The server will restart in 10 seconds.");
         }, 20L * 50L);
         Bukkit.getScheduler().scheduleSyncDelayedTask(getPlugin(), () -> {
             if (scheduledRestartCanceled) return;
-            rawBroadcast("&c&lThe server will restart in 5 seconds.");
+            rawBroadcast("<red><b>The server will restart in 5 seconds.");
         }, 20L * 55L);
         Bukkit.getScheduler().scheduleSyncDelayedTask(getPlugin(), () -> {
             if (scheduledRestartCanceled) return;

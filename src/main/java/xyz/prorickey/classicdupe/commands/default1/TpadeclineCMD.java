@@ -18,24 +18,24 @@ public class TpadeclineCMD implements CommandExecutor, TabCompleter {
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
         if(!(sender instanceof Player p)) {
-            sender.sendMessage(Utils.cmdMsg("&cYou cannot execute this command from console"));
+            sender.sendMessage(Utils.cmdMsg("<red>You cannot execute this command from console"));
             return true;
         }
         if(args.length == 0) {
-            sender.sendMessage(Utils.cmdMsg("&cYou must include who you are declining"));
+            sender.sendMessage(Utils.cmdMsg("<red>You must include who you are declining"));
             return true;
         }
         Player recipient = Bukkit.getServer().getPlayer(args[0]);
         if(recipient == null || !recipient.isOnline()) {
-            p.sendMessage(Utils.cmdMsg("&e" + args[0] + " &cis not currently online"));
+            p.sendMessage(Utils.cmdMsg("<yellow>" + args[0] + " <red>is not currently online"));
             return true;
         }
         if(TpaCMD.tpaRequests.containsKey(recipient) && TpaCMD.tpaRequests.get(recipient) == p) {
-            recipient.sendMessage(Utils.cmdMsg("&e" + p.getName() + "&c has declined your teleport request"));
-            p.sendMessage(Utils.cmdMsg("&aDeclined &e" + recipient.getName() + "'s &ateleport request"));
+            recipient.sendMessage(Utils.cmdMsg("<yellow>" + p.getName() + "<red> has declined your teleport request"));
+            p.sendMessage(Utils.cmdMsg("<green>Declined <yellow>" + recipient.getName() + "'s <green>teleport request"));
             TpaCMD.tpaRequests.remove(recipient);
         } else {
-            p.sendMessage(Utils.cmdMsg("&cThat person has not requested to teleport to you"));
+            p.sendMessage(Utils.cmdMsg("<red>That person has not requested to teleport to you"));
         }
         return true;
     }

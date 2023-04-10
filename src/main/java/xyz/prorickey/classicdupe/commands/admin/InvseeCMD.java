@@ -20,16 +20,16 @@ public class InvseeCMD implements CommandExecutor, TabCompleter {
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
         if(!(sender instanceof Player p)) {
-            sender.sendMessage(Utils.cmdMsg("&cYou cannot execute this command from console"));
+            sender.sendMessage(Utils.cmdMsg("<red>You cannot execute this command from console"));
             return true;
         }
         if(args.length == 0) {
-            p.sendMessage(Utils.cmdMsg("&cYou must include at least 1 argument"));
+            p.sendMessage(Utils.cmdMsg("<red>You must include at least 1 argument"));
             return true;
         }
         Player invPlayer = Bukkit.getServer().getPlayer(args[0]);
         if(invPlayer == null || !invPlayer.isOnline()) {
-            sender.sendMessage(Utils.cmdMsg("&e" + args[0] + " &cis not currently online"));
+            sender.sendMessage(Utils.cmdMsg("<yellow>" + args[0] + " <red>is not currently online"));
             return true;
         }
         Inventory targetInv = invPlayer.getInventory();

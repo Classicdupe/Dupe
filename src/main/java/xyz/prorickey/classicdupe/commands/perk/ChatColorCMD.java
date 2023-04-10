@@ -15,7 +15,6 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import xyz.prorickey.classicdupe.ClassicDupe;
 import xyz.prorickey.classicdupe.Utils;
-import xyz.prorickey.proutils.ChatFormat;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -31,92 +30,92 @@ public class ChatColorCMD implements CommandExecutor, Listener, TabCompleter {
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
         if(!(sender instanceof Player p)) {
-            sender.sendMessage(Utils.cmdMsg("&cYou cannot execute this command from console"));
+            sender.sendMessage(Utils.cmdMsg("<red>You cannot execute this command from console"));
             return true;
         }
         String currentColor;
-        currentColor = colorProfiles.getOrDefault(p.getUniqueId().toString(), "&7");
+        currentColor = colorProfiles.getOrDefault(p.getUniqueId().toString(), "<gray>");
         if(args.length == 0) {
-            Inventory gui = Bukkit.createInventory(null, 9, Component.text(ChatFormat.format("&aChatColor Menu")));
+            Inventory gui = Bukkit.createInventory(null, 9, Utils.format("<green>ChatColor Menu"));
 
             //White
             ItemStack whiteWool = new ItemStack(Material.WHITE_WOOL);
             whiteWool.editMeta(meta -> {
-                meta.displayName(Component.text(ChatFormat.format("&fWhite Chat Color")));
-                if(currentColor.equals("&f")) meta.lore(List.of(Component.text(ChatFormat.format("&aEnabled"))));
-                else meta.lore(List.of(Component.text(ChatFormat.format("&cDisabled"))));
+                meta.displayName(Utils.format("<white>White Chat Color"));
+                if(currentColor.equals("<white>")) meta.lore(List.of(Utils.format("<green>Enabled")));
+                else meta.lore(List.of(Utils.format("<red>Disabled")));
             });
             gui.setItem(0, whiteWool);
 
             //Pink
             ItemStack pinkWool = new ItemStack(Material.PINK_WOOL);
             pinkWool.editMeta(meta -> {
-                meta.displayName(Component.text(ChatFormat.format("&dPink Chat Color")));
-                if(currentColor.equals("&d")) meta.lore(List.of(Component.text(ChatFormat.format("&aEnabled"))));
-                else meta.lore(List.of(Component.text(ChatFormat.format("&cDisabled"))));
+                meta.displayName(Utils.format("<light_purple>Pink Chat Color"));
+                if(currentColor.equals("<light_purple>")) meta.lore(List.of(Utils.format("<green>Enabled")));
+                else meta.lore(List.of(Utils.format("<red>Disabled")));
             });
             gui.setItem(1, pinkWool);
 
             //Red
             ItemStack redWool = new ItemStack(Material.RED_WOOL);
             redWool.editMeta(meta -> {
-                meta.displayName(Component.text(ChatFormat.format("&dRed Chat Color")));
-                if(currentColor.equals("&c")) meta.lore(List.of(Component.text(ChatFormat.format("&aEnabled"))));
-                else meta.lore(List.of(Component.text(ChatFormat.format("&cDisabled"))));
+                meta.displayName(Utils.format("<light_purple>Red Chat Color"));
+                if(currentColor.equals("<red>")) meta.lore(List.of(Utils.format("<green>Enabled")));
+                else meta.lore(List.of(Utils.format("<red>Disabled")));
             });
             gui.setItem(2, redWool);
 
             //Aqua
             ItemStack aquaWool = new ItemStack(Material.LIGHT_BLUE_WOOL);
             aquaWool.editMeta(meta -> {
-                meta.displayName(Component.text(ChatFormat.format("&bAqua Chat Color")));
-                if(currentColor.equals("&b")) meta.lore(List.of(Component.text(ChatFormat.format("&aEnabled"))));
-                else meta.lore(List.of(Component.text(ChatFormat.format("&cDisabled"))));
+                meta.displayName(Utils.format("<aqua>Aqua Chat Color"));
+                if(currentColor.equals("<aqua>")) meta.lore(List.of(Utils.format("<green>Enabled")));
+                else meta.lore(List.of(Utils.format("<red>Disabled")));
             });
             gui.setItem(3, aquaWool);
 
             //Blue
             ItemStack blueWool = new ItemStack(Material.BLUE_WOOL);
             blueWool.editMeta(meta -> {
-                meta.displayName(Component.text(ChatFormat.format("&9Blue Chat Color")));
-                if(currentColor.equals("&9")) meta.lore(List.of(Component.text(ChatFormat.format("&aEnabled"))));
-                else meta.lore(List.of(Component.text(ChatFormat.format("&cDisabled"))));
+                meta.displayName(Utils.format("<blue>Blue Chat Color"));
+                if(currentColor.equals("<blue>")) meta.lore(List.of(Utils.format("<green>Enabled")));
+                else meta.lore(List.of(Utils.format("<red>Disabled")));
             });
             gui.setItem(4, blueWool);
 
             //Green
             ItemStack greenWool = new ItemStack(Material.GREEN_WOOL);
             greenWool.editMeta(meta -> {
-                meta.displayName(Component.text(ChatFormat.format("&aGreen Chat Color")));
-                if(currentColor.equals("&a")) meta.lore(List.of(Component.text(ChatFormat.format("&aEnabled"))));
-                else meta.lore(List.of(Component.text(ChatFormat.format("&cDisabled"))));
+                meta.displayName(Utils.format("<green>Green Chat Color"));
+                if(currentColor.equals("<green>")) meta.lore(List.of(Utils.format("<green>Enabled")));
+                else meta.lore(List.of(Utils.format("<red>Disabled")));
             });
             gui.setItem(5, greenWool);
 
             //Yellow
             ItemStack yellowWool = new ItemStack(Material.YELLOW_WOOL);
             yellowWool.editMeta(meta -> {
-                meta.displayName(Component.text(ChatFormat.format("&eYellow Chat Color")));
-                if(currentColor.equals("&e")) meta.lore(List.of(Component.text(ChatFormat.format("&aEnabled"))));
-                else meta.lore(List.of(Component.text(ChatFormat.format("&cDisabled"))));
+                meta.displayName(Utils.format("<yellow>Yellow Chat Color"));
+                if(currentColor.equals("<yellow>")) meta.lore(List.of(Utils.format("<green>Enabled")));
+                else meta.lore(List.of(Utils.format("<red>Disabled")));
             });
             gui.setItem(6, yellowWool);
 
             //Gold
             ItemStack goldWool = new ItemStack(Material.ORANGE_WOOL);
             goldWool.editMeta(meta -> {
-                meta.displayName(Component.text(ChatFormat.format("&6Gold Chat Color")));
-                if(currentColor.equals("&6")) meta.lore(List.of(Component.text(ChatFormat.format("&aEnabled"))));
-                else meta.lore(List.of(Component.text(ChatFormat.format("&cDisabled"))));
+                meta.displayName(Utils.format("<gold>Gold Chat Color"));
+                if(currentColor.equals("<gold>")) meta.lore(List.of(Utils.format("<green>Enabled")));
+                else meta.lore(List.of(Utils.format("<red>Disabled")));
             });
             gui.setItem(7, goldWool);
 
             //Gray
             ItemStack grayWool = new ItemStack(Material.LIGHT_GRAY_WOOL);
             grayWool.editMeta(meta -> {
-                meta.displayName(Component.text(ChatFormat.format("&7Gray Chat Color")));
-                if(currentColor.equals("&7")) meta.lore(List.of(Component.text(ChatFormat.format("&aEnabled"))));
-                else meta.lore(List.of(Component.text(ChatFormat.format("&cDisabled"))));
+                meta.displayName(Utils.format("<gray>Gray Chat Color"));
+                if(currentColor.equals("<gray>")) meta.lore(List.of(Utils.format("<green>Enabled")));
+                else meta.lore(List.of(Utils.format("<red>Disabled")));
             });
             gui.setItem(8, grayWool);
 
@@ -126,40 +125,40 @@ public class ChatColorCMD implements CommandExecutor, Listener, TabCompleter {
         } else {
             switch (args[0].toLowerCase()) {
                 case "white" -> {
-                    colorProfiles.put(p.getUniqueId().toString(), "&f");
-                    p.sendMessage(Utils.cmdMsg("&aSet your chat color to &fWhite"));
+                    colorProfiles.put(p.getUniqueId().toString(), "<white>");
+                    p.sendMessage(Utils.cmdMsg("<green>Set your chat color to <white>White"));
                 }
                 case "pink" -> {
-                    colorProfiles.put(p.getUniqueId().toString(), "&d");
-                    p.sendMessage(Utils.cmdMsg("&aSet your chat color to &dPink"));
+                    colorProfiles.put(p.getUniqueId().toString(), "<light_purple>");
+                    p.sendMessage(Utils.cmdMsg("<green>Set your chat color to <light_purple>Pink"));
                 }
                 case "red" -> {
-                    colorProfiles.put(p.getUniqueId().toString(), "&c");
-                    p.sendMessage(Utils.cmdMsg("&aSet your chat color to &cRed"));
+                    colorProfiles.put(p.getUniqueId().toString(), "<red>");
+                    p.sendMessage(Utils.cmdMsg("<green>Set your chat color to <red>Red"));
                 }
                 case "aqua" -> {
-                    colorProfiles.put(p.getUniqueId().toString(), "&b");
-                    p.sendMessage(Utils.cmdMsg("&aSet your chat color to &bAqua"));
+                    colorProfiles.put(p.getUniqueId().toString(), "<aqua>");
+                    p.sendMessage(Utils.cmdMsg("<green>Set your chat color to <aqua>Aqua"));
                 }
                 case "blue" -> {
-                    colorProfiles.put(p.getUniqueId().toString(), "&9");
-                    p.sendMessage(Utils.cmdMsg("&aSet your chat color to &9Blue"));
+                    colorProfiles.put(p.getUniqueId().toString(), "<blue>");
+                    p.sendMessage(Utils.cmdMsg("<green>Set your chat color to <blue>Blue"));
                 }
                 case "green" -> {
-                    colorProfiles.put(p.getUniqueId().toString(), "&a");
-                    p.sendMessage(Utils.cmdMsg("&aSet your chat color to &aGreen"));
+                    colorProfiles.put(p.getUniqueId().toString(), "<green>");
+                    p.sendMessage(Utils.cmdMsg("<green>Set your chat color to <green>Green"));
                 }
                 case "yellow" -> {
-                    colorProfiles.put(p.getUniqueId().toString(), "&e");
-                    p.sendMessage(Utils.cmdMsg("&aSet your chat color to &eYellow"));
+                    colorProfiles.put(p.getUniqueId().toString(), "<yellow>");
+                    p.sendMessage(Utils.cmdMsg("<green>Set your chat color to <yellow>Yellow"));
                 }
                 case "gold" -> {
-                    colorProfiles.put(p.getUniqueId().toString(), "&6");
-                    p.sendMessage(Utils.cmdMsg("&aSet your chat color to &6Gold"));
+                    colorProfiles.put(p.getUniqueId().toString(), "<gold>");
+                    p.sendMessage(Utils.cmdMsg("<green>Set your chat color to <gold>Gold"));
                 }
                 case "gray" -> {
-                    colorProfiles.put(p.getUniqueId().toString(), "&7");
-                    p.sendMessage(Utils.cmdMsg("&aSet your chat color to &7Gray"));
+                    colorProfiles.put(p.getUniqueId().toString(), "<gray>");
+                    p.sendMessage(Utils.cmdMsg("<green>Set your chat color to <gray>Gray"));
                 }
             }
             ClassicDupe.getDatabase().getPlayerDatabase().setChatColor(p.getUniqueId().toString(), colorProfiles.get(p.getUniqueId().toString()));
@@ -174,40 +173,40 @@ public class ChatColorCMD implements CommandExecutor, Listener, TabCompleter {
         Player p = (Player) e.getWhoClicked();
         switch (e.getRawSlot()) {
             case 0 -> {
-                colorProfiles.put(p.getUniqueId().toString(), "&f");
-                p.sendMessage(Utils.cmdMsg("&aSet your chat color to &fWhite"));
+                colorProfiles.put(p.getUniqueId().toString(), "<white>");
+                p.sendMessage(Utils.cmdMsg("<green>Set your chat color to <white>White"));
             }
             case 1 -> {
-                colorProfiles.put(p.getUniqueId().toString(), "&d");
-                p.sendMessage(Utils.cmdMsg("&aSet your chat color to &dPink"));
+                colorProfiles.put(p.getUniqueId().toString(), "<light_purple>");
+                p.sendMessage(Utils.cmdMsg("<green>Set your chat color to <light_purple>Pink"));
             }
             case 2 -> {
-                colorProfiles.put(p.getUniqueId().toString(), "&c");
-                p.sendMessage(Utils.cmdMsg("&aSet your chat color to &cRed"));
+                colorProfiles.put(p.getUniqueId().toString(), "<red>");
+                p.sendMessage(Utils.cmdMsg("<green>Set your chat color to <red>Red"));
             }
             case 3 -> {
-                colorProfiles.put(p.getUniqueId().toString(), "&b");
-                p.sendMessage(Utils.cmdMsg("&aSet your chat color to &bAqua"));
+                colorProfiles.put(p.getUniqueId().toString(), "<aqua>");
+                p.sendMessage(Utils.cmdMsg("<green>Set your chat color to <aqua>Aqua"));
             }
             case 4 -> {
-                colorProfiles.put(p.getUniqueId().toString(), "&9");
-                p.sendMessage(Utils.cmdMsg("&aSet your chat color to &9Blue"));
+                colorProfiles.put(p.getUniqueId().toString(), "<blue>");
+                p.sendMessage(Utils.cmdMsg("<green>Set your chat color to <blue>Blue"));
             }
             case 5 -> {
-                colorProfiles.put(p.getUniqueId().toString(), "&a");
-                p.sendMessage(Utils.cmdMsg("&aSet your chat color to &aGreen"));
+                colorProfiles.put(p.getUniqueId().toString(), "<green>");
+                p.sendMessage(Utils.cmdMsg("<green>Set your chat color to <green>Green"));
             }
             case 6 -> {
-                colorProfiles.put(p.getUniqueId().toString(), "&e");
-                p.sendMessage(Utils.cmdMsg("&aSet your chat color to &eYellow"));
+                colorProfiles.put(p.getUniqueId().toString(), "<yellow>");
+                p.sendMessage(Utils.cmdMsg("<green>Set your chat color to <yellow>Yellow"));
             }
             case 7 -> {
-                colorProfiles.put(p.getUniqueId().toString(), "&6");
-                p.sendMessage(Utils.cmdMsg("&aSet your chat color to &6Gold"));
+                colorProfiles.put(p.getUniqueId().toString(), "<gold>");
+                p.sendMessage(Utils.cmdMsg("<green>Set your chat color to <gold>Gold"));
             }
             case 8 -> {
-                colorProfiles.put(p.getUniqueId().toString(), "&7");
-                p.sendMessage(Utils.cmdMsg("&aSet your chat color to &7Gray"));
+                colorProfiles.put(p.getUniqueId().toString(), "<gray>");
+                p.sendMessage(Utils.cmdMsg("<green>Set your chat color to <gray>Gray"));
             }
         }
         ClassicDupe.getDatabase().getPlayerDatabase().setChatColor(p.getUniqueId().toString(), colorProfiles.get(p.getUniqueId().toString()));

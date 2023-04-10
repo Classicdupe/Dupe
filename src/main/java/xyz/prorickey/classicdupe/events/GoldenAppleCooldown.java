@@ -24,7 +24,7 @@ public class GoldenAppleCooldown implements Listener {
         else if(e.getPlayer().hasPermission("perks.godAppleCooldown.legend")) cooldown = 10;
         if(lastGappEaten.containsKey(e.getPlayer()) && lastGappEaten.get(e.getPlayer()) + (cooldown*1000) > System.currentTimeMillis()) {
             Long wait = (lastGappEaten.get(e.getPlayer()) + (cooldown*1000))-System.currentTimeMillis();
-            e.getPlayer().sendMessage(Utils.cmdMsg("&cYou must wait " + Math.round(wait/1000) + " second(s) before you can eat another Golden Apple"));
+            e.getPlayer().sendMessage(Utils.cmdMsg("<red>You must wait " + Math.round(wait/1000) + " second(s) before you can eat another Golden Apple"));
             e.setCancelled(true);
             return;
         }

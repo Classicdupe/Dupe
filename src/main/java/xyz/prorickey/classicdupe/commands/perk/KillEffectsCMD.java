@@ -38,7 +38,7 @@ public class KillEffectsCMD implements CommandExecutor, TabCompleter, Listener {
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
         if(!(sender instanceof Player p)) {
-            sender.sendMessage(Utils.cmdMsg("&cYou cannot execute this command from console"));
+            sender.sendMessage(Utils.cmdMsg("<red>You cannot execute this command from console"));
             return true;
         }
 
@@ -56,8 +56,8 @@ public class KillEffectsCMD implements CommandExecutor, TabCompleter, Listener {
             if(activeKillEffect != "none") {
                 meta.displayName(mm.deserialize("<gradient:#FF4646:#FF2B2B>Toggle Off</gradient>"));
                 meta.lore(List.of(
-                        Component.text(ChatFormat.format("&eCurrent Kill Effect: " + activeKillEffect))
-                ));
+                        Utils.format("<yellow>Current Kill Effect: " + activeKillEffect))
+                );
             }
             else meta.displayName(mm.deserialize("<gradient:#2FD83F:#15D927>Toggle Off</gradient>"));
         });
@@ -72,10 +72,10 @@ public class KillEffectsCMD implements CommandExecutor, TabCompleter, Listener {
             }
             meta.displayName(mm.deserialize("<gradient:#FA54FF:#F923FF>Noteblock Run Up</gradient>"));
             meta.lore(List.of(
-                    Component.text(ChatFormat.format("&eWhen a player is killed, everyone in a")),
-                    Component.text(ChatFormat.format("&e25 block radius hears a short noteblock")),
-                    Component.text(ChatFormat.format("&etune"))
-            ));
+                    Utils.format("<yellow>When a player is killed, everyone in a"),
+                    Utils.format("<yellow>25 block radius hears a short noteblock"),
+                    Utils.format("<yellow>tune"))
+            );
         });
         gui.setItem(3, noteblockrunup);
 
@@ -87,8 +87,8 @@ public class KillEffectsCMD implements CommandExecutor, TabCompleter, Listener {
             }
             meta.displayName(mm.deserialize("<gradient:#FF7A23:#FF5323>Flames</gradient>"));
             meta.lore(List.of(
-                    Component.text(ChatFormat.format("&eWhen a player is killed, flames appear")),
-                    Component.text(ChatFormat.format("&earound where the victim was"))
+                    Utils.format("<yellow>When a player is killed, flames appear"),
+                    Utils.format("<yellow>around where the victim was")
             ));
         });
         gui.setItem(4, flames);
@@ -101,8 +101,8 @@ public class KillEffectsCMD implements CommandExecutor, TabCompleter, Listener {
             }
             meta.displayName(mm.deserialize("<gradient:#F3FF23:#F5FF4A>Flames</gradient>"));
             meta.lore(List.of(
-                    Component.text(ChatFormat.format("&eWhen a player is killed, a firework")),
-                    Component.text(ChatFormat.format("&eis launched from where they were"))
+                    Utils.format("<yellow>When a player is killed, a firework"),
+                    Utils.format("<yellow>is launched from where they were")
             ));
         });
         gui.setItem(5, firework);

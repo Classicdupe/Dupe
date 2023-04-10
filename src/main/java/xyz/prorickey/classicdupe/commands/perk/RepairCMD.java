@@ -15,7 +15,7 @@ public class RepairCMD implements CommandExecutor {
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
         if(!(sender instanceof Player p)) {
-            sender.sendMessage(Utils.cmdMsg("&cYou cannot execute this command from console"));
+            sender.sendMessage(Utils.cmdMsg("<red>You cannot execute this command from console"));
             return true;
         }
         p.getInventory().forEach(item -> {
@@ -25,7 +25,7 @@ public class RepairCMD implements CommandExecutor {
                 item.setItemMeta(meta);
             }
         });
-        p.sendMessage(Utils.cmdMsg("&aRepaired all items in your inventory"));
+        p.sendMessage(Utils.cmdMsg("<green>Repaired all items in your inventory"));
         return true;
     }
     

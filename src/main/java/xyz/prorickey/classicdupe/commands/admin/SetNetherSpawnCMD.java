@@ -20,19 +20,19 @@ public class SetNetherSpawnCMD implements CommandExecutor, TabCompleter {
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
         if(args.length == 0) {
             if(!(sender instanceof Player p)) {
-                sender.sendMessage(Utils.cmdMsg("&cYou cannot execute this command from console"));
+                sender.sendMessage(Utils.cmdMsg("<red>You cannot execute this command from console"));
                 return true;
             }
             ClassicDupe.getDatabase().setNetherSpawn(p.getLocation());
-            p.sendMessage(Utils.cmdMsg("&aSet the nether's spawn location to your location"));
+            p.sendMessage(Utils.cmdMsg("<green>Set the nether's spawn location to your location"));
         } else {
             Player tarj = Bukkit.getServer().getPlayer(args[0]);
             if(tarj == null || !tarj.isOnline()) {
-                sender.sendMessage(Utils.cmdMsg("&e" + args[0] + " &cis not currently online"));
+                sender.sendMessage(Utils.cmdMsg("<yellow>" + args[0] + " <red>is not currently online"));
                 return true;
             }
             ClassicDupe.getDatabase().setNetherSpawn(tarj.getLocation());
-            sender.sendMessage(Utils.cmdMsg("&aSet the nether's spawn location to &e" + tarj.getName() + "'s &alocation"));
+            sender.sendMessage(Utils.cmdMsg("<green>Set the nether's spawn location to <yellow>" + tarj.getName() + "'s <green>location"));
         }
         return true;
     }

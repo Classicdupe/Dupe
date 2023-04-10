@@ -17,15 +17,15 @@ public class NakedOffCMD implements CommandExecutor, TabCompleter {
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
         if(!(sender instanceof Player player)) {
-            sender.sendMessage(Utils.cmdMsg("&cYou cannot execute this command from console"));
+            sender.sendMessage(Utils.cmdMsg("<red>You cannot execute this command from console"));
             return true;
         }
         if(!JoinEvent.nakedProtection.containsKey(player)) {
-            player.sendMessage(Utils.cmdMsg("&cYou are not currently in naked protection"));
+            player.sendMessage(Utils.cmdMsg("<red>You are not currently in naked protection"));
             return true;
         }
         JoinEvent.nakedProtection.remove(player);
-        player.sendMessage(Utils.cmdMsg("&aTurned off naked protection, pvp is now enabled"));
+        player.sendMessage(Utils.cmdMsg("<green>Turned off naked protection, pvp is now enabled"));
         return true;
     }
 

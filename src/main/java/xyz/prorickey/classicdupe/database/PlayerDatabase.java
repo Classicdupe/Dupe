@@ -320,7 +320,7 @@ public class PlayerDatabase {
 
     public void initPlayer(Player player) {
         try {
-            PreparedStatement stat = conn.prepareStatement("INSERT INTO players(uuid, name, nickname, timesjoined, playtime, randomitem, chatcolor, gradient, gradientfrom, gradientto) VALUES (?, ?, null, 1, 0, true, '&7', false, null, null)");
+            PreparedStatement stat = conn.prepareStatement("INSERT INTO players(uuid, name, nickname, timesjoined, playtime, randomitem, chatcolor, gradient, gradientfrom, gradientto) VALUES (?, ?, null, 1, 0, true, '<gray>', false, null, null)");
             stat.setString(1, player.getUniqueId().toString());
             stat.setString(2, player.getName());
             stat.execute();

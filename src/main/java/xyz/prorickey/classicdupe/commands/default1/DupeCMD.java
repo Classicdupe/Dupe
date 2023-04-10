@@ -21,15 +21,15 @@ public class DupeCMD implements CommandExecutor, TabCompleter {
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
         int dupeNum = 1;
         if(!(sender instanceof Player p)) {
-            sender.sendMessage(Utils.cmdMsg("&cYou cannot execute this command from console"));
+            sender.sendMessage(Utils.cmdMsg("<red>You cannot execute this command from console"));
             return true;
         }
         if(forbiddenDupes.contains(p.getInventory().getItemInMainHand().getType())) {
-            p.sendMessage(Utils.cmdMsg("&cYou cannot dupe that item"));
+            p.sendMessage(Utils.cmdMsg("<red>You cannot dupe that item"));
             return true;
         }
         if(Combat.inCombat.containsKey(p.getPlayer()) && forbiddenDupesInCombat.contains(p.getInventory().getItemInMainHand().getType())) {
-            p.sendMessage(Utils.cmdMsg("&cYou cannot dupe that item while in combat"));
+            p.sendMessage(Utils.cmdMsg("<red>You cannot dupe that item while in combat"));
             return true;
         }
         if(args.length > 0) {

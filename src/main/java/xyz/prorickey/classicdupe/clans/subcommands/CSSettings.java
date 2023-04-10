@@ -7,7 +7,6 @@ import xyz.prorickey.classicdupe.clans.Clan;
 import xyz.prorickey.classicdupe.clans.ClanMember;
 import xyz.prorickey.classicdupe.clans.ClanSub;
 import xyz.prorickey.classicdupe.clans.ClanDatabase;
-import xyz.prorickey.proutils.ChatFormat;
 import xyz.prorickey.proutils.TabComplete;
 
 import java.util.ArrayList;
@@ -18,50 +17,50 @@ import java.util.Map;
 public class CSSettings extends ClanSub {
 
     Map<String, String> nameToCode = new HashMap<>() {{
-        put("black", "&0");
-        put("darkBlue", "&1");
-        put("darkGreen", "&2");
-        put("darkAqua", "&3");
-        put("darkRed", "&4");
-        put("darkPurple", "&5");
-        put("gold", "&6");
-        put("gray", "&7");
-        put("darkGray", "&8");
-        put("blue", "&9");
-        put("green", "&a");
-        put("aqua", "&b");
-        put("red", "&c");
-        put("pink", "&d");
-        put("yellow", "&e");
-        put("white", "&f");
+        put("black", "<black>");
+        put("darkBlue", "<dark_blue>");
+        put("darkGreen", "<dark_green>");
+        put("darkAqua", "<dark_aqua>");
+        put("darkRed", "<dark_red>");
+        put("darkPurple", "<dark_purple>");
+        put("gold", "<gold>");
+        put("gray", "<gray>");
+        put("darkGray", "<dark_gray>");
+        put("blue", "<blue>");
+        put("green", "<green>");
+        put("aqua", "<aqua>");
+        put("red", "<red>");
+        put("pink", "<light_purple>");
+        put("yellow", "<yellow>");
+        put("white", "<white>");
     }};
 
     @Override
     public void execute(CommandSender sender, String[] args) {
         if(!(sender instanceof Player player)) {
-            sender.sendMessage(ChatFormat.format("&cYou cannot execute this command from console"));
+            sender.sendMessage(Utils.format("<red>You cannot execute this command from console"));
             return;
         }
         ClanMember cmem = ClanDatabase.getClanMember(player.getUniqueId());
         if(cmem.getClanID() == null) {
-            player.sendMessage(Utils.cmdMsg("&cYou are not in a clan. You can't change the settings of a clan that doesn't exist"));
+            player.sendMessage(Utils.cmdMsg("<red>You are not in a clan. You can't change the settings of a clan that doesn't exist"));
             return;
         }
         if(cmem.getLevel() < 2) {
-            player.sendMessage(Utils.cmdMsg("&cYou must either be an admin or the owner of the clan to execute this command"));
+            player.sendMessage(Utils.cmdMsg("<red>You must either be an admin or the owner of the clan to execute this command"));
             return;
         }
         Clan clan = ClanDatabase.getClan(cmem.getClanID());
         if(args.length == 0) {
-            player.sendMessage(ChatFormat.format("&e&lClan Settings"));
-            player.sendMessage(ChatFormat.format("&epublicClan: " + clan.getPublicClan()));
-            player.sendMessage(ChatFormat.format("&eclanColor: " + clan.getClanColor() + cmem.getClanName()));
+            player.sendMessage(Utils.format("<yellow><bold>Clan Settings"));
+            player.sendMessage(Utils.format("<yellow>publicClan: " + clan.getPublicClan()));
+            player.sendMessage(Utils.format("<yellow>clanColor: " + clan.getClanColor() + cmem.getClanName()));
         } else {
             if(args.length == 1) {
                 switch(args[0]) {
-                    case "publicClan" -> player.sendMessage(Utils.cmdMsg("&e&lClan Setting &6publicClan: " + clan.getPublicClan()));
-                    case "clanColor" -> player.sendMessage(Utils.cmdMsg("&e&lClan Setting &6clanColor: " + clan.getClanColor() + cmem.getClanName()));
-                    default -> player.sendMessage(Utils.cmdMsg("&cThat setting doesn't exist"));
+                    case "publicClan" -> player.sendMessage(Utils.cmdMsg("<yellow<b>Clan Setting <gold>publicClan: " + clan.getPublicClan()));
+                    case "clanColor" -> player.sendMessage(Utils.cmdMsg("<yellow<b>Clan Setting <gold>clanColor: " + clan.getClanColor() + cmem.getClanName()));
+                    default -> player.sendMessage(Utils.cmdMsg("<red>That setting doesn't exist"));
                 }
             } else {
                 switch(args[0]) {
@@ -69,22 +68,22 @@ public class CSSettings extends ClanSub {
                         if(args[1].equalsIgnoreCase("true")) {
                             clan.setPublicClan(true);
                             ClanDatabase.setPublicClan(clan, true);
-                            player.sendMessage(Utils.cmdMsg("&eYour clan is now public"));
+                            player.sendMessage(Utils.cmdMsg("<yellowYour clan is now public"));
                         } else if(args[1].equalsIgnoreCase("false")) {
                             clan.setPublicClan(false);
                             ClanDatabase.setPublicClan(clan, false);
-                            player.sendMessage(Utils.cmdMsg("&eYour clan is now private"));
+                            player.sendMessage(Utils.cmdMsg("<yellowYour clan is now private"));
                         } else {
-                            player.sendMessage(Utils.cmdMsg("&cYou can only set that setting to true or false"));
+                            player.sendMessage(Utils.cmdMsg("<red>You can only set that setting to true or false"));
                         }
                     }
                     case "clanColor" -> {
                         if(nameToCode.containsKey(args[1])) {
                             clan.setClanColor(nameToCode.get(args[1]));
                             ClanDatabase.setClanColor(clan, nameToCode.get(args[1]));
-                            player.sendMessage(Utils.cmdMsg("&eYour clan color is now " + nameToCode.get(args[1]) + args[1]));
+                            player.sendMessage(Utils.cmdMsg("<yellowYour clan color is now " + nameToCode.get(args[1]) + args[1]));
                         } else {
-                            player.sendMessage(Utils.cmdMsg("&cYou must pick one of the following colors: black, darkBlue, darkGreen, darkAqua, darkRed, darkPurple, gold, gray, darkGray, blue, green, aqua, red, pink, yellow or white"));
+                            player.sendMessage(Utils.cmdMsg("<red>You must pick one of the following colors: black, darkBlue, darkGreen, darkAqua, darkRed, darkPurple, gold, gray, darkGray, blue, green, aqua, red, pink, yellow or white"));
                         }
                     }
                 }

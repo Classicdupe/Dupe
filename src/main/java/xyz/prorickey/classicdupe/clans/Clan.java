@@ -19,7 +19,7 @@ public class Clan {
 
     // Settings
     private boolean publicClan = false;
-    private String clanColor = "&e";
+    private String clanColor = "<yellow>";
 
     // Warps
     private Map<String, Warp> warps = new HashMap<>();

@@ -10,7 +10,6 @@ import xyz.prorickey.classicdupe.clans.Clan;
 import xyz.prorickey.classicdupe.clans.ClanMember;
 import xyz.prorickey.classicdupe.clans.ClanSub;
 import xyz.prorickey.classicdupe.clans.ClanDatabase;
-import xyz.prorickey.proutils.ChatFormat;
 import xyz.prorickey.proutils.TabComplete;
 
 import java.util.ArrayList;
@@ -21,57 +20,57 @@ public class CSDemote extends ClanSub {
     @Override
     public void execute(CommandSender sender, String[] args) {
         if(!(sender instanceof Player player)) {
-            sender.sendMessage(ChatFormat.format("&cYou cannot execute this command from console"));
+            sender.sendMessage(Utils.format("<red>You cannot execute this command from console"));
             return;
         }
         ClanMember cmem = ClanDatabase.getClanMember(player.getUniqueId());
         if(cmem.getClanID() == null) {
-            player.sendMessage(Utils.cmdMsg("&cYou must be in a clan to demote players"));
+            player.sendMessage(Utils.cmdMsg("<red>You must be in a clan to demote players"));
             return;
         }
         if(args.length == 0) {
-            player.sendMessage(Utils.cmdMsg("&cYou must provide a player to demote"));
+            player.sendMessage(Utils.cmdMsg("<red>You must provide a player to demote"));
             return;
         }
         Clan clan = ClanDatabase.getClan(cmem.getClanID());
         OfflinePlayer offPlayer = Bukkit.getOfflinePlayer(args[0]);
         if(!clan.getMembers().contains(offPlayer)) {
-            player.sendMessage(Utils.cmdMsg("&cThat player is not in your clan"));
+            player.sendMessage(Utils.cmdMsg("<red>That player is not in your clan"));
             return;
         }
         ClanMember pmem = ClanDatabase.getClanMember(offPlayer.getUniqueId());
         if(!Objects.equals(pmem.getClanID(), cmem.getClanID())) {
-            player.sendMessage(Utils.cmdMsg("&cThat player is not in your clan"));
+            player.sendMessage(Utils.cmdMsg("<red>That player is not in your clan"));
             return;
         }
         if(pmem.getLevel() == 0) {
-            player.sendMessage(Utils.cmdMsg("&cThat player is already a default. You cannot demote them further"));
+            player.sendMessage(Utils.cmdMsg("<red>That player is already a default. You cannot demote them further"));
             return;
         }
         if(pmem.getLevel() == 1) {
             if(cmem.getLevel() < 3) {
-                player.sendMessage(Utils.cmdMsg("&cYou must be an admin or the owner to demote players"));
+                player.sendMessage(Utils.cmdMsg("<red>You must be an admin or the owner to demote players"));
                 return;
             }
             pmem.setLevel(0);
             clan.removeVip(pmem.getOffPlayer());
             clan.addDefault(pmem.getOffPlayer());
             ClanDatabase.setPlayerLevel(pmem.getOffPlayer().getUniqueId(), 0);
-            player.sendMessage(Utils.cmdMsg("&eDemoted &6" + pmem.getOffPlayer().getName()));
-            if(offPlayer.isOnline()) offPlayer.getPlayer().sendMessage(Utils.cmdMsg("&eYou have been demoted in your clan by &6" + player.getName()));
+            player.sendMessage(Utils.cmdMsg("<yellowDemoted <gold>" + pmem.getOffPlayer().getName()));
+            if(offPlayer.isOnline()) offPlayer.getPlayer().sendMessage(Utils.cmdMsg("<yellowYou have been demoted in your clan by <gold>" + player.getName()));
         } else if(pmem.getLevel() == 2) {
             if(cmem.getLevel() != 3) {
-                player.sendMessage(Utils.cmdMsg("&cYou must be the owner of the clan to demote admins"));
+                player.sendMessage(Utils.cmdMsg("<red>You must be the owner of the clan to demote admins"));
                 return;
             }
             pmem.setLevel(1);
             clan.removeAdmin(pmem.getOffPlayer());
             clan.addVip(pmem.getOffPlayer());
             ClanDatabase.setPlayerLevel(pmem.getOffPlayer().getUniqueId(), 1);
-            player.sendMessage(Utils.cmdMsg("&eDemoted &6" + pmem.getOffPlayer().getName()));
-            if(offPlayer.isOnline()) offPlayer.getPlayer().sendMessage(Utils.cmdMsg("&eYou have been demoted in your clan by &6" + player.getName()));
+            player.sendMessage(Utils.cmdMsg("<yellowDemoted <gold>" + pmem.getOffPlayer().getName()));
+            if(offPlayer.isOnline()) offPlayer.getPlayer().sendMessage(Utils.cmdMsg("<yellowYou have been demoted in your clan by <gold>" + player.getName()));
         } else if(pmem.getLevel() == 3) {
-            player.sendMessage(Utils.cmdMsg("&cYou cannot demote the owner of your clan"));
+            player.sendMessage(Utils.cmdMsg("<red>You cannot demote the owner of your clan"));
         }
     }
 

@@ -32,26 +32,26 @@ public class PlayerVaultCMD implements CommandExecutor, TabCompleter, Listener {
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
         if(!(sender instanceof Player p)) {
-            sender.sendMessage(Utils.cmdMsg("&cYou cannot execute that command from console"));
+            sender.sendMessage(Utils.cmdMsg("<red>You cannot execute that command from console"));
             return true;
         }
         if(args.length == 0) {
-            p.sendMessage(Utils.cmdMsg("&cYou must include which vault you would like to open"));
+            p.sendMessage(Utils.cmdMsg("<red>You must include which vault you would like to open"));
             return true;
         }
         int vault;
         try {
             vault = Integer.parseInt(args[0]);
         } catch(NumberFormatException e) {
-            p.sendMessage(Utils.cmdMsg("&cPlease provide a valid vault number to access"));
+            p.sendMessage(Utils.cmdMsg("<red>Please provide a valid vault number to access"));
             return true;
         }
         Map<Integer, ItemStack> vaultMap = ClassicDupe.getPVDatabase().getVault(p.getUniqueId().toString(), vault);
         if(vaultMap == null) {
-            p.sendMessage(Utils.cmdMsg("&cYou do not have access to that vault"));
+            p.sendMessage(Utils.cmdMsg("<red>You do not have access to that vault"));
             return true;
         }
-        Inventory vaultGUI = Bukkit.createInventory(null, 54, Component.text(ChatFormat.format("&9&lVault #" + vault)));
+        Inventory vaultGUI = Bukkit.createInventory(null, 54, Utils.format("<blue><b>Vault #" + vault));
         vaultMap.forEach(vaultGUI::setItem);
         p.openInventory(vaultGUI);
         vaultGuis.put(p.getUniqueId().toString(), vaultGUI);
