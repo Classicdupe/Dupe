@@ -23,6 +23,7 @@ public class KEPoints implements Listener {
 
     @EventHandler(priority = EventPriority.HIGH)
     public void onPlayerDeath(PlayerDeathEvent e) {
+        if(!KOTHEventManager.running) return;
         if(!KOTHEventManager.region.contains(e.getPlayer().getLocation().getBlockX(), e.getPlayer().getLocation().getBlockY(), e.getPlayer().getLocation().getBlockZ())) return;
         KOTHEventManager.PlayerKothData data = KOTHEventManager.getPlayerKothData(e.getPlayer());
         data.addDeath();

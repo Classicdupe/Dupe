@@ -47,7 +47,6 @@ public class KOTHEventManager {
 
     private static JavaPlugin plugin;
     private static long timeSinceLastKOTH;
-    private static Listener KEPoints = new KEPoints();
 
     public static boolean running = false;
     public static Map<UUID, PlayerKothData> kothData = new HashMap<>();
@@ -60,6 +59,8 @@ public class KOTHEventManager {
 
         pl.getCommand("koth").setExecutor(new KothKCMD());
         pl.getCommand("koth").setTabCompleter(new KothKCMD());
+
+        pl.getServer().getPluginManager().registerEvents(new KEPoints(), pl);
 
     }
 
@@ -104,7 +105,6 @@ public class KOTHEventManager {
         WorldGuard.getInstance().getPlatform().getRegionContainer()
                 .get(BukkitAdapter.adapt(Bukkit.getWorld("world"))).addRegion(region);
         carpetTask = new KEPoints.CarpetTask().runTaskTimer(plugin, 0, 10);
-        plugin.getServer().getPluginManager().registerEvents(KEPoints, plugin);
         Bukkit.getOnlinePlayers().forEach(p -> p.sendMessage(ChatFormat.format("&6&lKOTH &7| &eKoth event has started")));
         running = true;
         Bukkit.getScheduler().scheduleSyncDelayedTask(ClassicDupe.getPlugin(), KOTHEventManager::endKOTHEvent, 20*60*30);
@@ -113,7 +113,6 @@ public class KOTHEventManager {
     public static void endKOTHEvent() {
         if(!running) return;
         carpetTask.cancel();
-        HandlerList.unregisterAll(KEPoints);
         WorldGuard.getInstance().getPlatform().getRegionContainer()
                 .get(BukkitAdapter.adapt(Bukkit.getWorld("world"))).removeRegion(region.getId());
         CuboidRegion rg = new CuboidRegion(BukkitAdapter.adapt(Bukkit.getWorld("world")), region.getMinimumPoint(), region.getMaximumPoint());
@@ -123,56 +122,58 @@ public class KOTHEventManager {
         });
         region = null;
         running = false;
-        Map<PlayerKothData, Integer> kothPoints = new HashMap<>();
-        Map<PlayerKothData, Integer> kothKills = new HashMap<>();
-        kothData.forEach((uuid, data) -> {
-            kothPoints.put(data, data.getPoints());
-            kothKills.put(data, data.getKills());
-        });
-        Map<Integer, PlayerKothData> topPoints =
-                kothPoints.entrySet().stream()
-                        .sorted(Map.Entry.comparingByValue(Comparator.reverseOrder()))
-                        .limit(3)
-                        .collect(Collectors.toMap(
-                                Map.Entry::getValue, Map.Entry::getKey, (e1, e2) -> e1, LinkedHashMap::new));
-        Map<Integer, PlayerKothData> topKills =
-                kothKills.entrySet().stream()
-                        .sorted(Map.Entry.comparingByValue(Comparator.reverseOrder()))
-                        .limit(3)
-                        .collect(Collectors.toMap(
-                                Map.Entry::getValue, Map.Entry::getKey, (e1, e2) -> e1, LinkedHashMap::new));
-        List<PlayerKothData> topPointsList = topPoints.values().stream().toList();
-        List<PlayerKothData> topKillsList = topKills.values().stream().toList();
-        Bukkit.getOnlinePlayers().forEach(p -> {
-            p.sendMessage(ChatFormat.format("&e&lThe KOTH event has ended"));
-            p.sendMessage(ChatFormat.format("&e--- &6Top Points &e---"));
-            p.sendMessage(Component.text(ChatFormat.format("&e1. " + topPointsList.get(0).getOffPlayer().getName() + " - " + topPointsList.get(0).getPoints()))
-                    .hoverEvent(HoverEvent.showText(
-                            Component.text(ChatFormat.format("&eKOTH Stats\n&aKills &7- &e" + topPointsList.get(0).getKills() + "\n&aDeaths &7- &e" + topPointsList.get(0).getDeaths() + "\n&aPoints &7- &e" + topPointsList.get(0).getPoints()))
-                    )));
-            p.sendMessage(Component.text(ChatFormat.format("&e2. " + topPointsList.get(1).getOffPlayer().getName() + " - " + topPointsList.get(1).getPoints()))
-                    .hoverEvent(HoverEvent.showText(
-                            Component.text(ChatFormat.format("&eKOTH Stats\n&aKills &7- &e" + topPointsList.get(1).getKills() + "\n&aDeaths &7- &e" + topPointsList.get(1).getDeaths() + "\n&aPoints &7- &e" + topPointsList.get(1).getPoints()))
-                    )));
-            p.sendMessage(Component.text(ChatFormat.format("&e3. " + topPointsList.get(2).getOffPlayer().getName() + " - " + topPointsList.get(2).getPoints()))
-                    .hoverEvent(HoverEvent.showText(
-                            Component.text(ChatFormat.format("&eKOTH Stats\n&aKills &7- &e" + topPointsList.get(2).getKills() + "\n&aDeaths &7- &e" + topPointsList.get(2).getDeaths() + "\n&aPoints &7- &e" + topPointsList.get(2).getPoints()))
-                    )));
-            p.sendMessage(" ");
-            p.sendMessage(ChatFormat.format("&e--- &6Top Kills &e---"));
-            p.sendMessage(Component.text(ChatFormat.format("&e1. " + topKillsList.get(0).getOffPlayer().getName() + " - " + topKillsList.get(0).getKills()))
-                    .hoverEvent(HoverEvent.showText(
-                            Component.text(ChatFormat.format("&eKOTH Stats\n&aKills &7- &e" + topKillsList.get(0).getKills() + "\n&aDeaths &7- &e" + topKillsList.get(0).getDeaths() + "\n&aPoints &7- &e" + topKillsList.get(0).getPoints()))
-                    )));
-            p.sendMessage(Component.text(ChatFormat.format("&e2. " + topKillsList.get(1).getOffPlayer().getName() + " - " + topKillsList.get(1).getKills()))
-                    .hoverEvent(HoverEvent.showText(
-                            Component.text(ChatFormat.format("&eKOTH Stats\n&aKills &7- &e" + topKillsList.get(1).getKills() + "\n&aDeaths &7- &e" + topKillsList.get(1).getDeaths() + "\n&aPoints &7- &e" + topKillsList.get(1).getPoints()))
-                    )));
-            p.sendMessage(Component.text(ChatFormat.format("&e3. " + topKillsList.get(2).getOffPlayer().getName() + " - " + topKillsList.get(2).getKills()))
-                    .hoverEvent(HoverEvent.showText(
-                            Component.text(ChatFormat.format("&eKOTH Stats\n&aKills &7- &e" + topKillsList.get(2).getKills() + "\n&aDeaths &7- &e" + topKillsList.get(2).getDeaths() + "\n&aPoints &7- &e" + topKillsList.get(2).getPoints()))
-                    )));
-        });
+        if(kothData.size() > 3) {
+            Map<PlayerKothData, Integer> kothPoints = new HashMap<>();
+            Map<PlayerKothData, Integer> kothKills = new HashMap<>();
+            kothData.forEach((uuid, data) -> {
+                kothPoints.put(data, data.getPoints());
+                kothKills.put(data, data.getKills());
+            });
+            Map<Integer, PlayerKothData> topPoints =
+                    kothPoints.entrySet().stream()
+                            .sorted(Map.Entry.comparingByValue(Comparator.reverseOrder()))
+                            .limit(3)
+                            .collect(Collectors.toMap(
+                                    Map.Entry::getValue, Map.Entry::getKey, (e1, e2) -> e1, LinkedHashMap::new));
+            Map<Integer, PlayerKothData> topKills =
+                    kothKills.entrySet().stream()
+                            .sorted(Map.Entry.comparingByValue(Comparator.reverseOrder()))
+                            .limit(3)
+                            .collect(Collectors.toMap(
+                                    Map.Entry::getValue, Map.Entry::getKey, (e1, e2) -> e1, LinkedHashMap::new));
+            List<PlayerKothData> topPointsList = topPoints.values().stream().toList();
+            List<PlayerKothData> topKillsList = topKills.values().stream().toList();
+            Bukkit.getOnlinePlayers().forEach(p -> {
+                p.sendMessage(ChatFormat.format("&e&lThe KOTH event has ended"));
+                p.sendMessage(ChatFormat.format("&e--- &6Top Points &e---"));
+                p.sendMessage(Component.text(ChatFormat.format("&e1. " + topPointsList.get(0).getOffPlayer().getName() + " - " + topPointsList.get(0).getPoints()))
+                        .hoverEvent(HoverEvent.showText(
+                                Component.text(ChatFormat.format("&eKOTH Stats\n&aKills &7- &e" + topPointsList.get(0).getKills() + "\n&aDeaths &7- &e" + topPointsList.get(0).getDeaths() + "\n&aPoints &7- &e" + topPointsList.get(0).getPoints()))
+                        )));
+                p.sendMessage(Component.text(ChatFormat.format("&e2. " + topPointsList.get(1).getOffPlayer().getName() + " - " + topPointsList.get(1).getPoints()))
+                        .hoverEvent(HoverEvent.showText(
+                                Component.text(ChatFormat.format("&eKOTH Stats\n&aKills &7- &e" + topPointsList.get(1).getKills() + "\n&aDeaths &7- &e" + topPointsList.get(1).getDeaths() + "\n&aPoints &7- &e" + topPointsList.get(1).getPoints()))
+                        )));
+                p.sendMessage(Component.text(ChatFormat.format("&e3. " + topPointsList.get(2).getOffPlayer().getName() + " - " + topPointsList.get(2).getPoints()))
+                        .hoverEvent(HoverEvent.showText(
+                                Component.text(ChatFormat.format("&eKOTH Stats\n&aKills &7- &e" + topPointsList.get(2).getKills() + "\n&aDeaths &7- &e" + topPointsList.get(2).getDeaths() + "\n&aPoints &7- &e" + topPointsList.get(2).getPoints()))
+                        )));
+                p.sendMessage(" ");
+                p.sendMessage(ChatFormat.format("&e--- &6Top Kills &e---"));
+                p.sendMessage(Component.text(ChatFormat.format("&e1. " + topKillsList.get(0).getOffPlayer().getName() + " - " + topKillsList.get(0).getKills()))
+                        .hoverEvent(HoverEvent.showText(
+                                Component.text(ChatFormat.format("&eKOTH Stats\n&aKills &7- &e" + topKillsList.get(0).getKills() + "\n&aDeaths &7- &e" + topKillsList.get(0).getDeaths() + "\n&aPoints &7- &e" + topKillsList.get(0).getPoints()))
+                        )));
+                p.sendMessage(Component.text(ChatFormat.format("&e2. " + topKillsList.get(1).getOffPlayer().getName() + " - " + topKillsList.get(1).getKills()))
+                        .hoverEvent(HoverEvent.showText(
+                                Component.text(ChatFormat.format("&eKOTH Stats\n&aKills &7- &e" + topKillsList.get(1).getKills() + "\n&aDeaths &7- &e" + topKillsList.get(1).getDeaths() + "\n&aPoints &7- &e" + topKillsList.get(1).getPoints()))
+                        )));
+                p.sendMessage(Component.text(ChatFormat.format("&e3. " + topKillsList.get(2).getOffPlayer().getName() + " - " + topKillsList.get(2).getKills()))
+                        .hoverEvent(HoverEvent.showText(
+                                Component.text(ChatFormat.format("&eKOTH Stats\n&aKills &7- &e" + topKillsList.get(2).getKills() + "\n&aDeaths &7- &e" + topKillsList.get(2).getDeaths() + "\n&aPoints &7- &e" + topKillsList.get(2).getPoints()))
+                        )));
+            });
+        }
         kothData = new HashMap<>();
         timeSinceLastKOTH = System.currentTimeMillis();
     }
