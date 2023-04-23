@@ -1,6 +1,5 @@
 package xyz.prorickey.classicdupe.discord;
 
-import net.dv8tion.jda.api.entities.User;
 import net.luckperms.api.node.Node;
 import org.bukkit.entity.Player;
 import xyz.prorickey.classicdupe.ClassicDupe;
@@ -24,16 +23,19 @@ public class LinkRewards {
 
     public static void checkRewardsForBoosting(Player player) {
         LinkingDatabase.Link link = ClassicDupe.getDatabase().getLinkingDatabase().getLinkFromUUID(player.getUniqueId().toString());
-        if(link != null && ClassicDupeBot.getJDA().getGuildById(Config.getConfig().getLong("discord.guild")).getMemberById(link.id).isBoosting()) {
-            if(ClassicDupe.getLPAPI().getUserManager().getUser(player.getUniqueId()).getPrimaryGroup().equals("default")) {
-                ClassicDupe
-                        .getLPAPI().getUserManager()
-                        .getUser(player.getUniqueId()).data().add(
-                                Node.builder("group.vip").build()
-                        );
-                player.sendMessage(Utils.cmdMsg("<yellow>Thank you for boosting the discord. You have recieved the VIP rank."));
+
+        ClassicDupeBot.getJDA().getGuildById(Config.getConfig().getLong("discord.guild")).retrieveMemberById(link.id).queue(member -> {
+            if(link != null && member.isBoosting()) {
+                if(ClassicDupe.getLPAPI().getUserManager().getUser(player.getUniqueId()).getPrimaryGroup().equals("default")) {
+                    ClassicDupe
+                            .getLPAPI().getUserManager()
+                            .getUser(player.getUniqueId()).data().add(
+                                    Node.builder("group.vip").build()
+                            );
+                    player.sendMessage(Utils.cmdMsg("<yellow>Thank you for boosting the discord. You have recieved the VIP rank."));
+                }
             }
-        }
+        });
     }
 
 }

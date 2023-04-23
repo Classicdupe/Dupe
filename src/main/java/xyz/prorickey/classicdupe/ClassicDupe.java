@@ -6,7 +6,10 @@ import java.util.List;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.event.ClickEvent;
 import org.bukkit.Bukkit;
+import org.bukkit.Material;
 import org.bukkit.command.PluginCommand;
+import org.bukkit.enchantments.Enchantment;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -32,6 +35,8 @@ public class ClassicDupe extends JavaPlugin {
     public static LuckPerms lpapi;
     public static Database database;
     public static PlayerVaultDatabase pvdatabase;
+
+    public static List<ItemStack> randomItems = new ArrayList<>();
 
     @Override
     public void onEnable() {
@@ -67,6 +72,15 @@ public class ClassicDupe extends JavaPlugin {
 
         new Clans(this);
         KOTHEventManager.init(this);
+
+        for (Material value : Material.values()) randomItems.add(new ItemStack(value));
+        for (Enchantment value : Enchantment.values()) {
+            for(int i = 1; i < value.getMaxLevel(); i++) {
+                ItemStack book = new ItemStack(Material.ENCHANTED_BOOK);
+                book.addEnchantment(value, i);
+                randomItems.add(book);
+            }
+        }
 
         this.getCommand("dupe").setExecutor(new DupeCMD());
         this.getCommand("dupe").setTabCompleter(new DupeCMD());

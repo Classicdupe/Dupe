@@ -256,12 +256,36 @@ public class PlayerDatabase {
         });
     }
 
+    public void setKills(UUID uuid, int kills) {
+        Bukkit.getScheduler().runTaskAsynchronously(ClassicDupe.getPlugin(), () -> {
+            try {
+                conn.prepareStatement("UPDATE stats SET kills=" + kills + " WHERE uuid='" + uuid +  "'").execute();
+                if(stats.containsKey(uuid.toString())) stats.get(uuid.toString()).kills = kills;
+                else getStats(uuid.toString());
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
+        });
+    }
+
     public void addDeath(String uuid) {
         Bukkit.getScheduler().runTaskAsynchronously(ClassicDupe.getPlugin(), () -> {
             try {
                 conn.prepareStatement("UPDATE stats SET deaths=deaths+1 WHERE uuid='" + uuid +  "'").execute();
                 if(stats.containsKey(uuid)) stats.get(uuid).addDeath();
                 else getStats(uuid);
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
+        });
+    }
+
+    public void setDeaths(UUID uuid, int deaths) {
+        Bukkit.getScheduler().runTaskAsynchronously(ClassicDupe.getPlugin(), () -> {
+            try {
+                conn.prepareStatement("UPDATE stats SET deaths=" + deaths + " WHERE uuid='" + uuid +  "'").execute();
+                if(stats.containsKey(uuid.toString())) stats.get(uuid.toString()).deaths = deaths;
+                else getStats(uuid.toString());
             } catch (SQLException e) {
                 throw new RuntimeException(e);
             }

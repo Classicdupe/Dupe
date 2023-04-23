@@ -1,10 +1,8 @@
 package xyz.prorickey.classicdupe.events;
 
-import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
-import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -20,7 +18,6 @@ import xyz.prorickey.classicdupe.commands.perk.ChatColorCMD;
 import xyz.prorickey.classicdupe.commands.perk.ChatGradientCMD;
 import xyz.prorickey.classicdupe.database.PlayerDatabase;
 import xyz.prorickey.classicdupe.discord.LinkRewards;
-import xyz.prorickey.proutils.ChatFormat;
 
 import java.util.*;
 
@@ -62,6 +59,10 @@ public class JoinEvent implements Listener {
             return;
         }
         PlayerDatabase.PlayerData playerData = ClassicDupe.getDatabase().getPlayerDatabase().getPlayer(e.getPlayer().getUniqueId().toString());
+        if(playerData.chatcolor.startsWith("&")) ClassicDupe.getDatabase().getPlayerDatabase().setChatColor(e.getPlayer().getUniqueId().toString(),
+                    Utils.convertColorCodesToAdventure(playerData.chatcolor));
+        if(playerData.nickname != null && Utils.convertColorCodesToAdventure(playerData.nickname).length() != playerData.nickname.length()) ClassicDupe.getDatabase().getPlayerDatabase().setNickname(e.getPlayer().getUniqueId().toString(),
+                    Utils.convertColorCodesToAdventure(playerData.nickname));
         RandomItemTask task = new RandomItemTask(e.getPlayer());
         randomTaskMap.put(e.getPlayer(), task);
         task.runTaskTimer(ClassicDupe.getPlugin(), 0, 20*60);
@@ -69,7 +70,11 @@ public class JoinEvent implements Listener {
             randomItemList.add(e.getPlayer());
             e.getPlayer().sendMessage(Utils.cmdMsg("<green>Every <yellow>60 <green>you will recieve a random item. Execute /random to disable or enable this"));
         }
-        ChatColorCMD.colorProfiles.put(e.getPlayer().getUniqueId().toString(), playerData.chatcolor);
+        if(playerData.chatcolor.startsWith("&")) {
+            ClassicDupe.getDatabase().getPlayerDatabase().setChatColor(e.getPlayer().getUniqueId().toString(),
+                    Utils.convertColorCodesToAdventure(playerData.chatcolor));
+            ChatColorCMD.colorProfiles.put(e.getPlayer().getUniqueId().toString(), Utils.convertColorCodesToAdventure(playerData.chatcolor));
+        } else ChatColorCMD.colorProfiles.put(e.getPlayer().getUniqueId().toString(), playerData.chatcolor);
         if(playerData.gradient) {
             ChatGradientCMD.gradientProfiles.put(e.getPlayer().getUniqueId().toString(), new ChatGradientCMD.GradientProfiles(
                     playerData.gradientfrom,
@@ -106,15 +111,13 @@ public class JoinEvent implements Listener {
 
         private final Player player;
 
-        public RandomItemTask(Player pl) {
-            player = pl;
-        }
+        public RandomItemTask(Player pl) { player = pl; }
 
         @Override
         public void run() {
             if(!randomItemList.contains(player)) return;
-            Material random = Material.values()[new Random().nextInt(Material.values().length)];
-            player.getInventory().addItem(new ItemStack(random));
+            ItemStack random = ClassicDupe.randomItems.get(new Random().nextInt(ClassicDupe.randomItems.size()));
+            player.getInventory().addItem(random);
         }
     }
 

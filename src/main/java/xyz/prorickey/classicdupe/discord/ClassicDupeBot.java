@@ -44,8 +44,7 @@ public class ClassicDupeBot extends ListenerAdapter {
 
         ).queue();
 
-        ServerStatsUpdater task = new ServerStatsUpdater();
-        task.runTaskTimer(plugin, 0, 20*60*5);
+        if(!Config.getConfig().getBoolean("dev")) new ServerStatsUpdater().runTaskTimer(plugin, 0, 20*60*5);
     }
 
     public static JDA getJDA() { return jda; }

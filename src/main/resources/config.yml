@@ -1,3 +1,16 @@
+prefix: "<dark_gray>[<green>i<gray>]"
+dev: true
+events:
+  koth:
+    timeInBetween: 43200000
+    schems:
+      - jungle
+discord:
+  guild: 1068991438391623836
+  staffchat: 1094672777287585832
+  cspy: 1094679599742459994
+  token: "MTA3ODEwMjgzNDg3NDE2NzM1Ng.GxuBo8.tcjGQ7mRT1cR6cg6QzSMk8kYYYjlx9TIArK7Hg"
+  onlineplayers: 1084496172305092718
 blockFromPlacing:
   - bedrock
   - barrier
@@ -11,18 +24,6 @@ forbiddenDupesInCombat:
   - totem_of_undying
   - enchanted_golden_apple
   - ender_pearl
-prefix: "<dark_gray>[<green>i<gray>]"
-events:
-  koth:
-    timeInBetween: 43200000
-    schems:
-      - jungle
-discord:
-  guild: 1068991438391623836
-  staffchat: 1094672777287585832
-  cspy: 1094679599742459994
-  token: "MTA3ODEwMjgzNDg3NDE2NzM1Ng.GxuBo8.tcjGQ7mRT1cR6cg6QzSMk8kYYYjlx9TIArK7Hg"
-  onlineplayers: 1084496172305092718
 ranks:
   admin:
     prefix: "<color:#EF4444><bold>ADMIN</bold> "

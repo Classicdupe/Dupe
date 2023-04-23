@@ -9,12 +9,10 @@ import org.bukkit.plugin.java.JavaPlugin;
 import org.h2.util.IOUtils;
 import org.jetbrains.annotations.Nullable;
 import xyz.prorickey.classicdupe.ClassicDupe;
+import xyz.prorickey.classicdupe.Utils;
 
 import java.io.*;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicReference;
 
@@ -54,7 +52,12 @@ public class ClanDatabase {
                 ResultSet clanSet = main.prepareStatement("SELECT * FROM clans").executeQuery();
                 while(clanSet.next()) {
                     Clan clan = new Clan(UUID.fromString(clanSet.getString("clanId")), clanSet.getString("clanName"));
-                    clan.setClanColor(clanSet.getString("clanColor"));
+                    if(clanSet.getString("clanColor").startsWith("&")) {
+                        clan.setClanColor(Utils.convertColorCodesToAdventure(clanSet.getString("clanColor")));
+                        PreparedStatement stat = main.prepareStatement("UPDATE clans SET clanColor=? WHERE clanId='" + clanSet.getString("clanId") + "'");
+                        stat.setString(1, Utils.convertColorCodesToAdventure(clanSet.getString("clanColor")));
+                        stat.execute();
+                    } else clan.setClanColor(clanSet.getString("clanColor"));
                     clan.setPublicClan(clanSet.getBoolean("publicClan"));
                     clansById.put(clan.getClanId(), clan);
                     clansByName.put(clan.getClanName(), clan);

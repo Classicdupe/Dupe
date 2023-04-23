@@ -63,7 +63,7 @@ public class Chat implements Listener {
             StaffChatCMD.sendToStaffChat(
                     Utils.format("<dark_gray>[<red>SC<dark_gray>] ")
                             .append(MiniMessage.miniMessage().deserialize(((Utils.getPrefix(e.getPlayer()) != null) ? Utils.getPrefix(e.getPlayer()) : "") + e.getPlayer().getName()))
-                            .append(Utils.format(" <gray>\u00BB"))
+                            .append(Utils.format(" <gray>\u00BB "))
                             .append(e.message().color(TextColor.color(0x10F60E))));
             ClassicDupeBot.getJDA().getChannelById(TextChannel.class, Config.getConfig().getLong("discord.staffchat"))
                     .sendMessage("**" + e.getPlayer().getName() + "** \u00BB " + PlainTextComponentSerializer.plainText().serialize(e.message())).queue();
@@ -95,7 +95,7 @@ public class Chat implements Listener {
                     Utils.format((clanName != null ? "<dark_gray>[" + finalClanColor1 + clanName + "<dark_gray>] " : ""))
                             .append(mm.deserialize(((Utils.getPrefix(player) != null) ? Utils.getPrefix(player) : "") + finalName1))
                             .append(Utils.format((Utils.getSuffix(player) != null) ? " " + Utils.convertColorCodesToAdventure(Utils.getSuffix(player))  : ""))
-                            .append(Utils.format(" <gray>\u00BB <gray>"))
+                            .append(Utils.format(" <gray>\u00BB <white>"))
                             .append(Utils.format(ChatColorCMD.colorProfiles.get(e.getPlayer().getUniqueId().toString()) +
                                             PlainTextComponentSerializer.plainText().serialize(message)
                             )));
@@ -106,7 +106,7 @@ public class Chat implements Listener {
                     Utils.format((clanName != null ? "<dark_gray>[" + finalClanColor2 + clanName + "<dark_gray>] " : ""))
                             .append(mm.deserialize(((Utils.getPrefix(player) != null) ? Utils.getPrefix(player) : "") + finalName2))
                             .append(Utils.format((Utils.getSuffix(player) != null) ? " " + Utils.convertColorCodesToAdventure(Utils.getSuffix(player))  : ""))
-                            .append(Utils.format(" <gray>\u00BB <gray>"))
+                            .append(Utils.format(" <gray>\u00BB <white>"))
                             .append(mm.deserialize( "<gradient:" +
                                 ChatGradientCMD.gradientProfiles.get(e.getPlayer().getUniqueId().toString()).gradientFrom + ":" +
                                 ChatGradientCMD.gradientProfiles.get(e.getPlayer().getUniqueId().toString()).gradientTo + ">" +
