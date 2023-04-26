@@ -11,17 +11,14 @@ import com.sk89q.worldedit.function.operation.Operations;
 import com.sk89q.worldedit.math.BlockVector2;
 import com.sk89q.worldedit.math.BlockVector3;
 import com.sk89q.worldedit.regions.CuboidRegion;
-import com.sk89q.worldedit.regions.Region;
 import com.sk89q.worldedit.session.ClipboardHolder;
 import com.sk89q.worldguard.WorldGuard;
-import com.sk89q.worldguard.protection.flags.Flag;
 import com.sk89q.worldguard.protection.flags.Flags;
 import com.sk89q.worldguard.protection.flags.StateFlag;
+import com.sk89q.worldguard.protection.regions.ProtectedCuboidRegion;
 import com.sk89q.worldguard.protection.regions.ProtectedPolygonalRegion;
 import com.sk89q.worldguard.protection.regions.ProtectedRegion;
-import com.sk89q.worldguard.protection.regions.RegionContainer;
 import net.kyori.adventure.audience.Audience;
-import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.event.HoverEvent;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
@@ -49,7 +46,7 @@ public class KOTHEventManager {
 
     public static boolean running = false;
     public static Map<UUID, PlayerKothData> kothData = new HashMap<>();
-    public static ProtectedPolygonalRegion region = null;
+    public static ProtectedCuboidRegion region = null;
     private static BukkitTask carpetTask = null;
 
     public static void init(JavaPlugin pl) {
@@ -94,11 +91,11 @@ public class KOTHEventManager {
             });
             return;
         }
-        region = new ProtectedPolygonalRegion("tempKothEvent",
+        region = new ProtectedCuboidRegion("tempKothEvent",
                 true,
-                List.of(BlockVector2.at(39, 39), BlockVector2.at(-39, -39)),
-                64,
-                110);
+                BlockVector3.at(39, 64, 39),
+                BlockVector3.at(-39, 110, -39)
+        );
         region.setFlag(Flags.FALL_DAMAGE, StateFlag.State.ALLOW);
         region.setPriority(10);
         WorldGuard.getInstance().getPlatform().getRegionContainer()

@@ -42,7 +42,7 @@ public class KothKCMD implements CommandExecutor, TabCompleter {
 
     @Override
     public @Nullable List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
-        if(args.length == 1) return TabComplete.tabCompletionsSearch(args[0], List.of("start"));
+        if(args.length == 1) return TabComplete.tabCompletionsSearch(args[0], List.of("start", "stop"));
         return new ArrayList<>();
     }
 }

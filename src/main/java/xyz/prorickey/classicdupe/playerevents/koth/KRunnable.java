@@ -1,11 +1,14 @@
 package xyz.prorickey.classicdupe.playerevents.koth;
 
+import com.sk89q.worldedit.bukkit.BukkitAdapter;
+import com.sk89q.worldedit.math.BlockVector3;
+import com.sk89q.worldguard.WorldGuard;
+import com.sk89q.worldguard.protection.regions.ProtectedRegion;
 import net.kyori.adventure.bossbar.BossBar;
 import net.kyori.adventure.key.Key;
 import net.kyori.adventure.sound.Sound;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
-import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
@@ -21,27 +24,21 @@ public class KRunnable extends BukkitRunnable {
     private static long greenPointSafe = 0;
     public static Map<Player, BossBar> bossBars = new HashMap<>();
 
+    // WHAT THE FUCK IS GOING ON
+
     @Override
     public void run() {
         List<Player> redPoints = new ArrayList<>();
         List<Player> yellowPoints = new ArrayList<>();
         List<Player> greenPoints = new ArrayList<>();
         Bukkit.getOnlinePlayers().forEach(p -> {
-            if(KOTHEventManager.region.contains(p.getLocation().getBlockX(), p.getLocation().getBlockY(), p.getLocation().getBlockZ())) {
-                switch(Bukkit.getWorld("world").getBlockAt(p.getLocation()).getType()) {
+            if(KOTHEventManager.region.contains(BukkitAdapter.asBlockVector(p.getLocation()))) {
+                switch(p.getLocation().getBlock().getType()) {
                     case RED_CARPET -> redPoints.add(p);
                     case YELLOW_CARPET -> yellowPoints.add(p);
                     case GREEN_CARPET -> greenPoints.add(p);
-                    case PINK_CARPET -> {
-                        p.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION, 30*20, 2));
-                    }
-                    case ORANGE_CARPET -> {
-                        p.addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE, 30*20, 2));
-                    }
-                    case END_PORTAL -> {
-                        p.teleport(new Location(Bukkit.getWorld("world"), 0, 110, 0));
-                        p.setGliding(true);
-                    }
+                    case PINK_CARPET -> p.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION, 30*20, 2));
+                    case ORANGE_CARPET -> p.addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE, 30*20, 2));
                     default -> {
                         if(!bossBars.containsKey(p)) {
                             Component text = Utils.format("KOTH Event");
@@ -72,13 +69,13 @@ public class KRunnable extends BukkitRunnable {
             if((redPointSafe+15000) > System.currentTimeMillis()) {
                 bossBars.get(topDawg)
                         .name(Utils.format("Time Until Point: " + Math.round(((redPointSafe+15000)-System.currentTimeMillis())/1000)))
-                        .progress(Float.parseFloat(String.valueOf((1/15)*(((redPointSafe+15000)-System.currentTimeMillis())/1000))))
-                        .color(BossBar.Color.GREEN)
+                        .progress(Float.parseFloat(String.valueOf((((redPointSafe+15000)-System.currentTimeMillis())/1000)/15.0)))
+                        .color(BossBar.Color.YELLOW)
                         .overlay(BossBar.Overlay.PROGRESS);
             } else {
                 bossBars.get(topDawg)
                         .name(Utils.format("Time Until Point: 0"))
-                        .color(BossBar.Color.GREEN)
+                        .color(BossBar.Color.YELLOW)
                         .overlay(BossBar.Overlay.PROGRESS);
                 topDawg.playSound(Sound.sound(Key.key("block.note_block.chime"), Sound.Source.MASTER, 1f, 1f));
                 KOTHEventManager.PlayerKothData data = KOTHEventManager.getPlayerKothData(topDawg);
@@ -101,13 +98,13 @@ public class KRunnable extends BukkitRunnable {
             if((yellowPointSafe+15000) > System.currentTimeMillis()) {
                 bossBars.get(topDawg)
                         .name(Utils.format("Time Until Point: " + Math.round(((yellowPointSafe+15000)-System.currentTimeMillis())/1000)))
-                        .color(BossBar.Color.GREEN)
-                        .progress(Float.parseFloat(String.valueOf((1/15)*(((greenPointSafe+15000)-System.currentTimeMillis())/1000))))
+                        .color(BossBar.Color.YELLOW)
+                        .progress(Float.parseFloat(String.valueOf((((yellowPointSafe+15000)-System.currentTimeMillis())/1000)/15.0)))
                         .overlay(BossBar.Overlay.PROGRESS);
             } else {
                 bossBars.get(topDawg)
                         .name(Utils.format("Time Until Point: 0"))
-                        .color(BossBar.Color.GREEN)
+                        .color(BossBar.Color.YELLOW)
                         .overlay(BossBar.Overlay.PROGRESS);
                 topDawg.playSound(Sound.sound(Key.key("block.note_block.chime"), Sound.Source.MASTER, 1f, 1f));
                 KOTHEventManager.PlayerKothData data = KOTHEventManager.getPlayerKothData(topDawg);
@@ -130,13 +127,13 @@ public class KRunnable extends BukkitRunnable {
             if((greenPointSafe+15000) > System.currentTimeMillis()) {
                 bossBars.get(topDawg)
                         .name(Utils.format("Time Until Point: " + Math.round(((greenPointSafe+15000)-System.currentTimeMillis())/1000)))
-                        .color(BossBar.Color.GREEN)
-                        .progress(Float.parseFloat(String.valueOf((1/15)*(((greenPointSafe+15000)-System.currentTimeMillis())/1000))))
+                        .color(BossBar.Color.YELLOW)
+                        .progress(Float.parseFloat(String.valueOf((((greenPointSafe+15000)-System.currentTimeMillis())/1000)/15.0)))
                         .overlay(BossBar.Overlay.PROGRESS);
             } else {
                 bossBars.get(topDawg)
                         .name(Utils.format("Time Until Point: 0"))
-                        .color(BossBar.Color.GREEN)
+                        .color(BossBar.Color.YELLOW)
                         .overlay(BossBar.Overlay.PROGRESS);
                 topDawg.playSound(Sound.sound(Key.key("block.note_block.chime"), Sound.Source.MASTER, 1f, 1f));
                 KOTHEventManager.PlayerKothData data = KOTHEventManager.getPlayerKothData(topDawg);
@@ -146,4 +143,5 @@ public class KRunnable extends BukkitRunnable {
         }
 
     }
+
 }

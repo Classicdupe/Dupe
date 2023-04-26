@@ -10,6 +10,7 @@ import org.bukkit.Material;
 import org.bukkit.command.PluginCommand;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.EnchantmentStorageMeta;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -77,7 +78,9 @@ public class ClassicDupe extends JavaPlugin {
         for (Enchantment value : Enchantment.values()) {
             for(int i = 1; i < value.getMaxLevel(); i++) {
                 ItemStack book = new ItemStack(Material.ENCHANTED_BOOK);
-                book.addEnchantment(value, i);
+                EnchantmentStorageMeta meta = (EnchantmentStorageMeta) book.getItemMeta();
+                meta.addStoredEnchant(value, i, false);
+                book.setItemMeta(meta);
                 randomItems.add(book);
             }
         }
