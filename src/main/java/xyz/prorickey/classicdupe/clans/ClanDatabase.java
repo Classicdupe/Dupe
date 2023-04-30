@@ -175,8 +175,7 @@ public class ClanDatabase {
         Bukkit.getScheduler().runTaskAsynchronously(ClassicDupe.getPlugin(), () -> {
             try (PreparedStatement stmt = main.prepareStatement(
                     "INSERT INTO players(uuid, name, clanId, clanName, level, boosts) " +
-                            "VALUES (?, ?, null, null, null, 0) " +
-                            "ON DUPLICATE KEY UPDATE uuid = uuid")) {
+                            "VALUES (?, ?, null, null, null, 0)")) {
                 stmt.setString(1, player.getUniqueId().toString());
                 stmt.setString(2, player.getName());
                 stmt.executeUpdate();

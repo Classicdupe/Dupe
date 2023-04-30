@@ -1,6 +1,6 @@
 main: xyz.prorickey.classicdupe.ClassicDupe
 name: ClassicDupe
-version: 3.0.1
+version: 3.0.2
 description: The core plugin behind everything that happens in ClassicDupe
 api-version: 1.19
 load: POSTWORLD
@@ -221,6 +221,9 @@ commands:
     description: To manage KOTH events
     usage: "Usage: /koth"
     permission: events.koth
+  report:
+    description: To report players
+    usage: "Usage: /report"
 permissions:
   default.spawn.others:
     description: Allows you to teleport others to spawn
