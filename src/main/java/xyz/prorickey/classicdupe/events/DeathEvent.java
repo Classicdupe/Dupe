@@ -1,5 +1,6 @@
 package xyz.prorickey.classicdupe.events;
 
+import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -13,6 +14,7 @@ import org.bukkit.inventory.meta.SkullMeta;
 import xyz.prorickey.classicdupe.ClassicDupe;
 import xyz.prorickey.classicdupe.Utils;
 
+import java.awt.*;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
@@ -51,15 +53,30 @@ public class DeathEvent implements Listener {
         EntityDamageEvent.DamageCause damageCause = player.getLastDamageCause().getCause();
         switch(damageCause) {
             case BLOCK_EXPLOSION -> {
-                if(player.getKiller() != null) e.deathMessage(Utils.format("<red>\u2620 <gold>" + player.getName() + "<yellow> was exploded by <gold>" + killer.getName()));
+                if(player.getKiller() != null) {
+                    Component message = Utils.format("<red>\u2620 <gold>" + player.getName() + "<yellow> was exploded by <gold>" + killer.getName());
+                    if(killer.getInventory().getItemInMainHand().getItemMeta().displayName() != null) message = message.append(Utils.format("<yellow> using ")
+                            .append(killer.getInventory().getItemInMainHand().getItemMeta().displayName()));
+                    e.deathMessage(message);
+                }
                 else e.deathMessage(Utils.format("<red>\u2620 <gold>" + player.getName() + "<yellow> exploded"));
             }
             case PROJECTILE -> {
-                if(player.getKiller() != null) e.deathMessage(Utils.format("<red>\u2620 <gold>" + player.getName() + "<yellow> was sniped by <gold>" + killer.getName()));
+                if(player.getKiller() != null) {
+                    Component message = Utils.format("<red>\u2620 <gold>" + player.getName() + "<yellow> was sniped by <gold>" + killer.getName());
+                    if(killer.getInventory().getItemInMainHand().getItemMeta().displayName() != null) message = message.append(Utils.format("<yellow> using ")
+                            .append(killer.getInventory().getItemInMainHand().getItemMeta().displayName()));
+                    e.deathMessage(message);
+                }
                 else e.deathMessage(Utils.format("<red>\u2620 <gold>" + player.getName() + "<yellow> died by a projectile"));
             }
             case ENTITY_ATTACK, ENTITY_SWEEP_ATTACK -> {
-                if(player.getKiller() != null) e.deathMessage(Utils.format("<red>\u2620 <gold>" + player.getName() + "<yellow> was slain by <gold>" + killer.getName()));
+                if(player.getKiller() != null) {
+                    Component message = Utils.format("<red>\u2620 <gold>" + player.getName() + "<yellow> was exploded by <gold>" + killer.getName());
+                    if(killer.getInventory().getItemInMainHand().getItemMeta().displayName() != null) message = message.append(Utils.format("<yellow> using ")
+                            .append(killer.getInventory().getItemInMainHand().getItemMeta().displayName()));
+                    e.deathMessage(message);
+                }
                 else e.deathMessage(Utils.format("<red>\u2620 <gold>" + player.getName() + "<yellow> was slain"));
             }
             case FALL -> e.deathMessage(Utils.format("<red>\u2620 <gold>" + player.getName() + "<yellow> fell to their death"));
