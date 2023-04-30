@@ -1,6 +1,5 @@
 package xyz.prorickey.classicdupe.commands.default1;
 
-import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.event.ClickEvent;
 import net.kyori.adventure.text.event.HoverEvent;
 import org.apache.commons.lang3.RandomStringUtils;
@@ -14,7 +13,6 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import xyz.prorickey.classicdupe.ClassicDupe;
 import xyz.prorickey.classicdupe.Utils;
-import xyz.prorickey.proutils.ChatFormat;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -23,7 +21,7 @@ import java.util.Map;
 
 public class LinkCMD implements CommandExecutor, TabCompleter {
 
-    public static Map<String, LinkCode> linkCodes = new HashMap<>();
+    public static final Map<String, LinkCode> linkCodes = new HashMap<>();
 
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
@@ -71,10 +69,10 @@ public class LinkCMD implements CommandExecutor, TabCompleter {
         else return genCode();
     }
 
-    public class LinkCode {
-        public String code;
-        public Player player;
-        public Long time;
+    public static class LinkCode {
+        public final String code;
+        public final Player player;
+        public final Long time;
         public LinkCode(String code1, Player player1, Long time1) {
             code = code1;
             player = player1;

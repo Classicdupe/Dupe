@@ -3,7 +3,6 @@ package xyz.prorickey.classicdupe.database;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import xyz.prorickey.classicdupe.ClassicDupe;
-import xyz.prorickey.classicdupe.Utils;
 
 import java.io.File;
 import java.sql.*;

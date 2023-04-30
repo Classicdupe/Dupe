@@ -8,7 +8,6 @@ import com.sk89q.worldedit.extent.clipboard.Clipboard;
 import com.sk89q.worldedit.extent.clipboard.io.ClipboardFormats;
 import com.sk89q.worldedit.function.operation.Operation;
 import com.sk89q.worldedit.function.operation.Operations;
-import com.sk89q.worldedit.math.BlockVector2;
 import com.sk89q.worldedit.math.BlockVector3;
 import com.sk89q.worldedit.regions.CuboidRegion;
 import com.sk89q.worldedit.session.ClipboardHolder;
@@ -16,8 +15,6 @@ import com.sk89q.worldguard.WorldGuard;
 import com.sk89q.worldguard.protection.flags.Flags;
 import com.sk89q.worldguard.protection.flags.StateFlag;
 import com.sk89q.worldguard.protection.regions.ProtectedCuboidRegion;
-import com.sk89q.worldguard.protection.regions.ProtectedPolygonalRegion;
-import com.sk89q.worldguard.protection.regions.ProtectedRegion;
 import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.text.event.HoverEvent;
 import org.bukkit.Bukkit;
@@ -194,7 +191,7 @@ public class KOTHEventManager {
     }
 
     public static class PlayerKothData {
-        private OfflinePlayer offPlayer;
+        private final OfflinePlayer offPlayer;
         private int kills = 0;
         private int deaths = 0;
         private int points = 0;

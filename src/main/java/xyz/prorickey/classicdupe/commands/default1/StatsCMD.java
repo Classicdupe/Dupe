@@ -13,7 +13,6 @@ import xyz.prorickey.classicdupe.ClassicDupe;
 import xyz.prorickey.classicdupe.Utils;
 import xyz.prorickey.classicdupe.database.PlayerDatabase;
 import xyz.prorickey.classicdupe.metrics.Metrics;
-import xyz.prorickey.proutils.ChatFormat;
 import xyz.prorickey.proutils.TabComplete;
 
 import java.util.ArrayList;

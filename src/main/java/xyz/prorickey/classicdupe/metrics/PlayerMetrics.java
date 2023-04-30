@@ -2,13 +2,9 @@ package xyz.prorickey.classicdupe.metrics;
 
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
-import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.event.player.PlayerJoinEvent;
-import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
-import org.bukkit.scheduler.BukkitTask;
 import org.jetbrains.annotations.Nullable;
 import xyz.prorickey.classicdupe.ClassicDupe;
 
@@ -25,10 +21,8 @@ import java.util.UUID;
 public class PlayerMetrics implements Listener {
 
     private Connection conn;
-    private JavaPlugin plugin;
 
     public PlayerMetrics(JavaPlugin plugin) {
-        this.plugin = plugin;
         try {
             conn = DriverManager.getConnection("jdbc:h2:" + ClassicDupe.getPlugin().getDataFolder().getAbsolutePath() + File.separator + "metrics" + File.separator + "player");
             conn.prepareStatement("CREATE TABLE IF NOT EXISTS playtime(uuid VARCHAR, alltime INT, season INT)").execute();
@@ -63,7 +57,7 @@ public class PlayerMetrics implements Listener {
 
     public class PlaytimeTask extends BukkitRunnable {
 
-        private static Map<Player, Long> lastUpdate = new HashMap<>();
+        private static final Map<Player, Long> lastUpdate = new HashMap<>();
 
         @Override
         public void run() {

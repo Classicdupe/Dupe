@@ -23,10 +23,10 @@ public class ClanDatabase {
     public static YamlConfiguration globalConfig;
     private static Connection main;
 
-    private static List<String> clanNames = new ArrayList<>();
-    private static Map<UUID, Clan> clansById = new HashMap<>();
-    private static Map<String, Clan> clansByName = new HashMap<>();
-    private static Map<UUID, ClanMember> clanMembers = new HashMap<>();
+    private static final List<String> clanNames = new ArrayList<>();
+    private static final Map<UUID, Clan> clansById = new HashMap<>();
+    private static final Map<String, Clan> clansByName = new HashMap<>();
+    private static final Map<UUID, ClanMember> clanMembers = new HashMap<>();
 
     public static void init(JavaPlugin plugin) {
         dataDir = new File(plugin.getDataFolder() + "/clansData/");
@@ -198,7 +198,7 @@ public class ClanDatabase {
 
     public static void deleteClan(Clan clan) {
         UUID clanId = clan.getClanId();
-        clanMembers.values().removeIf(cmem -> cmem.getClanID() == clanId);
+        clanMembers.values().stream().filter(c -> c.getClanID() == clanId).forEach(ClanMember::removeClan);
         clansById.remove(clan.getClanId());
         clansByName.remove(clan.getClanName());
         clanNames.remove(clan.getClanName());

@@ -1,6 +1,5 @@
 package xyz.prorickey.classicdupe.commands.perk;
 
-import net.kyori.adventure.text.Component;
 import org.bukkit.Material;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -10,7 +9,6 @@ import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import xyz.prorickey.classicdupe.Utils;
-import xyz.prorickey.proutils.ChatFormat;
 
 import java.util.ArrayList;
 import java.util.List;

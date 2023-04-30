@@ -2,7 +2,6 @@ package xyz.prorickey.classicdupe.events;
 
 import io.papermc.paper.event.player.AsyncChatEvent;
 import net.dv8tion.jda.api.entities.channel.concrete.TextChannel;
-import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.TextColor;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
@@ -18,7 +17,6 @@ import xyz.prorickey.classicdupe.commands.perk.ChatColorCMD;
 import xyz.prorickey.classicdupe.commands.perk.ChatGradientCMD;
 import xyz.prorickey.classicdupe.database.PlayerDatabase;
 import xyz.prorickey.classicdupe.discord.ClassicDupeBot;
-import xyz.prorickey.proutils.ChatFormat;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -27,7 +25,7 @@ public class Chat implements Listener {
 
     public static Boolean mutedChat = false;
 
-    public static Map<Player, Long> chatCooldown = new HashMap<>();
+    public static final Map<Player, Long> chatCooldown = new HashMap<>();
 
     @EventHandler
     public void onChat(AsyncChatEvent e) {
@@ -43,8 +41,8 @@ public class Chat implements Listener {
         }
         if(chatCooldown.containsKey(e.getPlayer()) && chatCooldown.get(e.getPlayer()) > System.currentTimeMillis()) {
             e.setCancelled(true);
-            Long timeLeft = chatCooldown.get(e.getPlayer())-System.currentTimeMillis();
-            e.getPlayer().sendMessage(Utils.cmdMsg("<red>You are currently on chat cooldown for " + Math.round(timeLeft/1000) + " second(s)"));
+            long timeLeft = chatCooldown.get(e.getPlayer())-System.currentTimeMillis();
+            e.getPlayer().sendMessage(Utils.cmdMsg("<red>You are currently on chat cooldown for " + Math.round(timeLeft/1000.0) + " second(s)"));
             return;
         }
 

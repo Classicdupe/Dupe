@@ -3,7 +3,6 @@ package xyz.prorickey.classicdupe;
 import java.util.ArrayList;
 import java.util.List;
 
-import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.event.ClickEvent;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
@@ -37,7 +36,7 @@ public class ClassicDupe extends JavaPlugin {
     public static Database database;
     public static PlayerVaultDatabase pvdatabase;
 
-    public static List<ItemStack> randomItems = new ArrayList<>();
+    public static final List<ItemStack> randomItems = new ArrayList<>();
 
     @Override
     public void onEnable() {

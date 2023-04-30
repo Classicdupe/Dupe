@@ -23,9 +23,9 @@ import java.util.*;
 
 public class JoinEvent implements Listener {
 
-    public static Map<Player, RandomItemTask> randomTaskMap = new HashMap<>();
-    public static List<Player> randomItemList = new ArrayList<>();
-    public static Map<Player, Long> nakedProtection = new HashMap<>();
+    public static final Map<Player, RandomItemTask> randomTaskMap = new HashMap<>();
+    public static final List<Player> randomItemList = new ArrayList<>();
+    public static final Map<Player, Long> nakedProtection = new HashMap<>();
 
     @EventHandler
     public void onPlayerJoin(PlayerJoinEvent e) {

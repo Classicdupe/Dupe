@@ -16,7 +16,7 @@ import xyz.prorickey.classicdupe.discord.events.StaffChat;
 
 public class ClassicDupeBot extends ListenerAdapter {
 
-    ClassicDupe plugin;
+    final ClassicDupe plugin;
     public static JDA jda;
 
     public ClassicDupeBot(ClassicDupe p) {

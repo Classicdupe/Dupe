@@ -7,22 +7,22 @@ import java.util.*;
 public class Clan {
 
     // Clan Stuff
-    private UUID clanId;
-    private String clanName;
+    private final UUID clanId;
+    private final String clanName;
 
     // Players
     private OfflinePlayer owner = null;
-    private List<OfflinePlayer> admins = new ArrayList<>();
-    private List<OfflinePlayer> vips = new ArrayList<>();
-    private List<OfflinePlayer> defaults = new ArrayList<>();
-    private List<OfflinePlayer> members = new ArrayList<>();
+    private final List<OfflinePlayer> admins = new ArrayList<>();
+    private final List<OfflinePlayer> vips = new ArrayList<>();
+    private final List<OfflinePlayer> defaults = new ArrayList<>();
+    private final List<OfflinePlayer> members = new ArrayList<>();
 
     // Settings
     private boolean publicClan = false;
     private String clanColor = "<yellow>";
 
     // Warps
-    private Map<String, Warp> warps = new HashMap<>();
+    private final Map<String, Warp> warps = new HashMap<>();
 
     public Clan(UUID id, String name) {
         this.clanId = id;

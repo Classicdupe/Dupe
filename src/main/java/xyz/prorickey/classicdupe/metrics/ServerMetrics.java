@@ -4,7 +4,7 @@ import java.time.Duration;
 
 public class ServerMetrics {
 
-    private Long serverStartTime;
+    private final Long serverStartTime;
 
     public ServerMetrics() {
         serverStartTime = System.currentTimeMillis();

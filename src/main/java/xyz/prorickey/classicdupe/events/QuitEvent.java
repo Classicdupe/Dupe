@@ -1,6 +1,5 @@
 package xyz.prorickey.classicdupe.events;
 
-import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -12,7 +11,6 @@ import xyz.prorickey.classicdupe.commands.moderator.CspyCMD;
 import xyz.prorickey.classicdupe.commands.moderator.StaffChatCMD;
 import xyz.prorickey.classicdupe.commands.perk.ChatColorCMD;
 import xyz.prorickey.classicdupe.commands.perk.ChatGradientCMD;
-import xyz.prorickey.proutils.ChatFormat;
 
 import java.util.HashMap;
 

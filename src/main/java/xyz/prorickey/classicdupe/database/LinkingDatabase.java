@@ -8,15 +8,15 @@ import java.sql.SQLException;
 
 public class LinkingDatabase {
 
-    Connection conn;
+    final Connection conn;
 
     public LinkingDatabase(Connection conn) {
         this.conn = conn;
     }
 
     public static class Link {
-        public String uuid;
-        public Long id;
+        public final String uuid;
+        public final Long id;
         public Link(String uuid1, Long id1) {
             uuid = uuid1;
             id = id1;

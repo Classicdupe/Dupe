@@ -5,7 +5,6 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerItemConsumeEvent;
-import xyz.prorickey.classicdupe.ClassicDupe;
 import xyz.prorickey.classicdupe.Utils;
 
 import java.util.HashMap;
@@ -13,7 +12,7 @@ import java.util.Map;
 
 public class GoldenAppleCooldown implements Listener {
 
-    public static Map<Player, Long> lastGappEaten = new HashMap<>();
+    public static final Map<Player, Long> lastGappEaten = new HashMap<>();
 
     @EventHandler
     public void onPlayerItemConsume(PlayerItemConsumeEvent e) {
@@ -23,8 +22,8 @@ public class GoldenAppleCooldown implements Listener {
         else if(e.getPlayer().hasPermission("perks.godAppleCooldown.mvp")) cooldown = 20;
         else if(e.getPlayer().hasPermission("perks.godAppleCooldown.legend")) cooldown = 10;
         if(lastGappEaten.containsKey(e.getPlayer()) && lastGappEaten.get(e.getPlayer()) + (cooldown*1000) > System.currentTimeMillis()) {
-            Long wait = (lastGappEaten.get(e.getPlayer()) + (cooldown*1000))-System.currentTimeMillis();
-            e.getPlayer().sendMessage(Utils.cmdMsg("<red>You must wait " + Math.round(wait/1000) + " second(s) before you can eat another Golden Apple"));
+            long wait = (lastGappEaten.get(e.getPlayer()) + (cooldown*1000))-System.currentTimeMillis();
+            e.getPlayer().sendMessage(Utils.cmdMsg("<red>You must wait " + Math.round(wait/1000.0) + " second(s) before you can eat another Golden Apple"));
             e.setCancelled(true);
             return;
         }

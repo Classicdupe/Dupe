@@ -1,6 +1,5 @@
 package xyz.prorickey.classicdupe.events;
 
-import net.kyori.adventure.text.Component;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -12,7 +11,6 @@ import org.bukkit.scheduler.BukkitRunnable;
 import xyz.prorickey.classicdupe.Utils;
 import xyz.prorickey.classicdupe.clans.ClanDatabase;
 import xyz.prorickey.classicdupe.clans.ClanMember;
-import xyz.prorickey.proutils.ChatFormat;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -21,8 +19,8 @@ import java.util.Objects;
 
 public class Combat implements Listener {
 
-    public static Map<Player, Long> inCombat = new HashMap<>();
-    public static Map<Player, Player> whoHitWho = new HashMap<>();
+    public static final Map<Player, Long> inCombat = new HashMap<>();
+    public static final Map<Player, Player> whoHitWho = new HashMap<>();
 
     @EventHandler
     public void onEntityDamageByEntity(EntityDamageByEntityEvent e) {

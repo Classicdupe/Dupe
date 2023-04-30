@@ -7,7 +7,6 @@ import org.bukkit.command.TabCompleter;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import xyz.prorickey.classicdupe.Utils;
-import xyz.prorickey.proutils.ChatFormat;
 
 import java.util.ArrayList;
 import java.util.List;

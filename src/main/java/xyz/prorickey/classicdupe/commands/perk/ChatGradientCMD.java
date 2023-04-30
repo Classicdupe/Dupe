@@ -1,6 +1,5 @@
 package xyz.prorickey.classicdupe.commands.perk;
 
-import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
 import org.bukkit.Bukkit;
@@ -21,13 +20,12 @@ import org.jetbrains.annotations.Nullable;
 import xyz.prorickey.classicdupe.ClassicDupe;
 import xyz.prorickey.classicdupe.Utils;
 import xyz.prorickey.classicdupe.database.PlayerDatabase;
-import xyz.prorickey.proutils.ChatFormat;
 
 import java.util.*;
 
 public class ChatGradientCMD implements CommandExecutor, TabCompleter, Listener {
 
-    public static Map<String, GradientProfiles> gradientProfiles = new HashMap<>();
+    public static final Map<String, GradientProfiles> gradientProfiles = new HashMap<>();
     private static final Map<String, Inventory> chatgradientGUIS = new HashMap<>();
 
     @Override

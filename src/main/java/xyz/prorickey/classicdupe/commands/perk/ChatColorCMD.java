@@ -1,6 +1,5 @@
 package xyz.prorickey.classicdupe.commands.perk;
 
-import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.command.*;
@@ -23,7 +22,7 @@ import java.util.Map;
 
 public class ChatColorCMD implements CommandExecutor, Listener, TabCompleter {
 
-    public static Map<String, String> colorProfiles = new HashMap<>();
+    public static final Map<String, String> colorProfiles = new HashMap<>();
 
     private static final Map<String, Inventory> chatcolorGUIS = new HashMap<>();
 

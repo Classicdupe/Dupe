@@ -1,6 +1,5 @@
 package xyz.prorickey.classicdupe.commands.default1;
 
-import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.event.ClickEvent;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;

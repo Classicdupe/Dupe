@@ -6,7 +6,7 @@ import java.util.UUID;
 
 public class ClanMember {
 
-    private OfflinePlayer offPlayer;
+    private final OfflinePlayer offPlayer;
     private String clanName = null;
     private UUID clanId = null;
     private Integer level = null;

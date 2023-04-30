@@ -18,7 +18,7 @@ import java.util.*;
 
 public class CSInvite extends ClanSub {
 
-    public static List<Invite> invites = new ArrayList<>();
+    public static final List<Invite> invites = new ArrayList<>();
 
     @Override
     public void execute(CommandSender sender, String[] args) {
@@ -83,9 +83,9 @@ public class CSInvite extends ClanSub {
     }
 
     public static class Invite {
-        public UUID inviterUUID;
-        public UUID inviteeUUID;
-        public long inviteSent;
+        public final UUID inviterUUID;
+        public final UUID inviteeUUID;
+        public final long inviteSent;
         public Invite(UUID inviter, UUID invitee) {
             this.inviterUUID = inviter;
             this.inviteeUUID = invitee;

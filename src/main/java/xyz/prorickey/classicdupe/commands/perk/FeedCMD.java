@@ -1,7 +1,5 @@
 package xyz.prorickey.classicdupe.commands.perk;
 
-import net.kyori.adventure.key.Key;
-import net.kyori.adventure.sound.Sound;
 import org.bukkit.SoundCategory;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -16,7 +14,7 @@ import java.util.*;
 
 public class FeedCMD implements CommandExecutor, TabCompleter {
 
-    private static Map<UUID, Long> feedCooldown = new HashMap<>();
+    private static final Map<UUID, Long> feedCooldown = new HashMap<>();
 
     // Basic: 1 minute cooldown
     // Vip: 1 minute cooldown

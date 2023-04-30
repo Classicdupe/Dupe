@@ -14,11 +14,10 @@ import org.jetbrains.annotations.Nullable;
 import net.kyori.adventure.text.Component;
 import xyz.prorickey.classicdupe.ClassicDupe;
 import xyz.prorickey.classicdupe.Utils;
-import xyz.prorickey.proutils.ChatFormat;
 
 public class StaffChatCMD implements CommandExecutor, TabCompleter {
 
-    public static List<Player> staffChatPlayers = new ArrayList<>();
+    public static final List<Player> staffChatPlayers = new ArrayList<>();
 
     public static void sendToStaffChat(String text) {
         ClassicDupe.getPlugin().getServer().getOnlinePlayers().forEach(p -> {

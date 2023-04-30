@@ -51,15 +51,14 @@ public class StatsDCMD {
             String clanName = ClanDatabase.getClanMember(UUID.fromString(data.uuid)).getClanName();
             EmbedBuilder builder = new EmbedBuilder();
             builder.setTitle(data.name + "'s Stats");
-            StringBuilder message = new StringBuilder();
-            message.append("Nickname: ").append(data.nickname != null ? data.nickname : "None").append("\n")
-                    .append("Clan: ").append(clanName != null ? clanName : "No Clan").append("\n")
-                    .append("Kills: ").append(stats.kills).append("\n")
-                    .append("Deaths: ").append(stats.deaths).append("\n")
-                    .append("KDR: ").append(stats.kdr).append("\n")
-                    .append("Playtime: ").append(Metrics.getPlayerMetrics().getPlaytimeFormatted(UUID.fromString(data.uuid))).append("\n")
-                    .append("Linked: ").append("<@").append(link.id).append(">");
-            builder.setDescription(message.toString());
+            String message = "Nickname: " + (data.nickname != null ? data.nickname : "None") + "\n" +
+                    "Clan: " + (clanName != null ? clanName : "No Clan") + "\n" +
+                    "Kills: " + stats.kills + "\n" +
+                    "Deaths: " + stats.deaths + "\n" +
+                    "KDR: " + stats.kdr + "\n" +
+                    "Playtime: " + Metrics.getPlayerMetrics().getPlaytimeFormatted(UUID.fromString(data.uuid)) + "\n" +
+                    "Linked: " + "<@" + link.id + ">";
+            builder.setDescription(message);
             builder.setColor(0xFF4646);
             builder.setThumbnail("http://cravatar.eu/helmavatar/" + link.uuid);
             interaction.replyEmbeds(builder.build()).queue();

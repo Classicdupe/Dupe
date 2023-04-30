@@ -46,7 +46,7 @@ public class KEPoints implements Listener {
         }
     }
 
-    public static Set<Player> glidingFellas = new HashSet<>();
+    public static final Set<Player> glidingFellas = new HashSet<>();
 
     @EventHandler
     public void onEntityPortalEnter(EntityPortalEnterEvent e) {

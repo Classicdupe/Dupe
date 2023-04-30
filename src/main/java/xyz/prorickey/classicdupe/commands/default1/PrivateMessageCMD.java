@@ -16,7 +16,7 @@ import java.util.Map;
 
 public class PrivateMessageCMD implements CommandExecutor, TabCompleter {
 
-    public static Map<Player, Player> lastInConvo = new HashMap<>();
+    public static final Map<Player, Player> lastInConvo = new HashMap<>();
 
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {

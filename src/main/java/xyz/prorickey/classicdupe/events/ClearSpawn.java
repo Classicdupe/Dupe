@@ -37,9 +37,7 @@ public class ClearSpawn implements Listener {
         if(region != null && region.contains(BukkitAdapter.asBlockVector(e.getBlock().getLocation()))) blockMap.remove(e.getBlock());
     }
 
-    private static int timeBeforeDestroy = 1000*60*5;
-
-    private static Map<Block, Long> blockMap = new HashMap<>();
+    private static final Map<Block, Long> blockMap = new HashMap<>();
 
     public static class ClearSpawnTask extends BukkitRunnable {
         @Override
@@ -47,7 +45,7 @@ public class ClearSpawn implements Listener {
             for(int i = 0; i < blockMap.size(); i++) {
                 Block block = blockMap.keySet().stream().toList().get(i);
                 Long time = blockMap.get(block);
-                if((time + timeBeforeDestroy) < System.currentTimeMillis()) {
+                if((time + (1000*60*5)) < System.currentTimeMillis()) {
                     block.setType(Material.AIR);
                     blockMap.remove(block);
                 }

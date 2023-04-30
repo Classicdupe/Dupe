@@ -1,6 +1,5 @@
 package xyz.prorickey.classicdupe.commands.perk;
 
-import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
@@ -10,7 +9,6 @@ import org.bukkit.command.TabCompleter;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
@@ -18,7 +16,6 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import xyz.prorickey.classicdupe.ClassicDupe;
 import xyz.prorickey.classicdupe.Utils;
-import xyz.prorickey.proutils.ChatFormat;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -27,7 +24,7 @@ import java.util.Map;
 
 public class PlayerVaultCMD implements CommandExecutor, TabCompleter, Listener {
 
-    public static Map<String, Inventory> vaultGuis = new HashMap<>();
+    public static final Map<String, Inventory> vaultGuis = new HashMap<>();
 
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
@@ -62,14 +59,6 @@ public class PlayerVaultCMD implements CommandExecutor, TabCompleter, Listener {
     public @Nullable List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
         return new ArrayList<>();
     }
-
-    /*@EventHandler
-    public void onInventoryClick(InventoryClickEvent e) {
-        if(!e.getInventory().equals(vaultGuis.get(e.getWhoClicked().getUniqueId().toString()))) return;
-        String name = PlainTextComponentSerializer.plainText().serialize(e.getView().title());
-        int vault = Integer.parseInt(name.substring(name.length() - 1));
-        ClassicDupe.getPVDatabase().setVault(e.getWhoClicked().getUniqueId().toString(), vault, e.getInventory());
-    }*/
 
     @EventHandler
     public void onInventoryClose(InventoryCloseEvent e) {

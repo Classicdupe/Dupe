@@ -1,7 +1,6 @@
 package xyz.prorickey.classicdupe.database;
 
 import org.bukkit.Bukkit;
-import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.Nullable;
 import xyz.prorickey.classicdupe.ClassicDupe;
@@ -17,7 +16,7 @@ import java.util.UUID;
 
 public class PlayerDatabase {
 
-    Connection conn;
+    final Connection conn;
 
     public PlayerDatabase(Connection conn) {
         this.conn = conn;
@@ -25,16 +24,16 @@ public class PlayerDatabase {
 
     public static class PlayerData {
 
-        public String uuid;
-        public String name;
-        public String nickname;
-        public long timesjoined;
-        public long playtime;
-        public boolean randomitem;
-        public String chatcolor;
-        public boolean gradient;
-        public String gradientfrom;
-        public String gradientto;
+        public final String uuid;
+        public final String name;
+        public final String nickname;
+        public final long timesjoined;
+        public final long playtime;
+        public final boolean randomitem;
+        public final String chatcolor;
+        public final boolean gradient;
+        public final String gradientfrom;
+        public final String gradientto;
 
         public PlayerData(String uuid1,
                           String name1,
@@ -100,10 +99,10 @@ public class PlayerDatabase {
         }
     }
 
-    public static Map<Integer, String> killsLeaderboard = new HashMap<>();
-    public static Map<Integer, Integer> killsLeaderboardK = new HashMap<>();
-    public static Map<Integer, String> deathsLeaderboard = new HashMap<>();
-    public static Map<Integer, Integer> deathsLeaderboardD = new HashMap<>();
+    public static final Map<Integer, String> killsLeaderboard = new HashMap<>();
+    public static final Map<Integer, Integer> killsLeaderboardK = new HashMap<>();
+    public static final Map<Integer, String> deathsLeaderboard = new HashMap<>();
+    public static final Map<Integer, Integer> deathsLeaderboardD = new HashMap<>();
 
     public void reloadLeaderboards() {
         Bukkit.getScheduler().runTaskAsynchronously(ClassicDupe.getPlugin(), () -> {
@@ -242,7 +241,7 @@ public class PlayerDatabase {
         }
     }
 
-    private Map<String, PlayerStats> stats = new HashMap<>();
+    private final Map<String, PlayerStats> stats = new HashMap<>();
 
     public void addKill(String uuid) {
         Bukkit.getScheduler().runTaskAsynchronously(ClassicDupe.getPlugin(), () -> {

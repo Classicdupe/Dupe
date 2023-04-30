@@ -15,7 +15,7 @@ import java.util.*;
 
 public class Clans implements CommandExecutor, TabCompleter {
 
-    public static Map<String, ClanSub> clanSubs = new HashMap<>();
+    public static final Map<String, ClanSub> clanSubs = new HashMap<>();
 
     public Clans(JavaPlugin p) {
         p.getCommand("clan").setExecutor(this);

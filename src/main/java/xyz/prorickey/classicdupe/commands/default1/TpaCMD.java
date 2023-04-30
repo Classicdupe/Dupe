@@ -15,7 +15,6 @@ import org.jetbrains.annotations.Nullable;
 import xyz.prorickey.classicdupe.ClassicDupe;
 import xyz.prorickey.classicdupe.Utils;
 import xyz.prorickey.classicdupe.events.Combat;
-import xyz.prorickey.proutils.ChatFormat;
 import xyz.prorickey.proutils.TabComplete;
 
 import java.util.ArrayList;
@@ -26,9 +25,9 @@ import java.util.Map;
 public class TpaCMD implements CommandExecutor, TabCompleter {
 
     // Sender to Recipient
-    public static Map<Player, Player> tpaRequests = new HashMap<>();
+    public static final Map<Player, Player> tpaRequests = new HashMap<>();
     // Sender and time
-    public static Map<Player, Long> tpaRequestTimes = new HashMap<>();
+    public static final Map<Player, Long> tpaRequestTimes = new HashMap<>();
 
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {

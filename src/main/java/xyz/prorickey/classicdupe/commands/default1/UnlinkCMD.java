@@ -1,6 +1,5 @@
 package xyz.prorickey.classicdupe.commands.default1;
 
-import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;

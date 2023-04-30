@@ -22,18 +22,14 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import xyz.prorickey.classicdupe.ClassicDupe;
 import xyz.prorickey.classicdupe.Utils;
-import xyz.prorickey.proutils.ChatFormat;
 import xyz.xenondevs.particle.ParticleBuilder;
 import xyz.xenondevs.particle.ParticleEffect;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class KillEffectsCMD implements CommandExecutor, TabCompleter, Listener {
 
-    private static Map<Player, Inventory> guis = new HashMap<>();
+    private static final Map<Player, Inventory> guis = new HashMap<>();
 
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
@@ -53,7 +49,7 @@ public class KillEffectsCMD implements CommandExecutor, TabCompleter, Listener {
         // Toggle
         ItemStack toggle = new ItemStack(Material.NETHER_STAR);
         toggle.editMeta(meta -> {
-            if(activeKillEffect != "none") {
+            if(!Objects.equals(activeKillEffect, "none")) {
                 meta.displayName(mm.deserialize("<gradient:#FF4646:#FF2B2B>Toggle Off</gradient>"));
                 meta.lore(List.of(
                         Utils.format("<yellow>Current Kill Effect: " + activeKillEffect))
@@ -121,7 +117,7 @@ public class KillEffectsCMD implements CommandExecutor, TabCompleter, Listener {
     public void onInventoryClick(InventoryClickEvent e) {
         if (!e.getInventory().equals(guis.get(e.getWhoClicked().getUniqueId().toString()))) return;
         if(e.getRawSlot() == 49) {
-            
+            // TODO: Shennanigans
         }
     }
 

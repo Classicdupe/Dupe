@@ -1,9 +1,6 @@
 package xyz.prorickey.classicdupe.playerevents.koth;
 
 import com.sk89q.worldedit.bukkit.BukkitAdapter;
-import com.sk89q.worldedit.math.BlockVector3;
-import com.sk89q.worldguard.WorldGuard;
-import com.sk89q.worldguard.protection.regions.ProtectedRegion;
 import net.kyori.adventure.bossbar.BossBar;
 import net.kyori.adventure.key.Key;
 import net.kyori.adventure.sound.Sound;
@@ -22,7 +19,7 @@ public class KRunnable extends BukkitRunnable {
     private static long redPointSafe = 0;
     private static long yellowPointSafe = 0;
     private static long greenPointSafe = 0;
-    public static Map<Player, BossBar> bossBars = new HashMap<>();
+    public static final Map<Player, BossBar> bossBars = new HashMap<>();
 
     // WHAT THE FUCK IS GOING ON
 
@@ -68,8 +65,8 @@ public class KRunnable extends BukkitRunnable {
             if(redPointSafe == 0) redPointSafe = System.currentTimeMillis();
             if((redPointSafe+15000) > System.currentTimeMillis()) {
                 bossBars.get(topDawg)
-                        .name(Utils.format("Time Until Point: " + Math.round(((redPointSafe+15000)-System.currentTimeMillis())/1000)))
-                        .progress(Float.parseFloat(String.valueOf((((redPointSafe+15000)-System.currentTimeMillis())/1000)/15.0)))
+                        .name(Utils.format("Time Until Point: " + Math.round(((redPointSafe+15000)-System.currentTimeMillis())/1000.0)))
+                        .progress(Float.parseFloat(String.valueOf((((redPointSafe+15000)-System.currentTimeMillis())/1000.0)/15.0)))
                         .color(BossBar.Color.YELLOW)
                         .overlay(BossBar.Overlay.PROGRESS);
             } else {
@@ -97,9 +94,9 @@ public class KRunnable extends BukkitRunnable {
             if(yellowPointSafe == 0) yellowPointSafe = System.currentTimeMillis();
             if((yellowPointSafe+15000) > System.currentTimeMillis()) {
                 bossBars.get(topDawg)
-                        .name(Utils.format("Time Until Point: " + Math.round(((yellowPointSafe+15000)-System.currentTimeMillis())/1000)))
+                        .name(Utils.format("Time Until Point: " + Math.round(((yellowPointSafe+15000)-System.currentTimeMillis())/1000.0)))
                         .color(BossBar.Color.YELLOW)
-                        .progress(Float.parseFloat(String.valueOf((((yellowPointSafe+15000)-System.currentTimeMillis())/1000)/15.0)))
+                        .progress(Float.parseFloat(String.valueOf((((yellowPointSafe+15000)-System.currentTimeMillis())/1000.0)/15.0)))
                         .overlay(BossBar.Overlay.PROGRESS);
             } else {
                 bossBars.get(topDawg)
@@ -126,9 +123,9 @@ public class KRunnable extends BukkitRunnable {
             if(greenPointSafe == 0) greenPointSafe = System.currentTimeMillis();
             if((greenPointSafe+15000) > System.currentTimeMillis()) {
                 bossBars.get(topDawg)
-                        .name(Utils.format("Time Until Point: " + Math.round(((greenPointSafe+15000)-System.currentTimeMillis())/1000)))
+                        .name(Utils.format("Time Until Point: " + Math.round(((greenPointSafe+15000)-System.currentTimeMillis())/1000.0)))
                         .color(BossBar.Color.YELLOW)
-                        .progress(Float.parseFloat(String.valueOf((((greenPointSafe+15000)-System.currentTimeMillis())/1000)/15.0)))
+                        .progress(Float.parseFloat(String.valueOf((((greenPointSafe+15000)-System.currentTimeMillis())/1000.0)/15.0)))
                         .overlay(BossBar.Overlay.PROGRESS);
             } else {
                 bossBars.get(topDawg)

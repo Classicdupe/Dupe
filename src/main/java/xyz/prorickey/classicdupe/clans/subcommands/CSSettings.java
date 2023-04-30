@@ -16,7 +16,7 @@ import java.util.Map;
 
 public class CSSettings extends ClanSub {
 
-    Map<String, String> nameToCode = new HashMap<>() {{
+    final Map<String, String> nameToCode = new HashMap<>() {{
         put("black", "<black>");
         put("darkBlue", "<dark_blue>");
         put("darkGreen", "<dark_green>");

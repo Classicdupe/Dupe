@@ -19,7 +19,7 @@ import java.util.Map;
 
 public class Scoreboard {
 
-    private static Map<Player, org.bukkit.scoreboard.Scoreboard> scoreboards = new HashMap<>();
+    private static final Map<Player, org.bukkit.scoreboard.Scoreboard> scoreboards = new HashMap<>();
 
     public static class ScoreboardTask extends BukkitRunnable {
         @Override
@@ -67,7 +67,7 @@ public class Scoreboard {
 
             PlayerDatabase.PlayerStats menaceStats = ClassicDupe.getDatabase().getPlayerDatabase().getStats(Combat.whoHitWho.get(player).getUniqueId().toString());
 
-            long timeLeft = 15-(Math.round((System.currentTimeMillis()-Combat.inCombat.get(player))/1000));
+            long timeLeft = 15-(Math.round((System.currentTimeMillis()-Combat.inCombat.get(player))/1000.0));
 
             updateTeamScore(obj, board, 5, Utils.format("<gold>\u2022 <red>Fighting <yellow>" + Combat.whoHitWho.get(player).getName()));
             updateTeamScore(obj, board, 4, Utils.format("<gold>\u2022 <red>Stats <yellow>" + menaceStats.kills + "K " + menaceStats.deaths + "D"));
@@ -112,7 +112,7 @@ public class Scoreboard {
         obj.getScore(name).setScore(score);
     }
 
-    private static Map<Integer, String> colors = new HashMap<>(){{
+    private static final Map<Integer, String> colors = new HashMap<>(){{
         put(15, "\u00A70");
         put(14, "\u00A71");
         put(13, "\u00A72");

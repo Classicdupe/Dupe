@@ -4,9 +4,9 @@ import org.bukkit.Location;
 
 public class Warp {
 
-    public String name;
-    public Location location;
-    public Integer level;
+    public final String name;
+    public final Location location;
+    public final Integer level;
 
     public Warp(String name, Location loc, Integer level) {
         this.name = name;

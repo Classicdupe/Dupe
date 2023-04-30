@@ -1,16 +1,12 @@
 package xyz.prorickey.classicdupe.commands.perk;
 
-import net.kyori.adventure.text.Component;
-import net.luckperms.api.model.data.NodeMap;
 import net.luckperms.api.node.types.SuffixNode;
-import net.luckperms.api.node.types.WeightNode;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabCompleter;
-import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -22,7 +18,6 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import xyz.prorickey.classicdupe.ClassicDupe;
 import xyz.prorickey.classicdupe.Utils;
-import xyz.prorickey.proutils.ChatFormat;
 import xyz.prorickey.proutils.TabComplete;
 
 import java.util.ArrayList;
@@ -33,9 +28,9 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 public class SuffixCMD implements CommandExecutor, TabCompleter, Listener {
 
-    public static Map<String, String> suffixes = new HashMap<>();
-    public static Map<String, Inventory> guis = new HashMap<>();
-    public static Map<Inventory, Map<Integer, String>> guiData = new HashMap<>();
+    public static final Map<String, String> suffixes = new HashMap<>();
+    public static final Map<String, Inventory> guis = new HashMap<>();
+    public static final Map<Inventory, Map<Integer, String>> guiData = new HashMap<>();
 
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {

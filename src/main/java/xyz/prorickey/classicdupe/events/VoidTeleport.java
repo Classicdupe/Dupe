@@ -5,7 +5,6 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerMoveEvent;
 
 import xyz.prorickey.classicdupe.ClassicDupe;
-import xyz.prorickey.classicdupe.Utils;
 
 public class VoidTeleport implements Listener {
     

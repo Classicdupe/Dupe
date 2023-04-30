@@ -5,7 +5,6 @@ import org.bukkit.command.*;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import xyz.prorickey.classicdupe.Config;
 import xyz.prorickey.classicdupe.Utils;
 import xyz.prorickey.classicdupe.events.Combat;
 
@@ -14,8 +13,8 @@ import java.util.List;
 
 public class DupeCMD implements CommandExecutor, TabCompleter {
 
-    public static List<Material> forbiddenDupes = new ArrayList<>();
-    public static List<Material> forbiddenDupesInCombat = new ArrayList<>();
+    public static final List<Material> forbiddenDupes = new ArrayList<>();
+    public static final List<Material> forbiddenDupesInCombat = new ArrayList<>();
 
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {

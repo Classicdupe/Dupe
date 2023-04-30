@@ -1,6 +1,5 @@
 package xyz.prorickey.classicdupe.clans.subcommands;
 
-import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.event.ClickEvent;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
@@ -18,7 +17,7 @@ import java.util.*;
 
 public class CSPromote extends ClanSub {
 
-    private static Map<UUID, OfflinePlayer> promoterToPromotee = new HashMap<>();
+    private static final Map<UUID, OfflinePlayer> promoterToPromotee = new HashMap<>();
 
     @Override
     public void execute(CommandSender sender, String[] args) {

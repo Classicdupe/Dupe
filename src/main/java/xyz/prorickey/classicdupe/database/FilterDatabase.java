@@ -12,8 +12,8 @@ import java.util.concurrent.atomic.AtomicReference;
 
 public class FilterDatabase {
 
-    List<FilterWord> filter = new ArrayList<>();
-    Connection conn;
+    final List<FilterWord> filter = new ArrayList<>();
+    final Connection conn;
 
     public FilterDatabase(Connection conn) {
         this.conn = conn;
@@ -87,8 +87,8 @@ public class FilterDatabase {
     }
 
     public static class FilterWord {
-        public String text;
-        public Boolean fullword;
+        public final String text;
+        public final Boolean fullword;
         public FilterWord(String text, Boolean fullword) {
             this.text = text;
             this.fullword = fullword;

@@ -1,13 +1,7 @@
 package xyz.prorickey.classicdupe;
 
-import com.sk89q.worldedit.bukkit.BukkitAdapter;
-import com.sk89q.worldedit.math.BlockVector3;
-import com.sk89q.worldedit.util.gson.BlockVectorAdapter;
-import com.sk89q.worldguard.WorldGuard;
-import com.sk89q.worldguard.protection.regions.ProtectedRegion;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.minimessage.MiniMessage;
-import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 import org.codehaus.plexus.util.StringUtils;
@@ -34,7 +28,7 @@ public class Utils {
         return last[0];
     }
 
-    public static Map<String, String> codeToAdventure = new HashMap<>(){{
+    public static final Map<String, String> codeToAdventure = new HashMap<>(){{
         put("&0", "<black>");
         put("&1", "<dark_blue>");
         put("&2", "<dark_green>");
