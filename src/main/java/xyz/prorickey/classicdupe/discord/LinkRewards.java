@@ -23,9 +23,9 @@ public class LinkRewards {
 
     public static void checkRewardsForBoosting(Player player) {
         LinkingDatabase.Link link = ClassicDupe.getDatabase().getLinkingDatabase().getLinkFromUUID(player.getUniqueId().toString());
-
+        if(link == null) return;
         ClassicDupeBot.getJDA().getGuildById(Config.getConfig().getLong("discord.guild")).retrieveMemberById(link.id).queue(member -> {
-            if(link != null && member.isBoosting()) {
+            if(member.isBoosting()) {
                 if(ClassicDupe.getLPAPI().getUserManager().getUser(player.getUniqueId()).getPrimaryGroup().equals("default")) {
                     ClassicDupe
                             .getLPAPI().getUserManager()

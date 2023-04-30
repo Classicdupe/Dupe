@@ -27,11 +27,11 @@ public class QuitEvent implements Listener {
         PrivateMessageCMD.lastInConvo.remove(e.getPlayer());
         CspyCMD.cspyList.remove(e.getPlayer());
         if(PrivateMessageCMD.lastInConvo.containsValue(e.getPlayer())) new HashMap<>(PrivateMessageCMD.lastInConvo).forEach((sender, recipient) -> PrivateMessageCMD.lastInConvo.remove(sender));
-        e.quitMessage(Utils.format("<dark_gray>[<red>-<dark_gray>] ")
+        e.quitMessage(Utils.format("<dark_gray>[<red>-<dark_gray>] <yellow>")
                 .append(MiniMessage.miniMessage().deserialize(Utils.getPrefix(e.getPlayer())))
                 .append(Utils.format(e.getPlayer().getName())));
         if(Combat.inCombat.containsKey(e.getPlayer())) {
-            e.quitMessage(Utils.format("<dark_gray>[<red>-<dark_gray>] ")
+            e.quitMessage(Utils.format("<dark_gray>[<red>-<dark_gray>] <yellow>")
                     .append(MiniMessage.miniMessage().deserialize(Utils.getPrefix(e.getPlayer()) + e.getPlayer().getName()))
                     .append(Utils.format(" <dark_gray>| <red><bold>COMBAT LOG")));
             ClassicDupe.getDatabase().getPlayerDatabase().addDeath(e.getPlayer().getUniqueId().toString());
