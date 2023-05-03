@@ -76,7 +76,7 @@ public class CSInvite extends ClanSub {
                     OfflinePlayer inviter = Bukkit.getOfflinePlayer(invite.inviterUUID);
                     OfflinePlayer invitee = Bukkit.getOfflinePlayer(invite.inviteeUUID);
                     if(inviter.isOnline()) Bukkit.getPlayer(invite.inviterUUID).sendMessage(Utils.cmdMsg("<yellow>Invite sent to <gold>" + invitee.getName() + " <yellow>has expired"));
-                    if(invitee.isOnline()) Bukkit.getPlayer(invite.inviteeUUID).sendMessage(Utils.cmdMsg("<yellow>Invite from <gold>" + invitee + "<yellow> has expired"));
+                    if(invitee.isOnline()) Bukkit.getPlayer(invite.inviteeUUID).sendMessage(Utils.cmdMsg("<yellow>Invite from <gold>" + inviter.getName() + "<yellow> has expired"));
                 }
             });
         }

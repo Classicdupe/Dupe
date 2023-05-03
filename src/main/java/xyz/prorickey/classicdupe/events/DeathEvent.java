@@ -50,33 +50,26 @@ public class DeathEvent implements Listener {
             e.getPlayer().getWorld().dropItem(e.getPlayer().getLocation(), skull);
         }
         EntityDamageEvent.DamageCause damageCause = player.getLastDamageCause().getCause();
+        Component weapon = null;
+        if(killer != null &&
+        killer.getInventory().getItemInMainHand().getItemMeta() != null &&
+        killer.getInventory().getItemInMainHand().getItemMeta().displayName() != null) weapon = killer.getInventory().getItemInMainHand().getItemMeta().displayName();
         switch(damageCause) {
-            case BLOCK_EXPLOSION -> {
-                if(player.getKiller() != null) {
-                    Component message = Utils.format("<red>\u2620 <gold>" + player.getName() + "<yellow> was exploded by <gold>" + killer.getName());
-                    if(killer.getInventory().getItemInMainHand().getItemMeta().displayName() != null) message = message.append(Utils.format("<yellow> using ")
-                            .append(killer.getInventory().getItemInMainHand().getItemMeta().displayName()));
-                    e.deathMessage(message);
-                }
-                else e.deathMessage(Utils.format("<red>\u2620 <gold>" + player.getName() + "<yellow> exploded"));
-            }
-            case PROJECTILE -> {
-                if(player.getKiller() != null) {
-                    Component message = Utils.format("<red>\u2620 <gold>" + player.getName() + "<yellow> was sniped by <gold>" + killer.getName());
-                    if(killer.getInventory().getItemInMainHand().getItemMeta().displayName() != null) message = message.append(Utils.format("<yellow> using ")
-                            .append(killer.getInventory().getItemInMainHand().getItemMeta().displayName()));
-                    e.deathMessage(message);
-                }
-                else e.deathMessage(Utils.format("<red>\u2620 <gold>" + player.getName() + "<yellow> died by a projectile"));
-            }
-            case ENTITY_ATTACK, ENTITY_SWEEP_ATTACK -> {
-                if(player.getKiller() != null) {
-                    Component message = Utils.format("<red>\u2620 <gold>" + player.getName() + "<yellow> was exploded by <gold>" + killer.getName());
-                    if(killer.getInventory().getItemInMainHand().getItemMeta().displayName() != null) message = message.append(Utils.format("<yellow> using ")
-                            .append(killer.getInventory().getItemInMainHand().getItemMeta().displayName()));
+            case BLOCK_EXPLOSION, ENTITY_ATTACK, ENTITY_SWEEP_ATTACK -> {
+                if(killer != null) {
+                    Component message = Utils.format("<red>\u2620 <gold>" + player.getName() + "<yellow> was murdered by <gold>" + killer.getName());
+                    if(weapon != null) message = message.append(Utils.format("<yellow> using ").append(weapon));
                     e.deathMessage(message);
                 }
                 else e.deathMessage(Utils.format("<red>\u2620 <gold>" + player.getName() + "<yellow> was slain"));
+            }
+            case PROJECTILE -> {
+                if(killer != null) {
+                    Component message = Utils.format("<red>\u2620 <gold>" + player.getName() + "<yellow> was sniped by <gold>" + killer.getName());
+                    if(weapon != null) message = message.append(Utils.format("<yellow> using ").append(weapon));
+                    e.deathMessage(message);
+                }
+                else e.deathMessage(Utils.format("<red>\u2620 <gold>" + player.getName() + "<yellow> died by a projectile"));
             }
             case FALL -> e.deathMessage(Utils.format("<red>\u2620 <gold>" + player.getName() + "<yellow> fell to their death"));
             case LAVA -> e.deathMessage(Utils.format("<red>\u2620 <gold>" + player.getName() + "<yellow> took a swim in lava"));

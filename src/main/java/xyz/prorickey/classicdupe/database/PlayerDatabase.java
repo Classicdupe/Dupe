@@ -332,12 +332,8 @@ public class PlayerDatabase {
             }
         }
         public void addDeath() {
-            this.kills = this.kills+1;
-            if(deaths == 0) {
-                kdr = "Infinity";
-            } else {
-                kdr = (kills/deaths) + "";
-            }
+            this.deaths = this.deaths+1;
+            kdr = (kills/deaths) + "";
         }
     }
 
