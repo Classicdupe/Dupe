@@ -31,16 +31,16 @@ public class CSDelete extends ClanSub {
             return;
         }
         if(args.length == 0) {
-            player.sendMessage(Utils.cmdMsg("<yellowYou are about to delete your clan. Are you sure you want to do this?"));
+            player.sendMessage(Utils.cmdMsg("<yellow>You are about to delete your clan. Are you sure you want to do this?"));
             player.sendMessage(Utils.format("  <yellow>- Confirm: ")
                     .append(Utils.format("<red><b>/clan delete confirm"))
                             .clickEvent(ClickEvent.clickEvent(ClickEvent.Action.SUGGEST_COMMAND, "/clan delete confirm")));
         } else if(args[0].equalsIgnoreCase("confirm")) {
             Clan clan = ClanDatabase.getClan(cmem.getClanID());
             ClanDatabase.deleteClan(clan);
-            player.sendMessage(Utils.cmdMsg("<yellowYour clan has been deleted"));
+            player.sendMessage(Utils.cmdMsg("<yellow>Your clan has been deleted"));
         } else {
-            player.sendMessage(Utils.cmdMsg("<yellowYou are about to delete your clan. Are you sure you want to do this?"));
+            player.sendMessage(Utils.cmdMsg("<yellow>You are about to delete your clan. Are you sure you want to do this?"));
             player.sendMessage(Utils.format("  <yellow>- Confirm: ")
                     .append(Utils.format("<red><b>/clan delete confirm"))
                             .clickEvent(ClickEvent.clickEvent(ClickEvent.Action.SUGGEST_COMMAND, "/clan delete confirm")));

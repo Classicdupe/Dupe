@@ -1,6 +1,6 @@
 main: xyz.prorickey.classicdupe.ClassicDupe
 name: ClassicDupe
-version: 3.0.5
+version: 3.0.6
 description: The core plugin behind everything that happens in ClassicDupe
 api-version: 1.19
 load: POSTWORLD
@@ -224,6 +224,10 @@ commands:
   report:
     description: To report players
     usage: "Usage: /report"
+  craft:
+    description: To open a crafting table on the go
+    usage: "Usage: /craft"
+    permission: perk.craft
 permissions:
   default.spawn.others:
     description: Allows you to teleport others to spawn
