@@ -4,6 +4,7 @@ import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.event.ClickEvent;
 import net.kyori.adventure.text.event.HoverEvent;
 import org.bukkit.Bukkit;
+import org.bukkit.Location;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -17,10 +18,7 @@ import xyz.prorickey.classicdupe.Utils;
 import xyz.prorickey.classicdupe.events.Combat;
 import xyz.prorickey.proutils.TabComplete;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class TpaCMD implements CommandExecutor, TabCompleter {
 
@@ -67,6 +65,20 @@ public class TpaCMD implements CommandExecutor, TabCompleter {
     public @Nullable List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
         if(args.length == 1) return TabComplete.tabCompletionsSearch(args[0], ClassicDupe.getOnlinePlayerUsernames());
         return new ArrayList<>();
+    }
+
+    private static HashMap<Player, Location> lastLocation = new HashMap<>();
+
+    public static void saveLocation(Player p) {
+        lastLocation.put(p, p.getLocation());
+    }
+
+    public static void removeLocation(Player p) {
+        lastLocation.remove(p);
+    }
+
+    public static Location getLocation(Player p) {
+        return lastLocation.get(p);
     }
 
     public static class TPATask extends BukkitRunnable {

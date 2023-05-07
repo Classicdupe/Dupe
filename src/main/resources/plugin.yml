@@ -1,6 +1,6 @@
 main: xyz.prorickey.classicdupe.ClassicDupe
 name: ClassicDupe
-version: 3.0.6
+version: 3.1.0
 description: The core plugin behind everything that happens in ClassicDupe
 api-version: 1.19
 load: POSTWORLD
@@ -228,6 +228,16 @@ commands:
     description: To open a crafting table on the go
     usage: "Usage: /craft"
     permission: perk.craft
+  back:
+    description: To teleport back to a previous location
+    usage: "Usage: /back"
+  staffteleport:
+    description: To teleport to a player while staffing. Puts you in spectator and saves your location
+    usage: "Usage: /staffteleport"
+    permission: mod.staffteleport
+    aliases:
+      - stafftp
+      - stp
 permissions:
   default.spawn.others:
     description: Allows you to teleport others to spawn

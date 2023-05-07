@@ -36,6 +36,7 @@ public class TpacceptCMD implements CommandExecutor, TabCompleter {
                 p.sendMessage(Utils.cmdMsg("<red>That player is currently in combat and cannot teleport"));
                 return true;
             }
+            TpaCMD.saveLocation(recipient);
             recipient.teleport(p.getLocation());
             recipient.sendMessage(Utils.cmdMsg("<green>Teleported you to <yellow>" + p.getName()));
             p.sendMessage(Utils.cmdMsg("<yellow>" + recipient.getName() + "<green> has teleported to you"));

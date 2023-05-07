@@ -186,6 +186,10 @@ public class ClassicDupe extends JavaPlugin {
         this.getCommand("report").setTabCompleter(new ReportCMD());
         this.getCommand("craft").setExecutor(new CraftCMD());
         this.getCommand("craft").setTabCompleter(new CraftCMD());
+        this.getCommand("staffteleport").setExecutor(new StaffTeleportCMD());
+        this.getCommand("staffteleport").setTabCompleter(new StaffTeleportCMD());
+        this.getCommand("back").setExecutor(new BackCMD());
+        this.getCommand("back").setExecutor(new BackCMD());
 
         getServer().getPluginManager().registerEvents(new JoinEvent(), this);
         getServer().getPluginManager().registerEvents(new QuitEvent(), this);
