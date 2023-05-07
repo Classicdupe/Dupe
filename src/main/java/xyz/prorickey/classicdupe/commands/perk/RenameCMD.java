@@ -30,8 +30,8 @@ public class RenameCMD implements CommandExecutor, TabCompleter {
         }
         StringBuilder msg = new StringBuilder();
         for (String arg : args) msg.append(arg).append(" ");
-        p.getInventory().getItemInMainHand().editMeta(meta -> meta.displayName(Utils.format(msg.toString())));
-        p.sendMessage(Utils.cmdMsg("<green>Renamed the item in your hand to " + msg));
+        p.getInventory().getItemInMainHand().editMeta(meta -> meta.displayName(Utils.format(Utils.convertColorCodesToAdventure(msg.toString()))));
+        p.sendMessage(Utils.cmdMsg("<green>Renamed the item in your hand to " + Utils.convertColorCodesToAdventure(msg.toString())));
         return true;
     }
 

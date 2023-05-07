@@ -209,6 +209,7 @@ public class ClassicDupe extends JavaPlugin {
         getServer().getPluginManager().registerEvents(new ClearSpawn(), this);
         getServer().getPluginManager().registerEvents(new PearlCooldown(), this);
         getServer().getPluginManager().registerEvents(new CSPY(), this);
+        getServer().getPluginManager().registerEvents(new ReducedFireworkLag(), this);
     }
 
     @Override

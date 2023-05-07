@@ -16,6 +16,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class NicknameCMD implements CommandExecutor, TabCompleter {
+
+    private static String chars = "abcdefghijklmnopqrstuvxwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ123456789_";
+
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
         if(!(sender instanceof Player p)) {
@@ -27,14 +30,20 @@ public class NicknameCMD implements CommandExecutor, TabCompleter {
             sender.sendMessage(Utils.cmdMsg("<green>Reset your nickname"));
             return true;
         }
-        StringBuilder msg = new StringBuilder();
-        for (String arg : args) msg.append(arg).append(" ");
-        Component nickname = Utils.format(Utils.convertColorCodesToAdventure(msg.toString()));
+        if(args.length > 1) {
+            sender.sendMessage(Utils.cmdMsg("<red>You cannot have spaces in your nickname"));
+            return true;
+        }
+        if(!args[0].matches(".*[A-Za-z0-9]+_.*")) {
+            sender.sendMessage(Utils.cmdMsg("<red>Your nickname cannot have any special characters in it"));
+            return true;
+        }
+        Component nickname = Utils.format(Utils.convertColorCodesToAdventure(args[0]));
         if(PlainTextComponentSerializer.plainText().serialize(nickname).length() > 20) {
             sender.sendMessage(Utils.cmdMsg("<red>Your nickname must be under 20 characters"));
             return true;
         }
-        ClassicDupe.getDatabase().getPlayerDatabase().setNickname(p.getUniqueId().toString(), Utils.convertColorCodesToAdventure(msg.toString()));
+        ClassicDupe.getDatabase().getPlayerDatabase().setNickname(p.getUniqueId().toString(), Utils.convertColorCodesToAdventure(args[0]));
         p.sendMessage(Utils.cmdMsg("<green>Set your nickname to ")
                 .append(nickname));
         return true;
