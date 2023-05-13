@@ -34,7 +34,7 @@ public class NicknameCMD implements CommandExecutor, TabCompleter {
             sender.sendMessage(Utils.cmdMsg("<red>You cannot have spaces in your nickname"));
             return true;
         }
-        if(!args[0].matches(".*[A-Za-z0-9]+_.*")) {
+        if(!args[0].matches("^[A-Za-z0-9_&]+$")) {
             sender.sendMessage(Utils.cmdMsg("<red>Your nickname cannot have any special characters in it"));
             return true;
         }
