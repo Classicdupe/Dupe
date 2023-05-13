@@ -197,7 +197,7 @@ public class ClanDatabase {
 
     public static void deleteClan(Clan clan) {
         UUID clanId = clan.getClanId();
-        clanMembers.values().stream().filter(c -> c.getClanID().equals(clanId)).forEach(cmem -> {
+        clanMembers.values().stream().filter(c -> (c.getClanID() != null && c.getClanID().equals(clanId))).forEach(cmem -> {
             cmem.removeClan();
             removeClan(cmem);
         });
