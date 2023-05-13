@@ -112,8 +112,14 @@ public class ClassicDupe extends JavaPlugin {
         this.getCommand("chatcolor").setTabCompleter(new ChatColorCMD());
         this.getCommand("gradient").setExecutor(new ChatGradientCMD());
         this.getCommand("gradient").setTabCompleter(new ChatGradientCMD());
-        this.getCommand("staffchat").setExecutor(new StaffChatCMD());
-        this.getCommand("staffchat").setTabCompleter(new StaffChatCMD());
+        PluginCommand scCmd = plugin.getServer().getPluginCommand("sc");
+        if(scCmd.getPlugin().getPluginMeta().getName().equals("OpenInv")) {
+            scCmd.setExecutor(new StaffChatCMD());
+            scCmd.setTabCompleter(new StaffChatCMD());
+        } else {
+            this.getCommand("sc").setExecutor(new StaffChatCMD());
+            this.getCommand("sc").setTabCompleter(new StaffChatCMD());
+        }
         this.getCommand("repair").setExecutor(new RepairCMD());
         this.getCommand("clearchat").setExecutor(new ClearChatCMD());
         this.getCommand("pm").setExecutor(new PrivateMessageCMD());
