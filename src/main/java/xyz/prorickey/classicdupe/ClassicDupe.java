@@ -50,8 +50,8 @@ public class ClassicDupe extends JavaPlugin {
 
         Metrics.init(this);
 
-        RegisteredServiceProvider<LuckPerms> provider = Bukkit.getServicesManager().getRegistration(LuckPerms.class);
-        if(provider != null) { lpapi = provider.getProvider(); }
+        RegisteredServiceProvider<LuckPerms> lppro = Bukkit.getServicesManager().getRegistration(LuckPerms.class);
+        if(lppro != null) { lpapi = lppro.getProvider(); }
         if(Bukkit.getPluginManager().getPlugin("PlaceholderAPI") != null) new ClassicDupeExpansion(this).register();
 
         Config.init(this);

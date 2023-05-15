@@ -14,6 +14,7 @@ import org.jetbrains.annotations.Nullable;
 import xyz.prorickey.classicdupe.ClassicDupe;
 import xyz.prorickey.classicdupe.Utils;
 import xyz.prorickey.classicdupe.commands.default1.TpaCMD;
+import xyz.prorickey.proutils.TabComplete;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -45,7 +46,7 @@ public class StaffTeleportCMD implements CommandExecutor, TabCompleter {
 
     @Override
     public @Nullable List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
-        if(args.length == 1) return ClassicDupe.getOnlinePlayerUsernames();
+        if(args.length == 1) return TabComplete.tabCompletionsSearch(args[0], ClassicDupe.getOnlinePlayerUsernames());
         return new ArrayList<>();
     }
 }
