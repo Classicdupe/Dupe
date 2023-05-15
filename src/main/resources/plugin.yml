@@ -238,6 +238,12 @@ commands:
     aliases:
       - stafftp
       - stp
+  blockcommands:
+    description: Block players from using commands.
+    usage: "Usage /blockcommands [player]"
+    aliases:
+      - blockcmd
+      - bcmd
 permissions:
   default.spawn.others:
     description: Allows you to teleport others to spawn

@@ -12,22 +12,15 @@ import java.util.Map;
 
 public class GoldenAppleCooldown implements Listener {
 
-    public static final Map<Player, Long> lastGappEaten = new HashMap<>();
-
     @EventHandler
     public void onPlayerItemConsume(PlayerItemConsumeEvent e) {
         if(e.getItem().getType() != Material.ENCHANTED_GOLDEN_APPLE) return;
+        if(e.getPlayer().hasCooldown(Material.ENCHANTED_GOLDEN_APPLE))e.getPlayer().sendMessage(Utils.format("<red>Enchanted golden apples are in cooldown."));
         int cooldown = 45;
-        if(e.getPlayer().hasPermission("perks.godAppleCooldown.vip")) cooldown = 30;
-        else if(e.getPlayer().hasPermission("perks.godAppleCooldown.mvp")) cooldown = 20;
-        else if(e.getPlayer().hasPermission("perks.godAppleCooldown.legend")) cooldown = 10;
-        if(lastGappEaten.containsKey(e.getPlayer()) && lastGappEaten.get(e.getPlayer()) + (cooldown*1000) > System.currentTimeMillis()) {
-            long wait = (lastGappEaten.get(e.getPlayer()) + (cooldown*1000))-System.currentTimeMillis();
-            e.getPlayer().sendMessage(Utils.cmdMsg("<red>You must wait " + Math.round(wait/1000.0) + " second(s) before you can eat another Golden Apple"));
-            e.setCancelled(true);
-            return;
-        }
-        lastGappEaten.put(e.getPlayer(), System.currentTimeMillis());
+        if(e.getPlayer().hasPermission("perks.godAppleCooldown.vip")) cooldown = 600;
+        else if(e.getPlayer().hasPermission("perks.godAppleCooldown.mvp")) cooldown = 400;
+        else if(e.getPlayer().hasPermission("perks.godAppleCooldown.legend")) cooldown = 200;
+        e.getPlayer().setCooldown(Material.ENCHANTED_GOLDEN_APPLE, cooldown);
     }
 
 }

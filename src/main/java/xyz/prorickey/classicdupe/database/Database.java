@@ -2,10 +2,13 @@ package xyz.prorickey.classicdupe.database;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.entity.Player;
 import xyz.prorickey.classicdupe.ClassicDupe;
 
 import java.io.File;
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Database {
 
@@ -16,6 +19,7 @@ public class Database {
     private PlayerDatabase playerDatabase;
     private LinkingDatabase linkingDatabase;
     public Location spawn;
+    public static List<Player> blockedToUseCommands = new ArrayList<>();
 
     public Database() {
         try {
