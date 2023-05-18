@@ -5,6 +5,7 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabCompleter;
 import org.bukkit.entity.Player;
+import org.bukkit.potion.PotionEffectType;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import xyz.prorickey.classicdupe.ClassicDupe;
@@ -23,12 +24,13 @@ public class NightVisionCMD implements CommandExecutor, TabCompleter {
             return true;
         }
 
-        if(JoinEvent.nightVision.get(player)) {
-            JoinEvent.nightVision.put(player, false);
+        if(JoinEvent.nightVision.contains(player)) {
+            JoinEvent.nightVision.remove(player);
             ClassicDupe.getDatabase().getPlayerDatabase().setNightVision(player.getUniqueId().toString(), false);
+            player.removePotionEffect(PotionEffectType.NIGHT_VISION);
             player.sendMessage(Utils.cmdMsg("<green>Disabled your night vision effect. Use /night to turn it back on."));
         } else {
-            JoinEvent.nightVision.put(player, true);
+            JoinEvent.nightVision.add(player);
             ClassicDupe.getDatabase().getPlayerDatabase().setNightVision(player.getUniqueId().toString(), true);
             player.sendMessage(Utils.cmdMsg("<green>Enabled your night vision effect. Use /night to turn it back off."));
         }

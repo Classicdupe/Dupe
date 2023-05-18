@@ -37,9 +37,8 @@ public class Database {
             linkingDatabase = new LinkingDatabase(linkingConn);
 
             // Database Alters - To be removed in the future
-
-            // Adds the night column to the database
-            playerConn.prepareStatement("ALTER TABLE players" +
+            ResultSet set = playerConn.prepareStatement("SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME='players' AND COLUMN_NAME='night'").executeQuery();
+            if(!set.next()) playerConn.prepareStatement("ALTER TABLE players" +
                     " ADD night BOOLEAN NOT NULL" +
                     " DEFAULT (true)").execute();
         } catch (SQLException e) {
