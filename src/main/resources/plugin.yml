@@ -1,6 +1,6 @@
 main: xyz.prorickey.classicdupe.ClassicDupe
 name: ClassicDupe
-version: 3.2.0
+version: 3.3.0
 description: The core plugin behind everything that happens in ClassicDupe
 api-version: 1.19
 load: POSTWORLD
@@ -238,12 +238,19 @@ commands:
     aliases:
       - stafftp
       - stp
-  blockcommands:
-    description: Block players from using commands.
-    usage: "Usage /blockcommands [player]"
+#  blockcommands:
+#    description: Block players from using commands.
+#    usage: "Usage /blockcommands [player]"
+#    permission: mod.blockcommands
+#    aliases:
+#      - blockcmd
+#      - bcmd
+  night:
+    description: To toggle night vision on and off
+    usage: "Usage: /night"
     aliases:
-      - blockcmd
-      - bcmd
+      - nighttoggle
+      - nightvision
 permissions:
   default.spawn.others:
     description: Allows you to teleport others to spawn

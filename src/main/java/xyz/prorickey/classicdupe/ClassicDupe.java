@@ -22,7 +22,6 @@ import xyz.prorickey.classicdupe.commands.default1.*;
 import xyz.prorickey.classicdupe.commands.moderator.*;
 import xyz.prorickey.classicdupe.commands.perk.*;
 import xyz.prorickey.classicdupe.database.Database;
-import xyz.prorickey.classicdupe.database.FilterDatabase;
 import xyz.prorickey.classicdupe.database.PlayerVaultDatabase;
 import xyz.prorickey.classicdupe.discord.ClassicDupeBot;
 import xyz.prorickey.classicdupe.events.*;
@@ -197,8 +196,10 @@ public class ClassicDupe extends JavaPlugin {
         this.getCommand("staffteleport").setTabCompleter(new StaffTeleportCMD());
         this.getCommand("back").setExecutor(new BackCMD());
         this.getCommand("back").setExecutor(new BackCMD());
-        this.getCommand("blockcommands").setExecutor(new NoCommandCMD());
-        this.getCommand("blockcommands").setTabCompleter(new NoCommandCMD());
+        //this.getCommand("blockcommands").setExecutor(new BlockCommandCMD());
+        //this.getCommand("blockcommands").setTabCompleter(new BlockCommandCMD());
+        this.getCommand("night").setExecutor(new NightVisionCMD());
+        this.getCommand("night").setTabCompleter(new NightVisionCMD());
 
         getServer().getPluginManager().registerEvents(new JoinEvent(), this);
         getServer().getPluginManager().registerEvents(new QuitEvent(), this);
@@ -219,7 +220,7 @@ public class ClassicDupe extends JavaPlugin {
         getServer().getPluginManager().registerEvents(new PearlCooldown(), this);
         getServer().getPluginManager().registerEvents(new CSPY(), this);
         getServer().getPluginManager().registerEvents(new ReducedFireworkLag(), this);
-        getServer().getPluginManager().registerEvents(new CommandSendEvent(), this);
+        //getServer().getPluginManager().registerEvents(new CommandSendEvent(), this);
     }
 
     @Override

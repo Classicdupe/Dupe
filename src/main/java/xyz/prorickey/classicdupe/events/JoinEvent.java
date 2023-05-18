@@ -26,6 +26,7 @@ public class JoinEvent implements Listener {
     public static final Map<Player, RandomItemTask> randomTaskMap = new HashMap<>();
     public static final List<Player> randomItemList = new ArrayList<>();
     public static final Map<Player, Long> nakedProtection = new HashMap<>();
+    public static final Map<Player, Boolean> nightVision = new HashMap<>();
 
     @EventHandler
     public void onPlayerJoin(PlayerJoinEvent e) {
@@ -63,6 +64,7 @@ public class JoinEvent implements Listener {
                     Utils.convertColorCodesToAdventure(playerData.chatcolor));
         if(playerData.nickname != null && Utils.convertColorCodesToAdventure(playerData.nickname).length() != playerData.nickname.length()) ClassicDupe.getDatabase().getPlayerDatabase().setNickname(e.getPlayer().getUniqueId().toString(),
                     Utils.convertColorCodesToAdventure(playerData.nickname));
+        nightVision.put(e.getPlayer(), playerData.night);
         RandomItemTask task = new RandomItemTask(e.getPlayer());
         randomTaskMap.put(e.getPlayer(), task);
         task.runTaskTimer(ClassicDupe.getPlugin(), 0, 20*60);
@@ -91,7 +93,9 @@ public class JoinEvent implements Listener {
     public static class JoinEventTasks extends BukkitRunnable {
         @Override
         public void run() {
-            Bukkit.getOnlinePlayers().forEach(p -> p.addPotionEffect(new PotionEffect(
+            Bukkit.getOnlinePlayers()
+                    .stream().filter(nightVision::containsKey)
+                    .forEach(p -> p.addPotionEffect(new PotionEffect(
                     PotionEffectType.NIGHT_VISION,
                     999999999,
                     1

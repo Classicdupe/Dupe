@@ -34,6 +34,7 @@ public class PlayerDatabase {
         public final boolean gradient;
         public final String gradientfrom;
         public final String gradientto;
+        public final boolean night;
 
         public PlayerData(String uuid1,
                           String name1,
@@ -44,7 +45,8 @@ public class PlayerDatabase {
                           String chatcolor1,
                           boolean gradient1,
                           String gradientfrom1,
-                          String gradientto1
+                          String gradientto1,
+                          boolean night1
         ) {
             uuid = uuid1;
             name = name1;
@@ -56,6 +58,8 @@ public class PlayerDatabase {
             gradient = gradient1;
             gradientfrom = gradientfrom1;
             gradientto = gradientto1;
+            night = night1;
+
         }
     }
 
@@ -149,7 +153,8 @@ public class PlayerDatabase {
                     set.getString("chatcolor"),
                     set.getBoolean("gradient"),
                     set.getString("gradientfrom"),
-                    set.getString("gradientto")
+                    set.getString("gradientto"),
+                    set.getBoolean("night")
             );
         } catch (SQLException e) {
             Bukkit.getLogger().severe(e.toString());
@@ -239,6 +244,17 @@ public class PlayerDatabase {
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    public void setNightVision(String uuid, boolean value) {
+        try {
+            PreparedStatement stat = conn.prepareStatement("UPDATE players SET night=? WHERE uuid='" + uuid +  "'");
+            stat.setBoolean(1, value);
+            stat.execute();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+
     }
 
     private final Map<String, PlayerStats> stats = new HashMap<>();
@@ -339,7 +355,7 @@ public class PlayerDatabase {
 
     public void initPlayer(Player player) {
         try {
-            PreparedStatement stat = conn.prepareStatement("INSERT INTO players(uuid, name, nickname, timesjoined, playtime, randomitem, chatcolor, gradient, gradientfrom, gradientto) VALUES (?, ?, null, 1, 0, true, '<gray>', false, null, null)");
+            PreparedStatement stat = conn.prepareStatement("INSERT INTO players(uuid, name, nickname, timesjoined, playtime, randomitem, chatcolor, gradient, gradientfrom, gradientto, night) VALUES (?, ?, null, 1, 0, true, '<gray>', false, null, null, true)");
             stat.setString(1, player.getUniqueId().toString());
             stat.setString(2, player.getName());
             stat.execute();

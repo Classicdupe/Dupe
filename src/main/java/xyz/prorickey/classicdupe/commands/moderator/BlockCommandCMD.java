@@ -13,7 +13,7 @@ import xyz.prorickey.classicdupe.database.Database;
 
 import java.util.List;
 
-public class NoCommandCMD implements CommandExecutor, TabCompleter {
+public class BlockCommandCMD implements CommandExecutor, TabCompleter {
 
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
