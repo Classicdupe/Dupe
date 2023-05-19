@@ -16,7 +16,7 @@ public class GoldenAppleCooldown implements Listener {
     public void onPlayerItemConsume(PlayerItemConsumeEvent e) {
         if(e.getItem().getType() != Material.ENCHANTED_GOLDEN_APPLE) return;
         if(e.getPlayer().hasCooldown(Material.ENCHANTED_GOLDEN_APPLE))e.getPlayer().sendMessage(Utils.format("<red>Enchanted golden apples are in cooldown."));
-        int cooldown = 45;
+        int cooldown = 1100;
         if(e.getPlayer().hasPermission("perks.godAppleCooldown.vip")) cooldown = 600;
         else if(e.getPlayer().hasPermission("perks.godAppleCooldown.mvp")) cooldown = 400;
         else if(e.getPlayer().hasPermission("perks.godAppleCooldown.legend")) cooldown = 200;
