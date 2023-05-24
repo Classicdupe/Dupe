@@ -1,5 +1,9 @@
 prefix: "<dark_gray>[<green>i<gray>]"
 dev: true
+database:
+  mariadb: false
+  user: classicdupe
+  password: LNWnNwZHy7xdFMw7rah9
 events:
   koth:
     timeInBetween: 43200000
