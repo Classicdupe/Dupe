@@ -8,6 +8,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.command.PluginCommand;
 import org.bukkit.enchantments.Enchantment;
+import org.bukkit.event.Listener;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.EnchantmentStorageMeta;
 import org.bukkit.plugin.RegisteredServiceProvider;
@@ -27,6 +28,9 @@ import xyz.prorickey.classicdupe.discord.ClassicDupeBot;
 import xyz.prorickey.classicdupe.events.*;
 import xyz.prorickey.classicdupe.metrics.Metrics;
 import xyz.prorickey.classicdupe.playerevents.KOTHEventManager;
+import xyz.prorickey.classicdupe.playerevents.MAZEmanager;
+import xyz.prorickey.classicdupe.playerevents.maze.PlayerOnEnd;
+import xyz.prorickey.classicdupe.playerevents.maze.commands.MazeCommands;
 
 public class ClassicDupe extends JavaPlugin {
 
@@ -35,6 +39,7 @@ public class ClassicDupe extends JavaPlugin {
     public static LuckPerms lpapi;
     public static Database database;
     public static PlayerVaultDatabase pvdatabase;
+
 
     public static final List<ItemStack> randomItems = new ArrayList<>();
 
@@ -112,6 +117,8 @@ public class ClassicDupe extends JavaPlugin {
         this.getCommand("chatcolor").setTabCompleter(new ChatColorCMD());
         this.getCommand("gradient").setExecutor(new ChatGradientCMD());
         this.getCommand("gradient").setTabCompleter(new ChatGradientCMD());
+        this.getCommand("maze").setExecutor(new MazeCommands());
+        this.getCommand("joinmaze").setExecutor(new MazeCommands());
         PluginCommand scCmd = plugin.getServer().getPluginCommand("sc");
         if(scCmd.getPlugin().getPluginMeta().getName().equals("OpenInv")) {
             scCmd.setExecutor(new StaffChatCMD());
@@ -221,6 +228,11 @@ public class ClassicDupe extends JavaPlugin {
         getServer().getPluginManager().registerEvents(new CSPY(), this);
         getServer().getPluginManager().registerEvents(new ReducedFireworkLag(), this);
         //getServer().getPluginManager().registerEvents(new CommandSendEvent(), this);
+        getServer().getPluginManager().registerEvents(new PlayerOnEnd(), this);
+
+
+        //Init maze
+        MAZEmanager.init();
     }
 
     @Override

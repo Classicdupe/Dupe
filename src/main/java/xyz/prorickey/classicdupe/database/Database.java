@@ -38,9 +38,13 @@ public class Database {
 
             // Database Alters - To be removed in the future
             ResultSet set = playerConn.prepareStatement("SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME='players' AND COLUMN_NAME='night'").executeQuery();
-            if(!set.next()) playerConn.prepareStatement("ALTER TABLE players" +
-                    " ADD night BOOLEAN NOT NULL" +
-                    " DEFAULT (true)").execute();
+            try {
+                if (!set.next()) playerConn.prepareStatement("ALTER TABLE players" +
+                        " ADD night BOOLEAN NOT NULL" +
+                        " DEFAULT (true)").execute();
+            } catch (SQLException ee) {
+                Bukkit.getLogger().warning("CODE ERR: tried to recreate column 'night' in table 'players' but failed because its already there");
+            }
         } catch (SQLException e) {
             Bukkit.getLogger().severe(e.toString());
         }

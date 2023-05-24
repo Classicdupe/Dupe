@@ -238,6 +238,38 @@ commands:
     aliases:
       - stafftp
       - stp
+  maze:
+    description: Maze command
+    usage: "Usage: /maze <subcommand>"
+    permission: mod.maze
+    aliases:
+      - mz
+    subcommands:
+      start:
+        description: To start the maze
+        usage: "Usage: /maze start"
+      stop:
+        description: To stop the maze
+        usage: "Usage: /maze stop"
+      set:
+        description: To set the maze
+        usage: "Usage: /maze set <maze>?"
+      join:
+        description: To join the maze
+        usage: "Usage: /maze join"
+      leave:
+        description: To leave the maze
+        usage: "Usage: /maze leave"
+      reset:
+        description: To reset the maze
+        usage: "Usage: /maze reset"
+      location:
+        description: To set the location of the mazes
+        usage: "Usage: /maze location"
+  joinmaze:
+    description: To join the maze
+    usage: "Usage: /joinmaze"
+
 #  blockcommands:
 #    description: Block players from using commands.
 #    usage: "Usage /blockcommands [player]"
