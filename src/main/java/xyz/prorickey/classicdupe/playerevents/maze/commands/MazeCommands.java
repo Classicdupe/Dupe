@@ -91,7 +91,8 @@ public class MazeCommands implements CommandExecutor {
 
                         return true;
                     case "set":
-                        sender.sendMessage(ChatColor.YELLOW + "Feature WIP FOR V2");
+                        sender.sendMessage(ChatColor.YELLOW + "Setting Maze Size to " + args[1] + "...");
+                        MAZEmanager.MazeSize = Integer.parseInt(args[1]);
 
                         return true;
                     case "reset":
