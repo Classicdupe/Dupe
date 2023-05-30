@@ -29,7 +29,7 @@ commands:
     aliases:
       - randomitems
       - toggleitems
-      - toggle 
+      - toggle
   spawn:
     description: Teleports you to spawn
     usage: "Usage: /spawn [player]"
