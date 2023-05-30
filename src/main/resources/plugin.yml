@@ -26,6 +26,10 @@ commands:
   random:
     description: To toggle random items
     usage: "Usage: /random"
+    aliases:
+      - randomitems
+      - toggleitems
+      - toggle 
   spawn:
     description: Teleports you to spawn
     usage: "Usage: /spawn [player]"
