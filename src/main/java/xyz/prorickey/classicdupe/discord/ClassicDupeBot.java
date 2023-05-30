@@ -43,20 +43,8 @@ public class ClassicDupeBot extends ListenerAdapter {
                 Commands.slash("unlink", "To unlink your discord account")
 
         ).queue();
-
-        if(!Config.getConfig().getBoolean("dev")) new ServerStatsUpdater().runTaskTimer(plugin, 0, 20*60*5);
     }
 
     public static JDA getJDA() { return jda; }
-
-    public class ServerStatsUpdater extends BukkitRunnable {
-        @Override
-        public void run() {
-            jda.getVoiceChannelById(Config.getConfig().getLong("discord.onlineplayers"))
-                    .getManager()
-                    .setName("\uD83D\uDCC8\u30FBPlayers Online: " + plugin.getServer().getOnlinePlayers().size())
-                    .queue();
-        }
-    }
 
 }
