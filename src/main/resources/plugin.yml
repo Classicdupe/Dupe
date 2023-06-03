@@ -1,6 +1,6 @@
 main: xyz.prorickey.classicdupe.ClassicDupe
 name: ClassicDupe
-version: 3.4.2
+version: 3.4.3
 description: The core plugin behind everything that happens in ClassicDupe
 api-version: 1.19
 load: POSTWORLD
@@ -15,6 +15,7 @@ prefix: ClassicDupe
 libraries:
   - com.h2database:h2:2.1.214
   - net.dv8tion:JDA:5.0.0-beta.5
+  - org.mariadb.jdbc:mariadb-java-client:3.1.4
 commands:
   dupe:
     description: To dupe items. Can dupe up to 6 times
