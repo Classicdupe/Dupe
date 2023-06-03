@@ -23,6 +23,7 @@ import xyz.prorickey.classicdupe.commands.default1.*;
 import xyz.prorickey.classicdupe.commands.moderator.*;
 import xyz.prorickey.classicdupe.commands.perk.*;
 import xyz.prorickey.classicdupe.database.Database;
+import xyz.prorickey.classicdupe.database.FilterDatabase;
 import xyz.prorickey.classicdupe.database.PlayerVaultDatabase;
 import xyz.prorickey.classicdupe.discord.ClassicDupeBot;
 import xyz.prorickey.classicdupe.events.*;
@@ -54,7 +55,7 @@ public class ClassicDupe extends JavaPlugin {
         }
 
         Metrics.init(this);
-
+        FilterDatabase.blockWords();
         RegisteredServiceProvider<LuckPerms> lppro = Bukkit.getServicesManager().getRegistration(LuckPerms.class);
         if(lppro != null) { lpapi = lppro.getProvider(); }
         if(Bukkit.getPluginManager().getPlugin("PlaceholderAPI") != null) new ClassicDupeExpansion(this).register();
@@ -229,6 +230,7 @@ public class ClassicDupe extends JavaPlugin {
         getServer().getPluginManager().registerEvents(new ReducedFireworkLag(), this);
         //getServer().getPluginManager().registerEvents(new CommandSendEvent(), this);
         getServer().getPluginManager().registerEvents(new PlayerOnEnd(), this);
+        getServer().getPluginManager().registerEvents(new PlayerChat(), this);
 
 
         //Init maze

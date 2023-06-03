@@ -13,6 +13,7 @@ import java.util.concurrent.atomic.AtomicReference;
 public class FilterDatabase {
 
     final List<FilterWord> filter = new ArrayList<>();
+    public static List<String> blockedText = new ArrayList<>();
     final Connection conn;
 
     public FilterDatabase(Connection conn) {
@@ -93,6 +94,18 @@ public class FilterDatabase {
             this.text = text;
             this.fullword = fullword;
         }
+    }
+
+    public static void blockWords()
+    {
+        blockedText.add("<click:");
+        blockedText.add("<click");
+        blockedText.add("<click>");
+        blockedText.add("</click>");
+        blockedText.add("<link:");
+        blockedText.add("<link");
+        blockedText.add("<link>");
+        blockedText.add("</link>");
     }
 
 }
