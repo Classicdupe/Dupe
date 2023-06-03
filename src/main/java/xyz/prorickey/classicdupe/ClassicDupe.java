@@ -55,7 +55,6 @@ public class ClassicDupe extends JavaPlugin {
         }
 
         Metrics.init(this);
-        FilterDatabase.blockWords();
         RegisteredServiceProvider<LuckPerms> lppro = Bukkit.getServicesManager().getRegistration(LuckPerms.class);
         if(lppro != null) { lpapi = lppro.getProvider(); }
         if(Bukkit.getPluginManager().getPlugin("PlaceholderAPI") != null) new ClassicDupeExpansion(this).register();
@@ -230,7 +229,6 @@ public class ClassicDupe extends JavaPlugin {
         getServer().getPluginManager().registerEvents(new ReducedFireworkLag(), this);
         //getServer().getPluginManager().registerEvents(new CommandSendEvent(), this);
         getServer().getPluginManager().registerEvents(new PlayerOnEnd(), this);
-        getServer().getPluginManager().registerEvents(new PlayerChat(), this);
 
 
         //Init maze

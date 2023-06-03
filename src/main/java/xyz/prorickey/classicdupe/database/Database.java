@@ -26,17 +26,6 @@ public class Database {
 
     public Database() {
         try {
-
-<<<<<<< HEAD
-            // Database Alters - To be removed in the future
-            ResultSet set = playerConn.prepareStatement("SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME='players' AND COLUMN_NAME='night'").executeQuery();
-            try {
-                if (!set.next()) playerConn.prepareStatement("ALTER TABLE players" +
-                        " ADD night BOOLEAN NOT NULL" +
-                        " DEFAULT (true)").execute();
-            } catch (SQLException ee) {
-                Bukkit.getLogger().warning("CODE ERR: tried to recreate column 'night' in table 'players' but failed because its already there");
-=======
             if(Config.getConfig().getBoolean("database.mariadb")) {
                 conn = DriverManager.getConnection(
                         "jdbc:mariadb://localhost:3306/classicdupe",
@@ -206,7 +195,6 @@ public class Database {
                 filterDatabase = new FilterDatabase(serverConn);
                 playerDatabase = new PlayerDatabase(playerConn);
                 linkingDatabase = new LinkingDatabase(linkingConn);
->>>>>>> 325cb27732c627317aca863b36c6897041ca9a02
             }
         } catch (SQLException e) {
             throw new RuntimeException(e);

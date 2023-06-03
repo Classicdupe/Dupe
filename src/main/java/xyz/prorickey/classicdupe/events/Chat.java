@@ -2,6 +2,7 @@ package xyz.prorickey.classicdupe.events;
 
 import io.papermc.paper.event.player.AsyncChatEvent;
 import net.dv8tion.jda.api.entities.channel.concrete.TextChannel;
+import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.TextColor;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
@@ -87,7 +88,7 @@ public class Chat implements Listener {
                             .append(mm.deserialize(((Utils.getPrefix(player) != null) ? Utils.getPrefix(player) : "") + finalName))
                             .append(Utils.format((Utils.getSuffix(player) != null) ? " " + Utils.convertColorCodesToAdventure(Utils.getSuffix(player))  : ""))
                             .append(Utils.format(" <gray>\u00BB <gray>"))
-                            .append(message));
+                            .append(Component.text(mm.stripTags(PlainTextComponentSerializer.plainText().serialize(message)))));
         } else if(chatType.equals(ChatType.COLOR)) {
             String finalName1 = name;
             String finalClanColor1 = clanColor;
@@ -97,7 +98,7 @@ public class Chat implements Listener {
                             .append(Utils.format((Utils.getSuffix(player) != null) ? " " + Utils.convertColorCodesToAdventure(Utils.getSuffix(player))  : ""))
                             .append(Utils.format(" <gray>\u00BB <white>"))
                             .append(Utils.format(ChatColorCMD.colorProfiles.get(e.getPlayer().getUniqueId().toString()) +
-                                            PlainTextComponentSerializer.plainText().serialize(message)
+                                mm.stripTags(PlainTextComponentSerializer.plainText().serialize(message))
                             )));
         } else {
             String finalName2 = name;
@@ -110,7 +111,7 @@ public class Chat implements Listener {
                             .append(mm.deserialize( "<gradient:" +
                                 ChatGradientCMD.gradientProfiles.get(e.getPlayer().getUniqueId().toString()).gradientFrom + ":" +
                                 ChatGradientCMD.gradientProfiles.get(e.getPlayer().getUniqueId().toString()).gradientTo + ">" +
-                                PlainTextComponentSerializer.plainText().serialize(message) + "</gradient>"
+                                mm.stripTags(PlainTextComponentSerializer.plainText().serialize(message)) + "</gradient>"
                             )));
         }
 
