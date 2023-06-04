@@ -46,6 +46,22 @@ public class Chat implements Listener {
             e.getPlayer().sendMessage(Utils.cmdMsg("<red>You are currently on chat cooldown for " + Math.round(timeLeft/1000.0) + " second(s)"));
             return;
         }
+        if(StaffChatCMD.staffChatPlayers.contains(e.getPlayer())) {
+            e.setCancelled(true);
+            StaffChatCMD.sendToStaffChat(
+                    Utils.format("<dark_gray>[<red>SC<dark_gray>] ")
+                            .append(MiniMessage.miniMessage().deserialize(((Utils.getPrefix(e.getPlayer()) != null) ? Utils.getPrefix(e.getPlayer()) : "") + e.getPlayer().getName()))
+                            .append(Utils.format(" <gray>\u00BB "))
+                            .append(e.message().color(TextColor.color(0x10F60E))));
+            ClassicDupeBot.getJDA().getChannelById(TextChannel.class, Config.getConfig().getLong("discord.staffchat"))
+                    .sendMessage("**" + e.getPlayer().getName() + "** \u00BB " + PlainTextComponentSerializer.plainText().serialize(e.message())).queue();
+            return;
+        }
+        if(ClanDatabase.isInClanChat(e.getPlayer())) {
+            e.setCancelled(true);
+            ClanDatabase.sendToClanChat(PlainTextComponentSerializer.plainText().serialize(e.message()), e.getPlayer());
+            return;
+        }
 
         String clanName = ClanDatabase.getClanMember(e.getPlayer().getUniqueId()).getClanName();
         String clanColor = "<yellow>";
@@ -58,18 +74,6 @@ public class Chat implements Listener {
         else if(pgroup.equalsIgnoreCase("vip")) chatCooldown.put(e.getPlayer(), System.currentTimeMillis()+3000);
         else if(pgroup.equalsIgnoreCase("mvp")) chatCooldown.put(e.getPlayer(), System.currentTimeMillis()+2000);
         else if(pgroup.equalsIgnoreCase("legend")) chatCooldown.put(e.getPlayer(), System.currentTimeMillis()+1000);
-
-        if(StaffChatCMD.staffChatPlayers.contains(e.getPlayer())) {
-            e.setCancelled(true);
-            StaffChatCMD.sendToStaffChat(
-                    Utils.format("<dark_gray>[<red>SC<dark_gray>] ")
-                            .append(MiniMessage.miniMessage().deserialize(((Utils.getPrefix(e.getPlayer()) != null) ? Utils.getPrefix(e.getPlayer()) : "") + e.getPlayer().getName()))
-                            .append(Utils.format(" <gray>\u00BB "))
-                            .append(e.message().color(TextColor.color(0x10F60E))));
-            ClassicDupeBot.getJDA().getChannelById(TextChannel.class, Config.getConfig().getLong("discord.staffchat"))
-                    .sendMessage("**" + e.getPlayer().getName() + "** \u00BB " + PlainTextComponentSerializer.plainText().serialize(e.message())).queue();
-            return;
-        }
 
         ChatType chatType = ChatType.DEFAULT;
         if(ChatColorCMD.colorProfiles.containsKey(e.getPlayer().getUniqueId().toString())) chatType = ChatType.COLOR;
