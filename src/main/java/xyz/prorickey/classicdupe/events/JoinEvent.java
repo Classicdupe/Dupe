@@ -59,6 +59,7 @@ public class JoinEvent implements Listener {
             e.getPlayer().sendMessage(Utils.cmdMsg("<green>You currently have naked protection on. This means you cannot pvp but you are safe for 10 minutes. To turn this off execute /nakedoff"));
             return;
         }
+        ClassicDupe.getDatabase().getHomesDatabase().loadPlayer(e.getPlayer());
         PlayerDatabase.PlayerData playerData = ClassicDupe.getDatabase().getPlayerDatabase().getPlayer(e.getPlayer().getUniqueId().toString());
         if(playerData.chatcolor.startsWith("&")) ClassicDupe.getDatabase().getPlayerDatabase().setChatColor(e.getPlayer().getUniqueId().toString(),
                     Utils.convertColorCodesToAdventure(playerData.chatcolor));

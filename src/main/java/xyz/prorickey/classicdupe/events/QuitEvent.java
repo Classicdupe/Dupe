@@ -23,6 +23,7 @@ public class QuitEvent implements Listener {
         ChatGradientCMD.gradientProfiles.remove(e.getPlayer().getUniqueId().toString());
         StaffChatCMD.staffChatPlayers.remove(e.getPlayer());
         PrivateMessageCMD.lastInConvo.remove(e.getPlayer());
+        ClassicDupe.getDatabase().getHomesDatabase().unloadPlayer(e.getPlayer());
         CspyCMD.cspyList.remove(e.getPlayer());
         if(PrivateMessageCMD.lastInConvo.containsValue(e.getPlayer())) new HashMap<>(PrivateMessageCMD.lastInConvo).forEach((sender, recipient) -> PrivateMessageCMD.lastInConvo.remove(sender));
         e.quitMessage(Utils.format("<dark_gray>[<red>-<dark_gray>] ")
