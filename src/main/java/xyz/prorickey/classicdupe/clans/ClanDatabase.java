@@ -15,6 +15,7 @@ import java.io.*;
 import java.sql.*;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicReference;
+import java.util.stream.Collectors;
 
 public class ClanDatabase {
 
@@ -84,7 +85,7 @@ public class ClanDatabase {
                         OfflinePlayer offPlayer = Bukkit.getOfflinePlayer(UUID.fromString(players.getString("uuid")));
                         ClanMember cmem = new ClanMember(offPlayer);
                         if (players.getString("clanId") != null) {
-                            Clan clan = new Clan(UUID.fromString(players.getString("clanId")), players.getString("clanName"));
+                            Clan clan = clansById.get(UUID.fromString(players.getString("clanId")));
                             if (players.getString("clanColor").startsWith("&")) {
                                 clan.setClanColor(Utils.convertColorCodesToAdventure(players.getString("clanColor")));
                                 PreparedStatement stat = main.prepareStatement("UPDATE clans SET clanColor=? WHERE clanId=?");
@@ -103,13 +104,31 @@ public class ClanDatabase {
                             }
                             clan.addPlayer(offPlayer);
                             cmem.setClan(clan, players.getInt("level"));
-                            clansById.put(clan.getClanId(), clan);
-                            clansByName.put(clan.getClanName(), clan);
-                            clanNames.add(clan.getClanName());
                         }
                         clanMembers.put(offPlayer.getUniqueId(), cmem);
                     }
                 }
+
+                // Fix for clans that have no players
+                clansById.values()
+                    .stream().filter(clan -> clan.getMembers().size() == 0).toList()
+                    .forEach(clan -> {
+                        if (clan.getMembers().size() == 0) {
+                            clanNames.remove(clan.getClanName());
+                            clansById.remove(clan.getClanId());
+                            clansByName.remove(clan.getClanName());
+                            try {
+                                PreparedStatement stat1 = main.prepareStatement("DELETE FROM clanWarps WHERE clanId=?");
+                                stat1.setString(1, clan.getClanId().toString());
+                                stat1.execute();
+                                PreparedStatement stat2 = main.prepareStatement("DELETE FROM clans WHERE clanId=?");
+                                stat2.setString(1, clan.getClanId().toString());
+                                stat2.execute();
+                            } catch (SQLException e) {
+                                throw new RuntimeException(e);
+                            }
+                        }
+                });
             } catch (SQLException e) {
                 throw new RuntimeException(e);
             }
