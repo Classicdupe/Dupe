@@ -207,6 +207,12 @@ public class ClassicDupe extends JavaPlugin {
         //this.getCommand("blockcommands").setTabCompleter(new BlockCommandCMD());
         this.getCommand("night").setExecutor(new NightVisionCMD());
         this.getCommand("night").setTabCompleter(new NightVisionCMD());
+        this.getCommand("home").setExecutor(new HomeCMD());
+        this.getCommand("home").setTabCompleter(new HomeCMD());
+        this.getCommand("sethome").setExecutor(new SetHomeCMD());
+        this.getCommand("sethome").setTabCompleter(new SetHomeCMD());
+        this.getCommand("delhome").setExecutor(new DelHomeCMD());
+        this.getCommand("delhome").setTabCompleter(new DelHomeCMD());
 
         getServer().getPluginManager().registerEvents(new JoinEvent(), this);
         getServer().getPluginManager().registerEvents(new QuitEvent(), this);
@@ -229,7 +235,6 @@ public class ClassicDupe extends JavaPlugin {
         getServer().getPluginManager().registerEvents(new ReducedFireworkLag(), this);
         //getServer().getPluginManager().registerEvents(new CommandSendEvent(), this);
         getServer().getPluginManager().registerEvents(new PlayerOnEnd(), this);
-
 
         //Init maze
         MAZEmanager.init();

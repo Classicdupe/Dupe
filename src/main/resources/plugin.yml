@@ -274,7 +274,6 @@ commands:
   joinmaze:
     description: To join the maze
     usage: "Usage: /joinmaze"
-
 #  blockcommands:
 #    description: Block players from using commands.
 #    usage: "Usage /blockcommands [player]"
@@ -288,6 +287,17 @@ commands:
     aliases:
       - nighttoggle
       - nightvision
+  home:
+    description: To go to your home
+    usage: "Usage: /home"
+    aliases:
+      - h
+  sethome:
+    description: To set your home
+    usage: "Usage: /sethome"
+  delhome:
+    description: To delete your home
+    usage: "Usage: /delhome"
 permissions:
   default.spawn.others:
     description: Allows you to teleport others to spawn

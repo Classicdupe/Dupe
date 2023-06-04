@@ -18,9 +18,11 @@ public class Database {
     static Connection playerConn;
     static Connection serverConn;
     static Connection linkingConn;
+    static Connection homesConn;
     private FilterDatabase filterDatabase;
     private PlayerDatabase playerDatabase;
     private LinkingDatabase linkingDatabase;
+    private HomesDatabase homesDatabase;
     public Location spawn;
     public static List<Player> blockedToUseCommands = new ArrayList<>();
 
@@ -41,6 +43,7 @@ public class Database {
                 conn.prepareStatement("CREATE TABLE IF NOT EXISTS stats(uuid TEXT, kills INT, deaths INT)").execute();
                 conn.prepareStatement("CREATE TABLE IF NOT EXISTS particleEffects(uuid TEXT, killEffect TEXT, particleEffect TEXT)").execute();
                 conn.prepareStatement("CREATE TABLE IF NOT EXISTS link(uuid TEXT, dscid Long)").execute();
+                conn.prepareStatement("CREATE TABLE IF NOT EXISTS homes(uuid TEXT, name TEXT, world TEXT, x DOUBLE, y DOUBLE, z DOUBLE, yaw FLOAT, pitch FLOAT)").execute();
 
                 System.out.println("Created tables!");
 
@@ -176,14 +179,45 @@ public class Database {
                     new File(ClassicDupe.getPlugin().getDataFolder().getAbsolutePath() + File.separator + "linkData.mv.db").delete();
                 }
 
-                filterDatabase = new FilterDatabase(serverConn);
-                playerDatabase = new PlayerDatabase(playerConn);
-                linkingDatabase = new LinkingDatabase(linkingConn);
+                if(new File(ClassicDupe.getPlugin().getDataFolder().getAbsolutePath() + File.separator + "homes.mv.db").exists()) {
+
+                    homesConn = DriverManager.getConnection ("jdbc:h2:" + ClassicDupe.getPlugin().getDataFolder().getAbsolutePath() + File.separator + "homes");
+
+                    try (ResultSet set = conn.prepareStatement("SELECT * FROM homes").executeQuery()) {
+                        if (!set.next()) {
+                            PreparedStatement homeStat = linkingConn.prepareStatement("SELECT * FROM homes");
+                            ResultSet homeSet = homeStat.executeQuery();
+                            PreparedStatement stat = conn.prepareStatement("INSERT INTO homes(uuid, name, world, x, y, z, yaw, pitch) VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
+                            while (homeSet.next()) {
+                                stat.setString(1, homeSet.getString("uuid"));
+                                stat.setString(2, homeSet.getString("name"));
+                                stat.setString(3, homeSet.getString("world"));
+                                stat.setDouble(4, homeSet.getDouble("x"));
+                                stat.setDouble(5, homeSet.getDouble("y"));
+                                stat.setDouble(6, homeSet.getDouble("z"));
+                                stat.setFloat(7, homeSet.getFloat("yaw"));
+                                stat.setFloat(8, homeSet.getFloat("pitch"));
+                                stat.addBatch();
+                            }
+                            stat.executeLargeBatch();
+                        }
+                    }
+
+                    homesConn.close();
+                    homesConn = conn;
+                    new File(ClassicDupe.getPlugin().getDataFolder().getAbsolutePath() + File.separator + "homes.mv.db").delete();
+                }
+
+                filterDatabase = new FilterDatabase(conn);
+                playerDatabase = new PlayerDatabase(conn);
+                linkingDatabase = new LinkingDatabase(conn);
+                homesDatabase = new HomesDatabase(conn);
 
             } else {
                 playerConn = DriverManager.getConnection ("jdbc:h2:" + ClassicDupe.getPlugin().getDataFolder().getAbsolutePath() + File.separator + "playerData");
                 serverConn = DriverManager.getConnection ("jdbc:h2:" + ClassicDupe.getPlugin().getDataFolder().getAbsolutePath() + File.separator + "serverData");
                 linkingConn = DriverManager.getConnection ("jdbc:h2:" + ClassicDupe.getPlugin().getDataFolder().getAbsolutePath() + File.separator + "linkData");
+                homesConn = DriverManager.getConnection ("jdbc:h2:" + ClassicDupe.getPlugin().getDataFolder().getAbsolutePath() + File.separator + "homes");
 
                 playerConn.prepareStatement("CREATE TABLE IF NOT EXISTS players(uuid varchar, name varchar, nickname varchar, timesjoined long, playtime long, randomitem BOOLEAN, chatcolor VARCHAR, gradient BOOLEAN, gradientfrom VARCHAR, gradientto VARCHAR, night BOOLEAN)").execute();
                 serverConn.prepareStatement("CREATE TABLE IF NOT EXISTS filter(text varchar, fullword BOOLEAN)").execute();
@@ -191,10 +225,12 @@ public class Database {
                 playerConn.prepareStatement("CREATE TABLE IF NOT EXISTS stats(uuid VARCHAR, kills INT, deaths INT)").execute();
                 playerConn.prepareStatement("CREATE TABLE IF NOT EXISTS particleEffects(uuid VARCHAR, killEffect VARCHAR, particleEffect VARCHAR)").execute();
                 linkingConn.prepareStatement("CREATE TABLE IF NOT EXISTS link(uuid VARCHAR, dscid Long)").execute();
+                homesConn.prepareStatement("CREATE TABLE IF NOT EXISTS homes(uuid VARCHAR, name VARCHAR, world VARCHAR, x DOUBLE, y DOUBLE, z DOUBLE, yaw FLOAT, pitch FLOAT)").execute();
 
                 filterDatabase = new FilterDatabase(serverConn);
                 playerDatabase = new PlayerDatabase(playerConn);
                 linkingDatabase = new LinkingDatabase(linkingConn);
+                homesDatabase = new HomesDatabase(homesConn);
             }
         } catch (SQLException e) {
             throw new RuntimeException(e);
@@ -276,12 +312,10 @@ public class Database {
         }
     }
 
-    public FilterDatabase getFilterDatabase() {
-        return filterDatabase;
-    }
-
+    public FilterDatabase getFilterDatabase() { return filterDatabase; }
     public PlayerDatabase getPlayerDatabase() { return playerDatabase; }
     public LinkingDatabase getLinkingDatabase() { return linkingDatabase; }
+    public HomesDatabase getHomesDatabase() { return homesDatabase; }
 
     public void shutdown() {
         try {
