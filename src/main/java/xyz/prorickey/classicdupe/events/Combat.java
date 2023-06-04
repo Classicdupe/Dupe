@@ -24,6 +24,11 @@ public class Combat implements Listener {
 
     @EventHandler
     public void onEntityDamageByEntity(EntityDamageByEntityEvent e) {
+        if(e.getDamager() instanceof Player att && Utils.isVanished(att) && !att.hasPermission("admin.bypassnopvpinvanish")) {
+            e.setCancelled(true);
+            att.sendMessage(Utils.cmdMsg("<red>You cannot attack players while vanished"));
+            return;
+        }
         if(e.getEntity() instanceof Player player && JoinEvent.nakedProtection.containsKey(player)) {
             e.setCancelled(true);
             if(e.getDamager() instanceof Player attacker) attacker.sendMessage(Utils.cmdMsg("<red>You cannot attack that player, they are currently in naked protection"));
