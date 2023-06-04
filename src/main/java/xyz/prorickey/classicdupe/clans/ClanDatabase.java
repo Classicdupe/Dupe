@@ -228,6 +228,7 @@ public class ClanDatabase {
         Bukkit.getScheduler().runTaskAsynchronously(ClassicDupe.getPlugin(), () -> {
             try {
                 main.prepareStatement("UPDATE players SET clanId=null, clanName=null, level=null WHERE uuid='" + cmem.getOffPlayer().getUniqueId() + "'").execute();
+                if(clanChatMembers.contains(cmem.getOffPlayer().getPlayer())) ClanDatabase.removeFromClanChat(cmem.getOffPlayer().getPlayer());
             } catch (SQLException e) {
                 throw new RuntimeException(e);
             }
