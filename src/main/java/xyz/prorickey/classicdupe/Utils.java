@@ -58,6 +58,13 @@ public class Utils {
         if(Config.getConfig().getString("ranks." + rank + ".prefix") != null) return Config.getConfig().getString("ranks." + rank + ".prefix");
         return "";
     }
+
+    public static Integer getMaxHomes(OfflinePlayer player) {
+        String rank = ClassicDupe.getLPAPI().getUserManager().getUser(player.getUniqueId()).getCachedData().getMetaData().getPrimaryGroup();
+        if(Config.getConfig().getInt("ranks." + rank + ".homes") != 0) return Config.getConfig().getInt("ranks." + rank + ".homes");
+        return 1;
+    }
+
     public static String getSuffix(Player player) { return ClassicDupe.getLPAPI().getUserManager().getUser(player.getUniqueId()).getCachedData().getMetaData().getSuffix(); }
 
     public static String centerText(String text) {
