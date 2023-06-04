@@ -1,10 +1,12 @@
+import org.apache.tools.ant.filters.ReplaceTokens
+
 plugins {
     id 'java'
     id 'com.github.johnrengelman.shadow' version '8.1.1'
 }
 
 group 'xyz.prorickey.classicdupe'
-version '3.4.3'
+version '3.4.4'
 
 repositories {
     mavenCentral()
@@ -38,6 +40,13 @@ shadowJar {
 jar {
     enabled = false
     dependsOn(shadowJar)
+}
+
+processResources {
+    from(sourceSets.main.resources.srcDirs) {
+        duplicatesStrategy = 'include'
+        filter ReplaceTokens, tokens: [version: version]
+    }
 }
 
 def targetJavaVersion = 17
