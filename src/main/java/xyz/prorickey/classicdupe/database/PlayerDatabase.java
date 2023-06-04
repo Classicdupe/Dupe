@@ -3,6 +3,7 @@ package xyz.prorickey.classicdupe.database;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.Nullable;
+import org.mariadb.jdbc.export.Prepare;
 import xyz.prorickey.classicdupe.ClassicDupe;
 import xyz.prorickey.classicdupe.commands.perk.ChatGradientCMD;
 
@@ -353,17 +354,30 @@ public class PlayerDatabase {
         }
     }
 
-    public void initPlayer(Player player) {
-        try {
-            PreparedStatement stat = conn.prepareStatement("INSERT INTO players(uuid, name, nickname, timesjoined, playtime, randomitem, chatcolor, gradient, gradientfrom, gradientto, night) VALUES (?, ?, null, 1, 0, true, '<gray>', false, null, null, true)");
-            stat.setString(1, player.getUniqueId().toString());
-            stat.setString(2, player.getName());
-            stat.execute();
-            conn.prepareStatement("INSERT INTO stats(uuid, kills, deaths) VALUES('" + player.getUniqueId() + "', 0, 0)").execute();
-            conn.prepareStatement("INSERT INTO particleEffects(uuid, killEffect, particleEffect) VALUES('" + player.getUniqueId() + "', 'none', 'none')").execute();
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
+    public void playerDataUpdate(Player player) {
+        Bukkit.getScheduler().runTaskAsynchronously(ClassicDupe.getPlugin(), () -> {
+            try {
+                PreparedStatement stat = conn.prepareStatement("SELECT * FROM players WHERE uuid=?");
+                stat.setString(1, player.getUniqueId().toString());
+                ResultSet set = stat.executeQuery();
+                if(set.next()) {
+                    PreparedStatement stat1 = conn.prepareStatement("UPDATE players SET name=?, timesjoined=timesjoined+1 WHERE uuid=?");
+                    stat1.setString(1, player.getName());
+                    stat1.setString(2, player.getUniqueId().toString());
+                    stat1.execute();
+                } else {
+                    PreparedStatement stat1 = conn.prepareStatement("INSERT INTO players(uuid, name, nickname, timesjoined, playtime, randomitem, chatcolor, gradient, gradientfrom, gradientto, night) VALUES (?, ?, null, 1, 0, true, '<gray>', false, null, null, true)");
+                    stat1.setString(1, player.getUniqueId().toString());
+                    stat1.setString(2, player.getName());
+                    stat1.execute();
+                    conn.prepareStatement("INSERT INTO stats(uuid, kills, deaths) VALUES('" + player.getUniqueId() + "', 0, 0)").execute();
+                    conn.prepareStatement("INSERT INTO particleEffects(uuid, killEffect, particleEffect) VALUES('" + player.getUniqueId() + "', 'none', 'none')").execute();
+                }
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
+        });
+
     }
 
 }

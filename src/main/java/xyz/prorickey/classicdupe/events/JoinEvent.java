@@ -31,8 +31,8 @@ public class JoinEvent implements Listener {
     @EventHandler
     public void onPlayerJoin(PlayerJoinEvent e) {
         ClanDatabase.createIfNotExists(e.getPlayer());
+        ClassicDupe.getDatabase().getPlayerDatabase().playerDataUpdate(e.getPlayer());
         if(ClassicDupe.getDatabase().getPlayerDatabase().getPlayer(e.getPlayer().getUniqueId().toString()) == null) {
-            ClassicDupe.getDatabase().getPlayerDatabase().initPlayer(e.getPlayer());
             e.getPlayer().teleport(ClassicDupe.getDatabase().spawn);
             e.joinMessage(Utils.format("<yellow>" + e.getPlayer().getName() + " <green>Just joined for the first time! Give them a warm welcome"));
             e.getPlayer().sendMessage(Utils.cmdMsg("<green>Every <yellow>60 <green>you will recieve a random item. Execute /random to disable or enable this"));
