@@ -40,8 +40,10 @@ public class Scoreboard {
                 board.registerNewObjective(player.getUniqueId().toString(), Criteria.DUMMY, Component.text("dummy")) :
                 board.getObjective(player.getUniqueId().toString());
 
+        String displayName = "<green><bold>ClassicDupe";
+        if(Utils.isVanished(player)) displayName = "<green><bold>ClassicDupe <red><b>(VANISHED)";
         if(obj.getDisplaySlot() != DisplaySlot.SIDEBAR) obj.setDisplaySlot(DisplaySlot.SIDEBAR);
-        if(!obj.displayName().equals(Utils.format("<green><bold>ClassicDupe"))) obj.displayName(Utils.format("<green><bold>ClassicDupe"));
+        if(!obj.displayName().equals(Utils.format(displayName))) obj.displayName(Utils.format(displayName));
 
         ClanMember cmem = ClanDatabase.getClanMember(player.getUniqueId());
         String clanColor = "<yellow>";
