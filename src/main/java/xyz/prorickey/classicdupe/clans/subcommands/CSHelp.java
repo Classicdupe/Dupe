@@ -16,6 +16,7 @@ public class CSHelp extends ClanSub {
 
         sender.sendMessage(Utils.format("<yellow/clan help <gray>- <gold>To display the help section"));
         sender.sendMessage(Utils.format("<yellow/clan info [clan] <gray>- <gold>To display info about a clan"));
+        sender.sendMessage(Utils.format("<yellow/clan chat [message] <gray>- <gold>To toggle clan chat or send a message"));
         sender.sendMessage(Utils.format("<yellow/clan create <clanName> <gray>- <gold>To create a clan"));
         sender.sendMessage(Utils.format("<yellow/clan delete [confirm] <gray>- <gold>To delete your clan"));
         sender.sendMessage(Utils.format("<yellow/clan invite <player> <gray>- <gold>To invite a player to the clan"));

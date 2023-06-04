@@ -18,6 +18,7 @@ import org.bukkit.scheduler.BukkitRunnable;
 import net.luckperms.api.LuckPerms;
 import xyz.prorickey.classicdupe.clans.ClanDatabase;
 import xyz.prorickey.classicdupe.clans.Clans;
+import xyz.prorickey.classicdupe.clans.subcommands.CSChat;
 import xyz.prorickey.classicdupe.commands.admin.*;
 import xyz.prorickey.classicdupe.commands.default1.*;
 import xyz.prorickey.classicdupe.commands.moderator.*;
@@ -213,6 +214,8 @@ public class ClassicDupe extends JavaPlugin {
         this.getCommand("sethome").setTabCompleter(new SetHomeCMD());
         this.getCommand("delhome").setExecutor(new DelHomeCMD());
         this.getCommand("delhome").setTabCompleter(new DelHomeCMD());
+        this.getCommand("clanchat").setExecutor(new CSChat());
+        this.getCommand("clanchat").setTabCompleter(new CSChat());
 
         getServer().getPluginManager().registerEvents(new JoinEvent(), this);
         getServer().getPluginManager().registerEvents(new QuitEvent(), this);
