@@ -307,3 +307,5 @@ permissions:
     description: Reduced cooldown for legend
   perks.feed.mvp:
     description: Reduced cooldown for mvp
+  admin.bypassnopvpinvanish:
+    description: Allows you to bypass no pvp in vanish
