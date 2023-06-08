@@ -13,6 +13,8 @@ import org.joml.Vector3d;
 import xyz.prorickey.classicdupe.ClassicDupe;
 import xyz.prorickey.classicdupe.playerevents.MAZEmanager;
 
+import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -29,7 +31,7 @@ public class MazeCommands implements CommandExecutor {
             } else {
                 sender.sendMessage(ChatColor.YELLOW + "Joining maze...");
                 //teleoi=port to maze location
-                Location place = new Location(Bukkit.getWorld("world"), MAZEmanager.MazeLocation.x + 1, MAZEmanager.MazeLocation.y+ 1, MAZEmanager.MazeLocation.z+ 1);
+                Location place = MAZEmanager.MazeSpawn;
                 ((Player) sender).teleport(place);
                 sender.sendMessage(ChatColor.GREEN + "You have been teleported to the maze!");
                 return true;
@@ -145,9 +147,43 @@ public class MazeCommands implements CommandExecutor {
 
                         sender.sendMessage(ChatColor.GREEN + "Maze location set to: " + MAZEmanager.MazeLocation.x + ", " + MAZEmanager.MazeLocation.y + ", " + MAZEmanager.MazeLocation.z);
                         return true;
-                    default:
-                        sender.sendMessage(ChatColor.RED + "Invalid arguments! Usage: /maze <start|stop|set|reset|location>");
+                    case "setspawn":
+                        sender.sendMessage(ChatColor.GREEN + "Setting spawn location...");
+
+                        //get the location of the player
+                        Location loc2 = ((Player) sender).getLocation();
+                        MAZEmanager.MazeSpawn = loc2;
+
+
+                        Plugin plugin2 = ClassicDupe.plugin;
+
+                        File file = new File(plugin2.getDataFolder().getAbsolutePath() + "/maze/MazeSpawn.txt");
+
+
+                        if (!file.exists()) {
+                            sender.sendMessage(ChatColor.RED + "Error: Server Restart Required!");
+
+                            return false;
+                        }
+
+
+                        try {
+                            FileWriter writer = new FileWriter(file);
+                            writer.write(loc2.getX() + "," + loc2.getY() + "," + loc2.getZ());
+                            writer.close();
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+
+
+                        sender.sendMessage(ChatColor.GREEN + "Spawn location set to: " + loc2.getX() + ", " + loc2.getY() + ", " + loc2.getZ());
                         return true;
+
+
+                    default:
+                        sender.sendMessage(ChatColor.RED + "Invalid arguments! Usage: /maze <setspawn|start|stop|set|reset|location>");
+                        return true;
+
                 }
 
 

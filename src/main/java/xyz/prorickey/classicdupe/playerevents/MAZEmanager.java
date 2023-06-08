@@ -32,6 +32,7 @@ public class MAZEmanager {
     public static Location MazeLoc;
     public static int MazeSize = 10;
     public static ArrayList leaderboard = new ArrayList<String>();
+    public static Location MazeSpawn;
 
     //THREAD HANDLERS
     public static boolean AutoManagerThread = true;
@@ -85,6 +86,30 @@ public class MAZEmanager {
         MazeLocation.x = Float.parseFloat(dataSplit[0]);
         MazeLocation.y = Float.parseFloat(dataSplit[1]);
         MazeLocation.z = Float.parseFloat(dataSplit[2]);
+
+        //check if MazeSpawn.txt exists
+        Path path2 = Paths.get(ClassicDupe.plugin.getDataFolder() + "/maze/MazeSpawn.txt");
+        if (path2.toFile().exists() == false) {
+            try {
+                path2.toFile().createNewFile();
+                //set internals to 0,0,0
+                Files.writeString(path2, "0,65,0");
+                MazeSpawn = new Location(Bukkit.getWorld("world"), 0, 65, 0);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        } else {
+            String data2 = "";
+            try {
+                data2 = Files.readString(path2);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            String[] dataSplit2 = data2.split(",");
+            MazeSpawn = new Location(Bukkit.getWorld("world"), Float.parseFloat(dataSplit2[0]), Float.parseFloat(dataSplit2[1]), Float.parseFloat(dataSplit2[2]));
+        }
+
+
 
         MazeLoc = new Location(Bukkit.getWorld("world"), MazeLocation.x, MazeLocation.y, MazeLocation.z);
         if (AutoStart) {

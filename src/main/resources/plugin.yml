@@ -250,6 +250,9 @@ commands:
     aliases:
       - mz
     subcommands:
+      spawn:
+        description: To set the spawn of the maze
+        usage: "Usage: /maze setspawn"
       start:
         description: To start the maze
         usage: "Usage: /maze start"
@@ -271,6 +274,7 @@ commands:
       location:
         description: To set the location of the mazes
         usage: "Usage: /maze location"
+
   joinmaze:
     description: To join the maze
     usage: "Usage: /joinmaze"
