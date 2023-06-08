@@ -42,7 +42,7 @@ public class Combat implements Listener {
         if(e.getEntity() instanceof Player player && e.getDamager() instanceof Player attacker) {
             ClanMember pmem = ClanDatabase.getClanMember(player.getUniqueId());
             ClanMember amem = ClanDatabase.getClanMember(attacker.getUniqueId());
-            if(pmem.getClanID() != null && pmem.getClanID() != null && Objects.equals(pmem.getClanID(), amem.getClanID())) {
+            if(pmem != null && amem != null && pmem.getClanID() != null && Objects.equals(pmem.getClanID(), amem.getClanID())) {
                 e.setCancelled(true);
                 return;
             }
