@@ -317,14 +317,4 @@ public class Database {
     public LinkingDatabase getLinkingDatabase() { return linkingDatabase; }
     public HomesDatabase getHomesDatabase() { return homesDatabase; }
 
-    public void shutdown() {
-        try {
-            playerConn.close();
-            serverConn.close();
-            linkingConn.close();
-        } catch (SQLException e) {
-            Bukkit.getLogger().severe(e.toString());
-        }
-    }
-
 }
