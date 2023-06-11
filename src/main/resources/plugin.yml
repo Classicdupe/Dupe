@@ -14,7 +14,6 @@ depend:
 prefix: ClassicDupe
 libraries:
   - com.h2database:h2:2.1.214
-  - net.dv8tion:JDA:5.0.0-beta.5
   - org.mariadb.jdbc:mariadb-java-client:3.1.4
 commands:
   dupe:
