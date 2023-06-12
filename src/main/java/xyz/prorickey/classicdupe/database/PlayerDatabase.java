@@ -2,10 +2,9 @@ package xyz.prorickey.classicdupe.database;
 
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
+import org.bukkit.scheduler.BukkitRunnable;
 import org.jetbrains.annotations.Nullable;
-import org.mariadb.jdbc.export.Prepare;
 import xyz.prorickey.classicdupe.ClassicDupe;
-import xyz.prorickey.classicdupe.commands.perk.ChatGradientCMD;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -14,105 +13,122 @@ import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class PlayerDatabase {
 
     final Connection conn;
+    private final Map<UUID, PlayerData> playerDataMap = new HashMap<>();
 
     public PlayerDatabase(Connection conn) {
         this.conn = conn;
+        new BalanceTopTask().runTaskTimerAsynchronously(ClassicDupe.getPlugin(), 0, 20 * 60 * 5);
     }
 
-    public static class PlayerData {
-
-        public final String uuid;
-        public final String name;
-        public final String nickname;
-        public final long timesjoined;
-        public final long playtime;
-        public final boolean randomitem;
-        public final String chatcolor;
-        public final boolean gradient;
-        public final String gradientfrom;
-        public final String gradientto;
-        public final boolean night;
-        public final Integer balance;
-
-        public PlayerData(String uuid1,
-                          String name1,
-                          String nickname1,
-                          long timesjoined1,
-                          long playtime1,
-                          boolean randomitem1,
-                          String chatcolor1,
-                          boolean gradient1,
-                          String gradientfrom1,
-                          String gradientto1,
-                          boolean night1,
-                          Integer balance1
-        ) {
-            uuid = uuid1;
-            name = name1;
-            nickname = nickname1;
-            timesjoined = timesjoined1;
-            playtime = playtime1;
-            randomitem = randomitem1;
-            chatcolor = chatcolor1;
-            gradient = gradient1;
-            gradientfrom = gradientfrom1;
-            gradientto = gradientto1;
-            night = night1;
-            balance = balance1;
-        }
-    }
-
-    public void subtractBalance(UUID uuid, Integer sub) {
-        Bukkit.getScheduler().runTaskAsynchronously(ClassicDupe.getPlugin(), () -> {
-            try {
-                PreparedStatement statement = conn.prepareStatement("UPDATE playerData SET balance=balance-? WHERE uuid=?");
-                statement.setInt(1, sub);
-                statement.setString(2, uuid.toString());
-                statement.executeUpdate();
-            } catch (SQLException e) {
-                Bukkit.getLogger().severe(e.toString());
-            }
-        });
-    }
-
-    public void addBalance(UUID uuid, Integer add) {
-        Bukkit.getScheduler().runTaskAsynchronously(ClassicDupe.getPlugin(), () -> {
-            try {
-                PreparedStatement statement = conn.prepareStatement("UPDATE playerData SET balance=balance+? WHERE uuid=?");
-                statement.setInt(1, add);
-                statement.setString(2, uuid.toString());
-                statement.executeUpdate();
-            } catch (SQLException e) {
-                Bukkit.getLogger().severe(e.toString());
-            }
-        });
-    }
-
-    public void setBalance(UUID uuid, Integer balance) {
-        Bukkit.getScheduler().runTaskAsynchronously(ClassicDupe.getPlugin(), () -> {
-            try {
-                PreparedStatement statement = conn.prepareStatement("UPDATE playerData SET balance=? WHERE uuid=?");
-                statement.setInt(1, balance);
-                statement.setString(2, uuid.toString());
-                statement.executeUpdate();
-            } catch (SQLException e) {
-                Bukkit.getLogger().severe(e.toString());
-            }
-        });
-    }
-
-    public Integer getBalance(UUID uuid) {
+    public PlayerData getPlayerData(UUID uuid) {
+        if(playerDataMap.containsKey(uuid)) return playerDataMap.get(uuid);
         try {
-            ResultSet set = conn.prepareStatement("SELECT * FROM playerData WHERE uuid='" + uuid + "'").executeQuery();
-            if(set.next()) return set.getInt("balance");
+            PreparedStatement stat = conn.prepareStatement("SELECT * FROM players WHERE uuid=?");
+            stat.setString(1, uuid.toString());
+            ResultSet set = stat.executeQuery();
+            if(set.next()) {
+                return new PlayerData(
+                        conn,
+                        UUID.fromString(set.getString("uuid")),
+                        set.getString("name"),
+                        set.getString("nickname"),
+                        set.getLong("timesjoined"),
+                        set.getLong("playtime"),
+                        set.getBoolean("randomitem"),
+                        set.getString("chatcolor"),
+                        set.getBoolean("gradient"),
+                        set.getString("gradientfrom"),
+                        set.getString("gradientto"),
+                        set.getBoolean("night"),
+                        set.getInt("balance")
+                );
+            }
             return null;
         } catch (SQLException e) {
             Bukkit.getLogger().severe(e.toString());
             return null;
+        }
+    }
+
+    public void playerDataUnload(UUID uuid) { playerDataMap.remove(uuid); }
+
+    public void playerDataUpdateAndLoad(Player player) {
+        Bukkit.getScheduler().runTaskAsynchronously(ClassicDupe.getPlugin(), () -> {
+            try {
+                PreparedStatement stat = conn.prepareStatement("SELECT * FROM players WHERE uuid=?");
+                stat.setString(1, player.getUniqueId().toString());
+                ResultSet set = stat.executeQuery();
+                if(set.next()) {
+                    PreparedStatement stat1 = conn.prepareStatement("UPDATE players SET name=?, timesjoined=timesjoined+1 WHERE uuid=?");
+                    stat1.setString(1, player.getName());
+                    stat1.setString(2, player.getUniqueId().toString());
+                    stat1.execute();
+                    playerDataMap.put(player.getUniqueId(), new PlayerData(
+                            conn,
+                            UUID.fromString(set.getString("uuid")),
+                            set.getString("name"),
+                            set.getString("nickname"),
+                            set.getLong("timesjoined"),
+                            set.getLong("playtime"),
+                            set.getBoolean("randomitem"),
+                            set.getString("chatcolor"),
+                            set.getBoolean("gradient"),
+                            set.getString("gradientfrom"),
+                            set.getString("gradientto"),
+                            set.getBoolean("night"),
+                            set.getInt("balance")
+                    ));
+                } else {
+                    PreparedStatement stat1 = conn.prepareStatement("INSERT INTO players(uuid, name, nickname, timesjoined, playtime, randomitem, chatcolor, gradient, gradientfrom, gradientto, night, balance) VALUES (?, ?, null, 1, 0, true, '<gray>', false, null, null, true, 0)");
+                    stat1.setString(1, player.getUniqueId().toString());
+                    stat1.setString(2, player.getName());
+                    stat1.execute();
+                    conn.prepareStatement("INSERT INTO stats(uuid, kills, deaths) VALUES('" + player.getUniqueId() + "', 0, 0)").execute();
+                    conn.prepareStatement("INSERT INTO particleEffects(uuid, killEffect, particleEffect) VALUES('" + player.getUniqueId() + "', 'none', 'none')").execute();
+                    playerDataMap.put(player.getUniqueId(), new PlayerData(
+                            conn,
+                            player.getUniqueId(),
+                            player.getName(),
+                            null,
+                            1,
+                            0,
+                            true,
+                            "<gray>",
+                            false,
+                            null,
+                            null,
+                            true,
+                            0
+                    ));
+                }
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
+        });
+
+    }
+
+    public Map<Integer, PlayerData> balanceTop = new HashMap<>();
+
+    public class BalanceTopTask extends BukkitRunnable {
+        @Override
+        public void run() {
+            try {
+                PreparedStatement stat = conn.prepareStatement("SELECT * FROM players ORDER BY balance DESC LIMIT 10");
+                ResultSet set = stat.executeQuery();
+                AtomicInteger i = new AtomicInteger(1);
+                while(set.next()) balanceTop.put(
+                        i.getAndIncrement(),
+                        getPlayerData(UUID.fromString(set.getString("uuid")))
+                );
+            } catch (SQLException e) {
+                Bukkit.getLogger().severe(e.toString());
+            }
         }
     }
 
@@ -167,7 +183,7 @@ public class PlayerDatabase {
                 ResultSet killsSet = conn.prepareStatement("SELECT * FROM stats ORDER BY kills DESC").executeQuery();
                 for(int i = 0; i < 10; i++) {
                     if(killsSet.next()) {
-                        PlayerData data = getPlayer(killsSet.getString("uuid"));
+                        PlayerData data = getPlayerData(UUID.fromString(killsSet.getString("uuid")));
                         killsLeaderboard.put(i+1, data.name);
                         killsLeaderboardK.put(i+1, killsSet.getInt("kills"));
                     }
@@ -175,7 +191,7 @@ public class PlayerDatabase {
                 ResultSet deathsSet = conn.prepareStatement("SELECT * FROM stats ORDER BY deaths DESC").executeQuery();
                 for(int i = 0; i < 10; i++) {
                     if(deathsSet.next()) {
-                        PlayerData data = getPlayer(deathsSet.getString("uuid"));
+                        PlayerData data = getPlayerData(UUID.fromString(deathsSet.getString("uuid")));
                         deathsLeaderboard.put(i+1, data.name);
                         deathsLeaderboardD.put(i+1, deathsSet.getInt("deaths"));
                     }
@@ -184,131 +200,6 @@ public class PlayerDatabase {
                 Bukkit.getLogger().severe(e.toString());
             }
         });
-    }
-
-    public PlayerData getPlayer(String uuid) {
-        ResultSet set = null;
-        try {
-            set = conn.prepareStatement("SELECT * FROM players WHERE uuid='" + uuid + "'").executeQuery();
-        } catch (SQLException e) {
-            Bukkit.getLogger().severe(e.toString());
-        }
-        try {
-            assert set != null;
-            if(!set.next()) return null;
-            return new PlayerData(
-                    set.getString("uuid"),
-                    set.getString("name"),
-                    set.getString("nickname"),
-                    set.getLong("timesjoined"),
-                    set.getLong("playtime"),
-                    set.getBoolean("randomitem"),
-                    set.getString("chatcolor"),
-                    set.getBoolean("gradient"),
-                    set.getString("gradientfrom"),
-                    set.getString("gradientto"),
-                    set.getBoolean("night"),
-                    set.getInt("balance")
-            );
-        } catch (SQLException e) {
-            Bukkit.getLogger().severe(e.toString());
-            return null;
-        }
-    }
-
-    public void setNickname(String uuid, String nickname) {
-        try {
-            PreparedStatement stat = conn.prepareStatement("UPDATE players SET nickname=? WHERE uuid='" + uuid +  "'");
-            stat.setString(1, nickname);
-            stat.execute();
-        } catch (SQLException e) {
-            Bukkit.getLogger().severe(e.toString());
-        }
-    }
-
-    public void resetNickname(String uuid) {
-        try {
-            conn.prepareStatement("UPDATE players SET nickname=null WHERE uuid='" + uuid +  "'").execute();
-        } catch (SQLException e) {
-            Bukkit.getLogger().severe(e.toString());
-        }
-    }
-
-    public Boolean swapRandomItem(String uuid) {
-        PlayerData data = getPlayer(uuid);
-        if(data.randomitem) {
-            disableRandomItem(uuid);
-            return false;
-        } else {
-            enableRandomItem(uuid);
-            return true;
-        }
-    }
-
-    public void setChatColor(String uuid, String color) {
-        try {
-            conn.prepareStatement("UPDATE players SET chatcolor='" + color + "' WHERE uuid='" + uuid +  "'").execute();
-        } catch (SQLException e) {
-            Bukkit.getLogger().severe(e.toString());
-        }
-    }
-
-    public Boolean toggleGradient(String uuid) {
-        try {
-            if(getPlayer(uuid).gradient) {
-                conn.prepareStatement("UPDATE players SET gradient=false WHERE uuid='" + uuid +  "'").execute();
-                return false;
-            } else {
-                conn.prepareStatement("UPDATE players SET gradient=true WHERE uuid='" + uuid +  "'").execute();
-                return true;
-            }
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-    public ChatGradientCMD.GradientProfiles getGradientProfile(String uuid) {
-        PlayerData data = getPlayer(uuid);
-        return new ChatGradientCMD.GradientProfiles(
-                data.gradientfrom,
-                data.gradientto
-        );
-    }
-
-    public void setGradientProfile(String uuid, ChatGradientCMD.GradientProfiles profile) {
-        try {
-            conn.prepareStatement("UPDATE players SET gradientFrom='" + profile.gradientFrom + "' WHERE uuid='" + uuid +  "'").execute();
-            conn.prepareStatement("UPDATE players SET gradientTo='" + profile.gradientTo + "' WHERE uuid='" + uuid +  "'").execute();
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-    public void enableRandomItem(String uuid) {
-        try {
-            conn.prepareStatement("UPDATE players SET randomitem=true WHERE uuid='" + uuid +  "'").execute();
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-    public void disableRandomItem(String uuid) {
-        try {
-            conn.prepareStatement("UPDATE players SET randomitem=false WHERE uuid='" + uuid +  "'").execute();
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-    public void setNightVision(String uuid, boolean value) {
-        try {
-            PreparedStatement stat = conn.prepareStatement("UPDATE players SET night=? WHERE uuid='" + uuid +  "'");
-            stat.setBoolean(1, value);
-            stat.execute();
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
-
     }
 
     private final Map<String, PlayerStats> stats = new HashMap<>();
@@ -405,32 +296,6 @@ public class PlayerDatabase {
             this.deaths = this.deaths+1;
             kdr = (kills/deaths) + "";
         }
-    }
-
-    public void playerDataUpdate(Player player) {
-        Bukkit.getScheduler().runTaskAsynchronously(ClassicDupe.getPlugin(), () -> {
-            try {
-                PreparedStatement stat = conn.prepareStatement("SELECT * FROM players WHERE uuid=?");
-                stat.setString(1, player.getUniqueId().toString());
-                ResultSet set = stat.executeQuery();
-                if(set.next()) {
-                    PreparedStatement stat1 = conn.prepareStatement("UPDATE players SET name=?, timesjoined=timesjoined+1 WHERE uuid=?");
-                    stat1.setString(1, player.getName());
-                    stat1.setString(2, player.getUniqueId().toString());
-                    stat1.execute();
-                } else {
-                    PreparedStatement stat1 = conn.prepareStatement("INSERT INTO players(uuid, name, nickname, timesjoined, playtime, randomitem, chatcolor, gradient, gradientfrom, gradientto, night, balance) VALUES (?, ?, null, 1, 0, true, '<gray>', false, null, null, true, 0)");
-                    stat1.setString(1, player.getUniqueId().toString());
-                    stat1.setString(2, player.getName());
-                    stat1.execute();
-                    conn.prepareStatement("INSERT INTO stats(uuid, kills, deaths) VALUES('" + player.getUniqueId() + "', 0, 0)").execute();
-                    conn.prepareStatement("INSERT INTO particleEffects(uuid, killEffect, particleEffect) VALUES('" + player.getUniqueId() + "', 'none', 'none')").execute();
-                }
-            } catch (SQLException e) {
-                throw new RuntimeException(e);
-            }
-        });
-
     }
 
 }

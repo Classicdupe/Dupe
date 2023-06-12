@@ -6,9 +6,11 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabCompleter;
-import org.bukkit.configuration.ConfigurationSection;
-import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.Listener;
+import org.bukkit.event.inventory.InventoryClickEvent;
+import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.SkullMeta;
@@ -18,17 +20,14 @@ import org.jetbrains.annotations.Nullable;
 import xyz.prorickey.classicdupe.ClassicDupe;
 import xyz.prorickey.classicdupe.Config;
 import xyz.prorickey.classicdupe.Utils;
-import xyz.prorickey.classicdupe.database.PlayerDatabase;
+import xyz.prorickey.classicdupe.database.PlayerData;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
 
-public class ShopCMD implements CommandExecutor, TabCompleter {
+public class ShopCMD implements CommandExecutor, TabCompleter, Listener {
 
-    private static final List<Player> shopUsers = new ArrayList<>();
+    private static final Map<Player, Integer> shopUsers = new HashMap<>();
 
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
@@ -36,6 +35,7 @@ public class ShopCMD implements CommandExecutor, TabCompleter {
             sender.sendMessage(Utils.cmdMsg("<red>You cannot execute this command from console"));
             return true;
         }
+        openShop(player, 0);
         return true;
     }
 
@@ -50,53 +50,74 @@ public class ShopCMD implements CommandExecutor, TabCompleter {
 
         ItemStack blank = new ItemStack(Material.RED_STAINED_GLASS_PANE);
         blank.editMeta(meta -> meta.displayName(Utils.format(" ")));
-        for(int i = 0; i < 44; i++) inv.setItem(i, blank);
+        for(int i = 0; i < 45; i++) inv.setItem(i, blank);
 
         shopPage.getItems().forEach((slot, shopItem) -> {
             ItemStack item = shopItem.itemStack;
-            item.editMeta(meta -> {
-                meta.lore(List.of(
-                        Utils.format("<green>Cost: <yellow>" + shopItem.price)
-                ));
-            });
+            item.editMeta(meta -> meta.lore(List.of(
+                    Utils.format("<green>Cost: <yellow>" + shopItem.price + " <green>dabloons")
+            )));
             inv.setItem(slot, item);
         });
         
         ItemStack head = new ItemStack(Material.PLAYER_HEAD);
         SkullMeta skullMeta = (SkullMeta) head.getItemMeta();
         skullMeta.setOwningPlayer(player);
-        PlayerDatabase.PlayerData data = ClassicDupe.getDatabase().getPlayerDatabase().getPlayer(player.getUniqueId().toString());
-        skullMeta.displayName(Utils.format("<color:#11DE22>Your Balance <color:#8A8A8A>- <color:#E7D715>" + data.balance));
+        PlayerData data = ClassicDupe.getDatabase().getPlayerDatabase().getPlayerData(player.getUniqueId());
+        skullMeta.displayName(Utils.format("<color:#11DE22>Your Balance <color:#8A8A8A>- <color:#E7D715>" + data.getBalance()));
         head.setItemMeta(skullMeta);
 
         ItemStack moreBlank = new ItemStack(Material.BLACK_STAINED_GLASS_PANE);
         moreBlank.editMeta(meta -> meta.displayName(Utils.format(" ")));
-        for(int i = 45; i < 53; i++) inv.setItem(i, moreBlank);
+        for(int i = 45; i < 54; i++) inv.setItem(i, moreBlank);
 
         inv.setItem(49, head);
 
         player.openInventory(inv);
-        shopUsers.add(player);
+        shopUsers.put(player, page);
+    }
+
+    @EventHandler
+    public void onInventoryClick(InventoryClickEvent e) {
+        if(!shopUsers.containsKey(e.getWhoClicked()) || e.getClickedInventory().equals(e.getWhoClicked().getInventory())) return;
+        e.setCancelled(true);
+        ShopPage shopPage = shop.get(shopUsers.get(e.getWhoClicked()));
+        if(shopPage.items.containsKey(e.getSlot())) {
+            ShopItem shopItem = shopPage.items.get(e.getSlot());
+            PlayerData data = ClassicDupe.getDatabase().getPlayerDatabase().getPlayerData(e.getWhoClicked().getUniqueId());
+            if(data.balance < shopItem.price) {
+                e.getWhoClicked().sendMessage(Utils.cmdMsg("<red>You do not have enough money to buy this item"));
+                return;
+            }
+            data.subtractBalance(shopItem.price);
+            e.getWhoClicked().getInventory().addItem(shopItem.itemStack);
+            e.getWhoClicked().sendMessage(Utils.cmdMsg("<green>You have successfully purchased this item"));
+        }
+    }
+
+    @EventHandler
+    public void onInventoryClose(InventoryCloseEvent e) {
+        if(!shopUsers.containsKey(e.getPlayer())) return;
+        shopUsers.remove(e.getPlayer());
     }
 
     public static Map<Integer, ShopPage> shop = new HashMap<>();
 
     public static void reloadShop() {
         shop.clear();
-        List<ConfigurationSection> pages = (List<ConfigurationSection>) Config.getConfig().getList("economy.shop.pages");
+        List<Map<String, ?>> pages = (List<Map<String, ?>>) Config.getConfig().getList("economy.shop.pages");
         AtomicInteger i = new AtomicInteger(0);
+        assert pages != null;
         pages.forEach(page -> {
             Map<Integer, ShopItem> items = new HashMap<>();
-            List<ConfigurationSection> itemsList = (List<ConfigurationSection>) page.getList("items");
+            List<Map<String, ?>> itemsList = (List<Map<String, ?>>) page.get("items");
             AtomicInteger i2 = new AtomicInteger(0);
             itemsList.forEach(item -> {
-               ItemStack itemStack = new ItemStack(Material.valueOf(item.getString("material")));
-               itemStack.editMeta(meta -> {
-                   meta.getPersistentDataContainer().set(DupeCMD.undupableKey, PersistentDataType.BOOLEAN, true);
-               });
-               items.put(i2.getAndIncrement(), new ShopItem(itemStack, item.getInt("cost")));
+               ItemStack itemStack = new ItemStack(Material.valueOf(((String) item.get("material")).toUpperCase()));
+               itemStack.editMeta(meta -> meta.getPersistentDataContainer().set(DupeCMD.undupableKey, PersistentDataType.BOOLEAN, true));
+               items.put(i2.getAndIncrement(), new ShopItem(itemStack, (Integer) item.get("cost")));
             });
-            shop.put(i.getAndIncrement(), new ShopPage(page.getString("name"), items));
+            shop.put(i.getAndIncrement(), new ShopPage((String) page.get("name"), items));
         });
     }
 

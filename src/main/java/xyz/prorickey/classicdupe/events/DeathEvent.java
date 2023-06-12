@@ -38,7 +38,7 @@ public class DeathEvent implements Listener {
         if(e.getEntity().getKiller() != null && e.getEntity().getKiller() != player) {
             if(killer != null && killer.getUniqueId() != player.getUniqueId()) {
                 ClassicDupe.getDatabase().getPlayerDatabase().addKill(killer.getUniqueId().toString());
-                ClassicDupe.getDatabase().getPlayerDatabase().addBalance(killer.getUniqueId(), Config.getConfig().getInt("economy.moneyMaking.kill"));
+                ClassicDupe.getDatabase().getPlayerDatabase().getPlayerData(killer.getUniqueId()).addBalance(Config.getConfig().getInt("economy.moneyMaking.kill"));
             }
             ItemStack skull = new ItemStack(Material.PLAYER_HEAD);
             SkullMeta meta = (SkullMeta) Bukkit.getItemFactory().getItemMeta(Material.PLAYER_HEAD);

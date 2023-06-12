@@ -10,6 +10,7 @@ import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scoreboard.*;
 import xyz.prorickey.classicdupe.clans.ClanDatabase;
 import xyz.prorickey.classicdupe.clans.ClanMember;
+import xyz.prorickey.classicdupe.database.PlayerData;
 import xyz.prorickey.classicdupe.database.PlayerDatabase;
 import xyz.prorickey.classicdupe.events.Combat;
 import xyz.prorickey.classicdupe.metrics.Metrics;
@@ -49,14 +50,15 @@ public class Scoreboard {
         String clanColor = "<yellow>";
         if(cmem.getClanName() != null) clanColor = ClanDatabase.getClan(ClanDatabase.getClanMember(player.getUniqueId()).getClanID()).getClanColor();
 
-        PlayerDatabase.PlayerData data = ClassicDupe.getDatabase().getPlayerDatabase().getPlayer(player.getUniqueId().toString());
+        PlayerData data = ClassicDupe.getDatabase().getPlayerDatabase().getPlayerData(player.getUniqueId());
+        if(data == null) return;
 
         updateTeamScore(obj, board, 15, Utils.format("<gold><st>\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500"));
         updateTeamScore(obj, board, 14, Utils.format("<gold>\u2022 <yellow>Name <green>" + player.getName()));
         updateTeamScore(obj, board, 13, Utils.format("<gold>\u2022 <yellow>Clan " + (cmem.getClanName() != null ? "<dark_gray>[" + clanColor + cmem.getClanName() + "<dark_gray>]" : "<yellow>No Clan")));
         updateTeamScore(obj, board, 12, MiniMessage.miniMessage().deserialize(("<gold>\u2022 <yellow>Rank " + (Utils.getPrefix(player).equals("") ? "<gray>Default" : Utils.getPrefix(player)))));
         updateTeamScore(obj, board, 11, Utils.format("<gold>\u2022 <yellow>Suffix " + (Utils.getSuffix(player) != null ? Utils.convertColorCodesToAdventure(Utils.getSuffix(player)) : "<aqua>Unset")));
-        updateTeamScore(obj, board, 10, Utils.format("<gold>\u2022 <yellow>Balance <green>" + data.balance + "ms"));
+        updateTeamScore(obj, board, 10, Utils.format("<gold>\u2022 <yellow>Balance <green>" + data.balance + "DB"));
 
         PlayerDatabase.PlayerStats stats = ClassicDupe.getDatabase().getPlayerDatabase().getStats(player.getUniqueId().toString());
 

@@ -10,6 +10,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import xyz.prorickey.classicdupe.ClassicDupe;
 import xyz.prorickey.classicdupe.Utils;
+import xyz.prorickey.classicdupe.database.PlayerData;
 import xyz.prorickey.classicdupe.events.JoinEvent;
 
 import java.util.ArrayList;
@@ -24,14 +25,16 @@ public class NightVisionCMD implements CommandExecutor, TabCompleter {
             return true;
         }
 
+        PlayerData playerData = ClassicDupe.getDatabase().getPlayerDatabase().getPlayerData(player.getUniqueId());
+
         if(JoinEvent.nightVision.contains(player)) {
             JoinEvent.nightVision.remove(player);
-            ClassicDupe.getDatabase().getPlayerDatabase().setNightVision(player.getUniqueId().toString(), false);
+            playerData.setNightVision(false);
             player.removePotionEffect(PotionEffectType.NIGHT_VISION);
             player.sendMessage(Utils.cmdMsg("<green>Disabled your night vision effect. Use /night to turn it back on."));
         } else {
             JoinEvent.nightVision.add(player);
-            ClassicDupe.getDatabase().getPlayerDatabase().setNightVision(player.getUniqueId().toString(), true);
+            playerData.setNightVision(true);
             player.sendMessage(Utils.cmdMsg("<green>Enabled your night vision effect. Use /night to turn it back off."));
         }
 

@@ -67,7 +67,7 @@ economy:
   moneyMaking:
     kill: 1 # Amount of money you get per kill
   shop:
-    name: ""<color:#11DE13>Shop""
+    name: "<color:#11DE13>Shop"
     pages:
       - name: "<blue>Templates"
         items:
@@ -141,3 +141,6 @@ suffix:
   special: "&a&lSPECIAL"
   lava: "&c&lLAVA"
   pvp: "&e&lPVP"
+trimset:
+  vex:
+    swordAttackMultiplier: 1.5

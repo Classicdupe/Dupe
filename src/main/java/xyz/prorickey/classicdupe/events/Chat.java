@@ -16,6 +16,7 @@ import xyz.prorickey.classicdupe.clans.ClanDatabase;
 import xyz.prorickey.classicdupe.commands.moderator.StaffChatCMD;
 import xyz.prorickey.classicdupe.commands.perk.ChatColorCMD;
 import xyz.prorickey.classicdupe.commands.perk.ChatGradientCMD;
+import xyz.prorickey.classicdupe.database.PlayerData;
 import xyz.prorickey.classicdupe.database.PlayerDatabase;
 import xyz.prorickey.classicdupe.discord.ClassicDupeBot;
 
@@ -76,7 +77,7 @@ public class Chat implements Listener {
         if(ChatGradientCMD.gradientProfiles.containsKey(e.getPlayer().getUniqueId().toString())) chatType = ChatType.GRADIENT;
 
         String name = e.getPlayer().getName();
-        PlayerDatabase.PlayerData data = ClassicDupe.getDatabase().getPlayerDatabase().getPlayer(e.getPlayer().getUniqueId().toString());
+        PlayerData data = ClassicDupe.getDatabase().getPlayerDatabase().getPlayerData(e.getPlayer().getUniqueId());
         if(data.nickname != null) name = data.nickname;
 
         MiniMessage mm = MiniMessage.miniMessage();
@@ -97,7 +98,7 @@ public class Chat implements Listener {
                             .append(mm.deserialize(((Utils.getPrefix(player) != null) ? Utils.getPrefix(player) : "") + finalName1))
                             .append(Utils.format((Utils.getSuffix(player) != null) ? " " + Utils.convertColorCodesToAdventure(Utils.getSuffix(player))  : ""))
                             .append(Utils.format(" <gray>\u00BB <white>"))
-                            .append(Utils.format(ChatColorCMD.colorProfiles.get(e.getPlayer().getUniqueId().toString()) +
+                            .append(Utils.format(data.chatcolor +
                                 mm.stripTags(PlainTextComponentSerializer.plainText().serialize(message))
                             )));
         } else {
