@@ -12,6 +12,7 @@ import org.bukkit.event.player.PlayerRespawnEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.SkullMeta;
 import xyz.prorickey.classicdupe.ClassicDupe;
+import xyz.prorickey.classicdupe.Config;
 import xyz.prorickey.classicdupe.Utils;
 
 import java.time.LocalDateTime;
@@ -35,7 +36,10 @@ public class DeathEvent implements Listener {
         Player killer = e.getEntity().getKiller();
         ClassicDupe.getDatabase().getPlayerDatabase().addDeath(e.getEntity().getUniqueId().toString());
         if(e.getEntity().getKiller() != null && e.getEntity().getKiller() != player) {
-            if(killer != null && killer.getUniqueId() != player.getUniqueId()) ClassicDupe.getDatabase().getPlayerDatabase().addKill(killer.getUniqueId().toString());
+            if(killer != null && killer.getUniqueId() != player.getUniqueId()) {
+                ClassicDupe.getDatabase().getPlayerDatabase().addKill(killer.getUniqueId().toString());
+                ClassicDupe.getDatabase().getPlayerDatabase().addBalance(killer.getUniqueId(), Config.getConfig().getInt("economy.moneyMaking.kill"));
+            }
             ItemStack skull = new ItemStack(Material.PLAYER_HEAD);
             SkullMeta meta = (SkullMeta) Bukkit.getItemFactory().getItemMeta(Material.PLAYER_HEAD);
             meta.setOwningPlayer(e.getEntity());

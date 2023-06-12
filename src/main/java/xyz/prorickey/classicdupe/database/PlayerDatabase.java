@@ -36,6 +36,7 @@ public class PlayerDatabase {
         public final String gradientfrom;
         public final String gradientto;
         public final boolean night;
+        public final Integer balance;
 
         public PlayerData(String uuid1,
                           String name1,
@@ -47,7 +48,8 @@ public class PlayerDatabase {
                           boolean gradient1,
                           String gradientfrom1,
                           String gradientto1,
-                          boolean night1
+                          boolean night1,
+                          Integer balance1
         ) {
             uuid = uuid1;
             name = name1;
@@ -60,7 +62,57 @@ public class PlayerDatabase {
             gradientfrom = gradientfrom1;
             gradientto = gradientto1;
             night = night1;
+            balance = balance1;
+        }
+    }
 
+    public void subtractBalance(UUID uuid, Integer sub) {
+        Bukkit.getScheduler().runTaskAsynchronously(ClassicDupe.getPlugin(), () -> {
+            try {
+                PreparedStatement statement = conn.prepareStatement("UPDATE playerData SET balance=balance-? WHERE uuid=?");
+                statement.setInt(1, sub);
+                statement.setString(2, uuid.toString());
+                statement.executeUpdate();
+            } catch (SQLException e) {
+                Bukkit.getLogger().severe(e.toString());
+            }
+        });
+    }
+
+    public void addBalance(UUID uuid, Integer add) {
+        Bukkit.getScheduler().runTaskAsynchronously(ClassicDupe.getPlugin(), () -> {
+            try {
+                PreparedStatement statement = conn.prepareStatement("UPDATE playerData SET balance=balance+? WHERE uuid=?");
+                statement.setInt(1, add);
+                statement.setString(2, uuid.toString());
+                statement.executeUpdate();
+            } catch (SQLException e) {
+                Bukkit.getLogger().severe(e.toString());
+            }
+        });
+    }
+
+    public void setBalance(UUID uuid, Integer balance) {
+        Bukkit.getScheduler().runTaskAsynchronously(ClassicDupe.getPlugin(), () -> {
+            try {
+                PreparedStatement statement = conn.prepareStatement("UPDATE playerData SET balance=? WHERE uuid=?");
+                statement.setInt(1, balance);
+                statement.setString(2, uuid.toString());
+                statement.executeUpdate();
+            } catch (SQLException e) {
+                Bukkit.getLogger().severe(e.toString());
+            }
+        });
+    }
+
+    public Integer getBalance(UUID uuid) {
+        try {
+            ResultSet set = conn.prepareStatement("SELECT * FROM playerData WHERE uuid='" + uuid + "'").executeQuery();
+            if(set.next()) return set.getInt("balance");
+            return null;
+        } catch (SQLException e) {
+            Bukkit.getLogger().severe(e.toString());
+            return null;
         }
     }
 
@@ -155,7 +207,8 @@ public class PlayerDatabase {
                     set.getBoolean("gradient"),
                     set.getString("gradientfrom"),
                     set.getString("gradientto"),
-                    set.getBoolean("night")
+                    set.getBoolean("night"),
+                    set.getInt("balance")
             );
         } catch (SQLException e) {
             Bukkit.getLogger().severe(e.toString());
@@ -366,7 +419,7 @@ public class PlayerDatabase {
                     stat1.setString(2, player.getUniqueId().toString());
                     stat1.execute();
                 } else {
-                    PreparedStatement stat1 = conn.prepareStatement("INSERT INTO players(uuid, name, nickname, timesjoined, playtime, randomitem, chatcolor, gradient, gradientfrom, gradientto, night) VALUES (?, ?, null, 1, 0, true, '<gray>', false, null, null, true)");
+                    PreparedStatement stat1 = conn.prepareStatement("INSERT INTO players(uuid, name, nickname, timesjoined, playtime, randomitem, chatcolor, gradient, gradientfrom, gradientto, night, balance) VALUES (?, ?, null, 1, 0, true, '<gray>', false, null, null, true, 0)");
                     stat1.setString(1, player.getUniqueId().toString());
                     stat1.setString(2, player.getName());
                     stat1.execute();

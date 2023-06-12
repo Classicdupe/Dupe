@@ -37,7 +37,7 @@ public class Database {
 
                 System.out.println("Connected to MariaDB database!");
 
-                conn.prepareStatement("CREATE TABLE IF NOT EXISTS players(uuid TEXT, name TEXT, nickname TEXT, timesjoined long, playtime long, randomitem BOOLEAN, chatcolor TEXT, gradient BOOLEAN, gradientfrom TEXT, gradientto TEXT, night BOOLEAN)").execute();
+                conn.prepareStatement("CREATE TABLE IF NOT EXISTS players(uuid TEXT, name TEXT, nickname TEXT, timesjoined long, playtime long, randomitem BOOLEAN, chatcolor TEXT, gradient BOOLEAN, gradientfrom TEXT, gradientto TEXT, night BOOLEAN, balance BIGINT)").execute();
                 conn.prepareStatement("CREATE TABLE IF NOT EXISTS filter(text TEXT, fullword BOOLEAN)").execute();
                 conn.prepareStatement("CREATE TABLE IF NOT EXISTS spawn(spawn TEXT, x DOUBLE, y DOUBLE, z DOUBLE, pitch FLOAT, yaw FLOAT, world TEXT)").execute();
                 conn.prepareStatement("CREATE TABLE IF NOT EXISTS stats(uuid TEXT, kills INT, deaths INT)").execute();
@@ -58,7 +58,7 @@ public class Database {
                             PreparedStatement playerStat = playerConn.prepareStatement("SELECT * FROM players");
                             ResultSet playerSet = playerStat.executeQuery();
                             PreparedStatement stat = conn.prepareStatement("INSERT INTO" +
-                                    " players(uuid, name, nickname, timesjoined, playtime, randomitem, chatcolor, gradient, gradientfrom, gradientto, night)" +
+                                    " players(uuid, name, nickname, timesjoined, playtime, randomitem, chatcolor, gradient, gradientfrom, gradientto, night, balance)" +
                                     " VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
                             while(playerSet.next()) {
                                 stat.setString(1, playerSet.getString("uuid"));
@@ -72,6 +72,7 @@ public class Database {
                                 stat.setString(9, playerSet.getString("gradientfrom"));
                                 stat.setString(10, playerSet.getString("gradientto"));
                                 stat.setBoolean(11, playerSet.getBoolean("night"));
+                                stat.setLong(12, playerSet.getInt("balance"));
                                 stat.addBatch();
                             }
                             stat.executeLargeBatch();
@@ -219,7 +220,7 @@ public class Database {
                 linkingConn = DriverManager.getConnection ("jdbc:h2:" + ClassicDupe.getPlugin().getDataFolder().getAbsolutePath() + File.separator + "linkData");
                 homesConn = DriverManager.getConnection ("jdbc:h2:" + ClassicDupe.getPlugin().getDataFolder().getAbsolutePath() + File.separator + "homes");
 
-                playerConn.prepareStatement("CREATE TABLE IF NOT EXISTS players(uuid varchar, name varchar, nickname varchar, timesjoined long, playtime long, randomitem BOOLEAN, chatcolor VARCHAR, gradient BOOLEAN, gradientfrom VARCHAR, gradientto VARCHAR, night BOOLEAN)").execute();
+                playerConn.prepareStatement("CREATE TABLE IF NOT EXISTS players(uuid varchar, name varchar, nickname varchar, timesjoined long, playtime long, randomitem BOOLEAN, chatcolor VARCHAR, gradient BOOLEAN, gradientfrom VARCHAR, gradientto VARCHAR, night BOOLEAN, balance BIGINT)").execute();
                 serverConn.prepareStatement("CREATE TABLE IF NOT EXISTS filter(text varchar, fullword BOOLEAN)").execute();
                 serverConn.prepareStatement("CREATE TABLE IF NOT EXISTS spawn(spawn varchar, x DOUBLE, y DOUBLE, z DOUBLE, pitch FLOAT, yaw FLOAT, world varchar)").execute();
                 playerConn.prepareStatement("CREATE TABLE IF NOT EXISTS stats(uuid VARCHAR, kills INT, deaths INT)").execute();
