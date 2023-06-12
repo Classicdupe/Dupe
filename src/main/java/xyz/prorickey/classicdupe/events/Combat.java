@@ -35,8 +35,6 @@ public class Combat implements Listener {
 
     @EventHandler
     public void onEntityDamageByEntity(EntityDamageByEntityEvent e) {
-        System.out.println(e.getEntity());
-        System.out.println(e.getDamager());
         if(e.getDamager() instanceof Player att && Utils.isVanished(att) && !att.hasPermission("admin.bypassnopvpinvanish")) {
             e.setCancelled(true);
             att.sendMessage(Utils.cmdMsg("<red>You cannot attack players while vanished"));
