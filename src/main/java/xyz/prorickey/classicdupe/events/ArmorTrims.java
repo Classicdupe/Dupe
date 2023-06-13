@@ -1,0 +1,205 @@
+package xyz.prorickey.classicdupe.events;
+
+import com.destroystokyo.paper.event.entity.EntityKnockbackByEntityEvent;
+import org.bukkit.Bukkit;
+import org.bukkit.Material;
+import org.bukkit.entity.*;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.Listener;
+import org.bukkit.event.entity.EntityDamageByEntityEvent;
+import org.bukkit.event.entity.EntityDamageEvent;
+import org.bukkit.inventory.meta.ArmorMeta;
+import org.bukkit.inventory.meta.trim.TrimMaterial;
+import org.bukkit.inventory.meta.trim.TrimPattern;
+import org.bukkit.potion.PotionEffect;
+import org.bukkit.potion.PotionEffectType;
+import org.bukkit.scheduler.BukkitRunnable;
+import xyz.prorickey.classicdupe.Config;
+
+import java.util.Random;
+
+public class ArmorTrims implements Listener {
+
+    @EventHandler
+    public void onEntityDamageByEntity(EntityDamageByEntityEvent e) {
+
+        if(e.getDamager() instanceof Player attacker) {
+            if(
+                    hasTrimSet(attacker, TrimPattern.VEX) &&
+                            (attacker.getInventory().getItemInMainHand().getType().equals(Material.WOODEN_SWORD) ||
+                                    attacker.getInventory().getItemInMainHand().getType().equals(Material.STONE_SWORD) ||
+                                    attacker.getInventory().getItemInMainHand().getType().equals(Material.IRON_SWORD) ||
+                                    attacker.getInventory().getItemInMainHand().getType().equals(Material.GOLDEN_SWORD) ||
+                                    attacker.getInventory().getItemInMainHand().getType().equals(Material.DIAMOND_SWORD) ||
+                                    attacker.getInventory().getItemInMainHand().getType().equals(Material.NETHERITE_SWORD))
+            ) e.setDamage(e.getDamage() * Config.getConfig().getDouble("trimset.vex.swordAttackMultiplier"));
+            else if(
+                    hasTrimSet(attacker, TrimPattern.COAST) &&
+                            attacker.getInventory().getItemInMainHand().getType().equals(Material.TRIDENT)
+            ) {
+                e.setDamage(e.getDamage() * Config.getConfig().getDouble("trimset.coast.tridentAttackMultiplier"));
+                if(new Random().nextDouble() <= 0.02) e.getEntity().getWorld().strikeLightning(e.getEntity().getLocation());
+            } else if(
+                    hasTrimSet(attacker, TrimPattern.EYE) &&
+                            e.getEntity() instanceof LivingEntity entity
+            ) {
+                double r = new Random().nextDouble();
+                if(r <= 0.1) {
+                    entity.addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, 15*20, 1));
+                } else if(r >= 0.95) {
+                    entity.addPotionEffect(new PotionEffect(PotionEffectType.POISON, 10*20, 1));
+                }
+            } else if(
+                    hasTrimSet(attacker, TrimPattern.HOST)
+            ) e.setDamage(e.getDamage() * Config.getConfig().getDouble("trimset.host.attackMultiplier"));
+            else if(
+                    hasTrimSet(attacker, TrimPattern.RAISER) &&
+                            new Random().nextDouble() <= 0.25
+            ) e.getEntity().getWorld().spawn(e.getEntity().getLocation(), EvokerFangs.class, fangs -> fangs.setOwner(attacker));
+            else if(
+                    hasTrimSet(attacker, TrimPattern.RIB) &&
+                            e.getEntity() instanceof LivingEntity entity &&
+                            new Random().nextDouble() <= 0.05
+            ) entity.addPotionEffect(new PotionEffect(PotionEffectType.WITHER, 10*20, 1));
+            else if(
+                    hasTrimSet(attacker, TrimPattern.SHAPER) &&
+                            new Random().nextDouble() <= 0.1 &&
+                            e.getEntity() instanceof LivingEntity entity
+            ) {
+                entity.getWorld().spawn(entity.getLocation(), Vex.class, vex -> {
+                    vex.setTarget(entity);
+                    vex.setLimitedLifetimeTicks(20 * 30);
+                });
+            }
+            else if(
+                    hasTrimSet(attacker, TrimPattern.SNOUT) &&
+                            e.getEntity() instanceof LivingEntity entity &&
+                            new Random().nextDouble() <= 0.05
+            ) entity.setFireTicks(20 * 8);
+            else if(
+                    (hasTrimSet(attacker, TrimPattern.SPIRE) || hasTrimSet(attacker, TrimPattern.TIDE)) &&
+                            e.getEntity() instanceof LivingEntity entity &&
+                            new Random().nextDouble() <= 0.1
+            ) entity.damage(4d);
+            else if(
+                    hasTrimSet(attacker, TrimPattern.TIDE) &&
+                            e.getEntity() instanceof LivingEntity entity &&
+                            new Random().nextDouble() <= 0.25
+            ) entity.addPotionEffect(new PotionEffect(PotionEffectType.WEAKNESS, 25*20, 1));
+            else if(
+                    hasTrimSet(attacker, TrimPattern.WARD) &&
+                            e.getEntity() instanceof LivingEntity entity
+            ) e.setDamage(e.getDamage() * Config.getConfig().getDouble("trimset.ward.attackMultiplier"));
+            else if(
+                    hasTrimSet(attacker, TrimPattern.WILD) &&
+                            e.getEntity() instanceof LivingEntity entity
+            ) {
+                double r = new Random().nextDouble();
+                if(r <= 0.05) {
+                    entity.addPotionEffect(new PotionEffect(PotionEffectType.POISON, 10*20, 1));
+                } else if(r >= 0.9) {
+                    entity.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, 10*20, 1));
+                }
+            }
+        }
+
+        if(e.getEntity() instanceof Player victim) {
+            if(
+                    hasTrimSet(victim, TrimPattern.DUNE) &&
+                            new Random().nextDouble() <= 0.1
+            ) e.setDamage(0);
+            else if(
+                    hasTrimSet(victim, TrimPattern.HOST)
+            ) {
+                double r = new Random().nextDouble();
+                if(r <= 0.02) {
+                    e.setDamage(e.getDamage() + 8d);
+                } else if(r >= 0.9) {
+                    victim.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION, 5*20, 1));
+                    e.setDamage(e.getDamage() * Config.getConfig().getDouble("trimset.host.defenseMultiplier"));
+                } else {
+                    e.setDamage(e.getDamage() * Config.getConfig().getDouble("trimset.host.defenseMultiplier"));
+                }
+            } else if(
+                    hasTrimSet(victim, TrimPattern.RAISER) &&
+                            new Random().nextDouble() <= 0.25 &&
+                            e.getDamager() instanceof LivingEntity entity
+            ) entity.damage(e.getDamage() * Config.getConfig().getDouble("trimset.raiser.reflectMultiplier"));
+            else if(
+                    hasTrimSet(victim, TrimPattern.WARD)
+            ) e.setDamage(e.getDamage() * Config.getConfig().getDouble("trimset.ward.defenseMultiplier"));
+            else if(
+                    hasTrimSet(victim, TrimPattern.WAYFINDER) &&
+                            new Random().nextDouble() <= 0.25
+            ) {
+                if(victim.getPotionEffect(PotionEffectType.SPEED) == null) {
+                    victim.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 15*20, 1));
+                } else if(victim.getPotionEffect(PotionEffectType.SPEED).getAmplifier() == 1) {
+                    victim.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 15*20, 2));
+                } else if(victim.getPotionEffect(PotionEffectType.SPEED).getAmplifier() == 2) {
+                    victim.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 15*20, 3));
+                }
+            }
+        }
+
+        if(e.getEntity() instanceof Arrow arrow && arrow.getShooter() instanceof Player attacker) {
+            if(
+                    hasTrimSet(attacker, TrimPattern.SENTRY)
+            ) e.setDamage(e.getDamage() * Config.getConfig().getDouble("trimset.sentry.arrowAttackMultiplier"));
+        }
+    }
+
+    @EventHandler
+    public void onEntityDamage(EntityDamageEvent e) {
+        if(!(e.getEntity() instanceof Player victim)) return;
+        if(
+                hasTrimSet(victim, TrimPattern.SNOUT) &&
+                        e.getCause().equals(EntityDamageEvent.DamageCause.LAVA)
+        ) e.setCancelled(true);
+        else if(
+                hasTrimSet(victim, TrimPattern.SNOUT) &&
+                        e.getCause().equals(EntityDamageEvent.DamageCause.FIRE)
+        ) e.setDamage(e.getDamage() * Config.getConfig().getDouble("trimset.snout.fireDamageMultiplier"));
+    }
+
+    @EventHandler
+    public void onEntityKnockbackByEntity(EntityKnockbackByEntityEvent e) {
+        if(!(e.getEntity() instanceof Player victim)) return;
+        if(
+                hasTrimSet(victim, TrimPattern.WARD)
+        ) e.getEntity().setVelocity(e.getEntity().getVelocity().multiply(Config.getConfig().getDouble("trimset.ward.knockbackMultiplier")));
+    }
+
+    public static class ArmorTrimsTask extends BukkitRunnable {
+        @Override
+        public void run() {
+            Bukkit.getOnlinePlayers().forEach(player -> {
+                if(hasTrimSet(player, TrimPattern.VEX)) player.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 5, 1));
+                else if(hasTrimSet(player, TrimPattern.HOST)) player.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 5, 1));
+                else if(hasTrimSet(player, TrimPattern.WARD)) player.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, 5, 1));
+            });
+        }
+    }
+
+    public static Boolean hasTrimSet(Player player, TrimPattern pattern) {
+        if(player.getInventory().getHelmet() == null ||
+                !((ArmorMeta) player.getInventory().getHelmet().getItemMeta()).hasTrim() ||
+                !((ArmorMeta) player.getInventory().getHelmet().getItemMeta()).getTrim().getPattern().equals(pattern)) return false;
+        TrimMaterial trimMat = ((ArmorMeta) player.getInventory().getHelmet().getItemMeta()).getTrim().getMaterial();
+        return player.getInventory().getChestplate() != null &&
+                ((ArmorMeta) player.getInventory().getChestplate().getItemMeta()).hasTrim() &&
+                ((ArmorMeta) player.getInventory().getChestplate().getItemMeta()).getTrim().getPattern().equals(pattern) &&
+                ((ArmorMeta) player.getInventory().getChestplate().getItemMeta()).getTrim().getMaterial().equals(trimMat) &&
+
+                player.getInventory().getLeggings() != null &&
+                ((ArmorMeta) player.getInventory().getLeggings().getItemMeta()).hasTrim() &&
+                ((ArmorMeta) player.getInventory().getLeggings().getItemMeta()).getTrim().getPattern().equals(pattern) &&
+                ((ArmorMeta) player.getInventory().getLeggings().getItemMeta()).getTrim().getMaterial().equals(trimMat) &&
+
+                player.getInventory().getBoots() != null &&
+                ((ArmorMeta) player.getInventory().getBoots().getItemMeta()).hasTrim() &&
+                ((ArmorMeta) player.getInventory().getBoots().getItemMeta()).getTrim().getPattern().equals(pattern) &&
+                ((ArmorMeta) player.getInventory().getBoots().getItemMeta()).getTrim().getMaterial().equals(trimMat);
+    }
+
+}

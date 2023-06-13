@@ -144,3 +144,18 @@ suffix:
 trimset:
   vex:
     swordAttackMultiplier: 1.5
+  coast:
+    tridentAttackMultiplier: 2
+  host:
+    attackMultiplier: 1.25
+    defenseMultiplier: 0.75
+  sentry:
+    arrowAttackMultiplier: 1.5
+  raiser:
+    reflectMultiplier: 0.5
+  snout:
+    fireDamageMultiplier: 0.25
+  ward:
+    attackMultiplier: 1.5
+    defenseMultiplier: 0.5
+    knockbackMultiplier: 0.5

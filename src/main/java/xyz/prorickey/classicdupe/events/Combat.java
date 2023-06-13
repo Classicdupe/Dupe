@@ -73,43 +73,6 @@ public class Combat implements Listener {
             whoHitWho.put(player, whoKilledCrystal.get(crystal));
             whoHitWho.put(whoKilledCrystal.get(crystal), player);
         }
-
-        // Armor Trims
-        if(!(e.getDamager() instanceof Player attacker)) return;
-        if(
-                hasTrimSet(attacker, TrimPattern.VEX) &&
-                        (attacker.getInventory().getItemInMainHand().getType().equals(Material.WOODEN_SWORD) ||
-                        attacker.getInventory().getItemInMainHand().getType().equals(Material.STONE_SWORD) ||
-                        attacker.getInventory().getItemInMainHand().getType().equals(Material.IRON_SWORD) ||
-                        attacker.getInventory().getItemInMainHand().getType().equals(Material.GOLDEN_SWORD) ||
-                        attacker.getInventory().getItemInMainHand().getType().equals(Material.DIAMOND_SWORD) ||
-                        attacker.getInventory().getItemInMainHand().getType().equals(Material.NETHERITE_SWORD))
-        ) {
-            attacker.sendMessage(Utils.cmdMsg("<green>Vex trim set"));
-            e.setDamage(e.getDamage() * Config.getConfig().getDouble("trimset.vex.swordAttackMultiplier"));
-        }
-
-    }
-
-    public static Boolean hasTrimSet(Player player, TrimPattern pattern) {
-        if(player.getInventory().getHelmet() == null ||
-                !((ArmorMeta) player.getInventory().getHelmet().getItemMeta()).hasTrim() ||
-                !((ArmorMeta) player.getInventory().getHelmet().getItemMeta()).getTrim().getPattern().equals(pattern)) return false;
-        TrimMaterial trimMat = ((ArmorMeta) player.getInventory().getHelmet().getItemMeta()).getTrim().getMaterial();
-        return player.getInventory().getChestplate() != null &&
-                ((ArmorMeta) player.getInventory().getChestplate().getItemMeta()).hasTrim() &&
-                ((ArmorMeta) player.getInventory().getChestplate().getItemMeta()).getTrim().getPattern().equals(pattern) &&
-                ((ArmorMeta) player.getInventory().getChestplate().getItemMeta()).getTrim().getMaterial().equals(trimMat) &&
-
-                player.getInventory().getLeggings() != null &&
-                ((ArmorMeta) player.getInventory().getLeggings().getItemMeta()).hasTrim() &&
-                ((ArmorMeta) player.getInventory().getLeggings().getItemMeta()).getTrim().getPattern().equals(pattern) &&
-                ((ArmorMeta) player.getInventory().getLeggings().getItemMeta()).getTrim().getMaterial().equals(trimMat) &&
-
-                player.getInventory().getBoots() != null &&
-                ((ArmorMeta) player.getInventory().getBoots().getItemMeta()).hasTrim() &&
-                ((ArmorMeta) player.getInventory().getBoots().getItemMeta()).getTrim().getPattern().equals(pattern) &&
-                ((ArmorMeta) player.getInventory().getBoots().getItemMeta()).getTrim().getMaterial().equals(trimMat);
     }
 
     @EventHandler
