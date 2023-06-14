@@ -78,17 +78,15 @@ public class ArmorTrims implements Listener {
             ) entity.setFireTicks(20 * 8);
             else if(
                     (hasTrimSet(attacker, TrimPattern.SPIRE) || hasTrimSet(attacker, TrimPattern.TIDE)) &&
-                            e.getEntity() instanceof LivingEntity entity &&
-                            new Random().nextDouble() <= 0.1
-            ) entity.damage(4d);
+                            e.getCause().equals(EntityDamageEvent.DamageCause.THORNS)
+            ) e.setDamage(e.getDamage() * Config.getConfig().getDouble("trimset.spire.thornsAttackMultiplier"));
             else if(
                     hasTrimSet(attacker, TrimPattern.TIDE) &&
                             e.getEntity() instanceof LivingEntity entity &&
                             new Random().nextDouble() <= 0.25
             ) entity.addPotionEffect(new PotionEffect(PotionEffectType.WEAKNESS, 25*20, 1));
             else if(
-                    hasTrimSet(attacker, TrimPattern.WARD) &&
-                            e.getEntity() instanceof LivingEntity entity
+                    hasTrimSet(attacker, TrimPattern.WARD)
             ) e.setDamage(e.getDamage() * Config.getConfig().getDouble("trimset.ward.attackMultiplier"));
             else if(
                     hasTrimSet(attacker, TrimPattern.WILD) &&

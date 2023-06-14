@@ -6,6 +6,7 @@ import org.bukkit.block.ShulkerBox;
 import org.bukkit.command.*;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ArmorMeta;
 import org.bukkit.inventory.meta.BlockStateMeta;
 import org.bukkit.inventory.meta.BundleMeta;
 import org.bukkit.persistence.PersistentDataType;
@@ -32,7 +33,7 @@ public class DupeCMD implements CommandExecutor, TabCompleter {
             sender.sendMessage(Utils.cmdMsg("<red>You cannot execute this command from console"));
             return true;
         }
-        if(forbiddenDupes.contains(p.getInventory().getItemInMainHand().getType())) {
+        if(!checkDupable(p.getInventory().getItemInMainHand())) {
             p.sendMessage(Utils.cmdMsg("<red>That item is undupable"));
             return true;
         }
@@ -41,8 +42,7 @@ public class DupeCMD implements CommandExecutor, TabCompleter {
             ShulkerBox box = (ShulkerBox) ((BlockStateMeta) item.getItemMeta()).getBlockState();
             AtomicBoolean illegal = new AtomicBoolean(false);
             box.getInventory().forEach(itemStack -> {
-                if(forbiddenDupes.contains(itemStack.getType())) illegal.set(true);
-                if(Boolean.TRUE.equals(itemStack.getItemMeta().getPersistentDataContainer().get(undupableKey, PersistentDataType.BOOLEAN))) illegal.set(true);
+                if(!checkDupable(itemStack)) illegal.set(true);
             });
             if(illegal.get()) {
                 p.sendMessage(Utils.cmdMsg("<red>You cannot dupe a shulker that contains undupeable items"));
@@ -54,8 +54,7 @@ public class DupeCMD implements CommandExecutor, TabCompleter {
             BundleMeta bundle = (BundleMeta) item.getItemMeta();
             AtomicBoolean illegal = new AtomicBoolean(false);
             bundle.getItems().forEach(itemStack -> {
-                if(forbiddenDupes.contains(itemStack.getType())) illegal.set(true);
-                if(Boolean.TRUE.equals(itemStack.getItemMeta().getPersistentDataContainer().get(undupableKey, PersistentDataType.BOOLEAN))) illegal.set(true);
+                if(!checkDupable(itemStack)) illegal.set(true);
             });
             if(illegal.get()) {
                 p.sendMessage(Utils.cmdMsg("<red>You cannot dupe a bundle that contains undupeable items"));
@@ -84,4 +83,11 @@ public class DupeCMD implements CommandExecutor, TabCompleter {
         }
         return new ArrayList<>();
     }
+
+    public static Boolean checkDupable(ItemStack item) {
+        if(forbiddenDupes.contains(item.getType())) return false;
+        if(Boolean.TRUE.equals(item.getItemMeta().getPersistentDataContainer().get(undupableKey, PersistentDataType.BOOLEAN))) return false;
+        return !(item.getItemMeta() instanceof ArmorMeta armorMeta) || !armorMeta.hasTrim();
+    }
+
 }

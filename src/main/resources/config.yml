@@ -155,6 +155,10 @@ trimset:
     reflectMultiplier: 0.5
   snout:
     fireDamageMultiplier: 0.25
+  spire:
+    thornsAttackMultiplier: 1.5
+  tide:
+    thornsAttackMultiplier: 1.5
   ward:
     attackMultiplier: 1.5
     defenseMultiplier: 0.5
