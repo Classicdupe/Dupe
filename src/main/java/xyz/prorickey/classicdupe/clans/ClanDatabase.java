@@ -1,5 +1,7 @@
 package xyz.prorickey.classicdupe.clans;
 
+import net.kyori.adventure.text.minimessage.MiniMessage;
+import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.OfflinePlayer;
@@ -28,6 +30,8 @@ public class ClanDatabase {
     private static final Map<UUID, Clan> clansById = new HashMap<>();
     private static final Map<String, Clan> clansByName = new HashMap<>();
     private static final Map<UUID, ClanMember> clanMembers = new HashMap<>();
+
+    public static final List<Player> clanChatMembers = new ArrayList<>();
 
     public static void init(JavaPlugin plugin) {
         dataDir = new File(plugin.getDataFolder() + "/clansData/");
@@ -135,6 +139,22 @@ public class ClanDatabase {
         });
     }
 
+    public static void putInClanChat(Player player) { clanChatMembers.add(player); }
+    public static void removeFromClanChat(Player player) { clanChatMembers.remove(player); }
+    public static boolean isInClanChat(Player player) { return clanChatMembers.contains(player); }
+
+    public static void sendToClanChat(String message, Player player) {
+        ClanMember cmem = clanMembers.get(player.getUniqueId());
+        Clan clan = clansById.get(cmem.getClanID());
+        MiniMessage mm = MiniMessage.miniMessage();
+        clan.getMembers().forEach(mem -> {
+            if(mem.isOnline()) mem.getPlayer().sendMessage(
+                    Utils.format("<dark_gray>[<yellow>CLANCHAT<dark_gray>] ")
+                        .append(Utils.format("<yellow>" + player.getName() + " <dark_gray>» <white>" +
+                            mm.stripTags(message))));
+        });
+    }
+
     public static YamlConfiguration getGlobalConfig() { return globalConfig; }
 
     public static void createClan(String name, Player owner) {
@@ -208,6 +228,7 @@ public class ClanDatabase {
         Bukkit.getScheduler().runTaskAsynchronously(ClassicDupe.getPlugin(), () -> {
             try {
                 main.prepareStatement("UPDATE players SET clanId=null, clanName=null, level=null WHERE uuid='" + cmem.getOffPlayer().getUniqueId() + "'").execute();
+                if(clanChatMembers.contains(cmem.getOffPlayer().getPlayer())) ClanDatabase.removeFromClanChat(cmem.getOffPlayer().getPlayer());
             } catch (SQLException e) {
                 throw new RuntimeException(e);
             }

@@ -297,6 +297,12 @@ commands:
   delhome:
     description: To delete your home
     usage: "Usage: /delhome"
+  clanchat:
+    description: To toggle clan chat or send a message in clan chat
+    usage: "Usage: /clanchat"
+    aliases:
+      - cc
+      - cchat
 permissions:
   default.spawn.others:
     description: Allows you to teleport others to spawn
