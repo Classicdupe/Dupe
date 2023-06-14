@@ -26,7 +26,7 @@ public class NicknameCMD implements CommandExecutor, TabCompleter {
             return true;
         }
         if(args.length < 1) {
-            ClassicDupe.getDatabase().getPlayerDatabase().resetNickname(p.getUniqueId().toString());
+            ClassicDupe.getDatabase().getPlayerDatabase().getPlayerData(p.getUniqueId()).resetNickname();
             sender.sendMessage(Utils.cmdMsg("<green>Reset your nickname"));
             return true;
         }
@@ -43,9 +43,8 @@ public class NicknameCMD implements CommandExecutor, TabCompleter {
             sender.sendMessage(Utils.cmdMsg("<red>Your nickname must be under 20 characters"));
             return true;
         }
-        ClassicDupe.getDatabase().getPlayerDatabase().setNickname(p.getUniqueId().toString(), Utils.convertColorCodesToAdventure(args[0]));
-        p.sendMessage(Utils.cmdMsg("<green>Set your nickname to ")
-                .append(nickname));
+        ClassicDupe.getDatabase().getPlayerDatabase().getPlayerData(p.getUniqueId()).setNickname(Utils.convertColorCodesToAdventure(args[0]));
+        p.sendMessage(Utils.cmdMsg("<green>Set your nickname to " + Utils.convertColorCodesToAdventure(args[0])));
         return true;
     }
 

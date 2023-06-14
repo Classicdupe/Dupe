@@ -73,6 +73,7 @@ public class ClassicDupe extends JavaPlugin {
         new LinkCMD.LinkCodeTask().runTaskTimer(this, 0, 20);
         new Scoreboard.ScoreboardTask().runTaskTimer(this, 0, 10);
         new ClearSpawn.ClearSpawnTask().runTaskTimer(this, 0, 20);
+        new ArmorTrims.ArmorTrimsTask().runTaskTimer(this, 0, 20);
 
         new Clans(this);
         KOTHEventManager.init(this);
@@ -88,6 +89,7 @@ public class ClassicDupe extends JavaPlugin {
             }
         }
 
+        ShopCMD.reloadShop();
         this.getCommand("dupe").setExecutor(new DupeCMD());
         this.getCommand("dupe").setTabCompleter(new DupeCMD());
         this.getCommand("filter").setExecutor(new FilterCMD());
@@ -214,6 +216,10 @@ public class ClassicDupe extends JavaPlugin {
         this.getCommand("delhome").setTabCompleter(new DelHomeCMD());
         this.getCommand("clanchat").setExecutor(new CSChat());
         this.getCommand("clanchat").setTabCompleter(new CSChat());
+        this.getCommand("shop").setExecutor(new ShopCMD());
+        this.getCommand("shop").setTabCompleter(new ShopCMD());
+        this.getCommand("balance").setExecutor(new BalanceCMD());
+        this.getCommand("balance").setTabCompleter(new BalanceCMD());
 
         getServer().getPluginManager().registerEvents(new JoinEvent(), this);
         getServer().getPluginManager().registerEvents(new QuitEvent(), this);
@@ -236,6 +242,8 @@ public class ClassicDupe extends JavaPlugin {
         getServer().getPluginManager().registerEvents(new ReducedFireworkLag(), this);
         //getServer().getPluginManager().registerEvents(new CommandSendEvent(), this);
         getServer().getPluginManager().registerEvents(new PlayerOnEnd(), this);
+        getServer().getPluginManager().registerEvents(new ShopCMD(), this);
+        getServer().getPluginManager().registerEvents(new ArmorTrims(), this);
 
         //Init maze
         MAZEmanager.init();

@@ -26,6 +26,7 @@ public class QuitEvent implements Listener {
         PrivateMessageCMD.lastInConvo.remove(e.getPlayer());
         ClanDatabase.removeFromClanChat(e.getPlayer());
         ClassicDupe.getDatabase().getHomesDatabase().unloadPlayer(e.getPlayer());
+        ClassicDupe.getDatabase().getPlayerDatabase().playerDataUnload(e.getPlayer().getUniqueId());
         CspyCMD.cspyList.remove(e.getPlayer());
         if(PrivateMessageCMD.lastInConvo.containsValue(e.getPlayer())) new HashMap<>(PrivateMessageCMD.lastInConvo).forEach((sender, recipient) -> PrivateMessageCMD.lastInConvo.remove(sender));
         e.quitMessage(Utils.format("<dark_gray>[<red>-<dark_gray>] ")
