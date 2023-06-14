@@ -12,6 +12,7 @@ import org.bukkit.event.player.PlayerEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import xyz.prorickey.classicdupe.Utils;
 import xyz.prorickey.classicdupe.playerevents.MAZEmanager;
 
 //make it so its a listener to wait for a player to be at a certain cord
@@ -25,7 +26,7 @@ public class PlayerOnEnd implements Listener {
 
 
         if (MAZEmanager.MazeRunning &&isInMaze(playerLocation) && isStandingOnGoldBlock(playerLocation)) {
-            player.sendMessage(ChatColor.GOLD + ChatColor.BOLD.toString() + "You have completed the maze!");
+            player.sendMessage(Utils.format("<gold><b>You have completed the maze!"));
 
             MAZEmanager.leaderboard.add(player.getName());
 

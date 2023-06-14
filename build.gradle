@@ -4,11 +4,11 @@ plugins {
 }
 
 group 'xyz.prorickey.classicdupe'
-version '3.7.1'
+version '3.8.0'
 
 repositories {
     mavenCentral()
-    maven { url "https://repo.purpurmc.org/snapshots/" }
+    maven { url "https://repo.papermc.io/repository/maven-public/" }
     maven { url 'https://repo.extendedclip.com/content/repositories/placeholderapi/' }
     maven { url "https://maven.enginehub.org/repo/" }
     maven { url 'https://prorickey.xyz/repository/maven-public'}
@@ -16,19 +16,19 @@ repositories {
 }
 
 dependencies {
-    compileOnly 'org.purpurmc.purpur:purpur-api:1.19.4-R0.1-SNAPSHOT'
+    compileOnly 'io.papermc.paper:paper-api:1.20-R0.1-SNAPSHOT'
 
     compileOnly 'net.luckperms:api:5.4'
     compileOnly 'me.clip:placeholderapi:2.11.2'
-    compileOnly 'com.sk89q.worldguard:worldguard-bukkit:7.0.7'
+    compileOnly 'com.sk89q.worldguard:worldguard-bukkit:7.0.9-SNAPSHOT'
     compileOnly 'me.lucko:spark-api:0.1-SNAPSHOT'
 
     compileOnly 'com.h2database:h2:2.1.214'
-    compileOnly 'net.dv8tion:JDA:5.0.0-beta.5'
+    implementation 'net.dv8tion:JDA:5.0.0-beta.10'
     compileOnly 'org.mariadb.jdbc:mariadb-java-client:3.1.4'
 
     implementation 'xyz.prorickey:proutils:1.0.1'
-    implementation 'xyz.xenondevs:particle:1.8.3'
+    implementation 'xyz.xenondevs:particle:1.8.4'
 }
 
 shadowJar {
