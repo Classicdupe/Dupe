@@ -33,6 +33,7 @@ public class FireballWand {
 
         if (isOnDelay(plr.getName())) {
             System.out.println(isOnDelay(plr.getName()));
+            System.out.println(cooldowns);
             plr.sendMessage("You are on cooldown!");
 
             return;

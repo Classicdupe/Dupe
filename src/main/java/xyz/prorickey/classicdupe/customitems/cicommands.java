@@ -9,6 +9,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.jetbrains.annotations.NotNull;
+import xyz.prorickey.classicdupe.Utils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -62,6 +63,7 @@ public class cicommands implements CommandExecutor {
                         }
                         sender.sendMessage(ChatColor.GOLD + "-------------------------");
                         return true;
+
                     default:
                         sender.sendMessage(ChatColor.RED + "Usage: /customitem <give|list>");
                         return false;
