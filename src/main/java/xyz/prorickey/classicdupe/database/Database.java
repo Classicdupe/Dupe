@@ -10,7 +10,9 @@ import xyz.prorickey.classicdupe.Config;
 import java.io.File;
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class Database {
 
@@ -23,7 +25,6 @@ public class Database {
     private PlayerDatabase playerDatabase;
     private LinkingDatabase linkingDatabase;
     private HomesDatabase homesDatabase;
-    public Location spawn;
     public static List<Player> blockedToUseCommands = new ArrayList<>();
 
     public Database() {
@@ -236,81 +237,56 @@ public class Database {
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
-        spawn = getSpawn();
+
+        loadSpawns();
     }
 
-    public void setNetherSpawn(Location loc) {
-        try {
-            spawn = loc;
-            serverConn.prepareStatement("DELETE FROM spawn WHERE spawn='nether'").execute();
-            PreparedStatement stat = serverConn.prepareStatement("INSERT INTO spawn(spawn, x, y, z, pitch, yaw, world) VALUES('nether', ?, ?, ?, ?, ?, ?)");
-            stat.setDouble(1, loc.getX());
-            stat.setDouble(2, loc.getY());
-            stat.setDouble(3, loc.getZ());
-            stat.setFloat(4, loc.getPitch());
-            stat.setFloat(5, loc.getYaw());
-            stat.setString(6, loc.getWorld().getName());
-            stat.execute();
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
-    }
+    public Map<String, Location> spawns = new HashMap<>();
 
-    public Location getNetherSpawn() {
-        try {
-            ResultSet set = serverConn.prepareStatement("SELECT * FROM spawn WHERE spawn='nether'").executeQuery();
-            if(set.next()) {
-                return new Location(
-                        ClassicDupe.getPlugin().getServer().getWorld(set.getString("world")),
-                        set.getDouble("x"),
-                        set.getDouble("y"),
-                        set.getDouble("z"),
-                        set.getFloat("yaw"),
-                        set.getFloat("pitch")
-                );
-            } else {
-                return ClassicDupe.getPlugin().getServer().getWorld("world_nether").getSpawnLocation();
+    public void setSpawn(String name, Location loc) {
+        spawns.put(name, loc);
+        Bukkit.getScheduler().runTaskAsynchronously(ClassicDupe.getPlugin(), () -> {
+            try {
+                PreparedStatement stat = serverConn.prepareStatement("INSERT INTO spawn(spawn, x, y, z, pitch, yaw, world) VALUES(?, ?, ?, ?, ?, ?, ?)");
+                stat.setString(1, name);
+                stat.setDouble(2, loc.getX());
+                stat.setDouble(3, loc.getY());
+                stat.setDouble(4, loc.getZ());
+                stat.setFloat(5, loc.getPitch());
+                stat.setFloat(6, loc.getYaw());
+                stat.setString(7, loc.getWorld().getName());
+                stat.execute();
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
             }
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
+        });
     }
 
-    public void setSpawn(Location loc) {
-        try {
-            spawn = loc;
-            serverConn.prepareStatement("DELETE FROM spawn WHERE spawn='overworld'").execute();
-            PreparedStatement stat = serverConn.prepareStatement("INSERT INTO spawn(spawn, x, y, z, pitch, yaw, world) VALUES('overworld', ?, ?, ?, ?, ?, ?)");
-            stat.setDouble(1, loc.getX());
-            stat.setDouble(2, loc.getY());
-            stat.setDouble(3, loc.getZ());
-            stat.setFloat(4, loc.getPitch());
-            stat.setFloat(5, loc.getYaw());
-            stat.setString(6, loc.getWorld().getName());
-            stat.execute();
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-    public Location getSpawn() {
-        try {
-            ResultSet set = serverConn.prepareStatement("SELECT * FROM spawn WHERE spawn='overworld'").executeQuery();
-            if(set.next()) {
-                return new Location(
-                        ClassicDupe.getPlugin().getServer().getWorld(set.getString("world")),
-                        set.getDouble("x"),
-                        set.getDouble("y"),
-                        set.getDouble("z"),
-                        set.getFloat("yaw"),
-                        set.getFloat("pitch")
-                );
-            } else {
-                return ClassicDupe.getPlugin().getServer().getWorld("world").getSpawnLocation();
+    public void loadSpawns() {
+        Bukkit.getScheduler().runTaskAsynchronously(ClassicDupe.getPlugin(), () -> {
+            try {
+                ResultSet set = serverConn.prepareStatement("SELECT * FROM spawn").executeQuery();
+                while(set.next()) {
+                    spawns.put(
+                            set.getString("spawn"),
+                            new Location(
+                                    Bukkit.getWorld(set.getString("world")),
+                                    set.getDouble("x"),
+                                    set.getDouble("y"),
+                                    set.getDouble("z"),
+                                    set.getFloat("yaw"),
+                                    set.getFloat("pitch")
+                            )
+                    );
+                }
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
             }
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
+        });
+    }
+
+    public Location getSpawn(String name) {
+        return spawns.get(name);
     }
 
     public FilterDatabase getFilterDatabase() { return filterDatabase; }

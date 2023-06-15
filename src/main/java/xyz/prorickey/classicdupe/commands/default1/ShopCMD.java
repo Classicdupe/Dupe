@@ -103,6 +103,7 @@ public class ShopCMD implements CommandExecutor, TabCompleter, Listener {
 
     public static Map<Integer, ShopPage> shop = new HashMap<>();
 
+    @SuppressWarnings("unchecked")
     public static void reloadShop() {
         shop.clear();
         List<Map<String, ?>> pages = (List<Map<String, ?>>) Config.getConfig().getList("economy.shop.pages");

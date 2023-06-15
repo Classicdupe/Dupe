@@ -28,7 +28,7 @@ public class NetherCMD implements CommandExecutor, TabCompleter {
                 player.sendMessage(Utils.cmdMsg("<red>You cannot execute this command in combat"));
                 return true;
             }
-            player.teleport(ClassicDupe.getDatabase().getNetherSpawn());
+            player.teleport(ClassicDupe.getDatabase().getSpawn("nether"));
             Utils.cmdMsg("<green>Teleported you to the nether");
         } else {
             if(!sender.hasPermission("default.spawn.others")) return true;
@@ -37,7 +37,7 @@ public class NetherCMD implements CommandExecutor, TabCompleter {
                 sender.sendMessage(Utils.cmdMsg("<red>That player is not currently on the server"));
                 return true;
             }
-            p.teleport(ClassicDupe.getDatabase().getNetherSpawn());
+            p.teleport(ClassicDupe.getDatabase().getSpawn("nether"));
             Utils.cmdMsg("<green>You were sent to the nether by <yellow>" + sender.getName());
             Utils.cmdMsg("<green>Sent <yellow>" + p.getName() + "<green> to the nether");
         }

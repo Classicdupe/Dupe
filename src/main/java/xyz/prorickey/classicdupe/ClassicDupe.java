@@ -59,6 +59,7 @@ public class ClassicDupe extends JavaPlugin {
         RegisteredServiceProvider<LuckPerms> lppro = Bukkit.getServicesManager().getRegistration(LuckPerms.class);
         if(lppro != null) { lpapi = lppro.getProvider(); }
         if(Bukkit.getPluginManager().getPlugin("PlaceholderAPI") != null) new ClassicDupeExpansion(this).register();
+        MultiverseInventories inventories = (MultiverseInventories) Bukkit.getServer().getPluginManager().getPlugin("Multiverse-Inventories");
 
         Config.init(this);
         ClanDatabase.init(this);
@@ -194,8 +195,6 @@ public class ClassicDupe extends JavaPlugin {
         this.getCommand("configreload").setTabCompleter(new ConfigReload());
         this.getCommand("nether").setExecutor(new NetherCMD());
         this.getCommand("nether").setTabCompleter(new NetherCMD());
-        this.getCommand("setnetherspawn").setExecutor(new SetNetherSpawnCMD());
-        this.getCommand("setnetherspawn").setTabCompleter(new SetNetherSpawnCMD());
         this.getCommand("hat").setExecutor(new HatCMD());
         this.getCommand("hat").setTabCompleter(new HatCMD());
         this.getCommand("report").setExecutor(new ReportCMD());
@@ -216,17 +215,14 @@ public class ClassicDupe extends JavaPlugin {
         this.getCommand("sethome").setTabCompleter(new SetHomeCMD());
         this.getCommand("delhome").setExecutor(new DelHomeCMD());
         this.getCommand("delhome").setTabCompleter(new DelHomeCMD());
-
         this.getCommand("clanchat").setExecutor(new CSChat());
         this.getCommand("clanchat").setTabCompleter(new CSChat());
         this.getCommand("shop").setExecutor(new ShopCMD());
         this.getCommand("shop").setTabCompleter(new ShopCMD());
         this.getCommand("balance").setExecutor(new BalanceCMD());
         this.getCommand("balance").setTabCompleter(new BalanceCMD());
-
         this.getCommand("customitem").setExecutor(new cicommands());
-
-        this.getCommand("customitem").setExecutor(new cicommands());
+        this.getCommand("customitem").setTabCompleter(new cicommands());
 
         getServer().getPluginManager().registerEvents(new JoinEvent(), this);
         getServer().getPluginManager().registerEvents(new QuitEvent(), this);
@@ -249,12 +245,6 @@ public class ClassicDupe extends JavaPlugin {
         getServer().getPluginManager().registerEvents(new ReducedFireworkLag(), this);
         //getServer().getPluginManager().registerEvents(new CommandSendEvent(), this);
         getServer().getPluginManager().registerEvents(new PlayerOnEnd(), this);
-
-        getServer().getPluginManager().registerEvents(new ShopCMD(), this);
-        getServer().getPluginManager().registerEvents(new ArmorTrims(), this);
-
-        getServer().getPluginManager().registerEvents(new ItemUse(), this);
-
         getServer().getPluginManager().registerEvents(new ShopCMD(), this);
         getServer().getPluginManager().registerEvents(new ArmorTrims(), this);
         getServer().getPluginManager().registerEvents(new ItemUse(), this);

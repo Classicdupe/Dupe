@@ -25,7 +25,7 @@ public class SpawnCMD implements CommandExecutor, TabCompleter {
                 player.sendMessage(Utils.cmdMsg("<red>You cannot execute this command in combat"));
                 return true;
             }
-            player.teleport(ClassicDupe.getDatabase().spawn);
+            player.teleport(ClassicDupe.getDatabase().getSpawn("overworld"));
             Utils.cmdMsg("<green>Teleported you to spawn");
         } else {
             if(!sender.hasPermission("default.spawn.others")) return true;
@@ -34,7 +34,7 @@ public class SpawnCMD implements CommandExecutor, TabCompleter {
                 sender.sendMessage(Utils.cmdMsg("<red>That player is not currently on the server"));
                 return true;
             }
-            p.teleport(ClassicDupe.getDatabase().spawn);
+            p.teleport(ClassicDupe.getDatabase().getSpawn("overworld"));
             Utils.cmdMsg("<green>You were sent to spawn by <yellow>" + sender.getName());
             Utils.cmdMsg("<green>Sent <yellow>" + p.getName() + "<green> to spawn");
         }

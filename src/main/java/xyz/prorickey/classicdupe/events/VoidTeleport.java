@@ -15,7 +15,7 @@ public class VoidTeleport implements Listener {
                 ClassicDupe.rawBroadcast("<yellow>" + e.getPlayer().getName() + "<red> just jumped into the void while in combat");
                 ClassicDupe.getDatabase().getPlayerDatabase().addDeath(e.getPlayer().getUniqueId().toString());
             }
-            e.getPlayer().teleport(ClassicDupe.getDatabase().spawn);
+            e.getPlayer().teleport(ClassicDupe.getDatabase().getSpawn("overworld"));
         }
     }
 
