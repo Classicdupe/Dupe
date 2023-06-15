@@ -23,7 +23,7 @@ public class SetHomeCMD implements CommandExecutor, TabCompleter {
         }
         if(args.length == 0) {
             if(ClassicDupe.getDatabase().getHomesDatabase().getHome(player, "default") == null &&
-                ClassicDupe.getDatabase().getHomesDatabase().getHomes(player.getUniqueId()).size() > Utils.getMaxHomes(player)) {
+                ClassicDupe.getDatabase().getHomesDatabase().getHomes(player.getUniqueId()).size() >= Utils.getMaxHomes(player)) {
                 player.sendMessage(Utils.cmdMsg("<red>You have reached the maximum amount of homes"));
             } else {
                 ClassicDupe.getDatabase().getHomesDatabase().addHome(player, "default", player.getLocation());
@@ -31,7 +31,7 @@ public class SetHomeCMD implements CommandExecutor, TabCompleter {
             }
         } else {
             if(ClassicDupe.getDatabase().getHomesDatabase().getHome(player, args[0]) == null &&
-                    ClassicDupe.getDatabase().getHomesDatabase().getHomes(player.getUniqueId()).size() > Utils.getMaxHomes(player)) {
+                    ClassicDupe.getDatabase().getHomesDatabase().getHomes(player.getUniqueId()).size() >= Utils.getMaxHomes(player)) {
                 player.sendMessage(Utils.cmdMsg("<red>You have reached the maximum amount of homes"));
             } else {
                 ClassicDupe.getDatabase().getHomesDatabase().addHome(player, args[0], player.getLocation());

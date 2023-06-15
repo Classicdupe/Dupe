@@ -16,6 +16,7 @@ import xyz.prorickey.classicdupe.Utils;
 import xyz.prorickey.classicdupe.clans.ClanDatabase;
 import xyz.prorickey.classicdupe.commands.perk.ChatColorCMD;
 import xyz.prorickey.classicdupe.commands.perk.ChatGradientCMD;
+import xyz.prorickey.classicdupe.database.PlayerData;
 import xyz.prorickey.classicdupe.database.PlayerDatabase;
 import xyz.prorickey.classicdupe.discord.LinkRewards;
 
@@ -31,8 +32,8 @@ public class JoinEvent implements Listener {
     @EventHandler
     public void onPlayerJoin(PlayerJoinEvent e) {
         ClanDatabase.createIfNotExists(e.getPlayer());
-        ClassicDupe.getDatabase().getPlayerDatabase().playerDataUpdate(e.getPlayer());
-        if(ClassicDupe.getDatabase().getPlayerDatabase().getPlayer(e.getPlayer().getUniqueId().toString()) == null) {
+        if(ClassicDupe.getDatabase().getPlayerDatabase().getPlayerData(e.getPlayer().getUniqueId()) == null) {
+            ClassicDupe.getDatabase().getPlayerDatabase().playerDataUpdateAndLoad(e.getPlayer());
             e.getPlayer().teleport(ClassicDupe.getDatabase().spawn);
             e.joinMessage(Utils.format("<yellow>" + e.getPlayer().getName() + " <green>Just joined for the first time! Give them a warm welcome"));
             e.getPlayer().sendMessage(Utils.cmdMsg("<green>Every <yellow>60 <green>you will recieve a random item. Execute /random to disable or enable this"));
@@ -59,12 +60,12 @@ public class JoinEvent implements Listener {
             e.getPlayer().sendMessage(Utils.cmdMsg("<green>You currently have naked protection on. This means you cannot pvp but you are safe for 10 minutes. To turn this off execute /nakedoff"));
             return;
         }
+        ClassicDupe.getDatabase().getPlayerDatabase().playerDataUpdateAndLoad(e.getPlayer());
         ClassicDupe.getDatabase().getHomesDatabase().loadPlayer(e.getPlayer());
-        PlayerDatabase.PlayerData playerData = ClassicDupe.getDatabase().getPlayerDatabase().getPlayer(e.getPlayer().getUniqueId().toString());
-        if(playerData.chatcolor.startsWith("&")) ClassicDupe.getDatabase().getPlayerDatabase().setChatColor(e.getPlayer().getUniqueId().toString(),
-                    Utils.convertColorCodesToAdventure(playerData.chatcolor));
-        if(playerData.nickname != null && Utils.convertColorCodesToAdventure(playerData.nickname).length() != playerData.nickname.length()) ClassicDupe.getDatabase().getPlayerDatabase().setNickname(e.getPlayer().getUniqueId().toString(),
-                    Utils.convertColorCodesToAdventure(playerData.nickname));
+        PlayerData playerData = ClassicDupe.getDatabase().getPlayerDatabase().getPlayerData(e.getPlayer().getUniqueId());
+        if(playerData.chatcolor.startsWith("&")) playerData.setChatColor(Utils.convertColorCodesToAdventure(playerData.chatcolor));
+        if(playerData.nickname != null && Utils.convertColorCodesToAdventure(playerData.nickname).length() != playerData.nickname.length())
+            playerData.setNickname(Utils.convertColorCodesToAdventure(playerData.nickname));
         if(playerData.night) nightVision.add(e.getPlayer());
         RandomItemTask task = new RandomItemTask(e.getPlayer());
         randomTaskMap.put(e.getPlayer(), task);
@@ -74,8 +75,7 @@ public class JoinEvent implements Listener {
             e.getPlayer().sendMessage(Utils.cmdMsg("<green>Every <yellow>60 <green>you will recieve a random item. Execute /random to disable or enable this"));
         }
         if(playerData.chatcolor.startsWith("&")) {
-            ClassicDupe.getDatabase().getPlayerDatabase().setChatColor(e.getPlayer().getUniqueId().toString(),
-                    Utils.convertColorCodesToAdventure(playerData.chatcolor));
+            playerData.setChatColor(Utils.convertColorCodesToAdventure(playerData.chatcolor));
             ChatColorCMD.colorProfiles.put(e.getPlayer().getUniqueId().toString(), Utils.convertColorCodesToAdventure(playerData.chatcolor));
         } else ChatColorCMD.colorProfiles.put(e.getPlayer().getUniqueId().toString(), playerData.chatcolor);
         if(playerData.gradient) {

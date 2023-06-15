@@ -36,6 +36,7 @@ public class Clans implements CommandExecutor, TabCompleter {
         clanSubs.put("delhome", new CSDelHome());
         clanSubs.put("info", new CSInfo());
         clanSubs.put("demote", new CSDemote());
+        clanSubs.put("chat", new CSChat());
 
         new CSInvite.InviteTask().runTaskTimer(ClassicDupe.getPlugin(), 0, 20);
     }

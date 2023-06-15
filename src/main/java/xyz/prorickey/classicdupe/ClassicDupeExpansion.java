@@ -4,6 +4,7 @@ import me.clip.placeholderapi.expansion.PlaceholderExpansion;
 import org.bukkit.OfflinePlayer;
 import org.jetbrains.annotations.NotNull;
 import xyz.prorickey.classicdupe.clans.ClanDatabase;
+import xyz.prorickey.classicdupe.database.PlayerData;
 import xyz.prorickey.classicdupe.database.PlayerDatabase;
 
 public class ClassicDupeExpansion extends PlaceholderExpansion {
@@ -27,15 +28,15 @@ public class ClassicDupeExpansion extends PlaceholderExpansion {
     public String onRequest(OfflinePlayer player, String params) {
         if(params.equalsIgnoreCase("name")) {
             if(player == null) return null;
-            PlayerDatabase.PlayerData data = ClassicDupe.getDatabase().getPlayerDatabase().getPlayer(player.getUniqueId().toString());
+            PlayerData data = ClassicDupe.getDatabase().getPlayerDatabase().getPlayerData(player.getUniqueId());
             if(ClanDatabase.getClanMember(player.getUniqueId()).getClanID() != null) {
                 String clan = ClanDatabase.getClanMember(player.getUniqueId()).getClanName();
                 String clanColor = ClanDatabase.getClan(ClanDatabase.getClanMember(player.getUniqueId()).getClanID()).getClanColor();
-                if(data.nickname == null) return player.getName() + Utils.convertAdventureToColorCodes(" <dark_gray>[" + clanColor + clan + "<dark_gray>]");
-                else return Utils.convertAdventureToColorCodes(data.nickname) + Utils.convertAdventureToColorCodes(" <dark_gray>[" + clanColor + clan + "<dark_gray>]");
+                if(data.getNickname()== null) return player.getName() + Utils.convertAdventureToColorCodes(" <dark_gray>[" + clanColor + clan + "<dark_gray>]");
+                else return Utils.convertAdventureToColorCodes(data.getNickname()) + Utils.convertAdventureToColorCodes(" <dark_gray>[" + clanColor + clan + "<dark_gray>]");
             }
-            if(data.nickname == null) return player.getName();
-            else return Utils.convertAdventureToColorCodes(data.nickname);
+            if(data.getNickname() == null) return player.getName();
+            else return Utils.convertAdventureToColorCodes(data.getNickname());
         }
         for(int i = 0; i < 10; i++) {
             if(PlayerDatabase.killsLeaderboard.size() < i+1) return " ";

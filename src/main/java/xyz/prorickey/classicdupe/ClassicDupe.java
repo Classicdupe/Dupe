@@ -17,6 +17,7 @@ import org.bukkit.scheduler.BukkitRunnable;
 import net.luckperms.api.LuckPerms;
 import xyz.prorickey.classicdupe.clans.ClanDatabase;
 import xyz.prorickey.classicdupe.clans.Clans;
+import xyz.prorickey.classicdupe.clans.subcommands.CSChat;
 import xyz.prorickey.classicdupe.commands.admin.*;
 import xyz.prorickey.classicdupe.commands.default1.*;
 import xyz.prorickey.classicdupe.commands.moderator.*;
@@ -72,6 +73,7 @@ public class ClassicDupe extends JavaPlugin {
         new LinkCMD.LinkCodeTask().runTaskTimer(this, 0, 20);
         new Scoreboard.ScoreboardTask().runTaskTimer(this, 0, 10);
         new ClearSpawn.ClearSpawnTask().runTaskTimer(this, 0, 20);
+        new ArmorTrims.ArmorTrimsTask().runTaskTimer(this, 0, 20);
 
         new Clans(this);
         KOTHEventManager.init(this);
@@ -87,6 +89,7 @@ public class ClassicDupe extends JavaPlugin {
             }
         }
 
+        ShopCMD.reloadShop();
         this.getCommand("dupe").setExecutor(new DupeCMD());
         this.getCommand("dupe").setTabCompleter(new DupeCMD());
         this.getCommand("filter").setExecutor(new FilterCMD());
@@ -211,6 +214,12 @@ public class ClassicDupe extends JavaPlugin {
         this.getCommand("sethome").setTabCompleter(new SetHomeCMD());
         this.getCommand("delhome").setExecutor(new DelHomeCMD());
         this.getCommand("delhome").setTabCompleter(new DelHomeCMD());
+        this.getCommand("clanchat").setExecutor(new CSChat());
+        this.getCommand("clanchat").setTabCompleter(new CSChat());
+        this.getCommand("shop").setExecutor(new ShopCMD());
+        this.getCommand("shop").setTabCompleter(new ShopCMD());
+        this.getCommand("balance").setExecutor(new BalanceCMD());
+        this.getCommand("balance").setTabCompleter(new BalanceCMD());
 
         getServer().getPluginManager().registerEvents(new JoinEvent(), this);
         getServer().getPluginManager().registerEvents(new QuitEvent(), this);
@@ -233,6 +242,8 @@ public class ClassicDupe extends JavaPlugin {
         getServer().getPluginManager().registerEvents(new ReducedFireworkLag(), this);
         //getServer().getPluginManager().registerEvents(new CommandSendEvent(), this);
         getServer().getPluginManager().registerEvents(new PlayerOnEnd(), this);
+        getServer().getPluginManager().registerEvents(new ShopCMD(), this);
+        getServer().getPluginManager().registerEvents(new ArmorTrims(), this);
 
         //Init maze
         MAZEmanager.init();

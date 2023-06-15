@@ -1,13 +1,21 @@
 package xyz.prorickey.classicdupe.events;
 
+import org.bukkit.Material;
+import org.bukkit.entity.Arrow;
+import org.bukkit.entity.EnderCrystal;
 import org.bukkit.entity.Player;
+import org.bukkit.entity.TippedArrow;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityToggleGlideEvent;
 import org.bukkit.event.player.PlayerCommandPreprocessEvent;
+import org.bukkit.inventory.meta.ArmorMeta;
+import org.bukkit.inventory.meta.trim.TrimMaterial;
+import org.bukkit.inventory.meta.trim.TrimPattern;
 import org.bukkit.scheduler.BukkitRunnable;
+import xyz.prorickey.classicdupe.Config;
 import xyz.prorickey.classicdupe.Utils;
 import xyz.prorickey.classicdupe.clans.ClanDatabase;
 import xyz.prorickey.classicdupe.clans.ClanMember;
@@ -16,11 +24,14 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 public class Combat implements Listener {
 
     public static final Map<Player, Long> inCombat = new HashMap<>();
     public static final Map<Player, Player> whoHitWho = new HashMap<>();
+
+    public static final Map<EnderCrystal, Player> whoKilledCrystal = new HashMap<>();
 
     @EventHandler
     public void onEntityDamageByEntity(EntityDamageByEntityEvent e) {
@@ -52,6 +63,15 @@ public class Combat implements Listener {
         if(e.getEntity() instanceof Player victim && e.getDamager() instanceof Player attacker) {
             whoHitWho.put(victim, attacker);
             whoHitWho.put(attacker, victim);
+        }
+        if(e.getDamager() instanceof Arrow arrow && arrow.getShooter() instanceof Player shooter && e.getEntity() instanceof Player victim) {
+            whoHitWho.put(victim, shooter);
+            whoHitWho.put(shooter, victim);
+        }
+        if(e.getDamager() instanceof Player player && e.getEntity() instanceof EnderCrystal crystal) whoKilledCrystal.put(crystal, player);
+        if(e.getDamager() instanceof EnderCrystal crystal && e.getEntity() instanceof Player player && whoKilledCrystal.containsKey(crystal)) {
+            whoHitWho.put(player, whoKilledCrystal.get(crystal));
+            whoHitWho.put(whoKilledCrystal.get(crystal), player);
         }
     }
 

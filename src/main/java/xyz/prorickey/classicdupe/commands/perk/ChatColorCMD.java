@@ -160,7 +160,7 @@ public class ChatColorCMD implements CommandExecutor, Listener, TabCompleter {
                     p.sendMessage(Utils.cmdMsg("<green>Set your chat color to <gray>Gray"));
                 }
             }
-            ClassicDupe.getDatabase().getPlayerDatabase().setChatColor(p.getUniqueId().toString(), colorProfiles.get(p.getUniqueId().toString()));
+            ClassicDupe.getDatabase().getPlayerDatabase().getPlayerData(p.getUniqueId()).setChatColor(colorProfiles.get(p.getUniqueId().toString()));
         }
         return true;
     }
@@ -208,7 +208,7 @@ public class ChatColorCMD implements CommandExecutor, Listener, TabCompleter {
                 p.sendMessage(Utils.cmdMsg("<green>Set your chat color to <gray>Gray"));
             }
         }
-        ClassicDupe.getDatabase().getPlayerDatabase().setChatColor(p.getUniqueId().toString(), colorProfiles.get(p.getUniqueId().toString()));
+        ClassicDupe.getDatabase().getPlayerDatabase().getPlayerData(p.getUniqueId()).setChatColor(colorProfiles.get(p.getUniqueId().toString()));
         e.getInventory().close();
     }
 

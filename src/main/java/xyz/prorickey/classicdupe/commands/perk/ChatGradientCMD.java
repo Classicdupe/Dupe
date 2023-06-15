@@ -19,6 +19,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import xyz.prorickey.classicdupe.ClassicDupe;
 import xyz.prorickey.classicdupe.Utils;
+import xyz.prorickey.classicdupe.database.PlayerData;
 import xyz.prorickey.classicdupe.database.PlayerDatabase;
 
 import java.util.*;
@@ -49,7 +50,7 @@ public class ChatGradientCMD implements CommandExecutor, TabCompleter, Listener 
             return true;
         }
 
-        PlayerDatabase.PlayerData pdata = ClassicDupe.getDatabase().getPlayerDatabase().getPlayer(p.getUniqueId().toString());
+        PlayerData pdata = ClassicDupe.getDatabase().getPlayerDatabase().getPlayerData(p.getUniqueId());
 
         Inventory gui = Bukkit.createInventory(null, 27, Utils.format("<green>ChatGradient Menu"));
         List.of(3, 4, 5, 12, 14, 21, 22, 23).forEach(n -> gui.setItem(n, new ItemStack(Material.RED_STAINED_GLASS_PANE)));
@@ -109,23 +110,24 @@ public class ChatGradientCMD implements CommandExecutor, TabCompleter, Listener 
         Player p = (Player) e.getWhoClicked();
         List<Integer> firstSec = List.of(0, 1, 2, 9, 10, 11, 18, 19, 20);
         List<Integer> secondSec = List.of(6, 7, 8, 15, 16, 17, 24, 25, 26);
+        PlayerData playerData = ClassicDupe.getDatabase().getPlayerDatabase().getPlayerData(p.getUniqueId());
         if(firstSec.contains(e.getRawSlot())) {
             String name = PlainTextComponentSerializer.plainText().serialize(e.getCurrentItem().getItemMeta().displayName()).toLowerCase();
             String color = name.equals("pink") ? "light_purple" : name;
             if(gradientProfiles.containsKey(p.getUniqueId().toString())) gradientProfiles.put(p.getUniqueId().toString(), new GradientProfiles(color, gradientProfiles.get(p.getUniqueId().toString()).gradientTo));
             else gradientProfiles.put(p.getUniqueId().toString(), new GradientProfiles(color, "white"));
-            ClassicDupe.getDatabase().getPlayerDatabase().setGradientProfile(p.getUniqueId().toString(), gradientProfiles.get(p.getUniqueId().toString()));
+            playerData.setGradientProfile(gradientProfiles.get(p.getUniqueId().toString()));
         } else if(secondSec.contains(e.getRawSlot())) {
             String name = PlainTextComponentSerializer.plainText().serialize(e.getCurrentItem().getItemMeta().displayName()).toLowerCase();
             String color = name.equals("pink") ? "light_purple" : name;
             if(gradientProfiles.containsKey(p.getUniqueId().toString())) gradientProfiles.put(p.getUniqueId().toString(), new GradientProfiles(gradientProfiles.get(p.getUniqueId().toString()).gradientFrom, color));
             else gradientProfiles.put(p.getUniqueId().toString(), new GradientProfiles("white", color));
-            ClassicDupe.getDatabase().getPlayerDatabase().setGradientProfile(p.getUniqueId().toString(), gradientProfiles.get(p.getUniqueId().toString()));
+            playerData.setGradientProfile(gradientProfiles.get(p.getUniqueId().toString()));
         } else if(e.getRawSlot() == 13) {
-            GradientProfiles profile = ClassicDupe.getDatabase().getPlayerDatabase().getGradientProfile(p.getUniqueId().toString());
+            GradientProfiles profile = playerData.getGradientProfile();
             if(profile.gradientFrom == null) profile.gradientFrom = "white";
             if(profile.gradientTo == null) profile.gradientTo = "white";
-            if(ClassicDupe.getDatabase().getPlayerDatabase().toggleGradient(p.getUniqueId().toString())) gradientProfiles.put(p.getUniqueId().toString(), profile);
+            if(playerData.toggleGradient()) gradientProfiles.put(p.getUniqueId().toString(), profile);
             else gradientProfiles.remove(p.getUniqueId().toString());
 
 

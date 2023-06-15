@@ -24,10 +24,87 @@ blockFromPlacing:
 forbiddenDupes:
   - ender_dragon_spawn_egg
   - dragon_egg
+  - coast_armor_trim_smithing_template
+  - dune_armor_trim_smithing_template
+  - eye_armor_trim_smithing_template
+  - host_armor_trim_smithing_template
+  - raiser_armor_trim_smithing_template
+  - rib_armor_trim_smithing_template
+  - sentry_armor_trim_smithing_template
+  - shaper_armor_trim_smithing_template
+  - silence_armor_trim_smithing_template
+  - snout_armor_trim_smithing_template
+  - spire_armor_trim_smithing_template
+  - tide_armor_trim_smithing_template
+  - vex_armor_trim_smithing_template
+  - ward_armor_trim_smithing_template
+  - wayfinder_armor_trim_smithing_template
+  - wild_armor_trim_smithing_template
+  - netherite_upgrade_smithing_template
 forbiddenDupesInCombat:
   - totem_of_undying
   - enchanted_golden_apple
   - ender_pearl
+removedItems:
+  - coast_armor_trim_smithing_template
+  - dune_armor_trim_smithing_template
+  - eye_armor_trim_smithing_template
+  - host_armor_trim_smithing_template
+  - raiser_armor_trim_smithing_template
+  - rib_armor_trim_smithing_template
+  - sentry_armor_trim_smithing_template
+  - shaper_armor_trim_smithing_template
+  - silence_armor_trim_smithing_template
+  - snout_armor_trim_smithing_template
+  - spire_armor_trim_smithing_template
+  - tide_armor_trim_smithing_template
+  - vex_armor_trim_smithing_template
+  - ward_armor_trim_smithing_template
+  - wayfinder_armor_trim_smithing_template
+  - wild_armor_trim_smithing_template
+  - netherite_upgrade_smithing_template
+economy:
+  moneyMaking:
+    kill: 1 # Amount of money you get per kill
+  shop:
+    name: "<color:#11DE13>Shop"
+    pages:
+      - name: "<blue>Templates"
+        items:
+          - material: coast_armor_trim_smithing_template
+            cost: 1
+          - material: dune_armor_trim_smithing_template
+            cost: 1
+          - material: eye_armor_trim_smithing_template
+            cost: 1
+          - material: host_armor_trim_smithing_template
+            cost: 1
+          - material: raiser_armor_trim_smithing_template
+            cost: 1
+          - material: rib_armor_trim_smithing_template
+            cost: 1
+          - material: sentry_armor_trim_smithing_template
+            cost: 1
+          - material: shaper_armor_trim_smithing_template
+            cost: 1
+          - material: silence_armor_trim_smithing_template
+            cost: 1
+          - material: snout_armor_trim_smithing_template
+            cost: 1
+          - material: spire_armor_trim_smithing_template
+            cost: 1
+          - material: tide_armor_trim_smithing_template
+            cost: 1
+          - material: vex_armor_trim_smithing_template
+            cost: 1
+          - material: ward_armor_trim_smithing_template
+            cost: 1
+          - material: wayfinder_armor_trim_smithing_template
+            cost: 1
+          - material: wild_armor_trim_smithing_template
+            cost: 1
+          - material: netherite_upgrade_smithing_template
+            cost: 1
 ranks:
   admin:
     prefix: "<color:#EF4444><bold>ADMIN</bold> "
@@ -64,3 +141,25 @@ suffix:
   special: "&a&lSPECIAL"
   lava: "&c&lLAVA"
   pvp: "&e&lPVP"
+trimset:
+  vex:
+    swordAttackMultiplier: 1.5
+  coast:
+    tridentAttackMultiplier: 2
+  host:
+    attackMultiplier: 1.25
+    defenseMultiplier: 0.75
+  sentry:
+    arrowAttackMultiplier: 1.5
+  raiser:
+    reflectMultiplier: 0.5
+  snout:
+    fireDamageMultiplier: 0.25
+  spire:
+    thornsAttackMultiplier: 1.5
+  tide:
+    thornsAttackMultiplier: 1.5
+  ward:
+    attackMultiplier: 1.5
+    defenseMultiplier: 0.5
+    knockbackMultiplier: 0.5
