@@ -3,6 +3,7 @@ package xyz.prorickey.classicdupe;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.onarandombox.multiverseinventories.MultiverseInventories;
 import net.kyori.adventure.text.event.ClickEvent;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
