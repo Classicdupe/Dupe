@@ -16,6 +16,7 @@ import xyz.prorickey.classicdupe.Utils;
 import xyz.prorickey.classicdupe.playerevents.MAZEmanager;
 
 //make it so its a listener to wait for a player to be at a certain cord
+@SuppressWarnings("unchecked")
 public class PlayerOnEnd implements Listener {
 
     @EventHandler

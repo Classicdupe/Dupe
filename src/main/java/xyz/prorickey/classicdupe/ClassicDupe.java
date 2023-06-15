@@ -3,7 +3,6 @@ package xyz.prorickey.classicdupe;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.onarandombox.multiverseinventories.MultiverseInventories;
 import net.kyori.adventure.text.event.ClickEvent;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
@@ -60,7 +59,6 @@ public class ClassicDupe extends JavaPlugin {
         RegisteredServiceProvider<LuckPerms> lppro = Bukkit.getServicesManager().getRegistration(LuckPerms.class);
         if(lppro != null) { lpapi = lppro.getProvider(); }
         if(Bukkit.getPluginManager().getPlugin("PlaceholderAPI") != null) new ClassicDupeExpansion(this).register();
-        MultiverseInventories inventories = (MultiverseInventories) Bukkit.getServer().getPluginManager().getPlugin("Multiverse-Inventories");
 
         Config.init(this);
         ClanDatabase.init(this);
