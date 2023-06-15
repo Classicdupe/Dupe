@@ -6,9 +6,12 @@ import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.TextColor;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
+import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 import xyz.prorickey.classicdupe.ClassicDupe;
 import xyz.prorickey.classicdupe.Config;
 import xyz.prorickey.classicdupe.Utils;
@@ -22,6 +25,8 @@ import xyz.prorickey.classicdupe.discord.ClassicDupeBot;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class Chat implements Listener {
 
@@ -63,6 +68,10 @@ public class Chat implements Listener {
             ClanDatabase.sendToClanChat(PlainTextComponentSerializer.plainText().serialize(e.message()), e.getPlayer());
             return;
         }
+
+
+
+
 
         String clanName = ClanDatabase.getClanMember(e.getPlayer().getUniqueId()).getClanName();
         String clanColor = "<yellow>";

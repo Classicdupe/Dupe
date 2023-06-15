@@ -301,6 +301,7 @@ commands:
   delhome:
     description: To delete your home
     usage: "Usage: /delhome"
+<<<<<<< Updated upstream
   clanchat:
     description: To toggle clan chat or send a message in clan chat
     usage: "Usage: /clanchat"
@@ -313,6 +314,19 @@ commands:
   balance:
     description: To check your balance and get the top balances
     usage: "Usage: /balance"
+=======
+  customitem:
+    description: To get a custom item
+    usage: "Usage: /customitem <give|list>"
+    permission: admin.customitem
+    subcommands:
+        give:
+            description: To give a custom item
+            usage: "Usage: /customitem give <item>"
+        list:
+            description: To list all custom items
+            usage: "Usage: /customitem list"
+>>>>>>> Stashed changes
 permissions:
   default.spawn.others:
     description: Allows you to teleport others to spawn
@@ -324,3 +338,7 @@ permissions:
     description: Reduced cooldown for mvp
   admin.bypassnopvpinvanish:
     description: Allows you to bypass no pvp in vanish
+  admin.customitem:
+    description: Allows you to use the customitem command
+  admin.bypassCustomItemCd:
+    description: Allows you to bypass the cooldown for custom items
