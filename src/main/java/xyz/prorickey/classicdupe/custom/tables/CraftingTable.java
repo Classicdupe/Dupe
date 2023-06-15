@@ -95,7 +95,7 @@ public class CraftingTable implements Listener {
         gMeta.displayName(Utils.format("<green>Crafting Table"));
         gMeta.getPersistentDataContainer().set(noMoveKey, PersistentDataType.STRING, "noMoveKey");
         glass.setItemMeta(gMeta);
-        for(int i = 0; i < 54; i++) gui.setItem(i, glass);
+        for(int i = 0; i < 27; i++) gui.setItem(i, glass);
         ItemStack defaultItem = new ItemStack(Material.CRAFTING_TABLE);
         ItemStack newItem = new ItemStack(Material.BEACON);
         ItemMeta defMeta = defaultItem.getItemMeta();
