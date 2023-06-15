@@ -5,16 +5,19 @@ import org.bukkit.Material;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.command.TabCompleter;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.jetbrains.annotations.NotNull;
 import xyz.prorickey.classicdupe.Utils;
+import org.jetbrains.annotations.Nullable;
+import xyz.prorickey.proutils.TabComplete;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class cicommands implements CommandExecutor {
+public class cicommands implements CommandExecutor, TabCompleter {
 
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
@@ -105,5 +108,12 @@ public class cicommands implements CommandExecutor {
         }
 
         return null;
+    }
+
+    @Override
+    public @Nullable List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
+        if(args.length == 0) return TabComplete.tabCompletionsSearch(args[0], List.of("give", "list"));
+        else if(args.length == 1 && args[0].equalsIgnoreCase("give")) return TabComplete.tabCompletionsSearch(args[0], List.of("FBwand"));
+        else return new ArrayList<>();
     }
 }
