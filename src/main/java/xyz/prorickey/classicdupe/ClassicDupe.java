@@ -216,16 +216,13 @@ public class ClassicDupe extends JavaPlugin {
         this.getCommand("sethome").setTabCompleter(new SetHomeCMD());
         this.getCommand("delhome").setExecutor(new DelHomeCMD());
         this.getCommand("delhome").setTabCompleter(new DelHomeCMD());
-<<<<<<< Updated upstream
         this.getCommand("clanchat").setExecutor(new CSChat());
         this.getCommand("clanchat").setTabCompleter(new CSChat());
         this.getCommand("shop").setExecutor(new ShopCMD());
         this.getCommand("shop").setTabCompleter(new ShopCMD());
         this.getCommand("balance").setExecutor(new BalanceCMD());
         this.getCommand("balance").setTabCompleter(new BalanceCMD());
-=======
         this.getCommand("customitem").setExecutor(new cicommands());
->>>>>>> Stashed changes
 
         getServer().getPluginManager().registerEvents(new JoinEvent(), this);
         getServer().getPluginManager().registerEvents(new QuitEvent(), this);
@@ -248,12 +245,9 @@ public class ClassicDupe extends JavaPlugin {
         getServer().getPluginManager().registerEvents(new ReducedFireworkLag(), this);
         //getServer().getPluginManager().registerEvents(new CommandSendEvent(), this);
         getServer().getPluginManager().registerEvents(new PlayerOnEnd(), this);
-<<<<<<< Updated upstream
         getServer().getPluginManager().registerEvents(new ShopCMD(), this);
         getServer().getPluginManager().registerEvents(new ArmorTrims(), this);
-=======
         getServer().getPluginManager().registerEvents(new ItemUse(), this);
->>>>>>> Stashed changes
 
         //Init maze
         MAZEmanager.init();
