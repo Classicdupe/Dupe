@@ -214,6 +214,12 @@ commands:
       - clans
       - guild
       - guilds
+  clanadmin:
+    description: The admin command for clans
+    usage: "Usage: /clanadmin"
+    permission: admin.clanadmin
+    aliases:
+      - cadmin
   cspy:
     description: To toggle command spy
     usage: "Usage: /cspy"

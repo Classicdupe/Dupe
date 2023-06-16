@@ -9,7 +9,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scoreboard.*;
 import xyz.prorickey.classicdupe.clans.ClanDatabase;
-import xyz.prorickey.classicdupe.clans.ClanMember;
+import xyz.prorickey.classicdupe.clans.builders.ClanMember;
 import xyz.prorickey.classicdupe.database.PlayerData;
 import xyz.prorickey.classicdupe.database.PlayerDatabase;
 import xyz.prorickey.classicdupe.events.Combat;
