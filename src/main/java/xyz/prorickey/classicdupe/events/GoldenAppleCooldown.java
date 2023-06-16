@@ -1,14 +1,10 @@
 package xyz.prorickey.classicdupe.events;
 
 import org.bukkit.Material;
-import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerItemConsumeEvent;
 import xyz.prorickey.classicdupe.Utils;
-
-import java.util.HashMap;
-import java.util.Map;
 
 public class GoldenAppleCooldown implements Listener {
 

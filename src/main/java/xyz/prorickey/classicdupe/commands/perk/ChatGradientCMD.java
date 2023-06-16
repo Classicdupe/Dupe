@@ -20,7 +20,6 @@ import org.jetbrains.annotations.Nullable;
 import xyz.prorickey.classicdupe.ClassicDupe;
 import xyz.prorickey.classicdupe.Utils;
 import xyz.prorickey.classicdupe.database.PlayerData;
-import xyz.prorickey.classicdupe.database.PlayerDatabase;
 
 import java.util.*;
 

@@ -23,7 +23,6 @@ import xyz.prorickey.classicdupe.commands.default1.*;
 import xyz.prorickey.classicdupe.commands.moderator.*;
 import xyz.prorickey.classicdupe.commands.perk.*;
 import xyz.prorickey.classicdupe.customitems.cicommands;
-import xyz.prorickey.classicdupe.customitems.citicker;
 import xyz.prorickey.classicdupe.database.Database;
 import xyz.prorickey.classicdupe.database.PlayerVaultDatabase;
 import xyz.prorickey.classicdupe.discord.ClassicDupeBot;
@@ -40,8 +39,8 @@ public class ClassicDupe extends JavaPlugin {
     public static ClassicDupeBot bot;
     public static LuckPerms lpapi;
     public static Database database;
+    public static ClanDatabase clanDatabase;
     public static PlayerVaultDatabase pvdatabase;
-
 
     public static final List<ItemStack> randomItems = new ArrayList<>();
 
@@ -312,6 +311,7 @@ public class ClassicDupe extends JavaPlugin {
     public static LuckPerms getLPAPI() { return lpapi; }
     public static Database getDatabase() { return database; }
     public static PlayerVaultDatabase getPVDatabase() { return pvdatabase; }
+    public static ClanDatabase getClanDatabase() { return clanDatabase; }
 
     public static List<String> getOnlinePlayerUsernames() {
         List<String> list = new ArrayList<>();

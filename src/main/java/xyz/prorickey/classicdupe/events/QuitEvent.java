@@ -1,12 +1,10 @@
 package xyz.prorickey.classicdupe.events;
 
-import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerQuitEvent;
 import xyz.prorickey.classicdupe.ClassicDupe;
 import xyz.prorickey.classicdupe.Utils;
-import xyz.prorickey.classicdupe.clans.ClanDatabase;
 import xyz.prorickey.classicdupe.commands.default1.PrivateMessageCMD;
 import xyz.prorickey.classicdupe.commands.moderator.CspyCMD;
 import xyz.prorickey.classicdupe.commands.moderator.StaffChatCMD;
@@ -24,7 +22,7 @@ public class QuitEvent implements Listener {
         ChatGradientCMD.gradientProfiles.remove(e.getPlayer().getUniqueId().toString());
         StaffChatCMD.staffChatPlayers.remove(e.getPlayer());
         PrivateMessageCMD.lastInConvo.remove(e.getPlayer());
-        ClanDatabase.removeFromClanChat(e.getPlayer());
+        ClassicDupe.getClanDatabase().removeFromClanChat(e.getPlayer());
         ClassicDupe.getDatabase().getHomesDatabase().unloadPlayer(e.getPlayer());
         ClassicDupe.getDatabase().getPlayerDatabase().playerDataUnload(e.getPlayer().getUniqueId());
         CspyCMD.cspyList.remove(e.getPlayer());

@@ -3,10 +3,10 @@ package xyz.prorickey.classicdupe.database;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
-import org.mariadb.jdbc.export.Prepare;
 import xyz.prorickey.classicdupe.ClassicDupe;
 import xyz.prorickey.classicdupe.Config;
-import xyz.prorickey.classicdupe.clans.ClanDatabase;
+import xyz.prorickey.classicdupe.clans.databases.H2ClanDatabase;
+import xyz.prorickey.classicdupe.clans.databases.MariaClanDatabase;
 
 import java.io.File;
 import java.sql.*;
@@ -39,7 +39,7 @@ public class Database {
 
                 System.out.println("Connected to MariaDB database!");
 
-                ClanDatabase.init(ClassicDupe.getPlugin(), conn);
+                ClassicDupe.clanDatabase = new MariaClanDatabase(ClassicDupe.getPlugin(), conn);
 
                 conn.prepareStatement("CREATE TABLE IF NOT EXISTS players(uuid TEXT, name TEXT, nickname TEXT, timesjoined long, playtime long, randomitem BOOLEAN, chatcolor TEXT, gradient BOOLEAN, gradientfrom TEXT, gradientto TEXT, night BOOLEAN, balance BIGINT)").execute();
                 conn.prepareStatement("CREATE TABLE IF NOT EXISTS filter(text TEXT, fullword BOOLEAN)").execute();
@@ -219,8 +219,7 @@ public class Database {
                 homesDatabase = new HomesDatabase(conn);
 
             } else {
-                
-                ClanDatabase.init(ClassicDupe.getPlugin());
+                ClassicDupe.clanDatabase = new H2ClanDatabase(ClassicDupe.getPlugin());
 
                 playerConn = DriverManager.getConnection ("jdbc:h2:" + ClassicDupe.getPlugin().getDataFolder().getAbsolutePath() + File.separator + "playerData");
                 serverConn = DriverManager.getConnection ("jdbc:h2:" + ClassicDupe.getPlugin().getDataFolder().getAbsolutePath() + File.separator + "serverData");

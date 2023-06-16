@@ -1,6 +1,5 @@
 package xyz.prorickey.classicdupe.clans;
 
-import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -9,12 +8,11 @@ import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import xyz.prorickey.classicdupe.ClassicDupe;
-import xyz.prorickey.classicdupe.Utils;
+import xyz.prorickey.classicdupe.clans.adminsubcommands.CSForceDelete;
 import xyz.prorickey.classicdupe.clans.builders.ClanSub;
 import xyz.prorickey.classicdupe.clans.subcommands.*;
 import xyz.prorickey.proutils.TabComplete;
 
-import java.lang.reflect.InvocationTargetException;
 import java.util.*;
 
 public class Clans implements CommandExecutor, TabCompleter {
@@ -29,25 +27,23 @@ public class Clans implements CommandExecutor, TabCompleter {
         p.getCommand("clanadmin").setExecutor(this);
         p.getCommand("clanadmin").setTabCompleter(this);
 
-        Set<Class<? extends ClanSub>> commands = (Set<Class<? extends ClanSub>>) Utils.findAllClassesUsingClassLoader("xyz.prorickey.classicdupe.clans.subcommands");
-        commands.forEach(sub -> {
-            try {
-                clanSubs.put(sub.getSimpleName().substring(2).toLowerCase(), sub.getDeclaredConstructor().newInstance());
-            } catch (InstantiationException | NoSuchMethodException | InvocationTargetException |
-                     IllegalAccessException e) {
-                Bukkit.getLogger().severe(e.getMessage());
-            }
-        });
+        clanSubs.put("accept", new CSAccept());
+        clanSubs.put("create", new CSCreate());
+        clanSubs.put("decline", new CSDecline());
+        clanSubs.put("delete", new CSDelete());
+        clanSubs.put("help", new CSHelp());
+        clanSubs.put("info", new CSInfo());
+        clanSubs.put("invite", new CSInvite());
+        clanSubs.put("kick", new CSKick());
+        clanSubs.put("leave", new CSLeave());
+        clanSubs.put("promote", new CSPromote());
+        clanSubs.put("chat", new CSChat());
+        clanSubs.put("settings", new CSSettings());
+        clanSubs.put("demote", new CSDemote());
+        clanSubs.put("delhome", new CSDelHome());
+        clanSubs.put("home", new CSHome());
 
-        Set<Class<? extends ClanSub>> adminCommands = (Set<Class<? extends ClanSub>>) Utils.findAllClassesUsingClassLoader("xyz.prorickey.classicdupe.clans.adminsubcommands");
-        adminCommands.forEach(sub -> {
-            try {
-                adminClanSubs.put(sub.getSimpleName().substring(2).toLowerCase(), sub.getDeclaredConstructor().newInstance());
-            } catch (InstantiationException | NoSuchMethodException | InvocationTargetException |
-                     IllegalAccessException e) {
-                Bukkit.getLogger().severe(e.getMessage());
-            }
-        });
+        adminClanSubs.put("forceDelete", new CSForceDelete());
 
         new CSInvite.InviteTask().runTaskTimer(ClassicDupe.getPlugin(), 0, 20);
     }

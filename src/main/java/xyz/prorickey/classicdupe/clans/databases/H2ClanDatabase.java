@@ -11,8 +11,7 @@ import org.h2.util.IOUtils;
 import xyz.prorickey.classicdupe.ClassicDupe;
 import xyz.prorickey.classicdupe.Utils;
 import xyz.prorickey.classicdupe.clans.ClanDatabase;
-import xyz.prorickey.classicdupe.clans.ClanDatabaseIml;
-import xyz.prorickey.classicdupe.clans.Warp;
+import xyz.prorickey.classicdupe.clans.builders.Warp;
 import xyz.prorickey.classicdupe.clans.builders.Clan;
 import xyz.prorickey.classicdupe.clans.builders.ClanMember;
 
@@ -21,7 +20,7 @@ import java.sql.*;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicReference;
 
-public class H2ClanDatabase implements ClanDatabaseIml {
+public class H2ClanDatabase implements ClanDatabase {
 
     public static File dataDir;
     public static File globalConfigFile;
@@ -276,7 +275,7 @@ public class H2ClanDatabase implements ClanDatabaseIml {
         Bukkit.getScheduler().runTaskAsynchronously(ClassicDupe.getPlugin(), () -> {
             try {
                 main.prepareStatement("UPDATE players SET clanId=null, clanName=null, level=null WHERE uuid='" + clanMember.getOffPlayer().getUniqueId() + "'").execute();
-                if(clanChatMembers.contains(clanMember.getOffPlayer().getPlayer())) ClanDatabase.removeFromClanChat(clanMember.getOffPlayer().getPlayer());
+                if(clanChatMembers.contains(clanMember.getOffPlayer().getPlayer())) ClassicDupe.getClanDatabase().removeFromClanChat(clanMember.getOffPlayer().getPlayer());
             } catch (SQLException e) {
                 throw new RuntimeException(e);
             }

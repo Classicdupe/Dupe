@@ -11,7 +11,6 @@ import xyz.prorickey.classicdupe.ClassicDupe;
 import xyz.prorickey.classicdupe.Utils;
 import xyz.prorickey.classicdupe.clans.builders.ClanMember;
 import xyz.prorickey.classicdupe.clans.builders.ClanSub;
-import xyz.prorickey.classicdupe.clans.ClanDatabase;
 import xyz.prorickey.proutils.TabComplete;
 
 import java.util.*;
@@ -27,7 +26,7 @@ public class CSInvite extends ClanSub {
             sender.sendMessage(Utils.format("<red>You cannot execute this command from console"));
             return;
         }
-        ClanMember cmem = ClanDatabase.getClanMember(player.getUniqueId());
+        ClanMember cmem = ClassicDupe.getClanDatabase().getClanMember(player.getUniqueId());
         if(cmem.getClanID() == null) {
             player.sendMessage(Utils.cmdMsg("<red>You can't invite people to your imaginary clan. You must create one with /clan create"));
             return;
@@ -45,7 +44,7 @@ public class CSInvite extends ClanSub {
             player.sendMessage(Utils.cmdMsg("<red>That player is currently offline"));
             return;
         }
-        ClanMember pmem = ClanDatabase.getClanMember(p.getUniqueId());
+        ClanMember pmem = ClassicDupe.getClanDatabase().getClanMember(p.getUniqueId());
         if(pmem.getClanID() != null) {
             player.sendMessage(Utils.cmdMsg("<red>That player is already in a clan"));
             return;
