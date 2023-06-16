@@ -61,7 +61,6 @@ public class ClassicDupe extends JavaPlugin {
         if(Bukkit.getPluginManager().getPlugin("PlaceholderAPI") != null) new ClassicDupeExpansion(this).register();
 
         Config.init(this);
-        ClanDatabase.init(this);
         database = new Database();
         pvdatabase = new PlayerVaultDatabase(this);
 

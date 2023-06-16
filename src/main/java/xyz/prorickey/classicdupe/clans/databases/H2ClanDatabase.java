@@ -1,4 +1,4 @@
-package xyz.prorickey.classicdupe.clans;
+package xyz.prorickey.classicdupe.clans.databases;
 
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.bukkit.Bukkit;
@@ -8,9 +8,11 @@ import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.h2.util.IOUtils;
-import org.jetbrains.annotations.Nullable;
 import xyz.prorickey.classicdupe.ClassicDupe;
 import xyz.prorickey.classicdupe.Utils;
+import xyz.prorickey.classicdupe.clans.ClanDatabase;
+import xyz.prorickey.classicdupe.clans.ClanDatabaseIml;
+import xyz.prorickey.classicdupe.clans.Warp;
 import xyz.prorickey.classicdupe.clans.builders.Clan;
 import xyz.prorickey.classicdupe.clans.builders.ClanMember;
 
@@ -19,7 +21,7 @@ import java.sql.*;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicReference;
 
-public class ClanDatabase {
+public class H2ClanDatabase implements ClanDatabaseIml {
 
     public static File dataDir;
     public static File globalConfigFile;
@@ -33,11 +35,8 @@ public class ClanDatabase {
 
     public static final List<Player> clanChatMembers = new ArrayList<>();
 
-    public static void init(JavaPlugin plugin, Connection connection) {
+    public H2ClanDatabase(JavaPlugin plugin) {
 
-    }
-
-    public static void init(JavaPlugin plugin) {
         dataDir = new File(plugin.getDataFolder() + "/clansData/");
         dataDir.mkdirs();
         globalConfigFile = new File(plugin.getDataFolder() + "/clansData/global.yml");
@@ -119,54 +118,50 @@ public class ClanDatabase {
 
                 // Fix for clans that have no players
                 clansById.values()
-                    .stream().filter(clan -> clan.getMembers().size() == 0).toList()
-                    .forEach(clan -> {
-                        if (clan.getMembers().size() == 0) {
-                            clanNames.remove(clan.getClanName());
-                            clansById.remove(clan.getClanId());
-                            clansByName.remove(clan.getClanName());
-                            try {
-                                PreparedStatement stat1 = main.prepareStatement("DELETE FROM clanWarps WHERE clanId=?");
-                                stat1.setString(1, clan.getClanId().toString());
-                                stat1.execute();
-                                PreparedStatement stat2 = main.prepareStatement("DELETE FROM clans WHERE clanId=?");
-                                stat2.setString(1, clan.getClanId().toString());
-                                stat2.execute();
-                            } catch (SQLException e) {
-                                throw new RuntimeException(e);
+                        .stream().filter(clan -> clan.getMembers().size() == 0).toList()
+                        .forEach(clan -> {
+                            if (clan.getMembers().size() == 0) {
+                                clanNames.remove(clan.getClanName());
+                                clansById.remove(clan.getClanId());
+                                clansByName.remove(clan.getClanName());
+                                try {
+                                    PreparedStatement stat1 = main.prepareStatement("DELETE FROM clanWarps WHERE clanId=?");
+                                    stat1.setString(1, clan.getClanId().toString());
+                                    stat1.execute();
+                                    PreparedStatement stat2 = main.prepareStatement("DELETE FROM clans WHERE clanId=?");
+                                    stat2.setString(1, clan.getClanId().toString());
+                                    stat2.execute();
+                                } catch (SQLException e) {
+                                    throw new RuntimeException(e);
+                                }
                             }
-                        }
-                });
+                        });
             } catch (SQLException e) {
                 throw new RuntimeException(e);
             }
         });
+
     }
 
-    public static void putInClanChat(Player player) { clanChatMembers.add(player); }
-    public static void removeFromClanChat(Player player) { clanChatMembers.remove(player); }
-    public static boolean isInClanChat(Player player) { return clanChatMembers.contains(player); }
+    @Override
+    public YamlConfiguration getClanConfig() {
+        return globalConfig;
+    }
 
-    public static void sendToClanChat(String message, Player player) {
+    @Override
+    public UUID generateClanId() {
+        UUID uuid = UUID.randomUUID();
+        if(getClan(uuid) != null) return generateClanId();
+        return uuid;
+    }
+
+    @Override
+    public void createClan(String clanName, Player player) {
+        UUID id = generateClanId();
+        Clan clan = new Clan(id, clanName);
+        clan.setOwner(player);
+        clan.addPlayer(player);
         ClanMember cmem = clanMembers.get(player.getUniqueId());
-        Clan clan = clansById.get(cmem.getClanID());
-        MiniMessage mm = MiniMessage.miniMessage();
-        clan.getMembers().forEach(mem -> {
-            if(mem.isOnline()) mem.getPlayer().sendMessage(
-                    Utils.format("<dark_gray>[<yellow>CLANCHAT<dark_gray>] ")
-                        .append(Utils.format("<yellow>" + player.getName() + " <dark_gray>» <white>" +
-                            mm.stripTags(message))));
-        });
-    }
-
-    public static YamlConfiguration getGlobalConfig() { return globalConfig; }
-
-    public static void createClan(String name, Player owner) {
-        UUID id = genClanId();
-        Clan clan = new Clan(id, name);
-        clan.setOwner(owner);
-        clan.addPlayer(owner);
-        ClanMember cmem = clanMembers.get(owner.getUniqueId());
         cmem.setClan(clan, 3);
         clansById.put(id, clan);
         clansByName.put(clan.getClanName(), clan);
@@ -175,13 +170,13 @@ public class ClanDatabase {
             try {
                 PreparedStatement insertClanStmt = main.prepareStatement("INSERT INTO clans(clanId, clanName, clanKills, publicClan, clanColor) VALUES(?, ?, 0, false, '<yellow>')");
                 insertClanStmt.setString(1, id.toString());
-                insertClanStmt.setString(2, name);
+                insertClanStmt.setString(2, clanName);
                 insertClanStmt.addBatch();
 
                 PreparedStatement updatePlayerStmt = main.prepareStatement("UPDATE players SET clanId=?, clanName=?, level=3 WHERE uuid=?");
                 updatePlayerStmt.setString(1, id.toString());
-                updatePlayerStmt.setString(2, name);
-                updatePlayerStmt.setString(3, owner.getUniqueId().toString());
+                updatePlayerStmt.setString(2, clanName);
+                updatePlayerStmt.setString(3, player.getUniqueId().toString());
                 updatePlayerStmt.addBatch();
 
                 insertClanStmt.executeBatch();
@@ -192,54 +187,8 @@ public class ClanDatabase {
         });
     }
 
-    private static UUID genClanId() {
-        UUID uuid = UUID.randomUUID();
-        if(getClan(uuid) != null) return genClanId();
-        return uuid;
-    }
-
-    public static List<String> getLoadedClanNames() { return clanNames; }
-
-    @Nullable
-    public static Clan getClan(UUID id) { return clansById.get(id); }
-
-    @Nullable
-    public static Clan getClan(String name) {
-        AtomicReference<Clan> foundClan = new AtomicReference<>(null);
-        clansByName.forEach((s, clan) -> { if(s.equalsIgnoreCase(name)) foundClan.set(clan); });
-        return foundClan.get();
-    }
-
-    public static ClanMember getClanMember(UUID uuid) { return clanMembers.get(uuid); }
-
-    public static void createIfNotExists(Player player) {
-        if(clanMembers.containsKey(player.getUniqueId())) return;
-        clanMembers.put(player.getUniqueId(), new ClanMember(player));
-        Bukkit.getScheduler().runTaskAsynchronously(ClassicDupe.getPlugin(), () -> {
-            try (PreparedStatement stmt = main.prepareStatement(
-                    "INSERT INTO players(uuid, name, clanId, clanName, level, boosts) " +
-                            "VALUES (?, ?, null, null, null, 0)")) {
-                stmt.setString(1, player.getUniqueId().toString());
-                stmt.setString(2, player.getName());
-                stmt.executeUpdate();
-            } catch (SQLException e) {
-                throw new RuntimeException(e);
-            }
-        });
-    }
-
-    public static void removeClan(ClanMember cmem) {
-        Bukkit.getScheduler().runTaskAsynchronously(ClassicDupe.getPlugin(), () -> {
-            try {
-                main.prepareStatement("UPDATE players SET clanId=null, clanName=null, level=null WHERE uuid='" + cmem.getOffPlayer().getUniqueId() + "'").execute();
-                if(clanChatMembers.contains(cmem.getOffPlayer().getPlayer())) ClanDatabase.removeFromClanChat(cmem.getOffPlayer().getPlayer());
-            } catch (SQLException e) {
-                throw new RuntimeException(e);
-            }
-        });
-    }
-
-    public static void deleteClan(Clan clan) {
+    @Override
+    public void deleteClan(Clan clan) {
         UUID clanId = clan.getClanId();
         clanMembers.values().stream().filter(c -> (c.getClanID() != null && c.getClanID().equals(clanId))).forEach(cmem -> {
             cmem.removeClan();
@@ -267,7 +216,47 @@ public class ClanDatabase {
         });
     }
 
-    public static void setPlayerClan(UUID uuid, Clan clan) {
+    @Override
+    public List<String> getLoadedClanNames() {
+        return clanNames;
+    }
+
+    @Override
+    public Clan getClan(UUID id) {
+        return clansById.get(id);
+    }
+
+    @Override
+    public Clan getClan(String clanName) {
+        AtomicReference<Clan> foundClan = new AtomicReference<>(null);
+        clansByName.forEach((s, clan) -> { if(s.equalsIgnoreCase(clanName)) foundClan.set(clan); });
+        return foundClan.get();
+    }
+
+    @Override
+    public ClanMember getClanMember(UUID id) {
+        return clanMembers.get(id);
+    }
+
+    @Override
+    public void updateClanMemberInfo(Player player) {
+        if(clanMembers.containsKey(player.getUniqueId())) return;
+        clanMembers.put(player.getUniqueId(), new ClanMember(player));
+        Bukkit.getScheduler().runTaskAsynchronously(ClassicDupe.getPlugin(), () -> {
+            try (PreparedStatement stmt = main.prepareStatement(
+                    "INSERT INTO players(uuid, name, clanId, clanName, level, boosts) " +
+                            "VALUES (?, ?, null, null, null, 0)")) {
+                stmt.setString(1, player.getUniqueId().toString());
+                stmt.setString(2, player.getName());
+                stmt.executeUpdate();
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
+        });
+    }
+
+    @Override
+    public void setClan(UUID uuid, Clan clan) {
         Bukkit.getScheduler().runTaskAsynchronously(ClassicDupe.getPlugin(), () -> {
             try {
                 PreparedStatement statement = main.prepareStatement("UPDATE players SET clanId=?, clanName=?, level=? WHERE uuid=?");
@@ -282,11 +271,24 @@ public class ClanDatabase {
         });
     }
 
-    public static void setClanColor(Clan clan, String clanColor) {
+    @Override
+    public void removeClan(ClanMember clanMember) {
+        Bukkit.getScheduler().runTaskAsynchronously(ClassicDupe.getPlugin(), () -> {
+            try {
+                main.prepareStatement("UPDATE players SET clanId=null, clanName=null, level=null WHERE uuid='" + clanMember.getOffPlayer().getUniqueId() + "'").execute();
+                if(clanChatMembers.contains(clanMember.getOffPlayer().getPlayer())) ClanDatabase.removeFromClanChat(clanMember.getOffPlayer().getPlayer());
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
+        });
+    }
+
+    @Override
+    public void setClanColor(Clan clan, String color) {
         Bukkit.getScheduler().runTaskAsynchronously(ClassicDupe.getPlugin(), () -> {
             try {
                 PreparedStatement statement = main.prepareStatement("UPDATE clans SET clanColor=? WHERE clanId=?");
-                statement.setString(1, clanColor);
+                statement.setString(1, color);
                 statement.setString(2, clan.getClanId().toString());
                 statement.executeUpdate();
             } catch (SQLException e) {
@@ -295,11 +297,12 @@ public class ClanDatabase {
         });
     }
 
-    public static void setPublicClan(Clan clan, boolean publicClan) {
+    @Override
+    public void setPublicClan(Clan clan, boolean isPublic) {
         Bukkit.getScheduler().runTaskAsynchronously(ClassicDupe.getPlugin(), () -> {
             try {
                 PreparedStatement statement = main.prepareStatement("UPDATE clans SET publicClan=? WHERE clanId=?");
-                statement.setBoolean(1, publicClan);
+                statement.setBoolean(1, isPublic);
                 statement.setString(2, clan.getClanId().toString());
                 statement.executeUpdate();
             } catch (SQLException e) {
@@ -308,32 +311,8 @@ public class ClanDatabase {
         });
     }
 
-    public static void setPlayerLevel(UUID uuid, Integer level) {
-        Bukkit.getScheduler().runTaskAsynchronously(ClassicDupe.getPlugin(), () -> {
-            try {
-                PreparedStatement statement = main.prepareStatement("UPDATE players SET level=? WHERE uuid=?");
-                statement.setInt(1, level);
-                statement.setString(2, uuid.toString());
-                statement.execute();
-            } catch (SQLException e) {
-                throw new RuntimeException(e);
-            }
-        });
-    }
-
-    public static void delWarp(Clan clan, String warp) {
-        Bukkit.getScheduler().runTaskAsynchronously(ClassicDupe.getPlugin(), () -> {
-            try (PreparedStatement statement = main.prepareStatement("DELETE FROM clanWarps WHERE clanId=? AND name=?")) {
-                statement.setString(1, clan.getClanId().toString());
-                statement.setString(2, warp);
-                statement.executeUpdate();
-            } catch (SQLException e) {
-                throw new RuntimeException(e);
-            }
-        });
-    }
-
-    public static void setWarp(Clan clan, Warp warp) {
+    @Override
+    public void setWarp(Clan clan, Warp warp) {
         Bukkit.getScheduler().runTaskAsynchronously(ClassicDupe.getPlugin(), () -> {
             try (PreparedStatement statement = main.prepareStatement("INSERT INTO clanWarps(clanId, name, levelNeeded, x, y, z, pitch, yaw, world) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?)")) {
                 statement.setString(1, clan.getClanId().toString());
@@ -352,4 +331,58 @@ public class ClanDatabase {
         });
     }
 
+    @Override
+    public void delWarp(Clan clan, String warpName) {
+        Bukkit.getScheduler().runTaskAsynchronously(ClassicDupe.getPlugin(), () -> {
+            try (PreparedStatement statement = main.prepareStatement("DELETE FROM clanWarps WHERE clanId=? AND name=?")) {
+                statement.setString(1, clan.getClanId().toString());
+                statement.setString(2, warpName);
+                statement.executeUpdate();
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
+        });
+    }
+
+    @Override
+    public void setPlayerLevel(ClanMember clanMember, int level) {
+        Bukkit.getScheduler().runTaskAsynchronously(ClassicDupe.getPlugin(), () -> {
+            try {
+                PreparedStatement statement = main.prepareStatement("UPDATE players SET level=? WHERE uuid=?");
+                statement.setInt(1, level);
+                statement.setString(2, clanMember.getOffPlayer().getUniqueId().toString());
+                statement.execute();
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
+        });
+    }
+
+    @Override
+    public void putInClanChat(Player player) {
+        clanChatMembers.add(player);
+    }
+
+    @Override
+    public void removeFromClanChat(Player player) {
+        clanChatMembers.remove(player);
+    }
+
+    @Override
+    public boolean clanChat(Player player) {
+        return clanChatMembers.contains(player);
+    }
+
+    @Override
+    public void sendClanChat(String message, Player player) {
+        ClanMember cmem = clanMembers.get(player.getUniqueId());
+        Clan clan = clansById.get(cmem.getClanID());
+        MiniMessage mm = MiniMessage.miniMessage();
+        clan.getMembers().forEach(mem -> {
+            if(mem.isOnline()) mem.getPlayer().sendMessage(
+                    Utils.format("<dark_gray>[<yellow>CLANCHAT<dark_gray>] ")
+                            .append(Utils.format("<yellow>" + player.getName() + " <dark_gray>» <white>" +
+                                    mm.stripTags(message))));
+        });
+    }
 }
