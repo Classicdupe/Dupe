@@ -111,6 +111,8 @@ public class DupeCMD implements CommandExecutor, TabCompleter {
         if(Boolean.TRUE.equals(item.getItemMeta().getPersistentDataContainer().get(undupableKey, PersistentDataType.BOOLEAN))) return false;
         if (item.getItemMeta().getPersistentDataContainer().has(CIKeys.FBWAND, PersistentDataType.STRING)) return false;
         if (item.getItemMeta().getPersistentDataContainer().has(CIKeys.BURSTBOW, PersistentDataType.STRING)) return false;
+        if (item.getItemMeta().getPersistentDataContainer().has(CIKeys.PVPPOT, PersistentDataType.STRING)) return false;
+        if (item.getItemMeta().getPersistentDataContainer().has(CIKeys.PVPPOT2, PersistentDataType.STRING)) return false;
         return !(item.getItemMeta() instanceof ArmorMeta armorMeta) || !armorMeta.hasTrim();
     }
 

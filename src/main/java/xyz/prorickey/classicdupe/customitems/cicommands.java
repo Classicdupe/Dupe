@@ -60,6 +60,28 @@ public class cicommands implements CommandExecutor, TabCompleter {
                                 plr2.getInventory().addItem(item2);
                                 sender.sendMessage(ChatColor.GREEN + "Gave " + plr2.getName() + " a Burst Bow!");
                                 return true;
+                            case "pvppot":
+                                List<String> lore3 = new ArrayList<>();
+                                lore3.add("Gives you the basic pvp's essential buffs!");
+                                lore3.add("Speed 2, Strength 2, Duration: 1:30");
+                                lore3.add("Cooldown of 2 minutes.");
+
+                                ItemStack item3 = returnItem(ChatColor.DARK_PURPLE+ChatColor.BOLD.toString()+"PVP Pot Lvl 1.", lore3, "star", CIKeys.PVPPOT);
+                                Player plr3 = (Player) sender;
+                                plr3.getInventory().addItem(item3);
+                                sender.sendMessage(ChatColor.GREEN + "Gave " + plr3.getName() + " a PVP Pot Lvl 1!");
+                                return true;
+                            case "pvppot2":
+                                List<String> lore4 = new ArrayList<>();
+                                lore4.add("Gives you amazing pvp buffs!");
+                                lore4.add("Speed 2, Strength 2, Regeneration 2, Duration: 2:00");
+                                lore4.add("Cooldown of 3 minutes.");
+
+                                ItemStack item4 = returnItem(ChatColor.DARK_PURPLE+ChatColor.BOLD.toString()+"PVP Pot Lvl 2.", lore4, "star", CIKeys.PVPPOT2);
+                                Player plr4 = (Player) sender;
+                                plr4.getInventory().addItem(item4);
+                                sender.sendMessage(ChatColor.GREEN + "Gave " + plr4.getName() + " a PVP Pot Lvl 2!");
+                                return true;
 
 
                             default:
@@ -148,6 +170,30 @@ public class cicommands implements CommandExecutor, TabCompleter {
             itemStack.setItemMeta(itemMeta);
 
             return itemStack;
+        }
+
+        if (item.equals("star")) {
+
+            ItemStack itemStack = new ItemStack(Material.NETHER_STAR);
+
+            ItemMeta itemMeta = itemStack.getItemMeta();
+
+            // Set the display name
+            itemMeta.setDisplayName(name);
+            itemMeta.setLore(lore);
+
+            // Get the PersistentDataContainer for the item
+            PersistentDataContainer dataContainer = itemMeta.getPersistentDataContainer();
+
+            // Set the PDC value to "FBwand"
+            dataContainer.set(key, PersistentDataType.STRING, "CustomBow");
+
+
+
+            itemStack.setItemMeta(itemMeta);
+
+            return itemStack;
+
         }
 
         return null;

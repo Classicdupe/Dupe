@@ -9,18 +9,20 @@ import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.scheduler.BukkitRunnable;
 import xyz.prorickey.classicdupe.ClassicDupe;
-import xyz.prorickey.classicdupe.customitems.BurstBow;
-import xyz.prorickey.classicdupe.customitems.CIKeys;
-import xyz.prorickey.classicdupe.customitems.FireballWand;
+import xyz.prorickey.classicdupe.customitems.*;
 
 public class ItemUse implements Listener {
 
     private final FireballWand fireballWand;
     private final BurstBow burstBow;
+    private final PVPPot pvpPot;
+    private final PVPPot2 pvpPot2;
 
     public ItemUse() {
         this.fireballWand = new FireballWand(ClassicDupe.getPlugin());
         this.burstBow = new BurstBow(ClassicDupe.getPlugin());
+        this.pvpPot = new PVPPot(ClassicDupe.getPlugin());
+        this.pvpPot2 = new PVPPot2(ClassicDupe.getPlugin());
     }
 
     @EventHandler
@@ -35,6 +37,13 @@ public class ItemUse implements Listener {
             //check if its
             if (event.getItem().getItemMeta().getPersistentDataContainer().has(CIKeys.BURSTBOW, PersistentDataType.STRING)) {
                 burstBow.use(event.getPlayer());
+            }
+            //check if its PVPPot
+            if (event.getItem().getItemMeta().getPersistentDataContainer().has(CIKeys.PVPPOT, PersistentDataType.STRING)) {
+                pvpPot.use(event.getPlayer());
+            }
+            if (event.getItem().getItemMeta().getPersistentDataContainer().has(CIKeys.PVPPOT2, PersistentDataType.STRING)) {
+                pvpPot2.use(event.getPlayer());
             }
         } else {
             // Player used an item
