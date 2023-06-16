@@ -39,9 +39,6 @@ public class JoinEvent implements Listener {
             nakedProtection.put(e.getPlayer(), System.currentTimeMillis());
 
             // Starting Gear
-
-
-
             e.getPlayer().getInventory().setHelmet(new ItemStack(Material.IRON_HELMET));
             e.getPlayer().getInventory().setChestplate(new ItemStack(Material.IRON_CHESTPLATE));
             e.getPlayer().getInventory().setLeggings(new ItemStack(Material.IRON_LEGGINGS));

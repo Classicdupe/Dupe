@@ -42,8 +42,9 @@ public class Clans implements CommandExecutor, TabCompleter {
         clanSubs.put("demote", new CSDemote());
         clanSubs.put("delhome", new CSDelHome());
         clanSubs.put("home", new CSHome());
+        clanSubs.put("sethome", new CSSethome());
 
-        adminClanSubs.put("forceDelete", new CSForceDelete());
+        adminClanSubs.put("forcedelete", new CSForceDelete());
 
         new CSInvite.InviteTask().runTaskTimer(ClassicDupe.getPlugin(), 0, 20);
     }
@@ -51,11 +52,11 @@ public class Clans implements CommandExecutor, TabCompleter {
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
         if(command.getName().equals("clanadmin")) {
-            if(args.length == 0) clanSubs.get("help").execute(sender, args);
+            if(args.length == 0) adminClanSubs.get("help").execute(sender, args);
             else {
                 String[] subArgs = Arrays.copyOfRange(args, 1, args.length);
-                if(!clanSubs.containsKey(args[0].toLowerCase())) clanSubs.get("help").execute(sender, subArgs);
-                else clanSubs.get(args[0].toLowerCase()).execute(sender, subArgs);
+                if(!adminClanSubs.containsKey(args[0].toLowerCase())) adminClanSubs.get("help").execute(sender, subArgs);
+                else adminClanSubs.get(args[0].toLowerCase()).execute(sender, subArgs);
             }
         } else {
             if(args.length == 0) clanSubs.get("help").execute(sender, args);

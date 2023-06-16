@@ -50,6 +50,7 @@ public class ClassicDupe extends JavaPlugin {
 
         try {
             Class.forName("org.h2.Driver");
+            Class.forName ("org.mariadb.jdbc.Driver");
         } catch (ClassNotFoundException e) {
             throw new RuntimeException(e);
         }

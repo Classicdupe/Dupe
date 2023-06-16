@@ -52,10 +52,11 @@ public class MariaClanDatabase implements ClanDatabase {
                 OutputStream outputStream = new FileOutputStream(this.globalConfigFile)) {
                 IOUtils.copy(inputStream, outputStream);
             } catch (IOException e) {
-                Bukkit.getLogger().severe(e.toString());
+                throw new RuntimeException(e);
             }
         }
 
+        globalConfig = YamlConfiguration.loadConfiguration(globalConfigFile);
         Bukkit.getScheduler().runTaskAsynchronously(plugin, () -> {
             try {
                 this.conn.prepareStatement("CREATE TABLE IF NOT EXISTS clans(clanId TEXT, clanName TEXT, clanKills INT, publicClan BOOLEAN, clanColor TEXT)").execute();
@@ -68,7 +69,7 @@ public class MariaClanDatabase implements ClanDatabase {
                     this.allClanNames.add(data.getString("clanName"));
                 }
             } catch (SQLException e) {
-                Bukkit.getLogger().severe(e.toString());
+                throw new RuntimeException(e);
             }
         });
     }
@@ -105,7 +106,7 @@ public class MariaClanDatabase implements ClanDatabase {
                 insertClanStmt.setString(2, clanName);
                 insertClanStmt.execute();
             } catch (SQLException e) {
-                Bukkit.getLogger().severe(e.toString());
+                throw new RuntimeException(e);
             }
         });
     }
@@ -115,6 +116,7 @@ public class MariaClanDatabase implements ClanDatabase {
         loadedClanMembers
                 .values()
                 .stream()
+                .filter(cmem -> cmem.getClanID() != null)
                 .filter(cmem -> cmem.getClanID().equals(clan.getClanId()))
                 .forEach(cmem -> {
                     cmem.removeClan();
@@ -134,11 +136,11 @@ public class MariaClanDatabase implements ClanDatabase {
                 stmt.setString(1, clan.getClanId().toString());
                 stmt.execute();
 
-                stmt = this.conn.prepareStatement("UPDATE players SET clanId=null, clanName=null, level=null WHERE clanId=?");
+                stmt = this.conn.prepareStatement("UPDATE clanPlayers SET clanId=null, clanName=null, level=null WHERE clanId=?");
                 stmt.setString(1, clan.getClanId().toString());
                 stmt.execute();
             } catch (SQLException e) {
-                Bukkit.getLogger().severe(e.toString());
+                throw new RuntimeException(e);
             }
         });
     }
@@ -180,7 +182,7 @@ public class MariaClanDatabase implements ClanDatabase {
                     return clan;
                 }
             } catch (SQLException e) {
-                Bukkit.getLogger().severe(e.toString());
+                throw new RuntimeException(e);
             }
             return null;
         }
@@ -217,7 +219,7 @@ public class MariaClanDatabase implements ClanDatabase {
                     returnClan.set(clan);
                 }
             } catch (SQLException e) {
-                Bukkit.getLogger().severe(e.toString());
+                throw new RuntimeException(e);
             }
         });
         return returnClan.get();
@@ -241,7 +243,7 @@ public class MariaClanDatabase implements ClanDatabase {
                     return clanMember;
                 }
             } catch (SQLException e) {
-                Bukkit.getLogger().severe(e.toString());
+                throw new RuntimeException(e);
             }
             return null;
         }
@@ -252,23 +254,27 @@ public class MariaClanDatabase implements ClanDatabase {
     public void updateClanMemberInfo(Player player) {
         Bukkit.getScheduler().runTaskAsynchronously(ClassicDupe.getPlugin(), () -> {
             try {
-                PreparedStatement stmt = this.conn.prepareStatement("INSERT INTO clanPlayers (uuid, name, clanId, clanName, level, boosts) VALUES (?, ?, null, null, null, 0) ON DUPLICATE KEY UPDATE name=?");
-                stmt.setString(1, player.getUniqueId().toString());
-                stmt.setString(2, player.getName());
-                stmt.setString(3, player.getName());
-                stmt.execute();
-
-                PreparedStatement query = this.conn.prepareStatement("SELECT * FROM clanPlayers WHERE uuid=?");
-                query.setString(1, player.getUniqueId().toString());
-                ResultSet data = query.executeQuery();
+                PreparedStatement stat = this.conn.prepareStatement("SELECT * FROM clanPlayers WHERE uuid=?");
+                stat.setString(1, player.getUniqueId().toString());
+                ResultSet data = stat.executeQuery();
                 if(data.next()) {
+                    PreparedStatement stmt = this.conn.prepareStatement("UPDATE clanPlayers SET name=? WHERE uuid=?");
+                    stmt.setString(1, player.getName());
+                    stmt.setString(2, player.getUniqueId().toString());
+                    stmt.execute();
                     ClanMember clanMember = new ClanMember(player);
                     if(data.getString("clanId") != null) clanMember
                             .setClan(getClan(UUID.fromString(data.getString("clanId"))), data.getInt("level"));
                     loadedClanMembers.put(player.getUniqueId(), clanMember);
+                } else {
+                    PreparedStatement stmt = this.conn.prepareStatement("INSERT INTO clanPlayers (uuid, name, clanId, clanName, level, boosts) VALUES (?, ?, null, null, null, 0)");
+                    stmt.setString(1, player.getUniqueId().toString());
+                    stmt.setString(2, player.getName());
+                    stmt.execute();
+                    loadedClanMembers.put(player.getUniqueId(), new ClanMember(player));
                 }
             } catch (SQLException e) {
-                Bukkit.getLogger().severe(e.toString());
+                throw new RuntimeException(e);
             }
         });
     }
@@ -277,14 +283,13 @@ public class MariaClanDatabase implements ClanDatabase {
     public void setClan(UUID uuid, Clan clan) {
         Bukkit.getScheduler().runTaskAsynchronously(ClassicDupe.getPlugin(), () -> {
             try {
-                PreparedStatement statement = this.conn.prepareStatement("UPDATE players SET clanId=?, clanName=?, level=? WHERE uuid=?");
+                PreparedStatement statement = this.conn.prepareStatement("UPDATE clanPlayers SET clanId=?, clanName=?, level=0 WHERE uuid=?");
                 statement.setString(1, clan.getClanId().toString());
                 statement.setString(2, clan.getClanName());
-                statement.setInt(3, 0);
-                statement.setString(4, uuid.toString());
-                statement.executeUpdate();
+                statement.setString(3, uuid.toString());
+                statement.execute();
             } catch (SQLException e) {
-                Bukkit.getLogger().severe(e.toString());
+                throw new RuntimeException(e);
             }
         });
     }
@@ -293,12 +298,12 @@ public class MariaClanDatabase implements ClanDatabase {
     public void removeClan(ClanMember clanMember) {
         Bukkit.getScheduler().runTaskAsynchronously(ClassicDupe.getPlugin(), () -> {
             try {
-                PreparedStatement stmt = this.conn.prepareStatement("UPDATE players SET clanId=null, clanName=null, level=null WHERE uuid=?");
+                PreparedStatement stmt = this.conn.prepareStatement("UPDATE clanPlayers SET clanId=null, clanName=null, level=null WHERE uuid=?");
                 stmt.setString(1, clanMember.getOffPlayer().getUniqueId().toString());
-                stmt.executeUpdate();
+                stmt.execute();
                 if(clanChatMembers.contains(clanMember.getOffPlayer().getPlayer())) removeFromClanChat(clanMember.getOffPlayer().getPlayer());
             } catch (SQLException e) {
-                Bukkit.getLogger().severe(e.toString());
+                throw new RuntimeException(e);
             }
         });
     }
@@ -311,9 +316,9 @@ public class MariaClanDatabase implements ClanDatabase {
                 PreparedStatement statement = this.conn.prepareStatement("UPDATE clans SET clanColor=? WHERE clanId=?");
                 statement.setString(1, color);
                 statement.setString(2, clan.getClanId().toString());
-                statement.executeUpdate();
+                statement.execute();
             } catch (SQLException e) {
-                Bukkit.getLogger().severe(e.toString());
+                throw new RuntimeException(e);
             }
         });
     }
@@ -326,9 +331,9 @@ public class MariaClanDatabase implements ClanDatabase {
                 PreparedStatement statement = this.conn.prepareStatement("UPDATE clans SET publicClan=? WHERE clanId=?");
                 statement.setBoolean(1, isPublic);
                 statement.setString(2, clan.getClanId().toString());
-                statement.executeUpdate();
+                statement.execute();
             } catch (SQLException e) {
-                Bukkit.getLogger().severe(e.toString());
+                throw new RuntimeException(e);
             }
         });
     }
@@ -347,9 +352,9 @@ public class MariaClanDatabase implements ClanDatabase {
                 statement.setFloat(7, warp.location.getPitch());
                 statement.setFloat(8, warp.location.getYaw());
                 statement.setString(9, warp.location.getWorld().getName());
-                statement.executeUpdate();
+                statement.execute();
             } catch (SQLException e) {
-                Bukkit.getLogger().severe(e.toString());
+                throw new RuntimeException(e);
             }
         });
     }
@@ -361,9 +366,9 @@ public class MariaClanDatabase implements ClanDatabase {
             try (PreparedStatement statement = this.conn.prepareStatement("DELETE FROM clanWarps WHERE clanId=? AND name=?")) {
                 statement.setString(1, clan.getClanId().toString());
                 statement.setString(2, warpName);
-                statement.executeUpdate();
+                statement.execute();
             } catch (SQLException e) {
-                Bukkit.getLogger().severe(e.toString());
+                throw new RuntimeException(e);
             }
         });
     }
@@ -385,7 +390,7 @@ public class MariaClanDatabase implements ClanDatabase {
                 }
             }
             try {
-                PreparedStatement statement = this.conn.prepareStatement("UPDATE players SET level=? WHERE uuid=?");
+                PreparedStatement statement = this.conn.prepareStatement("UPDATE clanPlayers SET level=? WHERE uuid=?");
                 statement.setInt(1, level);
                 statement.setString(2, clanMember.getOffPlayer().getUniqueId().toString());
                 statement.execute();
@@ -412,7 +417,7 @@ public class MariaClanDatabase implements ClanDatabase {
         clan.getMembers().forEach(mem -> {
             if(mem.isOnline()) mem.getPlayer().sendMessage(
                     Utils.format("<dark_gray>[<yellow>CLANCHAT<dark_gray>] ")
-                            .append(Utils.format("<yellow>" + player.getName() + " <dark_gray>» <white>" +
+                            .append(Utils.format("<yellow>" + player.getName() + " <dark_gray>\u00BB <white>" +
                                     mm.stripTags(message))));
         });
     }

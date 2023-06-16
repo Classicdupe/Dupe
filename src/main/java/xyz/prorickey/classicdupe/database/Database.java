@@ -32,12 +32,12 @@ public class Database {
         try {
             if(Config.getConfig().getBoolean("database.mariadb")) {
                 conn = DriverManager.getConnection(
-                        "jdbc:mariadb://localhost:3306/classicdupe",
+                        "jdbc:mariadb://" + Config.getConfig().getString("database.host") + ":3306/classicdupe",
                         Config.getConfig().getString("database.user"),
                         Config.getConfig().getString("database.password")
                 );
 
-                System.out.println("Connected to MariaDB database!");
+                Bukkit.getLogger().info("Connected to MariaDB database!");
 
                 ClassicDupe.clanDatabase = new MariaClanDatabase(ClassicDupe.getPlugin(), conn);
 
@@ -49,7 +49,7 @@ public class Database {
                 conn.prepareStatement("CREATE TABLE IF NOT EXISTS link(uuid TEXT, dscid Long)").execute();
                 conn.prepareStatement("CREATE TABLE IF NOT EXISTS homes(uuid TEXT, name TEXT, world TEXT, x DOUBLE, y DOUBLE, z DOUBLE, yaw FLOAT, pitch FLOAT)").execute();
 
-                System.out.println("Created tables!");
+                Bukkit.getLogger().info("Created tables!");
 
                 if(new File(ClassicDupe.getPlugin().getDataFolder().getAbsolutePath() + File.separator + "playerData.mv.db").exists()) {
 
@@ -114,10 +114,11 @@ public class Database {
                     }
 
                     playerConn.close();
-                    playerConn = conn;
                     new File(ClassicDupe.getPlugin().getDataFolder().getAbsolutePath() + File.separator + "playerData.mv.db").delete();
 
                 }
+
+                playerConn = conn;
 
                 if(new File(ClassicDupe.getPlugin().getDataFolder().getAbsolutePath() + File.separator + "serverData.mv.db").exists()) {
 
@@ -157,9 +158,10 @@ public class Database {
                     }
 
                     serverConn.close();
-                    serverConn = conn;
                     new File(ClassicDupe.getPlugin().getDataFolder().getAbsolutePath() + File.separator + "serverData.mv.db").delete();
                 }
+
+                serverConn = conn;
 
                 if(new File(ClassicDupe.getPlugin().getDataFolder().getAbsolutePath() + File.separator + "linkData.mv.db").exists()) {
 
@@ -180,9 +182,10 @@ public class Database {
                     }
 
                     linkingConn.close();
-                    linkingConn = conn;
                     new File(ClassicDupe.getPlugin().getDataFolder().getAbsolutePath() + File.separator + "linkData.mv.db").delete();
                 }
+
+                linkingConn = conn;
 
                 if(new File(ClassicDupe.getPlugin().getDataFolder().getAbsolutePath() + File.separator + "homes.mv.db").exists()) {
 
@@ -209,9 +212,10 @@ public class Database {
                     }
 
                     homesConn.close();
-                    homesConn = conn;
                     new File(ClassicDupe.getPlugin().getDataFolder().getAbsolutePath() + File.separator + "homes.mv.db").delete();
                 }
+
+                homesConn = conn;
 
                 filterDatabase = new FilterDatabase(conn);
                 playerDatabase = new PlayerDatabase(conn);
