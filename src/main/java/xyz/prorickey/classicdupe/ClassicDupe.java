@@ -100,6 +100,10 @@ public class ClassicDupe extends JavaPlugin {
         this.getCommand("random").setTabCompleter(new RandomCMD());
         this.getCommand("spawn").setExecutor(new SpawnCMD());
         this.getCommand("spawn").setTabCompleter(new SpawnCMD());
+        this.getCommand("nether").setExecutor(new SpawnCMD());
+        this.getCommand("nether").setTabCompleter(new SpawnCMD());
+        this.getCommand("overworld").setExecutor(new SpawnCMD());
+        this.getCommand("overworld").setTabCompleter(new SpawnCMD());
         this.getCommand("setspawn").setExecutor(new SetSpawnCMD());
         this.getCommand("setspawn").setTabCompleter(new SetSpawnCMD());
         this.getCommand("gamemode").setExecutor(new GamemodeCMD());
@@ -192,8 +196,6 @@ public class ClassicDupe extends JavaPlugin {
         this.getCommand("feed").setTabCompleter(new FeedCMD());
         this.getCommand("configreload").setExecutor(new ConfigReload());
         this.getCommand("configreload").setTabCompleter(new ConfigReload());
-        this.getCommand("nether").setExecutor(new NetherCMD());
-        this.getCommand("nether").setTabCompleter(new NetherCMD());
         this.getCommand("hat").setExecutor(new HatCMD());
         this.getCommand("hat").setTabCompleter(new HatCMD());
         this.getCommand("report").setExecutor(new ReportCMD());
