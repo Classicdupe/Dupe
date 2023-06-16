@@ -2,6 +2,7 @@ package xyz.prorickey.classicdupe.customitems;
 
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
+import org.bukkit.NamespacedKey;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -44,10 +45,20 @@ public class cicommands implements CommandExecutor, TabCompleter {
                                 lore.add("A wand that shoots fireballs");
                                 lore.add("Cooldown of 10 seconds");
 
-                                ItemStack item = returnItem(ChatColor.DARK_PURPLE+ChatColor.BOLD.toString()+"Fireball Wand", lore, "stick");
+                                ItemStack item = returnItem(ChatColor.DARK_PURPLE+ChatColor.BOLD.toString()+"Fireball Wand", lore, "stick", CIKeys.FBWAND);
                                 Player plr = (Player) sender;
                                 plr.getInventory().addItem(item);
                                 sender.sendMessage(ChatColor.GREEN + "Gave " + plr.getName() + " a Fireball Wand!");
+                                return true;
+                            case "burstbow":
+                                List<String> lore2 = new ArrayList<>();
+                                lore2.add("A bow that shoots 3 arrows at once");
+                                lore2.add("Cooldown of 20 seconds");
+
+                                ItemStack item2 = returnItem(ChatColor.DARK_PURPLE+ChatColor.BOLD.toString()+"Burst Bow", lore2, "bow", CIKeys.BURSTBOW);
+                                Player plr2 = (Player) sender;
+                                plr2.getInventory().addItem(item2);
+                                sender.sendMessage(ChatColor.GREEN + "Gave " + plr2.getName() + " a Burst Bow!");
                                 return true;
 
 
@@ -60,6 +71,7 @@ public class cicommands implements CommandExecutor, TabCompleter {
                     case "list":
                         List<String> items = null;
                         items.add("FBwand -- FireBall Wand");
+                        items.add("BurstBow -- Bow that shoots 3 arrows at once");
 
                         sender.sendMessage(ChatColor.GOLD + "-------------------------");
                         sender.sendMessage(ChatColor.GOLD + "Custom Items:");
@@ -90,7 +102,7 @@ public class cicommands implements CommandExecutor, TabCompleter {
     }
 
 
-    public ItemStack returnItem(String name, List<String> lore, String item) {
+    public ItemStack returnItem(String name, List<String> lore, String item, NamespacedKey key) {
         // Make a giveable item with the name and lore
         if (item.equals("stick")) {
             // Create a stick with the name and lore
@@ -106,7 +118,30 @@ public class cicommands implements CommandExecutor, TabCompleter {
             PersistentDataContainer dataContainer = itemMeta.getPersistentDataContainer();
 
             // Set the PDC value to "FBwand"
-            dataContainer.set(CIKeys.FBWAND, PersistentDataType.STRING, "FBwand");
+            dataContainer.set(key, PersistentDataType.STRING, "CustomStick");
+
+
+
+            itemStack.setItemMeta(itemMeta);
+
+            return itemStack;
+        }
+
+        if (item.equals("bow")) {
+            // Create a stick with the name and lore
+            ItemStack itemStack = new ItemStack(Material.BOW);
+
+            ItemMeta itemMeta = itemStack.getItemMeta();
+
+            // Set the display name
+            itemMeta.setDisplayName(name);
+            itemMeta.setLore(lore);
+
+            // Get the PersistentDataContainer for the item
+            PersistentDataContainer dataContainer = itemMeta.getPersistentDataContainer();
+
+            // Set the PDC value to "FBwand"
+            dataContainer.set(key, PersistentDataType.STRING, "CustomBow");
 
 
 

@@ -14,6 +14,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import xyz.prorickey.classicdupe.ClassicDupe;
 import xyz.prorickey.classicdupe.Utils;
+import xyz.prorickey.classicdupe.customitems.CIKeys;
 import xyz.prorickey.classicdupe.events.Combat;
 
 import java.util.ArrayList;
@@ -108,6 +109,8 @@ public class DupeCMD implements CommandExecutor, TabCompleter {
         if(item == null || item.getType() == Material.AIR) return true;
         if(forbiddenDupes.contains(item.getType())) return false;
         if(Boolean.TRUE.equals(item.getItemMeta().getPersistentDataContainer().get(undupableKey, PersistentDataType.BOOLEAN))) return false;
+        if (item.getItemMeta().getPersistentDataContainer().has(CIKeys.FBWAND, PersistentDataType.STRING)) return false;
+        if (item.getItemMeta().getPersistentDataContainer().has(CIKeys.BURSTBOW, PersistentDataType.STRING)) return false;
         return !(item.getItemMeta() instanceof ArmorMeta armorMeta) || !armorMeta.hasTrim();
     }
 
