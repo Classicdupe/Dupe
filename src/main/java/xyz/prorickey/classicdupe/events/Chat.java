@@ -69,10 +69,6 @@ public class Chat implements Listener {
             return;
         }
 
-
-
-
-
         String clanName = ClanDatabase.getClanMember(e.getPlayer().getUniqueId()).getClanName();
         String clanColor = "<yellow>";
         if(clanName != null &&

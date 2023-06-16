@@ -9,11 +9,12 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import xyz.prorickey.classicdupe.Utils;
 import xyz.prorickey.classicdupe.clans.ClanDatabase;
-import xyz.prorickey.classicdupe.clans.ClanSub;
+import xyz.prorickey.classicdupe.clans.builders.ClanSub;
 
 import java.util.ArrayList;
 import java.util.List;
 
+@SuppressWarnings("unused")
 public class CSChat extends ClanSub implements CommandExecutor, TabCompleter {
 
     @Override
