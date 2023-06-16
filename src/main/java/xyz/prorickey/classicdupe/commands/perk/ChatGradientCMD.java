@@ -128,8 +128,6 @@ public class ChatGradientCMD implements CommandExecutor, TabCompleter, Listener 
             if(profile.gradientTo == null) profile.gradientTo = "white";
             if(playerData.toggleGradient()) gradientProfiles.put(p.getUniqueId().toString(), profile);
             else gradientProfiles.remove(p.getUniqueId().toString());
-
-
         }
         e.getInventory().close();
     }
