@@ -3,9 +3,9 @@ package xyz.prorickey.classicdupe.clans.subcommands;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import xyz.prorickey.classicdupe.Utils;
-import xyz.prorickey.classicdupe.clans.Clan;
-import xyz.prorickey.classicdupe.clans.ClanMember;
-import xyz.prorickey.classicdupe.clans.ClanSub;
+import xyz.prorickey.classicdupe.clans.builders.Clan;
+import xyz.prorickey.classicdupe.clans.builders.ClanMember;
+import xyz.prorickey.classicdupe.clans.builders.ClanSub;
 import xyz.prorickey.classicdupe.clans.ClanDatabase;
 import xyz.prorickey.proutils.TabComplete;
 
@@ -14,6 +14,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+@SuppressWarnings("unused")
 public class CSSettings extends ClanSub {
 
     final Map<String, String> nameToCode = new HashMap<>() {{

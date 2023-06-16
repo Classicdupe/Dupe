@@ -1,6 +1,7 @@
-package xyz.prorickey.classicdupe.clans;
+package xyz.prorickey.classicdupe.clans.builders;
 
 import org.bukkit.OfflinePlayer;
+import xyz.prorickey.classicdupe.clans.Warp;
 
 import java.util.*;
 

@@ -1,7 +1,6 @@
 package xyz.prorickey.classicdupe.clans;
 
 import net.kyori.adventure.text.minimessage.MiniMessage;
-import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.OfflinePlayer;
@@ -12,12 +11,13 @@ import org.h2.util.IOUtils;
 import org.jetbrains.annotations.Nullable;
 import xyz.prorickey.classicdupe.ClassicDupe;
 import xyz.prorickey.classicdupe.Utils;
+import xyz.prorickey.classicdupe.clans.builders.Clan;
+import xyz.prorickey.classicdupe.clans.builders.ClanMember;
 
 import java.io.*;
 import java.sql.*;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicReference;
-import java.util.stream.Collectors;
 
 public class ClanDatabase {
 

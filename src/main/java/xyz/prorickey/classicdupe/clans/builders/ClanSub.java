@@ -1,4 +1,4 @@
-package xyz.prorickey.classicdupe.clans;
+package xyz.prorickey.classicdupe.clans.builders;
 
 import org.bukkit.command.CommandSender;
 

@@ -2,13 +2,19 @@ package xyz.prorickey.classicdupe;
 
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.minimessage.MiniMessage;
+import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.metadata.MetadataValue;
 import org.codehaus.plexus.util.StringUtils;
 
+import java.io.BufferedReader;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 public class Utils {
 
@@ -77,5 +83,25 @@ public class Utils {
         int maxWidth = 80,
                 spaces = (int) Math.round((maxWidth-1.4*text.length())/2);
         return StringUtils.repeat(" ", spaces)+text;
+    }
+
+    public static Set<Class<?>> findAllClassesUsingClassLoader(String packageName) {
+        InputStream stream = ClassLoader.getSystemClassLoader()
+                .getResourceAsStream(packageName.replaceAll("[.]", "/"));
+        BufferedReader reader = new BufferedReader(new InputStreamReader(stream));
+        return reader.lines()
+                .filter(line -> line.endsWith(".class"))
+                .map(line -> getClass(line, packageName))
+                .collect(Collectors.toSet());
+    }
+
+    private static Class<?> getClass(String className, String packageName) {
+        try {
+            return Class.forName(packageName + "."
+                    + className.substring(0, className.lastIndexOf('.')));
+        } catch (ClassNotFoundException e) {
+            Bukkit.getLogger().severe(e.toString());
+        }
+        return null;
     }
 }

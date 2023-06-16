@@ -9,13 +9,14 @@ import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 import xyz.prorickey.classicdupe.ClassicDupe;
 import xyz.prorickey.classicdupe.Utils;
-import xyz.prorickey.classicdupe.clans.ClanMember;
-import xyz.prorickey.classicdupe.clans.ClanSub;
+import xyz.prorickey.classicdupe.clans.builders.ClanMember;
+import xyz.prorickey.classicdupe.clans.builders.ClanSub;
 import xyz.prorickey.classicdupe.clans.ClanDatabase;
 import xyz.prorickey.proutils.TabComplete;
 
 import java.util.*;
 
+@SuppressWarnings("unused")
 public class CSInvite extends ClanSub {
 
     public static final List<Invite> invites = new ArrayList<>();
