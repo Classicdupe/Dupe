@@ -5,12 +5,20 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
+import org.bukkit.persistence.PersistentDataType;
+import org.bukkit.plugin.Plugin;
+import org.bukkit.scheduler.BukkitRunnable;
 import xyz.prorickey.classicdupe.ClassicDupe;
+import xyz.prorickey.classicdupe.customitems.CIKeys;
 import xyz.prorickey.classicdupe.customitems.FireballWand;
 
 public class ItemUse implements Listener {
 
-    private FireballWand fireballWand = new FireballWand(ClassicDupe.getPlugin());
+    private final FireballWand fireballWand;
+
+    public ItemUse() {
+        this.fireballWand = new FireballWand(ClassicDupe.getPlugin());
+    }
 
     @EventHandler
     public void onPlayerInteract(PlayerInteractEvent event) {
@@ -18,7 +26,7 @@ public class ItemUse implements Listener {
             // Player clicked while holding an item
             // Do something here
 
-            if (event.getItem().getLore().get(0).toString().equals("A wand that shoots fireballs")) {
+            if (event.getItem().getItemMeta().getPersistentDataContainer().has(CIKeys.FBWAND, PersistentDataType.STRING)) {
                 fireballWand.use(event.getPlayer());
             }
         } else {
@@ -27,14 +35,10 @@ public class ItemUse implements Listener {
         }
     }
 
-    @EventHandler
-    public void onTick() {
-        fireballWand.tick();
-    }
 
-    //Leave
+
     @EventHandler
-    public void onPlayerQuit(PlayerQuitEvent e) {
-        fireballWand.PlayerLeave(e.getPlayer());
+    public void onPlayerQuit(PlayerQuitEvent event) {
+        fireballWand.playerLeave(event.getPlayer());
     }
 }

@@ -9,6 +9,8 @@ import org.bukkit.command.TabCompleter;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.persistence.PersistentDataContainer;
+import org.bukkit.persistence.PersistentDataType;
 import org.jetbrains.annotations.NotNull;
 import xyz.prorickey.classicdupe.Utils;
 import org.jetbrains.annotations.Nullable;
@@ -87,28 +89,35 @@ public class cicommands implements CommandExecutor, TabCompleter {
         return false;
     }
 
+
     public ItemStack returnItem(String name, List<String> lore, String item) {
-
-        //Make a giveable item with the name and lore
-        if (item == "stick") {
-            //create a stick with the name and lore
-            ItemStack itemStack = new ItemStack(Material.STICK); // Replace with the desired material
-
+        // Make a giveable item with the name and lore
+        if (item.equals("stick")) {
+            // Create a stick with the name and lore
+            ItemStack itemStack = new ItemStack(Material.STICK);
 
             ItemMeta itemMeta = itemStack.getItemMeta();
+
             // Set the display name
             itemMeta.setDisplayName(name);
             itemMeta.setLore(lore);
 
+            // Get the PersistentDataContainer for the item
+            PersistentDataContainer dataContainer = itemMeta.getPersistentDataContainer();
+
+            // Set the PDC value to "FBwand"
+            dataContainer.set(CIKeys.FBWAND, PersistentDataType.STRING, "FBwand");
+
+
+
             itemStack.setItemMeta(itemMeta);
 
             return itemStack;
-
-
         }
 
         return null;
     }
+
 
     @Override
     public @Nullable List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
