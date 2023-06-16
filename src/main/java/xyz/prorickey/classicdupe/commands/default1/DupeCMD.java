@@ -105,6 +105,7 @@ public class DupeCMD implements CommandExecutor, TabCompleter {
     );
 
     public static Boolean checkDupable(ItemStack item) {
+        if(item == null || item.getType() == Material.AIR) return true;
         if(forbiddenDupes.contains(item.getType())) return false;
         if(Boolean.TRUE.equals(item.getItemMeta().getPersistentDataContainer().get(undupableKey, PersistentDataType.BOOLEAN))) return false;
         return !(item.getItemMeta() instanceof ArmorMeta armorMeta) || !armorMeta.hasTrim();
