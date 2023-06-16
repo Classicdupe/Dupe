@@ -24,8 +24,9 @@ dependencies {
     compileOnly 'me.lucko:spark-api:0.1-SNAPSHOT'
 
     compileOnly 'com.h2database:h2:2.1.214'
-    implementation 'net.dv8tion:JDA:5.0.0-beta.10'
+    compileOnly 'net.dv8tion:JDA:5.0.0-beta.10'
     compileOnly 'org.mariadb.jdbc:mariadb-java-client:3.1.4'
+    compileOnly 'com.fasterxml.jackson.core:jackson-annotations:2.15.2'
 
     implementation 'xyz.prorickey:proutils:1.0.1'
     implementation 'xyz.xenondevs:particle:1.8.4'
