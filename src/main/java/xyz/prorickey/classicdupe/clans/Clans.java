@@ -29,20 +29,20 @@ public class Clans implements CommandExecutor, TabCompleter {
         p.getCommand("clanadmin").setExecutor(this);
         p.getCommand("clanadmin").setTabCompleter(this);
 
-        Set<Class<? extends ClanSub>> commands = (Set<Class<? extends ClanSub>>) Utils.findAllClassesUsingClassLoader("xyz.prorickey.classicdupe.clans.subcommands");
+        Set<Class<?>> commands = Utils.findAllClassesUsingClassLoader("xyz.prorickey.classicdupe.clans.subcommands");
         commands.forEach(sub -> {
             try {
-                clanSubs.put(sub.getSimpleName().substring(2).toLowerCase(), sub.getDeclaredConstructor().newInstance());
+                clanSubs.put(sub.getSimpleName().substring(2).toLowerCase(), (ClanSub) sub.getConstructor().newInstance());
             } catch (InstantiationException | NoSuchMethodException | InvocationTargetException |
                      IllegalAccessException e) {
                 Bukkit.getLogger().severe(e.getMessage());
             }
         });
 
-        Set<Class<? extends ClanSub>> adminCommands = (Set<Class<? extends ClanSub>>) Utils.findAllClassesUsingClassLoader("xyz.prorickey.classicdupe.clans.adminsubcommands");
+        Set<Class<?>> adminCommands = Utils.findAllClassesUsingClassLoader("xyz.prorickey.classicdupe.clans.adminsubcommands");
         adminCommands.forEach(sub -> {
             try {
-                adminClanSubs.put(sub.getSimpleName().substring(2).toLowerCase(), sub.getDeclaredConstructor().newInstance());
+                adminClanSubs.put(sub.getSimpleName().substring(2).toLowerCase(), (ClanSub) sub.getConstructor().newInstance());
             } catch (InstantiationException | NoSuchMethodException | InvocationTargetException |
                      IllegalAccessException e) {
                 Bukkit.getLogger().severe(e.getMessage());
