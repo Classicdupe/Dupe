@@ -145,28 +145,39 @@ public class PlayerData {
     }
 
     public Boolean toggleGradient() {
+        if(this.gradient) {
+            disableGradient();
+            return false;
+        } else {
+            enableGradient();
+            return true;
+        }
+    }
+
+    private void enableGradient() {
+        this.gradient = true;
         Bukkit.getScheduler().runTaskAsynchronously(ClassicDupe.getPlugin(), () -> {
             try {
-                if(this.gradient) {
-                    PreparedStatement stat = conn.prepareStatement("UPDATE players SET gradient=false WHERE uuid=?");
-                    stat.setString(1, this.uuid.toString());
-                    stat.execute();
-                } else {
-                    PreparedStatement stat = conn.prepareStatement("UPDATE players SET gradient=true WHERE uuid=?");
-                    stat.setString(1, this.uuid.toString());
-                    stat.execute();
-                }
+                PreparedStatement stat = conn.prepareStatement("UPDATE players SET gradient=TRUE WHERE uuid=?");
+                stat.setString(1, this.uuid.toString());
+                stat.execute();
             } catch (SQLException e) {
                 Bukkit.getLogger().severe(e.toString());
             }
         });
-        if(this.gradient) {
-            this.gradient = false;
-            return false;
-        } else {
-            this.gradient = true;
-            return true;
-        }
+    }
+
+    private void disableGradient() {
+        this.gradient = false;
+        Bukkit.getScheduler().runTaskAsynchronously(ClassicDupe.getPlugin(), () -> {
+            try {
+                PreparedStatement stat = conn.prepareStatement("UPDATE players SET gradient=FALSE WHERE uuid=?");
+                stat.setString(1, this.uuid.toString());
+                stat.execute();
+            } catch (SQLException e) {
+                Bukkit.getLogger().severe(e.toString());
+            }
+        });
     }
 
     public ChatGradientCMD.GradientProfiles getGradientProfile() {

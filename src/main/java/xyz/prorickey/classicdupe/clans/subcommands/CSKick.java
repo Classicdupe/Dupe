@@ -9,7 +9,6 @@ import xyz.prorickey.classicdupe.Utils;
 import xyz.prorickey.classicdupe.clans.builders.Clan;
 import xyz.prorickey.classicdupe.clans.builders.ClanMember;
 import xyz.prorickey.classicdupe.clans.builders.ClanSub;
-import xyz.prorickey.classicdupe.clans.ClanDatabase;
 import xyz.prorickey.proutils.TabComplete;
 
 import java.util.ArrayList;
@@ -24,7 +23,7 @@ public class CSKick extends ClanSub {
             sender.sendMessage(Utils.format("<red>You cannot execute this command from console"));
             return;
         }
-        ClanMember cmem = ClanDatabase.getClanMember(player.getUniqueId());
+        ClanMember cmem = ClassicDupe.getClanDatabase().getClanMember(player.getUniqueId());
         if(cmem.getClanID() == null) {
             player.sendMessage(Utils.cmdMsg("<red>You must be in a clan to kick players"));
             return;
@@ -38,11 +37,11 @@ public class CSKick extends ClanSub {
             return;
         }
         OfflinePlayer offPlayer = Bukkit.getOfflinePlayer(args[0]);
-        if(!ClanDatabase.getClan(cmem.getClanID()).getMembers().contains(offPlayer)) {
+        if(!ClassicDupe.getClanDatabase().getClan(cmem.getClanID()).getMembers().contains(offPlayer)) {
             player.sendMessage(Utils.cmdMsg("<red>That player is not in your clan"));
             return;
         }
-        ClanMember pmem = ClanDatabase.getClanMember(offPlayer.getUniqueId());
+        ClanMember pmem = ClassicDupe.getClanDatabase().getClanMember(offPlayer.getUniqueId());
         if(!Objects.equals(pmem.getClanID(), cmem.getClanID())) {
             player.sendMessage(Utils.cmdMsg("<red>That player is not in your clan"));
             return;
@@ -51,10 +50,10 @@ public class CSKick extends ClanSub {
             player.sendMessage(Utils.cmdMsg("<red>You must be the owner of the clan to kick that player"));
             return;
         }
-        Clan clan = ClanDatabase.getClan(cmem.getClanID());
+        Clan clan = ClassicDupe.getClanDatabase().getClan(cmem.getClanID());
         clan.removePlayer(pmem.getOffPlayer());
         pmem.removeClan();
-        ClanDatabase.removeClan(pmem);
+        ClassicDupe.getClanDatabase().removeClan(pmem);
         if(offPlayer.isOnline()) offPlayer.getPlayer().sendMessage(Utils.cmdMsg("<yellow>You have been kicked from your clan by <gold>" + player.getName()));
         player.sendMessage(Utils.cmdMsg("<yellow>Kicked <gold>" + offPlayer.getName() + "<yellow> from your clan"));
     }

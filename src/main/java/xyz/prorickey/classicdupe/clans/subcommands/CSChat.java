@@ -7,8 +7,8 @@ import org.bukkit.command.TabCompleter;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import xyz.prorickey.classicdupe.ClassicDupe;
 import xyz.prorickey.classicdupe.Utils;
-import xyz.prorickey.classicdupe.clans.ClanDatabase;
 import xyz.prorickey.classicdupe.clans.builders.ClanSub;
 
 import java.util.ArrayList;
@@ -23,22 +23,22 @@ public class CSChat extends ClanSub implements CommandExecutor, TabCompleter {
             sender.sendMessage(Utils.cmdMsg("<red>You cannot execute this command from console"));
             return;
         }
-        if(ClanDatabase.getClanMember(player.getUniqueId()).getClanID() == null) {
+        if(ClassicDupe.getClanDatabase().getClanMember(player.getUniqueId()).getClanID() == null) {
             player.sendMessage(Utils.cmdMsg("<red>You are not in a clan"));
             return;
         }
         if(args.length == 0) {
-            if(ClanDatabase.isInClanChat(player)) {
-                ClanDatabase.removeFromClanChat(player);
+            if(ClassicDupe.getClanDatabase().clanChat(player)) {
+                ClassicDupe.getClanDatabase().removeFromClanChat(player);
                 player.sendMessage(Utils.cmdMsg("<red>Disabled clan chat"));
             } else {
-                ClanDatabase.putInClanChat(player);
+                ClassicDupe.getClanDatabase().putInClanChat(player);
                 player.sendMessage(Utils.cmdMsg("<green>Enabled clan chat"));
             }
         } else {
             StringBuilder msg = new StringBuilder();
             for (String arg : args) msg.append(arg).append(" ");
-            ClanDatabase.sendToClanChat(msg.toString(), player);
+            ClassicDupe.getClanDatabase().sendClanChat(msg.toString(), player);
         }
     }
 

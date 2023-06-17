@@ -10,7 +10,6 @@ import xyz.prorickey.classicdupe.Utils;
 import xyz.prorickey.classicdupe.clans.builders.Clan;
 import xyz.prorickey.classicdupe.clans.builders.ClanMember;
 import xyz.prorickey.classicdupe.clans.builders.ClanSub;
-import xyz.prorickey.classicdupe.clans.ClanDatabase;
 import xyz.prorickey.proutils.TabComplete;
 
 import java.util.*;
@@ -26,7 +25,7 @@ public class CSPromote extends ClanSub {
             sender.sendMessage(Utils.format("<red>You cannot execute this command from console"));
             return;
         }
-        ClanMember cmem = ClanDatabase.getClanMember(player.getUniqueId());
+        ClanMember cmem = ClassicDupe.getClanDatabase().getClanMember(player.getUniqueId());
         if(cmem.getClanID() == null) {
             player.sendMessage(Utils.cmdMsg("<red>You must be in a clan to promote players"));
             return;
@@ -35,7 +34,7 @@ public class CSPromote extends ClanSub {
             player.sendMessage(Utils.cmdMsg("<red>You must provide a player to promote"));
             return;
         }
-        Clan clan = ClanDatabase.getClan(cmem.getClanID());
+        Clan clan = ClassicDupe.getClanDatabase().getClan(cmem.getClanID());
         if(args[0].equalsIgnoreCase("confirm")) {
             if(!promoterToPromotee.containsKey(player.getUniqueId())) {
                 player.sendMessage(Utils.cmdMsg("<red>You must first promote the player with the regular promote command before confirming"));
@@ -43,15 +42,15 @@ public class CSPromote extends ClanSub {
                 return;
             }
             OfflinePlayer offPlayer = promoterToPromotee.get(player.getUniqueId());
-            ClanMember pmem = ClanDatabase.getClanMember(offPlayer.getUniqueId());
+            ClanMember pmem = ClassicDupe.getClanDatabase().getClanMember(offPlayer.getUniqueId());
             if(!Objects.equals(pmem.getClanID(), cmem.getClanID())) {
                 player.sendMessage(Utils.cmdMsg("<red>That player is not in your clan"));
                 promoterToPromotee.remove(player.getUniqueId());
                 return;
             }
-            ClanDatabase.setPlayerLevel(cmem.getOffPlayer().getUniqueId(), 2);
+            ClassicDupe.getClanDatabase().setPlayerLevel(cmem, 2);
             cmem.setLevel(2);
-            ClanDatabase.setPlayerLevel(pmem.getOffPlayer().getUniqueId(), 3);
+            ClassicDupe.getClanDatabase().setPlayerLevel(pmem, 3);
             pmem.setLevel(3);
             clan.setOwner(pmem.getOffPlayer());
             clan.removeAdmin(pmem.getOffPlayer());
@@ -66,7 +65,7 @@ public class CSPromote extends ClanSub {
             player.sendMessage(Utils.cmdMsg("<red>That player is not in your clan"));
             return;
         }
-        ClanMember pmem = ClanDatabase.getClanMember(offPlayer.getUniqueId());
+        ClanMember pmem = ClassicDupe.getClanDatabase().getClanMember(offPlayer.getUniqueId());
         if(!Objects.equals(pmem.getClanID(), cmem.getClanID())) {
             player.sendMessage(Utils.cmdMsg("<red>That player is not in your clan"));
             return;
@@ -76,7 +75,7 @@ public class CSPromote extends ClanSub {
                 player.sendMessage(Utils.cmdMsg("<red>You must be at least an admin to promote players"));
                 return;
             }
-            ClanDatabase.setPlayerLevel(pmem.getOffPlayer().getUniqueId(), pmem.getLevel()+1);
+            ClassicDupe.getClanDatabase().setPlayerLevel(pmem, pmem.getLevel()+1);
             pmem.setLevel(pmem.getLevel()+1);
             clan.removeDefault(pmem.getOffPlayer());
             clan.addVip(pmem.getOffPlayer());
@@ -87,7 +86,7 @@ public class CSPromote extends ClanSub {
                 player.sendMessage(Utils.cmdMsg("<red>You must be the owner of the clan to promote people to admin"));
                 return;
             }
-            ClanDatabase.setPlayerLevel(pmem.getOffPlayer().getUniqueId(), 2);
+            ClassicDupe.getClanDatabase().setPlayerLevel(pmem, 2);
             pmem.setLevel(2);
             clan.removeVip(pmem.getOffPlayer());
             clan.addAdmin(pmem.getOffPlayer());

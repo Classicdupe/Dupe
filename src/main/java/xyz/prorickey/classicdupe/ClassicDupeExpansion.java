@@ -3,7 +3,6 @@ package xyz.prorickey.classicdupe;
 import me.clip.placeholderapi.expansion.PlaceholderExpansion;
 import org.bukkit.OfflinePlayer;
 import org.jetbrains.annotations.NotNull;
-import xyz.prorickey.classicdupe.clans.ClanDatabase;
 import xyz.prorickey.classicdupe.database.PlayerData;
 import xyz.prorickey.classicdupe.database.PlayerDatabase;
 
@@ -29,9 +28,9 @@ public class ClassicDupeExpansion extends PlaceholderExpansion {
         if(params.equalsIgnoreCase("name")) {
             if(player == null) return null;
             PlayerData data = ClassicDupe.getDatabase().getPlayerDatabase().getPlayerData(player.getUniqueId());
-            if(ClanDatabase.getClanMember(player.getUniqueId()).getClanID() != null) {
-                String clan = ClanDatabase.getClanMember(player.getUniqueId()).getClanName();
-                String clanColor = ClanDatabase.getClan(ClanDatabase.getClanMember(player.getUniqueId()).getClanID()).getClanColor();
+            if(ClassicDupe.getClanDatabase().getClanMember(player.getUniqueId()).getClanID() != null) {
+                String clan = ClassicDupe.getClanDatabase().getClanMember(player.getUniqueId()).getClanName();
+                String clanColor = ClassicDupe.getClanDatabase().getClan(ClassicDupe.getClanDatabase().getClanMember(player.getUniqueId()).getClanID()).getClanColor();
                 if(data.getNickname()== null) return player.getName() + Utils.convertAdventureToColorCodes(" <dark_gray>[" + clanColor + clan + "<dark_gray>]");
                 else return Utils.convertAdventureToColorCodes(data.getNickname()) + Utils.convertAdventureToColorCodes(" <dark_gray>[" + clanColor + clan + "<dark_gray>]");
             }

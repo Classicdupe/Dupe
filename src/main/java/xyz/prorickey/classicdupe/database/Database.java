@@ -3,9 +3,10 @@ package xyz.prorickey.classicdupe.database;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
-import org.mariadb.jdbc.export.Prepare;
 import xyz.prorickey.classicdupe.ClassicDupe;
 import xyz.prorickey.classicdupe.Config;
+import xyz.prorickey.classicdupe.clans.databases.H2ClanDatabase;
+import xyz.prorickey.classicdupe.clans.databases.MariaClanDatabase;
 
 import java.io.File;
 import java.sql.*;
@@ -31,12 +32,14 @@ public class Database {
         try {
             if(Config.getConfig().getBoolean("database.mariadb")) {
                 conn = DriverManager.getConnection(
-                        "jdbc:mariadb://localhost:3306/classicdupe",
+                        "jdbc:mariadb://" + Config.getConfig().getString("database.host") + ":3306/classicdupe",
                         Config.getConfig().getString("database.user"),
                         Config.getConfig().getString("database.password")
                 );
 
-                System.out.println("Connected to MariaDB database!");
+                Bukkit.getLogger().info("Connected to MariaDB database!");
+
+                ClassicDupe.clanDatabase = new MariaClanDatabase(ClassicDupe.getPlugin(), conn);
 
                 conn.prepareStatement("CREATE TABLE IF NOT EXISTS players(uuid TEXT, name TEXT, nickname TEXT, timesjoined long, playtime long, randomitem BOOLEAN, chatcolor TEXT, gradient BOOLEAN, gradientfrom TEXT, gradientto TEXT, night BOOLEAN, balance BIGINT)").execute();
                 conn.prepareStatement("CREATE TABLE IF NOT EXISTS filter(text TEXT, fullword BOOLEAN)").execute();
@@ -46,7 +49,7 @@ public class Database {
                 conn.prepareStatement("CREATE TABLE IF NOT EXISTS link(uuid TEXT, dscid Long)").execute();
                 conn.prepareStatement("CREATE TABLE IF NOT EXISTS homes(uuid TEXT, name TEXT, world TEXT, x DOUBLE, y DOUBLE, z DOUBLE, yaw FLOAT, pitch FLOAT)").execute();
 
-                System.out.println("Created tables!");
+                Bukkit.getLogger().info("Created tables!");
 
                 if(new File(ClassicDupe.getPlugin().getDataFolder().getAbsolutePath() + File.separator + "playerData.mv.db").exists()) {
 
@@ -111,10 +114,11 @@ public class Database {
                     }
 
                     playerConn.close();
-                    playerConn = conn;
                     new File(ClassicDupe.getPlugin().getDataFolder().getAbsolutePath() + File.separator + "playerData.mv.db").delete();
 
                 }
+
+                playerConn = conn;
 
                 if(new File(ClassicDupe.getPlugin().getDataFolder().getAbsolutePath() + File.separator + "serverData.mv.db").exists()) {
 
@@ -154,9 +158,10 @@ public class Database {
                     }
 
                     serverConn.close();
-                    serverConn = conn;
                     new File(ClassicDupe.getPlugin().getDataFolder().getAbsolutePath() + File.separator + "serverData.mv.db").delete();
                 }
+
+                serverConn = conn;
 
                 if(new File(ClassicDupe.getPlugin().getDataFolder().getAbsolutePath() + File.separator + "linkData.mv.db").exists()) {
 
@@ -177,9 +182,10 @@ public class Database {
                     }
 
                     linkingConn.close();
-                    linkingConn = conn;
                     new File(ClassicDupe.getPlugin().getDataFolder().getAbsolutePath() + File.separator + "linkData.mv.db").delete();
                 }
+
+                linkingConn = conn;
 
                 if(new File(ClassicDupe.getPlugin().getDataFolder().getAbsolutePath() + File.separator + "homes.mv.db").exists()) {
 
@@ -206,9 +212,10 @@ public class Database {
                     }
 
                     homesConn.close();
-                    homesConn = conn;
                     new File(ClassicDupe.getPlugin().getDataFolder().getAbsolutePath() + File.separator + "homes.mv.db").delete();
                 }
+
+                homesConn = conn;
 
                 filterDatabase = new FilterDatabase(conn);
                 playerDatabase = new PlayerDatabase(conn);
@@ -216,6 +223,8 @@ public class Database {
                 homesDatabase = new HomesDatabase(conn);
 
             } else {
+                ClassicDupe.clanDatabase = new H2ClanDatabase(ClassicDupe.getPlugin());
+
                 playerConn = DriverManager.getConnection ("jdbc:h2:" + ClassicDupe.getPlugin().getDataFolder().getAbsolutePath() + File.separator + "playerData");
                 serverConn = DriverManager.getConnection ("jdbc:h2:" + ClassicDupe.getPlugin().getDataFolder().getAbsolutePath() + File.separator + "serverData");
                 linkingConn = DriverManager.getConnection ("jdbc:h2:" + ClassicDupe.getPlugin().getDataFolder().getAbsolutePath() + File.separator + "linkData");

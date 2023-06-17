@@ -2,6 +2,7 @@ prefix: "<dark_gray>[<green>i<dark_gray>]"
 dev: true
 database:
   mariadb: false
+  host: 172.18.0.1
   user: classicdupe
   password: LNWnNwZHy7xdFMw7rah9
 events:

@@ -1,8 +1,8 @@
 package xyz.prorickey.classicdupe.clans.adminsubcommands;
 
 import org.bukkit.command.CommandSender;
+import xyz.prorickey.classicdupe.ClassicDupe;
 import xyz.prorickey.classicdupe.Utils;
-import xyz.prorickey.classicdupe.clans.ClanDatabase;
 import xyz.prorickey.classicdupe.clans.builders.Clan;
 import xyz.prorickey.classicdupe.clans.builders.ClanSub;
 import xyz.prorickey.proutils.TabComplete;
@@ -22,18 +22,18 @@ public class CSForceDelete extends ClanSub {
             sender.sendMessage(Utils.cmdMsg("<red>Please specify a clan to force delete"));
             return;
         }
-        Clan clan = ClanDatabase.getClan(args[0]);
+        Clan clan = ClassicDupe.getClanDatabase().getClan(args[0]);
         if(clan == null) {
             sender.sendMessage(Utils.cmdMsg("<red>Clan <yellow>" + args[0] + " <red>does not exist"));
             return;
         }
-        ClanDatabase.deleteClan(clan);
+        ClassicDupe.getClanDatabase().deleteClan(clan);
         sender.sendMessage(Utils.cmdMsg("<green>Clan <yellow>" + clan.getClanName() + " <green>has been forcefully deleted"));
     }
 
     @Override
     public List<String> tabComplete(CommandSender sender, String[] args) {
-        if(args.length == 1) return TabComplete.tabCompletionsSearch(args[0], ClanDatabase.getLoadedClanNames());
+        if(args.length == 1) return TabComplete.tabCompletionsSearch(args[0], ClassicDupe.getClanDatabase().getLoadedClanNames());
         return new ArrayList<>();
     }
 
