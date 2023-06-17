@@ -50,6 +50,7 @@ public class Database {
                 conn.prepareStatement("CREATE TABLE IF NOT EXISTS particleEffects(uuid TEXT, killEffect TEXT, particleEffect TEXT)").execute();
                 conn.prepareStatement("CREATE TABLE IF NOT EXISTS link(uuid TEXT, dscid Long)").execute();
                 conn.prepareStatement("CREATE TABLE IF NOT EXISTS homes(uuid TEXT, name TEXT, world TEXT, x DOUBLE, y DOUBLE, z DOUBLE, yaw FLOAT, pitch FLOAT)").execute();
+                conn.prepareStatement("CREATE TABLE IF NOT EXISTS bounties(uuid TEXT, amount BIGINT)").execute();
 
                 Bukkit.getLogger().info("Created tables!");
 

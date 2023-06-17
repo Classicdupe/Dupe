@@ -6,11 +6,14 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabCompleter;
 import org.bukkit.entity.Player;
+import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.InventoryHolder;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.inventory.meta.SkullMeta;
 import org.bukkit.persistence.PersistentDataType;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -24,16 +27,12 @@ import java.util.*;
 
 public class BountyCMD implements CommandExecutor, TabCompleter, Listener {
 
-    public static NamespacedKey noMoveKey;
-    public static NamespacedKey closeKey;
-    public static NamespacedKey nextKey;
+    public static NamespacedKey noMoveKey = new NamespacedKey(ClassicDupe.getPlugin(), "noMoveKey");;
+    public static NamespacedKey closeKey = new NamespacedKey(ClassicDupe.getPlugin(), "closeKey");
+    public static NamespacedKey nextKey = new NamespacedKey(ClassicDupe.getPlugin(), "nextKey");
+    public static NamespacedKey backKey = new NamespacedKey(ClassicDupe.getPlugin(), "backKey");
+    public static NamespacedKey uuidKey = new NamespacedKey(ClassicDupe.getPlugin(), "uuidKey");
     List<ItemStack> lastPage = new ArrayList<>();
-
-    public BountyCMD() {
-        noMoveKey = new NamespacedKey(ClassicDupe.getPlugin(), "noMoveKey");
-        closeKey = new NamespacedKey(ClassicDupe.getPlugin(), "closeKey");
-        nextKey = new NamespacedKey(ClassicDupe.getPlugin(), "nextKey");
-    }
 
     @Override
     @SuppressWarnings("ConstantConditions")
@@ -52,7 +51,7 @@ public class BountyCMD implements CommandExecutor, TabCompleter, Listener {
                         player.sendMessage(Utils.cmdMsg("<red>You need to provide a player and an amount"));
                         return true;
                     }
-                    Player target = Bukkit.getPlayer(args[1]);
+                    OfflinePlayer target = Bukkit.getOfflinePlayer(args[1]);
                     if(target == null || ClassicDupe.getDatabase().getPlayerDatabase().getPlayerData(target.getUniqueId()) == null) {
                         player.sendMessage(Utils.cmdMsg("<red>That player does not exist"));
                         return true;
@@ -75,7 +74,7 @@ public class BountyCMD implements CommandExecutor, TabCompleter, Listener {
                     }
                     playerData.subtractBalance(amount);
                     player.sendMessage(Utils.cmdMsg("<green>You placed a bounty of <yellow>" + amount + "<green> on <yellow>" + target.getName()));
-                    if(target.isOnline()) target.sendMessage(Utils.cmdMsg("<green>A bounty of <yellow>" + amount + "<green> has been placed on you by <yellow>" + player.getName()));
+                    if(target.isOnline()) target.getPlayer().sendMessage(Utils.cmdMsg("<green>A bounty of <yellow>" + amount + "<green> has been placed on you by <yellow>" + player.getName()));
                 }
                 case "list" -> {
                     Map<UUID, Integer> sorted = ClassicDupe.getDatabase().getBountyDatabase().getBountiesSorted();
@@ -100,7 +99,7 @@ public class BountyCMD implements CommandExecutor, TabCompleter, Listener {
                         player.sendMessage(Utils.cmdMsg("<red>You need to provide a player and an amount"));
                         return true;
                     }
-                    Player target = Bukkit.getPlayer(args[1]);
+                    OfflinePlayer target = Bukkit.getOfflinePlayer(args[1]);
                     if(target == null || ClassicDupe.getDatabase().getPlayerDatabase().getPlayerData(target.getUniqueId()) == null) {
                         player.sendMessage(Utils.cmdMsg("<red>That player does not exist"));
                         return true;
@@ -128,7 +127,7 @@ public class BountyCMD implements CommandExecutor, TabCompleter, Listener {
                         player.sendMessage(Utils.cmdMsg("<red>You need to provide a player"));
                         return true;
                     }
-                    Player target = Bukkit.getPlayer(args[1]);
+                    OfflinePlayer target = Bukkit.getOfflinePlayer(args[1]);
                     if(target == null || ClassicDupe.getDatabase().getPlayerDatabase().getPlayerData(target.getUniqueId()) == null) {
                         player.sendMessage(Utils.cmdMsg("<red>That player does not exist"));
                         return true;
@@ -182,6 +181,7 @@ public class BountyCMD implements CommandExecutor, TabCompleter, Listener {
         else next = new ItemStack(Material.BARRIER);
         next.editMeta(meta -> {
             meta.getPersistentDataContainer().set(noMoveKey, PersistentDataType.STRING, "noMoveKey");
+            meta.getPersistentDataContainer().set(nextKey, PersistentDataType.STRING, "nextKey");
             meta.displayName(Utils.format("<green>Next"));
         });
         gui.setItem(53, next);
@@ -191,6 +191,7 @@ public class BountyCMD implements CommandExecutor, TabCompleter, Listener {
         else back = new ItemStack(Material.BARRIER);
         back.editMeta(meta -> {
             meta.getPersistentDataContainer().set(noMoveKey, PersistentDataType.STRING, "noMoveKey");
+            meta.getPersistentDataContainer().set(backKey, PersistentDataType.STRING, "backKey");
             meta.displayName(Utils.format("<red>Back"));
         });
         gui.setItem(45, back);
@@ -204,6 +205,7 @@ public class BountyCMD implements CommandExecutor, TabCompleter, Listener {
             PlayerDatabase.PlayerStats stats = ClassicDupe.getDatabase().getPlayerDatabase().getStats(uuid.toString());
             skull.editMeta(meta -> {
                 meta.getPersistentDataContainer().set(noMoveKey, PersistentDataType.STRING, "noMoveKey");
+                meta.getPersistentDataContainer().set(uuidKey, PersistentDataType.STRING, uuid.toString());
                 meta.displayName(Utils.format("<yellow>" + bitchass));
                 meta.lore(List.of(
                         Utils.format("<green>Bounty: <yellow>" + bountiesSorted.get(uuid)),
@@ -212,7 +214,35 @@ public class BountyCMD implements CommandExecutor, TabCompleter, Listener {
                         Utils.format("<green>KDR: <yellow>" + stats.kdr)
                 ));
             });
+            SkullMeta skullMeta = (SkullMeta) skull.getItemMeta();
+            skullMeta.setOwningPlayer(Bukkit.getOfflinePlayer(uuid));
+            skull.setItemMeta(skullMeta);
             gui.setItem(i-start, skull);
+        }
+
+        currentPage.put(player, page);
+        player.openInventory(gui);
+    }
+
+    private static Map<Player, Integer> currentPage = new HashMap<>();
+
+    @EventHandler
+    public void onInventoryClick(InventoryClickEvent event) {
+        Inventory clickedInventory = event.getClickedInventory();
+        if (clickedInventory != null && clickedInventory.getHolder() instanceof BountiesGUI) {
+            if (event.getCurrentItem() != null) {
+                Player player = (Player) event.getWhoClicked();
+                if (event.getCurrentItem().getItemMeta().getPersistentDataContainer().has(noMoveKey, PersistentDataType.STRING)) event.setCancelled(true);
+                if (event.getCurrentItem().getItemMeta().getPersistentDataContainer().has(closeKey, PersistentDataType.STRING)) clickedInventory.close();
+                if (
+                        event.getCurrentItem().getType().equals(Material.EMERALD_BLOCK) &&
+                                event.getCurrentItem().getItemMeta().getPersistentDataContainer().has(nextKey, PersistentDataType.STRING)
+                ) createBountyGUI(player, currentPage.get(player)+1);
+                if(
+                        event.getCurrentItem().getType().equals(Material.REDSTONE_BLOCK) &&
+                                event.getCurrentItem().getItemMeta().getPersistentDataContainer().has(backKey, PersistentDataType.STRING)
+                ) createBountyGUI(player, currentPage.get(player)-1);
+            }
         }
     }
 

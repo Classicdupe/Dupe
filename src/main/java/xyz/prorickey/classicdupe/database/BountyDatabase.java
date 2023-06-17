@@ -60,7 +60,7 @@ public class BountyDatabase {
      * @param amount Amount to set bounty to
      */
     public void setBounty(UUID uuid, Integer amount) {
-        if(bounties.containsKey(uuid)) bounties.put(uuid, amount);
+        bounties.put(uuid, amount);
         Bukkit.getScheduler().runTaskAsynchronously(ClassicDupe.getPlugin(), () -> {
             try {
                 PreparedStatement stat  = this.conn.prepareStatement("SELECT * FROM bounties WHERE uuid=?");
@@ -70,6 +70,11 @@ public class BountyDatabase {
                     PreparedStatement stat2 = this.conn.prepareStatement("UPDATE bounties SET amount=? WHERE uuid=?");
                     stat2.setInt(1, amount);
                     stat2.setString(2, uuid.toString());
+                    stat2.execute();
+                } else {
+                    PreparedStatement stat2 = this.conn.prepareStatement("INSERT INTO bounties(uuid, amount) VALUES (?, ?)");
+                    stat2.setString(1, uuid.toString());
+                    stat2.setInt(2, amount);
                     stat2.execute();
                 }
             } catch (SQLException e) {
@@ -133,6 +138,7 @@ public class BountyDatabase {
      */
     public void addBounty(UUID uuid, Integer amount) {
         if(bounties.containsKey(uuid)) bounties.put(uuid, bounties.get(uuid)+amount);
+        else bounties.put(uuid, amount);
         Bukkit.getScheduler().runTaskAsynchronously(ClassicDupe.getPlugin(), () -> {
             try {
                 PreparedStatement stat  = this.conn.prepareStatement("SELECT * FROM bounties WHERE uuid=?");
