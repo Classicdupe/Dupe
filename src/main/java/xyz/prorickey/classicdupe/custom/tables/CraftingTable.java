@@ -24,6 +24,7 @@ public class CraftingTable implements Listener {
     private static final NamespacedKey craftKey = new NamespacedKey(ClassicDupe.getPlugin(), "craftKey");
     private static final NamespacedKey craftToDefKey = new NamespacedKey(ClassicDupe.getPlugin(), "craftToDefKey");
     private static final NamespacedKey craftToNewKey = new NamespacedKey(ClassicDupe.getPlugin(), "craftToNewKey");
+    private static final NamespacedKey craftedKey = new NamespacedKey(ClassicDupe.getPlugin(), "craftedKey");
 
     @EventHandler
     public void onPlayerInteract(org.bukkit.event.player.PlayerInteractEvent event) {
@@ -55,8 +56,12 @@ public class CraftingTable implements Listener {
                 Recipe recipe = Bukkit.getServer().getCraftingRecipe(craftingMatrix, player.getWorld());
                 if (recipe != null) {
                     ItemStack result = recipe.getResult();
+                    result.editMeta(meta -> meta.getPersistentDataContainer().set(craftedKey, PersistentDataType.STRING, "craftedKey"));
                     clickedInventory.setItem(25, result);
                 }
+            }
+            if(event.getCurrentItem().getItemMeta().getPersistentDataContainer().has(craftedKey, PersistentDataType.STRING)) {
+
             }
         }
     }
@@ -75,6 +80,9 @@ public class CraftingTable implements Listener {
         close.setItemMeta(aMeta);
         glass.setItemMeta(gMeta);
         for(int i = 0; i < 54; i++) inventory.setItem(i, glass);
+        Integer[] slots = {10, 11, 12, 19, 20, 21, 28, 29, 30};
+        for(int i = 0; i < slots.length; i++) inventory.setItem(slots[i], null);
+        inventory.setItem(25, null);
         inventory.setItem(49, close);
         ItemStack craft = new ItemStack(Material.CRAFTING_TABLE);
         ItemMeta cMeta = craft.getItemMeta();

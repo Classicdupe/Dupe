@@ -7,6 +7,7 @@ import xyz.prorickey.classicdupe.clans.builders.ClanMember;
 import xyz.prorickey.classicdupe.clans.builders.Warp;
 
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 public interface ClanDatabase {
@@ -37,5 +38,8 @@ public interface ClanDatabase {
     void removeFromClanChat(Player player);
     boolean clanChat(Player player);
     void sendClanChat(String message, Player player);
+
+    void addClanKill(Clan clan);
+    Map<Clan, Integer> getTopClanKills();
 
 }

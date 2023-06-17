@@ -6,6 +6,7 @@ import org.bukkit.OfflinePlayer;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.scheduler.BukkitRunnable;
 import org.h2.util.IOUtils;
 import org.jetbrains.annotations.Nullable;
 import xyz.prorickey.classicdupe.ClassicDupe;
@@ -40,6 +41,8 @@ public class MariaClanDatabase implements ClanDatabase {
 
     private final List<Player> clanChatMembers = new ArrayList<>();
 
+    private Map<Clan, Integer> topClanKills = new HashMap<>();
+
     public MariaClanDatabase(JavaPlugin plugin, Connection conn) {
         this.plugin = plugin;
         this.conn = conn;
@@ -72,6 +75,8 @@ public class MariaClanDatabase implements ClanDatabase {
                 throw new RuntimeException(e);
             }
         });
+
+        new TopClanKills().runTaskTimerAsynchronously(plugin, 0, 20 * 60);
     }
 
     @Override
@@ -201,6 +206,7 @@ public class MariaClanDatabase implements ClanDatabase {
                     Clan clan = new Clan(UUID.fromString(data.getString("clanId")), clanName);
                     clan.setClanColor(data.getString("clanColor"));
                     clan.setPublicClan(data.getBoolean("publicClan"));
+                    clan.setClanKills(data.getInt("clanKills"));
                     PreparedStatement stmt2 = this.conn.prepareStatement("SELECT uuid, level FROM clanPlayers WHERE clanId=?");
                     stmt2.setString(1, data.getString("clanId"));
                     ResultSet data2 = stmt2.executeQuery();
@@ -420,5 +426,39 @@ public class MariaClanDatabase implements ClanDatabase {
                             .append(Utils.format("<yellow>" + player.getName() + " <dark_gray>\u00BB <white>" +
                                     mm.stripTags(message))));
         });
+    }
+
+    @Override
+    public void addClanKill(Clan clan) {
+        clan.setClanKills(clan.getClanKills()+1);
+        Bukkit.getScheduler().runTaskAsynchronously(ClassicDupe.getPlugin(), () -> {
+            try {
+                PreparedStatement statement = this.conn.prepareStatement("UPDATE clans SET clanKills=clanKills+1 WHERE clanId=?");
+                statement.setString(1, clan.getClanId().toString());
+                statement.execute();
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
+        });
+    }
+
+    @Override
+    public Map<Clan, Integer> getTopClanKills() { return topClanKills; }
+
+    public class TopClanKills extends BukkitRunnable {
+        @Override
+        public void run() {
+            try {
+                Map<Clan, Integer> clanKillsSorted = new HashMap<>();
+                ResultSet rs = conn.prepareStatement("SELECT * FROM clans ORDER BY clanKills DESC LIMIT 10").executeQuery();
+                while(rs.next()) {
+                    Clan clan = getClan(UUID.fromString(rs.getString("clanId")));
+                    clanKillsSorted.put(clan, rs.getInt("clanKills"));
+                }
+                topClanKills = clanKillsSorted;
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
+        }
     }
 }

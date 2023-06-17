@@ -197,23 +197,27 @@ public class ArmorTrims implements Listener {
 
     public static Boolean hasTrimSet(Player player, TrimPattern pattern) {
         if(player.getInventory().getHelmet() == null ||
-                !((ArmorMeta) player.getInventory().getHelmet().getItemMeta()).hasTrim() ||
-                !((ArmorMeta) player.getInventory().getHelmet().getItemMeta()).getTrim().getPattern().equals(pattern)) return false;
-        TrimMaterial trimMat = ((ArmorMeta) player.getInventory().getHelmet().getItemMeta()).getTrim().getMaterial();
+                !(player.getInventory().getHelmet().getItemMeta() instanceof ArmorMeta helmetMeta) ||
+                !helmetMeta.hasTrim() ||
+                !helmetMeta.getTrim().getPattern().equals(pattern)) return false;
+        TrimMaterial trimMat = helmetMeta.getTrim().getMaterial();
         return player.getInventory().getChestplate() != null &&
-                ((ArmorMeta) player.getInventory().getChestplate().getItemMeta()).hasTrim() &&
-                ((ArmorMeta) player.getInventory().getChestplate().getItemMeta()).getTrim().getPattern().equals(pattern) &&
-                ((ArmorMeta) player.getInventory().getChestplate().getItemMeta()).getTrim().getMaterial().equals(trimMat) &&
+                (player.getInventory().getChestplate().getItemMeta() instanceof ArmorMeta chestMeta) &&
+                chestMeta.hasTrim() &&
+                chestMeta.getTrim().getPattern().equals(pattern) &&
+                chestMeta.getTrim().getMaterial().equals(trimMat) &&
 
                 player.getInventory().getLeggings() != null &&
-                ((ArmorMeta) player.getInventory().getLeggings().getItemMeta()).hasTrim() &&
-                ((ArmorMeta) player.getInventory().getLeggings().getItemMeta()).getTrim().getPattern().equals(pattern) &&
-                ((ArmorMeta) player.getInventory().getLeggings().getItemMeta()).getTrim().getMaterial().equals(trimMat) &&
+                (player.getInventory().getLeggings().getItemMeta() instanceof ArmorMeta legMeta) &&
+                legMeta.hasTrim() &&
+                legMeta.getTrim().getPattern().equals(pattern) &&
+                legMeta.getTrim().getMaterial().equals(trimMat) &&
 
                 player.getInventory().getBoots() != null &&
-                ((ArmorMeta) player.getInventory().getBoots().getItemMeta()).hasTrim() &&
-                ((ArmorMeta) player.getInventory().getBoots().getItemMeta()).getTrim().getPattern().equals(pattern) &&
-                ((ArmorMeta) player.getInventory().getBoots().getItemMeta()).getTrim().getMaterial().equals(trimMat);
+                (player.getInventory().getBoots().getItemMeta() instanceof ArmorMeta bootsMeta) &&
+                bootsMeta.hasTrim() &&
+                bootsMeta.getTrim().getPattern().equals(pattern) &&
+                bootsMeta.getTrim().getMaterial().equals(trimMat);
     }
 
 }

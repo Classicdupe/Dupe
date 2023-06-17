@@ -21,6 +21,9 @@ public class Clan {
     private boolean publicClan = false;
     private String clanColor = "<yellow>";
 
+    // Statistics
+    private Integer clanKills;
+
     // Warps
     private final Map<String, Warp> warps = new HashMap<>();
 
@@ -79,4 +82,6 @@ public class Clan {
     public List<Warp> getWarps() { return this.warps.values().stream().toList(); }
     public List<String> getWarpNames() { return this.warps.keySet().stream().toList(); }
 
+    public void setClanKills(Integer clanKills) { this.clanKills = clanKills; }
+    public Integer getClanKills() { return this.clanKills != null ? this.clanKills : 0; }
 }

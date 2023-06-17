@@ -14,6 +14,7 @@ import org.bukkit.inventory.meta.SkullMeta;
 import xyz.prorickey.classicdupe.ClassicDupe;
 import xyz.prorickey.classicdupe.Config;
 import xyz.prorickey.classicdupe.Utils;
+import xyz.prorickey.classicdupe.clans.builders.Clan;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -42,6 +43,11 @@ public class DeathEvent implements Listener {
                 if(ClassicDupe.getDatabase().getBountyDatabase().getBounty(player.getUniqueId()) != null)
                     ClassicDupe.getDatabase().getPlayerDatabase().getPlayerData(killer.getUniqueId())
                             .addBalance(ClassicDupe.getDatabase().getBountyDatabase().getBounty(player.getUniqueId()));
+                if(ClassicDupe.getClanDatabase().getClanMember(killer.getUniqueId()).getClanID() != null) ClassicDupe
+                        .getClanDatabase()
+                        .addClanKill(
+                                ClassicDupe.getClanDatabase()
+                                        .getClan(ClassicDupe.getClanDatabase().getClanMember(killer.getUniqueId()).getClanID()));
             }
             ItemStack skull = new ItemStack(Material.PLAYER_HEAD);
             SkullMeta meta = (SkullMeta) Bukkit.getItemFactory().getItemMeta(Material.PLAYER_HEAD);
