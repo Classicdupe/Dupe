@@ -253,6 +253,7 @@ public class ClassicDupe extends JavaPlugin {
         getServer().getPluginManager().registerEvents(new ItemUse(), this);
         getServer().getPluginManager().registerEvents(new CraftingTable(), this);
         getServer().getPluginManager().registerEvents(new BountyCMD(), this);
+        getServer().getPluginManager().registerEvents(new CraftingTable(), this);
 
         //Init maze
         MAZEmanager.init();
