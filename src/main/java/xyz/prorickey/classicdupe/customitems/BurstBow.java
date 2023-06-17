@@ -1,23 +1,24 @@
 package xyz.prorickey.classicdupe.customitems;
 
+import net.md_5.bungee.api.ChatMessageType;
 import org.bukkit.Bukkit;
+import org.bukkit.entity.Arrow;
 import org.bukkit.entity.Fireball;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
-import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
 
+import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
-public class FireballWand {
+public class BurstBow {
     private final Plugin plugin;
     private List<List<String>> cooldown = new ArrayList<>();
 
-    private static final long COOLDOWN_DURATION = 10_000L; // 10 seconds
+    private static final long COOLDOWN_DURATION = 20_000L; // 20 seconds
 
-    public FireballWand(Plugin plugin) {
+    public BurstBow(Plugin plugin) {
         this.plugin = plugin;
 
     }
@@ -27,28 +28,33 @@ public class FireballWand {
 
             return;
         }
+        //loop 3 times
+        if (isOnCooldown(player)) {
+            return;
+        }
 
-        // Player is not on cooldown, perform the action
+        // Loop 3 times
+        for (int i = 0; i < 3; i++) {
+            // Schedule the arrow shoot with a delay of 5 ticks
+            Bukkit.getScheduler().runTaskLater(plugin, () -> {
+                // Player is not on cooldown, perform the action
 
-        // Get the player's location and direction
-        Vector direction = player.getLocation().getDirection();
+                // Get the player's location and direction
+                Vector direction = player.getLocation().getDirection();
 
-        // Create a fireball entity at the player's location
-        Fireball fireball = player.launchProjectile(Fireball.class, direction);
+                // Create an arrow entity at the player's location
+                Arrow arrow = player.launchProjectile(Arrow.class, direction);
 
-        // Set the fireball's speed (3 blocks per second)
-        double speed = 3.0;
-        Vector velocity = direction.multiply(speed);
-        fireball.setVelocity(velocity);
+                // Set the arrow's speed (3 blocks per second)
+                double speed = 3.0;
+                Vector velocity = direction.multiply(speed);
+                arrow.setVelocity(velocity);
 
-        // Set the fireball to explode on impact
-        fireball.setIsIncendiary(true);
-        fireball.setYield(7.0f); // Explosion power
+                // Example: Set the shooter of the arrow to the player
+                arrow.setShooter(player);
+            }, 3 * (i + 1));
+        }
 
-        // Example: Set the shooter of the fireball to the player
-        fireball.setShooter(player);
-
-        // Add the player to the cooldowns map
         resetcd(player);
     }
 
@@ -83,7 +89,8 @@ public class FireballWand {
                 if (elapsedTime < COOLDOWN_DURATION) {
                     // Player is still on cooldown
                     System.out.println("PLR " + elapsedTime/1000);
-                    player.sendMessage("You are on cooldown for " + (COOLDOWN_DURATION - elapsedTime)/1000 + " seconds.");
+                    //make a action bar message with the time left
+                    player.spigot().sendMessage(ChatMessageType.ACTION_BAR, new net.md_5.bungee.api.chat.TextComponent("§cYou are on cooldown for " + (COOLDOWN_DURATION - elapsedTime)/1000 + " seconds"));
                     return true;
                 } else {
                     // Cooldown has expired, remove the entry from the list

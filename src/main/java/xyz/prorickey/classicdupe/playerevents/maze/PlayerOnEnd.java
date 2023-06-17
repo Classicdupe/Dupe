@@ -31,7 +31,7 @@ public class PlayerOnEnd implements Listener {
                 if (onlinePlayer.name() == player.name()) {
                     continue;
                 }
-                onlinePlayer.sendMessage(ChatColor.GOLD + ChatColor.BOLD.toString() +player.getName() + " has completed the maze!");
+                onlinePlayer.sendMessage(Utils.format("<gold><b>" + player.getName() + " has completed the maze!"));
             }
 
             player.teleport(Bukkit.getWorld(player.getWorld().getName()).getSpawnLocation());

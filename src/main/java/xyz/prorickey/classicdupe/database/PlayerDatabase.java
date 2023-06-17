@@ -113,7 +113,7 @@ public class PlayerDatabase {
 
     }
 
-    public Map<Integer, PlayerData> balanceTop = new HashMap<>();
+    public static Map<Integer, PlayerData> balanceTop = new HashMap<>();
 
     public class BalanceTopTask extends BukkitRunnable {
         @Override
