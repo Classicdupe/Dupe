@@ -22,10 +22,12 @@ public class Database {
     static Connection serverConn;
     static Connection linkingConn;
     static Connection homesConn;
+    static Connection bountyConn;
     private FilterDatabase filterDatabase;
     private PlayerDatabase playerDatabase;
     private LinkingDatabase linkingDatabase;
     private HomesDatabase homesDatabase;
+    private BountyDatabase bountyDatabase;
     public static List<Player> blockedToUseCommands = new ArrayList<>();
 
     public Database() {
@@ -217,10 +219,34 @@ public class Database {
 
                 homesConn = conn;
 
+                if(new File(ClassicDupe.getPlugin().getDataFolder().getAbsolutePath() + File.separator + "bountyData.mv.db").exists()) {
+                    bountyConn = DriverManager.getConnection ("jdbc:h2:" + ClassicDupe.getPlugin().getDataFolder().getAbsolutePath() + File.separator + "bountyData");
+
+                    try (ResultSet set = conn.prepareStatement("SELECT * FROM bounty").executeQuery()) {
+                        if (!set.next()) {
+                            PreparedStatement bountyStat = bountyConn.prepareStatement("SELECT * FROM bounty");
+                            ResultSet bountySet = bountyStat.executeQuery();
+                            PreparedStatement stat = conn.prepareStatement("INSERT INTO bounty(uuid, amount) VALUES (?, ?)");
+                            while (bountySet.next()) {
+                                stat.setString(1, bountySet.getString("uuid"));
+                                stat.setDouble(2, bountySet.getDouble("amount"));
+                                stat.addBatch();
+                            }
+                            stat.executeLargeBatch();
+                        }
+                    }
+
+                    bountyConn.close();
+                    new File(ClassicDupe.getPlugin().getDataFolder().getAbsolutePath() + File.separator + "bountyData.mv.db").delete();
+                }
+
+                bountyConn = conn;
+
                 filterDatabase = new FilterDatabase(conn);
                 playerDatabase = new PlayerDatabase(conn);
                 linkingDatabase = new LinkingDatabase(conn);
                 homesDatabase = new HomesDatabase(conn);
+                bountyDatabase = new BountyDatabase(conn);
 
             } else {
                 ClassicDupe.clanDatabase = new H2ClanDatabase(ClassicDupe.getPlugin());
@@ -229,6 +255,7 @@ public class Database {
                 serverConn = DriverManager.getConnection ("jdbc:h2:" + ClassicDupe.getPlugin().getDataFolder().getAbsolutePath() + File.separator + "serverData");
                 linkingConn = DriverManager.getConnection ("jdbc:h2:" + ClassicDupe.getPlugin().getDataFolder().getAbsolutePath() + File.separator + "linkData");
                 homesConn = DriverManager.getConnection ("jdbc:h2:" + ClassicDupe.getPlugin().getDataFolder().getAbsolutePath() + File.separator + "homes");
+                bountyConn = DriverManager.getConnection ("jdbc:h2:" + ClassicDupe.getPlugin().getDataFolder().getAbsolutePath() + File.separator + "bountyData");
 
                 playerConn.prepareStatement("CREATE TABLE IF NOT EXISTS players(uuid varchar, name varchar, nickname varchar, timesjoined long, playtime long, randomitem BOOLEAN, chatcolor VARCHAR, gradient BOOLEAN, gradientfrom VARCHAR, gradientto VARCHAR, night BOOLEAN, balance BIGINT)").execute();
                 serverConn.prepareStatement("CREATE TABLE IF NOT EXISTS filter(text varchar, fullword BOOLEAN)").execute();
@@ -237,11 +264,13 @@ public class Database {
                 playerConn.prepareStatement("CREATE TABLE IF NOT EXISTS particleEffects(uuid VARCHAR, killEffect VARCHAR, particleEffect VARCHAR)").execute();
                 linkingConn.prepareStatement("CREATE TABLE IF NOT EXISTS link(uuid VARCHAR, dscid Long)").execute();
                 homesConn.prepareStatement("CREATE TABLE IF NOT EXISTS homes(uuid VARCHAR, name VARCHAR, world VARCHAR, x DOUBLE, y DOUBLE, z DOUBLE, yaw FLOAT, pitch FLOAT)").execute();
+                bountyConn.prepareStatement("CREATE TABLE IF NOT EXISTS bounty(uuid VARCHAR, amount BIGINT)").execute();
 
                 filterDatabase = new FilterDatabase(serverConn);
                 playerDatabase = new PlayerDatabase(playerConn);
                 linkingDatabase = new LinkingDatabase(linkingConn);
                 homesDatabase = new HomesDatabase(homesConn);
+                bountyDatabase = new BountyDatabase(playerConn);
             }
         } catch (SQLException e) {
             throw new RuntimeException(e);
@@ -302,5 +331,6 @@ public class Database {
     public PlayerDatabase getPlayerDatabase() { return playerDatabase; }
     public LinkingDatabase getLinkingDatabase() { return linkingDatabase; }
     public HomesDatabase getHomesDatabase() { return homesDatabase; }
+    public BountyDatabase getBountyDatabase() { return bountyDatabase; }
 
 }

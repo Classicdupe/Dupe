@@ -25,6 +25,12 @@ public class PlayerDatabase {
         new BalanceTopTask().runTaskTimerAsynchronously(ClassicDupe.getPlugin(), 0, 20 * 60 * 5);
     }
 
+    /**
+     * Gets the player data of a player. Returns null if the player is not in the database
+     * @param uuid UUID of the player
+     * @return PlayerData of the player. Null if not in database
+     */
+    @Nullable
     public PlayerData getPlayerData(UUID uuid) {
         if(playerDataMap.containsKey(uuid)) return playerDataMap.get(uuid);
         try {

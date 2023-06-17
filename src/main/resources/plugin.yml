@@ -333,6 +333,9 @@ commands:
         list:
             description: To list all custom items
             usage: "Usage: /customitem list"
+  bounty:
+    description: To list and place bounties on players
+    usage: "Usage: /bounty"
 permissions:
   default.spawn.others:
     description: Allows you to teleport others to spawn
@@ -348,3 +351,7 @@ permissions:
     description: Allows you to use the customitem command
   admin.bypassCustomItemCd:
     description: Allows you to bypass the cooldown for custom items
+  default.bounty.forceset:
+    description: Allows you to force set a bounty
+  default.bounty.delete:
+    description: Allows you to delete a bounty

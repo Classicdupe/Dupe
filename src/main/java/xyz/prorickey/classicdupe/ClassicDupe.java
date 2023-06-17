@@ -223,6 +223,8 @@ public class ClassicDupe extends JavaPlugin {
         this.getCommand("balance").setTabCompleter(new BalanceCMD());
         this.getCommand("customitem").setExecutor(new cicommands());
         this.getCommand("customitem").setTabCompleter(new cicommands());
+        this.getCommand("bounty").setExecutor(new BountyCMD());
+        this.getCommand("bounty").setTabCompleter(new BountyCMD());
 
         getServer().getPluginManager().registerEvents(new JoinEvent(), this);
         getServer().getPluginManager().registerEvents(new QuitEvent(), this);
@@ -248,6 +250,7 @@ public class ClassicDupe extends JavaPlugin {
         getServer().getPluginManager().registerEvents(new ShopCMD(), this);
         getServer().getPluginManager().registerEvents(new ArmorTrims(), this);
         getServer().getPluginManager().registerEvents(new ItemUse(), this);
+        getServer().getPluginManager().registerEvents(new BountyCMD(), this);
 
         //Init maze
         MAZEmanager.init();
