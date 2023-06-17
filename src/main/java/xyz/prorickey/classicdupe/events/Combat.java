@@ -1,5 +1,6 @@
 package xyz.prorickey.classicdupe.events;
 
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Arrow;
 import org.bukkit.entity.EnderCrystal;
 import org.bukkit.entity.Player;
@@ -53,7 +54,7 @@ public class Combat implements Listener {
         }
         if(e.getEntity() instanceof Player player && !e.getCause().equals(EntityDamageEvent.DamageCause.FALL)) inCombat.put(player, System.currentTimeMillis());
         if(e.getDamager() instanceof Player player) inCombat.put(player, System.currentTimeMillis());
-        if(e.getEntity() instanceof Player victim && e.getDamager() instanceof Player attacker) {
+        if(e.getEntity() instanceof Player victim && e.getDamager() instanceof Player attacker && Bukkit.getOnlinePlayers().contains(victim)) {
             whoHitWho.put(victim, attacker);
             whoHitWho.put(attacker, victim);
         }
