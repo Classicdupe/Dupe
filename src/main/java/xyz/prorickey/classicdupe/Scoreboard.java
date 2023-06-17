@@ -8,8 +8,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scoreboard.*;
-import xyz.prorickey.classicdupe.clans.ClanDatabase;
-import xyz.prorickey.classicdupe.clans.ClanMember;
+import xyz.prorickey.classicdupe.clans.builders.ClanMember;
 import xyz.prorickey.classicdupe.database.PlayerData;
 import xyz.prorickey.classicdupe.database.PlayerDatabase;
 import xyz.prorickey.classicdupe.events.Combat;
@@ -46,9 +45,9 @@ public class Scoreboard {
         if(obj.getDisplaySlot() != DisplaySlot.SIDEBAR) obj.setDisplaySlot(DisplaySlot.SIDEBAR);
         if(!obj.displayName().equals(Utils.format(displayName))) obj.displayName(Utils.format(displayName));
 
-        ClanMember cmem = ClanDatabase.getClanMember(player.getUniqueId());
+        ClanMember cmem = ClassicDupe.getClanDatabase().getClanMember(player.getUniqueId());
         String clanColor = "<yellow>";
-        if(cmem.getClanName() != null) clanColor = ClanDatabase.getClan(ClanDatabase.getClanMember(player.getUniqueId()).getClanID()).getClanColor();
+        if(cmem.getClanName() != null) clanColor = ClassicDupe.getClanDatabase().getClan(ClassicDupe.getClanDatabase().getClanMember(player.getUniqueId()).getClanID()).getClanColor();
 
         PlayerData data = ClassicDupe.getDatabase().getPlayerDatabase().getPlayerData(player.getUniqueId());
         if(data == null) return;

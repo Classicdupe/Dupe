@@ -3,6 +3,7 @@ package xyz.prorickey.classicdupe.events;
 import com.destroystokyo.paper.event.entity.EntityKnockbackByEntityEvent;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
+import org.bukkit.NamespacedKey;
 import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -11,14 +12,19 @@ import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.inventory.meta.ArmorMeta;
 import org.bukkit.inventory.meta.trim.TrimMaterial;
 import org.bukkit.inventory.meta.trim.TrimPattern;
+import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
+import xyz.prorickey.classicdupe.ClassicDupe;
 import xyz.prorickey.classicdupe.Config;
 
 import java.util.Random;
+import java.util.UUID;
 
 public class ArmorTrims implements Listener {
+
+    private static NamespacedKey vexKey = new NamespacedKey(ClassicDupe.getPlugin(), "ownerUUID");
 
     @EventHandler
     public void onEntityDamageByEntity(EntityDamageByEntityEvent e) {
@@ -68,7 +74,9 @@ public class ArmorTrims implements Listener {
             ) {
                 entity.getWorld().spawn(entity.getLocation(), Vex.class, vex -> {
                     vex.setTarget(entity);
+                    vex.setLimitedLifetime(true);
                     vex.setLimitedLifetimeTicks(20 * 30);
+                    vex.getPersistentDataContainer().set(vexKey, PersistentDataType.STRING, attacker.getUniqueId().toString());
                 });
             }
             else if(
@@ -145,6 +153,14 @@ public class ArmorTrims implements Listener {
                     hasTrimSet(attacker, TrimPattern.SENTRY)
             ) e.setDamage(e.getDamage() * Config.getConfig().getDouble("trimset.sentry.arrowAttackMultiplier"));
         }
+
+        if(
+                e.getDamager() instanceof Vex vex &&
+                        vex.getPersistentDataContainer().has(vexKey, PersistentDataType.STRING) &&
+                        vex.getPersistentDataContainer().get(vexKey, PersistentDataType.STRING).equals(e.getEntity().getUniqueId().toString())
+        ) {
+            e.setCancelled(true);
+        }
     }
 
     @EventHandler
@@ -172,9 +188,9 @@ public class ArmorTrims implements Listener {
         @Override
         public void run() {
             Bukkit.getOnlinePlayers().forEach(player -> {
-                if(hasTrimSet(player, TrimPattern.VEX)) player.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 5, 1));
-                else if(hasTrimSet(player, TrimPattern.HOST)) player.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 5, 1));
-                else if(hasTrimSet(player, TrimPattern.WARD)) player.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, 5, 1));
+                if(hasTrimSet(player, TrimPattern.VEX)) player.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 5*20, 1));
+                else if(hasTrimSet(player, TrimPattern.HOST)) player.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 5*20, 1));
+                else if(hasTrimSet(player, TrimPattern.WARD)) player.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, 5*20, 1));
             });
         }
     }

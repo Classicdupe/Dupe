@@ -6,16 +6,16 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import xyz.prorickey.classicdupe.ClassicDupe;
 import xyz.prorickey.classicdupe.Utils;
-import xyz.prorickey.classicdupe.clans.Clan;
-import xyz.prorickey.classicdupe.clans.ClanMember;
-import xyz.prorickey.classicdupe.clans.ClanSub;
-import xyz.prorickey.classicdupe.clans.ClanDatabase;
+import xyz.prorickey.classicdupe.clans.builders.Clan;
+import xyz.prorickey.classicdupe.clans.builders.ClanMember;
+import xyz.prorickey.classicdupe.clans.builders.ClanSub;
 import xyz.prorickey.proutils.TabComplete;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
+@SuppressWarnings("unused")
 public class CSDemote extends ClanSub {
     @Override
     public void execute(CommandSender sender, String[] args) {
@@ -23,7 +23,7 @@ public class CSDemote extends ClanSub {
             sender.sendMessage(Utils.format("<red>You cannot execute this command from console"));
             return;
         }
-        ClanMember cmem = ClanDatabase.getClanMember(player.getUniqueId());
+        ClanMember cmem = ClassicDupe.getClanDatabase().getClanMember(player.getUniqueId());
         if(cmem.getClanID() == null) {
             player.sendMessage(Utils.cmdMsg("<red>You must be in a clan to demote players"));
             return;
@@ -32,13 +32,13 @@ public class CSDemote extends ClanSub {
             player.sendMessage(Utils.cmdMsg("<red>You must provide a player to demote"));
             return;
         }
-        Clan clan = ClanDatabase.getClan(cmem.getClanID());
+        Clan clan = ClassicDupe.getClanDatabase().getClan(cmem.getClanID());
         OfflinePlayer offPlayer = Bukkit.getOfflinePlayer(args[0]);
         if(!clan.getMembers().contains(offPlayer)) {
             player.sendMessage(Utils.cmdMsg("<red>That player is not in your clan"));
             return;
         }
-        ClanMember pmem = ClanDatabase.getClanMember(offPlayer.getUniqueId());
+        ClanMember pmem = ClassicDupe.getClanDatabase().getClanMember(offPlayer.getUniqueId());
         if(!Objects.equals(pmem.getClanID(), cmem.getClanID())) {
             player.sendMessage(Utils.cmdMsg("<red>That player is not in your clan"));
             return;
@@ -55,7 +55,7 @@ public class CSDemote extends ClanSub {
             pmem.setLevel(0);
             clan.removeVip(pmem.getOffPlayer());
             clan.addDefault(pmem.getOffPlayer());
-            ClanDatabase.setPlayerLevel(pmem.getOffPlayer().getUniqueId(), 0);
+            ClassicDupe.getClanDatabase().setPlayerLevel(pmem, 0);
             player.sendMessage(Utils.cmdMsg("<yellowDemoted <gold>" + pmem.getOffPlayer().getName()));
             if(offPlayer.isOnline()) offPlayer.getPlayer().sendMessage(Utils.cmdMsg("<yellowYou have been demoted in your clan by <gold>" + player.getName()));
         } else if(pmem.getLevel() == 2) {
@@ -66,7 +66,7 @@ public class CSDemote extends ClanSub {
             pmem.setLevel(1);
             clan.removeAdmin(pmem.getOffPlayer());
             clan.addVip(pmem.getOffPlayer());
-            ClanDatabase.setPlayerLevel(pmem.getOffPlayer().getUniqueId(), 1);
+            ClassicDupe.getClanDatabase().setPlayerLevel(pmem, 1);
             player.sendMessage(Utils.cmdMsg("<yellowDemoted <gold>" + pmem.getOffPlayer().getName()));
             if(offPlayer.isOnline()) offPlayer.getPlayer().sendMessage(Utils.cmdMsg("<yellowYou have been demoted in your clan by <gold>" + player.getName()));
         } else if(pmem.getLevel() == 3) {

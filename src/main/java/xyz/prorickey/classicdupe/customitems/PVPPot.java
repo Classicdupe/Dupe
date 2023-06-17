@@ -1,23 +1,27 @@
 package xyz.prorickey.classicdupe.customitems;
 
+
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Fireball;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
+import org.bukkit.potion.PotionEffect;
+import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class FireballWand {
+public class PVPPot {
     private final Plugin plugin;
     private List<List<String>> cooldown = new ArrayList<>();
 
-    private static final long COOLDOWN_DURATION = 10_000L; // 10 seconds
+    private static final long COOLDOWN_DURATION = 120_000L; // 10 seconds
 
-    public FireballWand(Plugin plugin) {
+    public PVPPot(Plugin plugin) {
         this.plugin = plugin;
 
     }
@@ -28,27 +32,11 @@ public class FireballWand {
             return;
         }
 
-        // Player is not on cooldown, perform the action
 
-        // Get the player's location and direction
-        Vector direction = player.getLocation().getDirection();
+        player.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 20*90, 1));
+        player.addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE, 20*90, 1));
 
-        // Create a fireball entity at the player's location
-        Fireball fireball = player.launchProjectile(Fireball.class, direction);
 
-        // Set the fireball's speed (3 blocks per second)
-        double speed = 3.0;
-        Vector velocity = direction.multiply(speed);
-        fireball.setVelocity(velocity);
-
-        // Set the fireball to explode on impact
-        fireball.setIsIncendiary(true);
-        fireball.setYield(7.0f); // Explosion power
-
-        // Example: Set the shooter of the fireball to the player
-        fireball.setShooter(player);
-
-        // Add the player to the cooldowns map
         resetcd(player);
     }
 
@@ -111,3 +99,4 @@ public class FireballWand {
         }
     }
 }
+

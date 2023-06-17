@@ -2,16 +2,17 @@ package xyz.prorickey.classicdupe.clans.subcommands;
 
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import xyz.prorickey.classicdupe.ClassicDupe;
 import xyz.prorickey.classicdupe.Utils;
-import xyz.prorickey.classicdupe.clans.Clan;
-import xyz.prorickey.classicdupe.clans.ClanMember;
-import xyz.prorickey.classicdupe.clans.ClanSub;
-import xyz.prorickey.classicdupe.clans.ClanDatabase;
+import xyz.prorickey.classicdupe.clans.builders.Clan;
+import xyz.prorickey.classicdupe.clans.builders.ClanMember;
+import xyz.prorickey.classicdupe.clans.builders.ClanSub;
 import xyz.prorickey.proutils.TabComplete;
 
 import java.util.ArrayList;
 import java.util.List;
 
+@SuppressWarnings("unused")
 public class CSDelHome extends ClanSub {
     @Override
     public void execute(CommandSender sender, String[] args) {
@@ -19,7 +20,7 @@ public class CSDelHome extends ClanSub {
             sender.sendMessage(Utils.format("<red>You cannot execute this command from console"));
             return;
         }
-        ClanMember cmem = ClanDatabase.getClanMember(player.getUniqueId());
+        ClanMember cmem = ClassicDupe.getClanDatabase().getClanMember(player.getUniqueId());
         if(cmem.getClanID() == null) {
             player.sendMessage(Utils.cmdMsg("<red>You must be in a clan to delete homes"));
             return;
@@ -28,13 +29,13 @@ public class CSDelHome extends ClanSub {
             player.sendMessage(Utils.cmdMsg("<red>You must be either an admin or the owner to delete homes in a clan"));
             return;
         }
-        Clan clan = ClanDatabase.getClan(cmem.getClanID());
+        Clan clan = ClassicDupe.getClanDatabase().getClan(cmem.getClanID());
         if(args.length == 0) {
             if(!clan.getWarpNames().contains("default")) {
                 player.sendMessage(Utils.cmdMsg("<yellowThat home does not exist and cannot be deleted"));
                 return;
             }
-            ClanDatabase.delWarp(clan, "default");
+            ClassicDupe.getClanDatabase().delWarp(clan, "default");
             clan.delWarp("default");
             player.sendMessage(Utils.cmdMsg("<yellowDeleted the clans default home"));
         } else {
@@ -42,7 +43,7 @@ public class CSDelHome extends ClanSub {
                 player.sendMessage(Utils.cmdMsg("<yellowThat home does not exist and cannot be deleted"));
                 return;
             }
-            ClanDatabase.delWarp(clan, args[0].toLowerCase());
+            ClassicDupe.getClanDatabase().delWarp(clan, args[0].toLowerCase());
             clan.delWarp(args[0].toLowerCase());
             player.sendMessage(Utils.cmdMsg("<yellowDeleted <gold>" + args[0].toLowerCase()));
         }
@@ -50,9 +51,9 @@ public class CSDelHome extends ClanSub {
 
     @Override
     public List<String> tabComplete(CommandSender sender, String[] args) {
-        if(!(sender instanceof Player player) || ClanDatabase.getClanMember(player.getUniqueId()).getClanID() == null) return new ArrayList<>();
-        ClanMember cmem = ClanDatabase.getClanMember(player.getUniqueId());
-        if(args.length == 1) return TabComplete.tabCompletionsSearch(args[0], ClanDatabase.getClan(cmem.getClanName()).getWarpNames());
+        if(!(sender instanceof Player player) || ClassicDupe.getClanDatabase().getClanMember(player.getUniqueId()).getClanID() == null) return new ArrayList<>();
+        ClanMember cmem = ClassicDupe.getClanDatabase().getClanMember(player.getUniqueId());
+        if(args.length == 1) return TabComplete.tabCompletionsSearch(args[0], ClassicDupe.getClanDatabase().getClan(cmem.getClanName()).getWarpNames());
         return new ArrayList<>();
     }
 }

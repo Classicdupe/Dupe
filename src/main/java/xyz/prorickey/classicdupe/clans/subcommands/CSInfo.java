@@ -4,13 +4,17 @@ import net.kyori.adventure.text.Component;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import xyz.prorickey.classicdupe.ClassicDupe;
 import xyz.prorickey.classicdupe.Utils;
-import xyz.prorickey.classicdupe.clans.*;
+import xyz.prorickey.classicdupe.clans.builders.Clan;
+import xyz.prorickey.classicdupe.clans.builders.ClanMember;
+import xyz.prorickey.classicdupe.clans.builders.ClanSub;
 import xyz.prorickey.proutils.TabComplete;
 
 import java.util.ArrayList;
 import java.util.List;
 
+@SuppressWarnings("unused")
 public class CSInfo extends ClanSub {
     @Override
     public void execute(CommandSender sender, String[] args) {
@@ -20,13 +24,13 @@ public class CSInfo extends ClanSub {
                 sender.sendMessage(Utils.format("<red>You cannot execute this command without an argument from console"));
                 return;
             }
-            ClanMember cmem = ClanDatabase.getClanMember(player.getUniqueId());
+            ClanMember cmem = ClassicDupe.getClanDatabase().getClanMember(player.getUniqueId());
             if(cmem.getClanID() == null) {
                 player.sendMessage(Utils.cmdMsg("<red>You must be in a clan to view your own clans info"));
                 return;
             }
-            clan = ClanDatabase.getClan(cmem.getClanID());
-        } else clan = ClanDatabase.getClan(args[0]);
+            clan = ClassicDupe.getClanDatabase().getClan(cmem.getClanID());
+        } else clan = ClassicDupe.getClanDatabase().getClan(args[0]);
         if(clan == null) {
             sender.sendMessage(Utils.cmdMsg("<red>That clan does not exist"));
             return;
@@ -60,7 +64,7 @@ public class CSInfo extends ClanSub {
 
     @Override
     public List<String> tabComplete(CommandSender sender, String[] args) {
-        if(args.length == 1) return TabComplete.tabCompletionsSearch(args[0], ClanDatabase.getLoadedClanNames());
+        if(args.length == 1) return TabComplete.tabCompletionsSearch(args[0], ClassicDupe.getClanDatabase().getLoadedClanNames());
         return new ArrayList<>();
     }
 }

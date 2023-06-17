@@ -20,7 +20,6 @@ import org.jetbrains.annotations.Nullable;
 import xyz.prorickey.classicdupe.ClassicDupe;
 import xyz.prorickey.classicdupe.Utils;
 import xyz.prorickey.classicdupe.database.PlayerData;
-import xyz.prorickey.classicdupe.database.PlayerDatabase;
 
 import java.util.*;
 
@@ -129,8 +128,6 @@ public class ChatGradientCMD implements CommandExecutor, TabCompleter, Listener 
             if(profile.gradientTo == null) profile.gradientTo = "white";
             if(playerData.toggleGradient()) gradientProfiles.put(p.getUniqueId().toString(), profile);
             else gradientProfiles.remove(p.getUniqueId().toString());
-
-
         }
         e.getInventory().close();
     }

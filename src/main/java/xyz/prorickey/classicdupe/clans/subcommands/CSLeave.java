@@ -2,15 +2,16 @@ package xyz.prorickey.classicdupe.clans.subcommands;
 
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import xyz.prorickey.classicdupe.ClassicDupe;
 import xyz.prorickey.classicdupe.Utils;
-import xyz.prorickey.classicdupe.clans.Clan;
-import xyz.prorickey.classicdupe.clans.ClanMember;
-import xyz.prorickey.classicdupe.clans.ClanSub;
-import xyz.prorickey.classicdupe.clans.ClanDatabase;
+import xyz.prorickey.classicdupe.clans.builders.Clan;
+import xyz.prorickey.classicdupe.clans.builders.ClanMember;
+import xyz.prorickey.classicdupe.clans.builders.ClanSub;
 
 import java.util.ArrayList;
 import java.util.List;
 
+@SuppressWarnings("unused")
 public class CSLeave extends ClanSub {
     @Override
     public void execute(CommandSender sender, String[] args) {
@@ -18,7 +19,7 @@ public class CSLeave extends ClanSub {
             sender.sendMessage(Utils.format("<red>You cannot execute this command from console"));
             return;
         }
-        ClanMember cmem = ClanDatabase.getClanMember(player.getUniqueId());
+        ClanMember cmem = ClassicDupe.getClanDatabase().getClanMember(player.getUniqueId());
         if(cmem.getClanID() == null) {
             player.sendMessage(Utils.cmdMsg("<red>You aren't in a clan"));
             return;
@@ -27,9 +28,9 @@ public class CSLeave extends ClanSub {
             player.sendMessage(Utils.cmdMsg("<red>You cannot leave a clan that you own. You must promote someone else to owner before you can leave"));
             return;
         }
-        Clan clan = ClanDatabase.getClan(cmem.getClanID());
+        Clan clan = ClassicDupe.getClanDatabase().getClan(cmem.getClanID());
         clan.removePlayer(player);
-        ClanDatabase.removeClan(cmem);
+        ClassicDupe.getClanDatabase().removeClan(cmem);
         cmem.removeClan();
         player.sendMessage(Utils.cmdMsg("<yellowYou have left your clan"));
     }

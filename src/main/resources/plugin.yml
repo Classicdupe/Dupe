@@ -6,6 +6,8 @@ api-version: 1.19
 load: POSTWORLD
 authors:
   - Prorickey
+  - ModdedKid
+  - BraveDishDealer
 website: classicdupe.tebex.io
 depend:
   - LuckPerms
@@ -15,6 +17,8 @@ prefix: ClassicDupe
 libraries:
   - com.h2database:h2:2.1.214
   - org.mariadb.jdbc:mariadb-java-client:3.1.4
+  - net.dv8tion:JDA:5.0.0-beta.10
+  - com.fasterxml.jackson.core:jackson-annotations:2.15.2
 commands:
   dupe:
     description: To dupe items. Can dupe up to 6 times
@@ -33,10 +37,16 @@ commands:
   spawn:
     description: Teleports you to spawn
     usage: "Usage: /spawn [player]"
+  nether:
+    description: To go to the nether
+    usage: "Usage: /nether [player]"
+  overworld:
+    description: To go to the overworld
+    usage: "Usage: /overworld [player]"
   setspawn:
     description: Sets the spawn to the players location
     permission: admin.setspawn
-    usage: "Usage: /setspawn [player]"
+    usage: "Usage: /setspawn <spawn> [player]"
   gamemode:
     aliases:
       - gm
@@ -196,13 +206,6 @@ commands:
     description: To reload the config
     usage: "Usage: /configreload"
     permission: admin.reload
-  setnetherspawn:
-    description: To set the spawn of the nether
-    usage: "Usage: /setnetherspawn"
-    permission: admin.setnetherspawn
-  nether:
-    description: To go to the nether
-    usage: "Usage: /nether"
   hat:
     description: To put on a hat
     usage: "Usage: /hat"
@@ -214,6 +217,12 @@ commands:
       - clans
       - guild
       - guilds
+  clanadmin:
+    description: The admin command for clans
+    usage: "Usage: /clanadmin"
+    permission: admin.clanadmin
+    aliases:
+      - cadmin
   cspy:
     description: To toggle command spy
     usage: "Usage: /cspy"
@@ -324,6 +333,9 @@ commands:
         list:
             description: To list all custom items
             usage: "Usage: /customitem list"
+  bounty:
+    description: To list and place bounties on players
+    usage: "Usage: /bounty"
 permissions:
   default.spawn.others:
     description: Allows you to teleport others to spawn
@@ -339,3 +351,7 @@ permissions:
     description: Allows you to use the customitem command
   admin.bypassCustomItemCd:
     description: Allows you to bypass the cooldown for custom items
+  default.bounty.forceset:
+    description: Allows you to force set a bounty
+  default.bounty.delete:
+    description: Allows you to delete a bounty

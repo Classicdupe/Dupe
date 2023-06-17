@@ -24,7 +24,6 @@ import xyz.prorickey.classicdupe.commands.moderator.*;
 import xyz.prorickey.classicdupe.commands.perk.*;
 import xyz.prorickey.classicdupe.custom.tables.CraftingTable;
 import xyz.prorickey.classicdupe.customitems.cicommands;
-import xyz.prorickey.classicdupe.customitems.citicker;
 import xyz.prorickey.classicdupe.database.Database;
 import xyz.prorickey.classicdupe.database.PlayerVaultDatabase;
 import xyz.prorickey.classicdupe.discord.ClassicDupeBot;
@@ -41,8 +40,8 @@ public class ClassicDupe extends JavaPlugin {
     public static ClassicDupeBot bot;
     public static LuckPerms lpapi;
     public static Database database;
+    public static ClanDatabase clanDatabase;
     public static PlayerVaultDatabase pvdatabase;
-
 
     public static final List<ItemStack> randomItems = new ArrayList<>();
 
@@ -52,6 +51,7 @@ public class ClassicDupe extends JavaPlugin {
 
         try {
             Class.forName("org.h2.Driver");
+            Class.forName ("org.mariadb.jdbc.Driver");
         } catch (ClassNotFoundException e) {
             throw new RuntimeException(e);
         }
@@ -62,7 +62,6 @@ public class ClassicDupe extends JavaPlugin {
         if(Bukkit.getPluginManager().getPlugin("PlaceholderAPI") != null) new ClassicDupeExpansion(this).register();
 
         Config.init(this);
-        ClanDatabase.init(this);
         database = new Database();
         pvdatabase = new PlayerVaultDatabase(this);
 
@@ -101,6 +100,10 @@ public class ClassicDupe extends JavaPlugin {
         this.getCommand("random").setTabCompleter(new RandomCMD());
         this.getCommand("spawn").setExecutor(new SpawnCMD());
         this.getCommand("spawn").setTabCompleter(new SpawnCMD());
+        this.getCommand("nether").setExecutor(new SpawnCMD());
+        this.getCommand("nether").setTabCompleter(new SpawnCMD());
+        this.getCommand("overworld").setExecutor(new SpawnCMD());
+        this.getCommand("overworld").setTabCompleter(new SpawnCMD());
         this.getCommand("setspawn").setExecutor(new SetSpawnCMD());
         this.getCommand("setspawn").setTabCompleter(new SetSpawnCMD());
         this.getCommand("gamemode").setExecutor(new GamemodeCMD());
@@ -193,8 +196,6 @@ public class ClassicDupe extends JavaPlugin {
         this.getCommand("feed").setTabCompleter(new FeedCMD());
         this.getCommand("configreload").setExecutor(new ConfigReload());
         this.getCommand("configreload").setTabCompleter(new ConfigReload());
-        this.getCommand("nether").setExecutor(new NetherCMD());
-        this.getCommand("nether").setTabCompleter(new NetherCMD());
         this.getCommand("hat").setExecutor(new HatCMD());
         this.getCommand("hat").setTabCompleter(new HatCMD());
         this.getCommand("report").setExecutor(new ReportCMD());
@@ -223,6 +224,8 @@ public class ClassicDupe extends JavaPlugin {
         this.getCommand("balance").setTabCompleter(new BalanceCMD());
         this.getCommand("customitem").setExecutor(new cicommands());
         this.getCommand("customitem").setTabCompleter(new cicommands());
+        this.getCommand("bounty").setExecutor(new BountyCMD());
+        this.getCommand("bounty").setTabCompleter(new BountyCMD());
 
         getServer().getPluginManager().registerEvents(new JoinEvent(), this);
         getServer().getPluginManager().registerEvents(new QuitEvent(), this);
@@ -249,6 +252,7 @@ public class ClassicDupe extends JavaPlugin {
         getServer().getPluginManager().registerEvents(new ArmorTrims(), this);
         getServer().getPluginManager().registerEvents(new ItemUse(), this);
         getServer().getPluginManager().registerEvents(new CraftingTable(), this);
+        getServer().getPluginManager().registerEvents(new BountyCMD(), this);
 
         //Init maze
         MAZEmanager.init();
@@ -315,6 +319,7 @@ public class ClassicDupe extends JavaPlugin {
     public static LuckPerms getLPAPI() { return lpapi; }
     public static Database getDatabase() { return database; }
     public static PlayerVaultDatabase getPVDatabase() { return pvdatabase; }
+    public static ClanDatabase getClanDatabase() { return clanDatabase; }
 
     public static List<String> getOnlinePlayerUsernames() {
         List<String> list = new ArrayList<>();

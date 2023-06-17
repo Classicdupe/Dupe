@@ -6,27 +6,20 @@ import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.TextColor;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
-import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
 import xyz.prorickey.classicdupe.ClassicDupe;
 import xyz.prorickey.classicdupe.Config;
 import xyz.prorickey.classicdupe.Utils;
-import xyz.prorickey.classicdupe.clans.ClanDatabase;
 import xyz.prorickey.classicdupe.commands.moderator.StaffChatCMD;
 import xyz.prorickey.classicdupe.commands.perk.ChatColorCMD;
 import xyz.prorickey.classicdupe.commands.perk.ChatGradientCMD;
 import xyz.prorickey.classicdupe.database.PlayerData;
-import xyz.prorickey.classicdupe.database.PlayerDatabase;
 import xyz.prorickey.classicdupe.discord.ClassicDupeBot;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 public class Chat implements Listener {
 
@@ -63,21 +56,17 @@ public class Chat implements Listener {
                     .sendMessage("**" + e.getPlayer().getName() + "** \u00BB " + PlainTextComponentSerializer.plainText().serialize(e.message())).queue();
             return;
         }
-        if(ClanDatabase.isInClanChat(e.getPlayer())) {
+        if(ClassicDupe.getClanDatabase().clanChat(e.getPlayer())) {
             e.setCancelled(true);
-            ClanDatabase.sendToClanChat(PlainTextComponentSerializer.plainText().serialize(e.message()), e.getPlayer());
+            ClassicDupe.getClanDatabase().sendClanChat(PlainTextComponentSerializer.plainText().serialize(e.message()), e.getPlayer());
             return;
         }
 
-
-
-
-
-        String clanName = ClanDatabase.getClanMember(e.getPlayer().getUniqueId()).getClanName();
+        String clanName = ClassicDupe.getClanDatabase().getClanMember(e.getPlayer().getUniqueId()).getClanName();
         String clanColor = "<yellow>";
         if(clanName != null &&
-                ClanDatabase.getClanMember(e.getPlayer().getUniqueId()).getClanID() != null
-        ) clanColor = ClanDatabase.getClan(ClanDatabase.getClanMember(e.getPlayer().getUniqueId()).getClanID()).getClanColor();
+                ClassicDupe.getClanDatabase().getClanMember(e.getPlayer().getUniqueId()).getClanID() != null
+        ) clanColor = ClassicDupe.getClanDatabase().getClan(ClassicDupe.getClanDatabase().getClanMember(e.getPlayer().getUniqueId()).getClanID()).getClanColor();
 
         String pgroup = ClassicDupe.getLPAPI().getUserManager().getUser(e.getPlayer().getUniqueId()).getPrimaryGroup();
         if(pgroup.equalsIgnoreCase("default")) chatCooldown.put(e.getPlayer(), System.currentTimeMillis()+4000);

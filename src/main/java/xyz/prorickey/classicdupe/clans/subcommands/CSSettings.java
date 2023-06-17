@@ -2,11 +2,11 @@ package xyz.prorickey.classicdupe.clans.subcommands;
 
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import xyz.prorickey.classicdupe.ClassicDupe;
 import xyz.prorickey.classicdupe.Utils;
-import xyz.prorickey.classicdupe.clans.Clan;
-import xyz.prorickey.classicdupe.clans.ClanMember;
-import xyz.prorickey.classicdupe.clans.ClanSub;
-import xyz.prorickey.classicdupe.clans.ClanDatabase;
+import xyz.prorickey.classicdupe.clans.builders.Clan;
+import xyz.prorickey.classicdupe.clans.builders.ClanMember;
+import xyz.prorickey.classicdupe.clans.builders.ClanSub;
 import xyz.prorickey.proutils.TabComplete;
 
 import java.util.ArrayList;
@@ -14,6 +14,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+@SuppressWarnings("unused")
 public class CSSettings extends ClanSub {
 
     final Map<String, String> nameToCode = new HashMap<>() {{
@@ -41,7 +42,7 @@ public class CSSettings extends ClanSub {
             sender.sendMessage(Utils.format("<red>You cannot execute this command from console"));
             return;
         }
-        ClanMember cmem = ClanDatabase.getClanMember(player.getUniqueId());
+        ClanMember cmem = ClassicDupe.getClanDatabase().getClanMember(player.getUniqueId());
         if(cmem.getClanID() == null) {
             player.sendMessage(Utils.cmdMsg("<red>You are not in a clan. You can't change the settings of a clan that doesn't exist"));
             return;
@@ -50,7 +51,7 @@ public class CSSettings extends ClanSub {
             player.sendMessage(Utils.cmdMsg("<red>You must either be an admin or the owner of the clan to execute this command"));
             return;
         }
-        Clan clan = ClanDatabase.getClan(cmem.getClanID());
+        Clan clan = ClassicDupe.getClanDatabase().getClan(cmem.getClanID());
         if(args.length == 0) {
             player.sendMessage(Utils.format("<yellow><bold>Clan Settings"));
             player.sendMessage(Utils.format("<yellow>publicClan: " + clan.getPublicClan()));
@@ -67,11 +68,11 @@ public class CSSettings extends ClanSub {
                     case "publicClan" -> {
                         if(args[1].equalsIgnoreCase("true")) {
                             clan.setPublicClan(true);
-                            ClanDatabase.setPublicClan(clan, true);
+                            ClassicDupe.getClanDatabase().setPublicClan(clan, true);
                             player.sendMessage(Utils.cmdMsg("<yellowYour clan is now public"));
                         } else if(args[1].equalsIgnoreCase("false")) {
                             clan.setPublicClan(false);
-                            ClanDatabase.setPublicClan(clan, false);
+                            ClassicDupe.getClanDatabase().setPublicClan(clan, false);
                             player.sendMessage(Utils.cmdMsg("<yellowYour clan is now private"));
                         } else {
                             player.sendMessage(Utils.cmdMsg("<red>You can only set that setting to true or false"));
@@ -80,7 +81,7 @@ public class CSSettings extends ClanSub {
                     case "clanColor" -> {
                         if(nameToCode.containsKey(args[1])) {
                             clan.setClanColor(nameToCode.get(args[1]));
-                            ClanDatabase.setClanColor(clan, nameToCode.get(args[1]));
+                            ClassicDupe.getClanDatabase().setClanColor(clan, nameToCode.get(args[1]));
                             player.sendMessage(Utils.cmdMsg("<yellowYour clan color is now " + nameToCode.get(args[1]) + args[1]));
                         } else {
                             player.sendMessage(Utils.cmdMsg("<red>You must pick one of the following colors: black, darkBlue, darkGreen, darkAqua, darkRed, darkPurple, gold, gray, darkGray, blue, green, aqua, red, pink, yellow or white"));

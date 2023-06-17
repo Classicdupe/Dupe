@@ -4,13 +4,14 @@ import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import xyz.prorickey.classicdupe.Utils;
-import xyz.prorickey.classicdupe.clans.ClanSub;
+import xyz.prorickey.classicdupe.clans.builders.ClanSub;
 import xyz.prorickey.proutils.TabComplete;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
 
+@SuppressWarnings("unused")
 public class CSDecline extends ClanSub {
 
     @Override

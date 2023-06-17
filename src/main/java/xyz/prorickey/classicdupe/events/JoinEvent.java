@@ -13,11 +13,9 @@ import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
 import xyz.prorickey.classicdupe.ClassicDupe;
 import xyz.prorickey.classicdupe.Utils;
-import xyz.prorickey.classicdupe.clans.ClanDatabase;
 import xyz.prorickey.classicdupe.commands.perk.ChatColorCMD;
 import xyz.prorickey.classicdupe.commands.perk.ChatGradientCMD;
 import xyz.prorickey.classicdupe.database.PlayerData;
-import xyz.prorickey.classicdupe.database.PlayerDatabase;
 import xyz.prorickey.classicdupe.discord.LinkRewards;
 
 import java.util.*;
@@ -31,7 +29,7 @@ public class JoinEvent implements Listener {
 
     @EventHandler
     public void onPlayerJoin(PlayerJoinEvent e) {
-        ClanDatabase.createIfNotExists(e.getPlayer());
+        ClassicDupe.getClanDatabase().updateClanMemberInfo(e.getPlayer());
         if(ClassicDupe.getDatabase().getPlayerDatabase().getPlayerData(e.getPlayer().getUniqueId()) == null) {
             ClassicDupe.getDatabase().getPlayerDatabase().playerDataUpdateAndLoad(e.getPlayer());
             e.getPlayer().teleport(ClassicDupe.getDatabase().getSpawn("hub"));
@@ -41,9 +39,6 @@ public class JoinEvent implements Listener {
             nakedProtection.put(e.getPlayer(), System.currentTimeMillis());
 
             // Starting Gear
-
-
-
             e.getPlayer().getInventory().setHelmet(new ItemStack(Material.IRON_HELMET));
             e.getPlayer().getInventory().setChestplate(new ItemStack(Material.IRON_CHESTPLATE));
             e.getPlayer().getInventory().setLeggings(new ItemStack(Material.IRON_LEGGINGS));
