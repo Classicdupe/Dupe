@@ -22,6 +22,7 @@ import xyz.prorickey.classicdupe.commands.admin.*;
 import xyz.prorickey.classicdupe.commands.default1.*;
 import xyz.prorickey.classicdupe.commands.moderator.*;
 import xyz.prorickey.classicdupe.commands.perk.*;
+import xyz.prorickey.classicdupe.custom.tables.CraftingTable;
 import xyz.prorickey.classicdupe.customitems.cicommands;
 import xyz.prorickey.classicdupe.database.Database;
 import xyz.prorickey.classicdupe.database.PlayerVaultDatabase;
@@ -250,6 +251,7 @@ public class ClassicDupe extends JavaPlugin {
         getServer().getPluginManager().registerEvents(new ShopCMD(), this);
         getServer().getPluginManager().registerEvents(new ArmorTrims(), this);
         getServer().getPluginManager().registerEvents(new ItemUse(), this);
+        getServer().getPluginManager().registerEvents(new CraftingTable(), this);
         getServer().getPluginManager().registerEvents(new BountyCMD(), this);
 
         //Init maze
