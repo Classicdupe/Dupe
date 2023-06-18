@@ -60,6 +60,13 @@ public class Utils {
         put("&r", "<reset>");
     }};
 
+    /**
+     * Gets the prefix of an offline player
+     * @deprecated Use luckperms api instead - Scheduled for removal
+     * @param player The player to get the prefix of
+     * @return The prefix of the player formatted with adventure color codes
+     */
+    @Deprecated
     public static String getPrefix(OfflinePlayer player) {
         String rank = ClassicDupe.getLPAPI().getUserManager().getUser(player.getUniqueId()).getCachedData().getMetaData().getPrimaryGroup();
         if(Config.getConfig().getString("ranks." + rank + ".prefix") != null) return Config.getConfig().getString("ranks." + rank + ".prefix");
