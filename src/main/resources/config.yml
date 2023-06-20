@@ -69,43 +69,61 @@ economy:
     kill: 1 # Amount of money you get per kill
   shop:
     name: "<color:#11DE13>Shop"
+    loreLimit: 25
     pages:
       - name: "<blue>Templates"
         items:
           - material: coast_armor_trim_smithing_template
             cost: 1
+            lore: "<yellow>2% chance of striking enemy with lightning<br><yellow>Doubles trident damage"
           - material: dune_armor_trim_smithing_template
             cost: 1
+            lore: "<yellow>10% chace of not taking damage from an attack"
           - material: eye_armor_trim_smithing_template
             cost: 1
+            lore: "<yellow>10% chance of giving enemy blindness<br><yellow>5% chance of giving enemy poison"
           - material: host_armor_trim_smithing_template
             cost: 1
+            lore: "<yellow>25% increased damage, protection and speed<br><yellow>10% chance of getting regeneration when hit<br><yellow>2% chance of losing 4 hearts when hit"
           - material: raiser_armor_trim_smithing_template
             cost: 1
+            lore: "<yellow>25% chance of spawning a chomper"
           - material: rib_armor_trim_smithing_template
             cost: 1
+            lore: "<yellow>5% chance of giving enemy wither when hit"
           - material: sentry_armor_trim_smithing_template
             cost: 1
+            lore: "<yellow>50% increased bow and crossbow damage"
           - material: shaper_armor_trim_smithing_template
             cost: 1
+            lore: "<yellow>10% chance of spawning in a vex"
           - material: silence_armor_trim_smithing_template
             cost: 1
+            lore: "<yellow>25% chance of dealing half of enemys damage back to them"
           - material: snout_armor_trim_smithing_template
             cost: 1
+            lore: "<yellow>75% reduction in fire damage<br><yellow>No lava damage<br><yellow>5% chance of setting enemy on fire"
           - material: spire_armor_trim_smithing_template
             cost: 1
+            lore: "<yellow>50% more thorns damage"
           - material: tide_armor_trim_smithing_template
             cost: 1
+            lore: "<yellow>25% chance of giving enemy weakness<br><yellow>50% more thorns damage"
           - material: vex_armor_trim_smithing_template
             cost: 1
+            lore: "<yellow>50% more sword damage<br><yellow>Small speed buff"
           - material: ward_armor_trim_smithing_template
             cost: 1
+            lore: "<yellow>50% more damage and protection<br><yellow>Slowness 1<br><yellow>75% reduced knockback"
           - material: wayfinder_armor_trim_smithing_template
             cost: 1
+            lore: "<yellow>25% chance of getting speed when hit(Does stack)"
           - material: wild_armor_trim_smithing_template
             cost: 1
+            lore: "<yellow>5% chance of giving enemy poison<br><yellow>10% chance of giving enemy slowness"
           - material: netherite_upgrade_smithing_template
             cost: 1
+            lore: "<yellow>Needed to upgrade armor to netherite"
 ranks:
   admin:
     homes: 8

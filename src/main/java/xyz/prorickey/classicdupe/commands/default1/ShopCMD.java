@@ -1,5 +1,7 @@
 package xyz.prorickey.classicdupe.commands.default1;
 
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.command.Command;
@@ -54,9 +56,13 @@ public class ShopCMD implements CommandExecutor, TabCompleter, Listener {
 
         shopPage.getItems().forEach((slot, shopItem) -> {
             ItemStack item = shopItem.itemStack;
-            item.editMeta(meta -> meta.lore(List.of(
-                    Utils.format("<green>Cost: <yellow>" + shopItem.price + " <green>dabloons")
-            )));
+            item.editMeta(meta -> {
+                List<Component> lore = new ArrayList<>();
+                lore.add(Utils.format("<green>Cost: <yellow>" + shopItem.price + " <green>dabloons"));
+                Arrays.stream(shopItem.unparsedLore.split("<br>"))
+                        .toList().forEach(str -> lore.add(MiniMessage.miniMessage().deserialize(str)));
+                meta.lore(lore);
+            });
             inv.setItem(slot, item);
         });
         
@@ -116,7 +122,7 @@ public class ShopCMD implements CommandExecutor, TabCompleter, Listener {
             itemsList.forEach(item -> {
                ItemStack itemStack = new ItemStack(Material.valueOf(((String) item.get("material")).toUpperCase()));
                itemStack.editMeta(meta -> meta.getPersistentDataContainer().set(DupeCMD.undupableKey, PersistentDataType.BOOLEAN, true));
-               items.put(i2.getAndIncrement(), new ShopItem(itemStack, (Integer) item.get("cost")));
+               items.put(i2.getAndIncrement(), new ShopItem(itemStack, (Integer) item.get("cost"), (String) item.get("lore")));
             });
             shop.put(i.getAndIncrement(), new ShopPage((String) page.get("name"), items));
         });
@@ -141,14 +147,17 @@ public class ShopCMD implements CommandExecutor, TabCompleter, Listener {
 
         private final ItemStack itemStack;
         private final int price;
+        private final String unparsedLore;
 
-        public ShopItem(ItemStack itemStack, int price) {
+        public ShopItem(ItemStack itemStack, int price, String unparsedLore) {
             this.itemStack = itemStack;
             this.price = price;
+            this.unparsedLore = unparsedLore;
         }
 
         public ItemStack getItemStack() { return itemStack; }
         public int getPrice() { return price; }
+        public String getUnparsedLore() { return unparsedLore; }
     }
 
 }
