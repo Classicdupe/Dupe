@@ -38,7 +38,7 @@ public class Chat implements Listener {
         // serialize it to normal string format (STRING)
         String serialized = mm.serialize(e.originalMessage());
         // Remove stupid tags
-        //if (!e.player().hasPermission("classicdupe.admin.tags")){
+        //if (!e.player().hasPermission("classicdupe.admin.tags")) {
         serialized = mm.stripTags(serialized);
         //}
         if (e.player() == null){
@@ -67,7 +67,7 @@ public class Chat implements Listener {
             serialized ="<gradient:" +
                     ChatGradientCMD.gradientProfiles.get(e.player().getUniqueId().toString()).gradientFrom + ":" +
                     ChatGradientCMD.gradientProfiles.get(e.player().getUniqueId().toString()).gradientTo + ">" +
-                    mm.stripTags(PlainTextComponentSerializer.plainText().serialize(e.originalMessage()));
+                    serialized;
         }
 
         e.result(mm.deserialize(serialized));
