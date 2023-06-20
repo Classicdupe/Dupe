@@ -13,6 +13,7 @@ depend:
   - LuckPerms
   - PlaceholderAPI
   - WorldGuard
+  - spark
 prefix: ClassicDupe
 libraries:
   - com.h2database:h2:2.1.214

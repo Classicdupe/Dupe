@@ -9,11 +9,13 @@ import org.bukkit.Location;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockFromToEvent;
+import xyz.prorickey.classicdupe.Config;
 
 public class FlowEvent implements Listener {
 
     @EventHandler
     public void onBlockFromTo(BlockFromToEvent e) {
+        if(Config.getConfig().getBoolean("dev")) return;
         RegionContainer container = WorldGuard.getInstance().getPlatform().getRegionContainer();
         ProtectedRegion spawnb = container.get(BukkitAdapter.adapt(Bukkit.getWorld("world"))).getRegion("spawnb");
         Location loc = e.getToBlock().getLocation();
