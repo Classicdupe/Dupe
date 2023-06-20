@@ -337,6 +337,9 @@ commands:
   bounty:
     description: To list and place bounties on players
     usage: "Usage: /bounty"
+  deathmessages:
+    description: To turn death messages on and off
+    usage: "Usage: /deathmessages"
 permissions:
   default.spawn.others:
     description: Allows you to teleport others to spawn

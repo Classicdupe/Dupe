@@ -1,5 +1,6 @@
 package xyz.prorickey.classicdupe.commands.default1;
 
+import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -29,10 +30,12 @@ public class UnlinkCMD implements CommandExecutor, TabCompleter {
             return true;
         }
         ClassicDupe.getDatabase().getLinkingDatabase().unlinkByUUID(player.getUniqueId().toString());
-        ClassicDupeBot.getJDA().getGuildById(1068991438391623836L).removeRoleFromMember(
-                ClassicDupeBot.getJDA().getUserById(link.id),
-                ClassicDupeBot.getJDA().getRoleById(1078109485144473620L)
-                ).queue();
+        Bukkit.getScheduler().runTaskAsynchronously(ClassicDupe.getPlugin(), () -> {
+            ClassicDupeBot.getJDA().getGuildById(1068991438391623836L).removeRoleFromMember(
+                    ClassicDupeBot.getJDA().retrieveUserById(link.id).complete(),
+                    ClassicDupeBot.getJDA().getRoleById(1078109485144473620L)
+            ).queue();
+        });
         player.sendMessage(Utils.cmdMsg("<green>Unlinked your account from " + ClassicDupeBot.getJDA().getUserById(link.id).getName()));
         return true;
     }

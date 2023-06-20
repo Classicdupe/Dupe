@@ -226,6 +226,8 @@ public class ClassicDupe extends JavaPlugin {
         this.getCommand("customitem").setTabCompleter(new cicommands());
         this.getCommand("bounty").setExecutor(new BountyCMD());
         this.getCommand("bounty").setTabCompleter(new BountyCMD());
+        this.getCommand("deathmessages").setExecutor(new DeathMessagesCMD());
+        this.getCommand("deathmessages").setTabCompleter(new DeathMessagesCMD());
 
         getServer().getPluginManager().registerEvents(new JoinEvent(), this);
         getServer().getPluginManager().registerEvents(new QuitEvent(), this);
