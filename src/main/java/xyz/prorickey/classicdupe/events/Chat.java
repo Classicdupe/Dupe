@@ -3,6 +3,8 @@ package xyz.prorickey.classicdupe.events;
 import io.papermc.paper.event.player.AsyncChatDecorateEvent;
 import io.papermc.paper.event.player.AsyncChatEvent;
 import net.dv8tion.jda.api.entities.channel.concrete.TextChannel;
+import net.kyori.adventure.key.Key;
+import net.kyori.adventure.sound.Sound;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.TextColor;
 import net.kyori.adventure.text.minimessage.MiniMessage;
@@ -10,6 +12,7 @@ import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import xyz.prorickey.classicdupe.ClassicDupe;
 import xyz.prorickey.classicdupe.Config;
@@ -30,7 +33,7 @@ public class Chat implements Listener {
     public static final Map<Player, Long> chatCooldown = new HashMap<>();
 
     @EventHandler
-    public void onDecorate(AsyncChatDecorateEvent e){
+    public void onAsyncChatDecorate(AsyncChatDecorateEvent e){
         MiniMessage mm = MiniMessage.miniMessage();
         // serialize it to normal string format (STRING)
         String serialized = mm.serialize(e.originalMessage());
@@ -48,7 +51,10 @@ public class Chat implements Listener {
         // Checking all players in the message
         // Old for loop due to streaming needs final variables.
         for (Player onlinePlayer : Bukkit.getOnlinePlayers()) {
-            serialized = serialized.replace(onlinePlayer.getName(), "<yellow>@"+onlinePlayer.getName()+"</yellow>");
+            if(serialized.contains("@" + onlinePlayer.getName())) {
+                serialized = serialized.replace("@" + onlinePlayer.getName(), "<yellow>@"+onlinePlayer.getName()+"</yellow>");
+                onlinePlayer.playSound(Sound.sound(Key.key("block.note_block.pling"), Sound.Source.MASTER, 1, 1));
+            }
         }
         ChatType chatType = ChatType.DEFAULT;
         if(ChatColorCMD.colorProfiles.containsKey(e.player().getUniqueId().toString())) chatType = ChatType.COLOR;
@@ -57,7 +63,7 @@ public class Chat implements Listener {
             serialized = "<gray>" + serialized;
         } else if (chatType.equals(ChatType.COLOR)){
             serialized = "<white>" + data.chatcolor + serialized;
-        } else if(chatType.equals(ChatType.GRADIENT)) {
+        } else {
             serialized ="<gradient:" +
                     ChatGradientCMD.gradientProfiles.get(e.player().getUniqueId().toString()).gradientFrom + ":" +
                     ChatGradientCMD.gradientProfiles.get(e.player().getUniqueId().toString()).gradientTo + ">" +
@@ -66,9 +72,9 @@ public class Chat implements Listener {
 
         e.result(mm.deserialize(serialized));
     }
-
-    @EventHandler
-    public void onChat(AsyncChatEvent e) {
+    
+    @EventHandler(priority = EventPriority.HIGHEST)
+    public void onAsyncChat(AsyncChatEvent e) {
         if(!ClassicDupe.getDatabase().getFilterDatabase().checkMessage(PlainTextComponentSerializer.plainText().serialize(e.message()).toLowerCase())) {
             e.setCancelled(true);
             e.getPlayer().sendMessage(Utils.cmdMsg("<red>Your message has been blocked by the filter"));
