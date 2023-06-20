@@ -340,6 +340,9 @@ commands:
   deathmessages:
     description: To turn death messages on and off
     usage: "Usage: /deathmessages"
+  mutepings:
+    description: To mute pings in chat
+    usage: "Usage: /mutepings"
 permissions:
   default.spawn.others:
     description: Allows you to teleport others to spawn

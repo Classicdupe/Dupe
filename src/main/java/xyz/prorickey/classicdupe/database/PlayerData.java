@@ -25,6 +25,7 @@ public class PlayerData {
     public boolean night;
     public Integer balance;
     public boolean deathmessages;
+    public boolean mutepings;
 
     public PlayerData(Connection conn,
                       UUID uuid1,
@@ -39,7 +40,8 @@ public class PlayerData {
                       String gradientto1,
                       boolean night1,
                       Integer balance1,
-                        boolean deathmessages1
+                      boolean deathmessages1,
+                      boolean mutepings1
     ) {
         this.conn = conn;
         uuid = uuid1;
@@ -55,6 +57,7 @@ public class PlayerData {
         night = night1;
         balance = balance1;
         deathmessages = deathmessages1;
+        mutepings = mutepings1;
     }
 
     public UUID getUuid() { return uuid; }
@@ -70,6 +73,7 @@ public class PlayerData {
     public boolean isNight() { return night; }
     public Integer getBalance() { return balance; }
     public boolean getDeathMessages() { return deathmessages; }
+    public boolean getMutePings() { return mutepings; }
 
     public void setNickname(String nickname) {
         this.nickname = nickname;
@@ -272,6 +276,20 @@ public class PlayerData {
             try {
                 PreparedStatement statement = conn.prepareStatement("UPDATE players SET deathMessages=? WHERE uuid=?");
                 statement.setBoolean(1, deathMessages);
+                statement.setString(2, this.uuid.toString());
+                statement.executeUpdate();
+            } catch (SQLException e) {
+                Bukkit.getLogger().severe(e.toString());
+            }
+        });
+    }
+
+    public void setMutePings(boolean mutePings) {
+        this.mutepings = mutePings;
+        Bukkit.getScheduler().runTaskAsynchronously(ClassicDupe.getPlugin(), () -> {
+            try {
+                PreparedStatement statement = conn.prepareStatement("UPDATE players SET mutepings=? WHERE uuid=?");
+                statement.setBoolean(1, mutePings);
                 statement.setString(2, this.uuid.toString());
                 statement.executeUpdate();
             } catch (SQLException e) {

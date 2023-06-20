@@ -52,7 +52,8 @@ public class PlayerDatabase {
                         set.getString("gradientto"),
                         set.getBoolean("night"),
                         set.getInt("balance"),
-                        set.getBoolean("deathmessages")
+                        set.getBoolean("deathmessages"),
+                        set.getBoolean("mutepings")
                 );
             }
             return null;
@@ -89,10 +90,11 @@ public class PlayerDatabase {
                             set.getString("gradientto"),
                             set.getBoolean("night"),
                             set.getInt("balance"),
-                            set.getBoolean("deathmessages")
+                            set.getBoolean("deathmessages"),
+                            set.getBoolean("mutepings")
                     ));
                 } else {
-                    PreparedStatement stat1 = conn.prepareStatement("INSERT INTO players(uuid, name, nickname, timesjoined, playtime, randomitem, chatcolor, gradient, gradientfrom, gradientto, night, balance, deathmessages) VALUES (?, ?, null, 1, 0, true, '<gray>', false, null, null, true, 0, true)");
+                    PreparedStatement stat1 = conn.prepareStatement("INSERT INTO players(uuid, name, nickname, timesjoined, playtime, randomitem, chatcolor, gradient, gradientfrom, gradientto, night, balance, deathmessages, mutepings) VALUES (?, ?, null, 1, 0, true, '<gray>', false, null, null, true, 0, true, false)");
                     stat1.setString(1, player.getUniqueId().toString());
                     stat1.setString(2, player.getName());
                     stat1.execute();
@@ -112,7 +114,8 @@ public class PlayerDatabase {
                             null,
                             true,
                             0,
-                            true
+                            true,
+                            false
                     ));
                 }
             } catch (SQLException e) {

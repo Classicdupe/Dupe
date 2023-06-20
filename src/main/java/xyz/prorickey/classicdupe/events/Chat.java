@@ -53,7 +53,9 @@ public class Chat implements Listener {
         for (Player onlinePlayer : Bukkit.getOnlinePlayers()) {
             if(serialized.contains("@" + onlinePlayer.getName())) {
                 serialized = serialized.replace("@" + onlinePlayer.getName(), "<yellow>@"+onlinePlayer.getName()+"</yellow>");
-                onlinePlayer.playSound(Sound.sound(Key.key("block.note_block.pling"), Sound.Source.MASTER, 1, 1));
+                PlayerData playerData = ClassicDupe.getDatabase().getPlayerDatabase().getPlayerData(onlinePlayer.getUniqueId());
+                if(!playerData.getMutePings())
+                    onlinePlayer.playSound(Sound.sound(Key.key("block.note_block.pling"), Sound.Source.MASTER, 1, 1));
             }
         }
         ChatType chatType = ChatType.DEFAULT;
