@@ -92,7 +92,7 @@ public class PlayerDatabase {
                             set.getBoolean("deathmessages")
                     ));
                 } else {
-                    PreparedStatement stat1 = conn.prepareStatement("INSERT INTO players(uuid, name, nickname, timesjoined, playtime, randomitem, chatcolor, gradient, gradientfrom, gradientto, night, balance) VALUES (?, ?, null, 1, 0, true, '<gray>', false, null, null, true, 0)");
+                    PreparedStatement stat1 = conn.prepareStatement("INSERT INTO players(uuid, name, nickname, timesjoined, playtime, randomitem, chatcolor, gradient, gradientfrom, gradientto, night, balance, deathmessages) VALUES (?, ?, null, 1, 0, true, '<gray>', false, null, null, true, 0, true)");
                     stat1.setString(1, player.getUniqueId().toString());
                     stat1.setString(2, player.getName());
                     stat1.execute();
