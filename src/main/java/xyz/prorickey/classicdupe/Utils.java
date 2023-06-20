@@ -58,7 +58,8 @@ public class Utils {
     }};
 
     /**
-     * Gets the prefix of an offline player
+     * Gets the prefix of an offline player.
+     * Also removed the boldness from the prefix.
      *
      * @param player The player to get the prefix of
      * @return The prefix of the player formatted with adventure color codes
@@ -66,7 +67,7 @@ public class Utils {
     @Deprecated
     public static String getPrefix(OfflinePlayer player) {
         String prefix = ClassicDupe.getLPAPI().getUserManager().getUser(player.getUniqueId()).getCachedData().getMetaData().getPrefix();
-        if(prefix != null) return convertColorCodesToAdventure(prefix);
+        if(prefix != null) return convertColorCodesToAdventure(prefix) + "<b></b>";
         return "";
     }
 
