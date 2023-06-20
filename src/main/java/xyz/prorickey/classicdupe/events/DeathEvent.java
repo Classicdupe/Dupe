@@ -15,6 +15,7 @@ import xyz.prorickey.classicdupe.ClassicDupe;
 import xyz.prorickey.classicdupe.Config;
 import xyz.prorickey.classicdupe.Utils;
 import xyz.prorickey.classicdupe.clans.builders.Clan;
+import xyz.prorickey.classicdupe.database.PlayerData;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -110,6 +111,13 @@ public class DeathEvent implements Listener {
             case ENTITY_EXPLOSION -> e.deathMessage(Utils.format("<red>\u2620 <gold>" + player.getName() + "<yellow> died from an explosion"));
             default -> e.deathMessage(Utils.format("<red>\u2620 <gold>" + player.getName() + "<yellow> died"));
         }
+
+        Component comp = e.deathMessage();
+        e.deathMessage(null);
+        Bukkit.getOnlinePlayers().forEach(p -> {
+            PlayerData playerData = ClassicDupe.getDatabase().getPlayerDatabase().getPlayerData(p.getUniqueId());
+            if(playerData.getDeathMessages()) p.sendMessage(comp);
+        });
     }
 
 }
