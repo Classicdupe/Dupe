@@ -67,7 +67,7 @@ public class Chat implements Listener {
             serialized ="<gradient:" +
                     ChatGradientCMD.gradientProfiles.get(e.player().getUniqueId().toString()).gradientFrom + ":" +
                     ChatGradientCMD.gradientProfiles.get(e.player().getUniqueId().toString()).gradientTo + ">" +
-                    mm.stripTags(PlainTextComponentSerializer.plainText().serialize(e.originalMessage())) + "</gradient>";
+                    mm.stripTags(PlainTextComponentSerializer.plainText().serialize(e.originalMessage()));
         }
 
         e.result(mm.deserialize(serialized));
