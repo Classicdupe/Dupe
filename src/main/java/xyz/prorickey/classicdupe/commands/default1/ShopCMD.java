@@ -85,7 +85,7 @@ public class ShopCMD implements CommandExecutor, TabCompleter, Listener {
 
     @EventHandler
     public void onInventoryClick(InventoryClickEvent e) {
-        if(!shopUsers.containsKey(e.getWhoClicked()) || e.getClickedInventory().equals(e.getWhoClicked().getInventory())) return;
+        if(e.getClickedInventory() == null || !shopUsers.containsKey(e.getWhoClicked()) || e.getClickedInventory().equals(e.getWhoClicked().getInventory())) return;
         e.setCancelled(true);
         ShopPage shopPage = shop.get(shopUsers.get(e.getWhoClicked()));
         if(shopPage.items.containsKey(e.getSlot())) {
