@@ -1,7 +1,9 @@
 package xyz.prorickey.classicdupe.commands.default1;
 
 import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.TextDecoration;
 import net.kyori.adventure.text.minimessage.MiniMessage;
+import org.apache.commons.lang3.text.WordUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.command.Command;
@@ -14,6 +16,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.inventory.Inventory;
+import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.SkullMeta;
 import org.bukkit.persistence.PersistentDataType;
@@ -26,6 +29,8 @@ import xyz.prorickey.classicdupe.database.PlayerData;
 
 import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class ShopCMD implements CommandExecutor, TabCompleter, Listener {
 
@@ -60,7 +65,7 @@ public class ShopCMD implements CommandExecutor, TabCompleter, Listener {
                 List<Component> lore = new ArrayList<>();
                 lore.add(Utils.format("<green>Cost: <yellow>" + shopItem.price + " <green>dabloons"));
                 Arrays.stream(shopItem.unparsedLore.split("<br>"))
-                        .toList().forEach(str -> lore.add(MiniMessage.miniMessage().deserialize(str)));
+                        .toList().forEach(str -> lore.add(MiniMessage.miniMessage().deserialize(str).decoration(TextDecoration.ITALIC, false)));
                 meta.lore(lore);
             });
             inv.setItem(slot, item);
@@ -96,7 +101,9 @@ public class ShopCMD implements CommandExecutor, TabCompleter, Listener {
                 return;
             }
             data.subtractBalance(shopItem.price);
-            e.getWhoClicked().getInventory().addItem(shopItem.itemStack);
+            ItemStack item = new ItemStack(shopItem.material);
+            item.editMeta(meta -> meta.getPersistentDataContainer().set(DupeCMD.undupableKey, PersistentDataType.BOOLEAN, true));
+            e.getWhoClicked().getInventory().addItem(item);
             e.getWhoClicked().sendMessage(Utils.cmdMsg("<green>You have successfully purchased this item"));
         }
     }
@@ -121,11 +128,26 @@ public class ShopCMD implements CommandExecutor, TabCompleter, Listener {
             AtomicInteger i2 = new AtomicInteger(0);
             itemsList.forEach(item -> {
                ItemStack itemStack = new ItemStack(Material.valueOf(((String) item.get("material")).toUpperCase()));
-               itemStack.editMeta(meta -> meta.getPersistentDataContainer().set(DupeCMD.undupableKey, PersistentDataType.BOOLEAN, true));
-               items.put(i2.getAndIncrement(), new ShopItem(itemStack, (Integer) item.get("cost"), (String) item.get("lore")));
+               itemStack.editMeta(meta -> {
+                   meta.getPersistentDataContainer().set(DupeCMD.undupableKey, PersistentDataType.BOOLEAN, true);
+                   meta.addItemFlags(ItemFlag.HIDE_ITEM_SPECIFICS);
+                   String name = (String) item.get("material");
+                   name = firstLetterCapitalWithSingleSpace(name
+                           .substring(0, name.length()-"_smithing_template".length())
+                           .replaceAll("_", " "));
+                   meta.displayName(Utils.format("<yellow>" + name));
+               });
+               items.put(i2.getAndIncrement(), new ShopItem(Material.valueOf(((String) item.get("material")).toUpperCase()), itemStack, (Integer) item.get("cost"), (String) item.get("lore")));
             });
             shop.put(i.getAndIncrement(), new ShopPage((String) page.get("name"), items));
         });
+    }
+
+    private static String firstLetterCapitalWithSingleSpace(final String words) {
+        return Stream.of(words.trim().split("\\s"))
+                .filter(word -> word.length() > 0)
+                .map(word -> word.substring(0, 1).toUpperCase() + word.substring(1))
+                .collect(Collectors.joining(" "));
     }
 
     public static class ShopPage {
@@ -148,16 +170,19 @@ public class ShopCMD implements CommandExecutor, TabCompleter, Listener {
         private final ItemStack itemStack;
         private final int price;
         private final String unparsedLore;
+        private final Material material;
 
-        public ShopItem(ItemStack itemStack, int price, String unparsedLore) {
+        public ShopItem(Material mat, ItemStack itemStack, int price, String unparsedLore) {
             this.itemStack = itemStack;
             this.price = price;
             this.unparsedLore = unparsedLore;
+            this.material = mat;
         }
 
         public ItemStack getItemStack() { return itemStack; }
         public int getPrice() { return price; }
         public String getUnparsedLore() { return unparsedLore; }
+        public Material getMaterial() { return material; }
     }
 
 }
