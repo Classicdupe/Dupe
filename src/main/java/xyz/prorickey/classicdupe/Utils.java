@@ -2,19 +2,15 @@ package xyz.prorickey.classicdupe;
 
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.minimessage.MiniMessage;
-import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.metadata.MetadataValue;
 import org.codehaus.plexus.util.StringUtils;
 
-import java.io.BufferedReader;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Set;
-import java.util.stream.Collectors;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class Utils {
 
@@ -26,6 +22,7 @@ public class Utils {
     public static String convertColorCodesToAdventure(String text) {
         final String[] last = {text};
         codeToAdventure.forEach((code, adv) -> last[0] = last[0].replaceAll(code, adv));
+        last[0] = translateLegacyHexColorCodes(last[0]);
         return last[0];
     }
 
@@ -62,15 +59,25 @@ public class Utils {
 
     /**
      * Gets the prefix of an offline player
-     * @deprecated Use luckperms api instead - Scheduled for removal
+     *
      * @param player The player to get the prefix of
      * @return The prefix of the player formatted with adventure color codes
      */
     @Deprecated
     public static String getPrefix(OfflinePlayer player) {
-        String rank = ClassicDupe.getLPAPI().getUserManager().getUser(player.getUniqueId()).getCachedData().getMetaData().getPrimaryGroup();
-        if(Config.getConfig().getString("ranks." + rank + ".prefix") != null) return Config.getConfig().getString("ranks." + rank + ".prefix");
+        String prefix = ClassicDupe.getLPAPI().getUserManager().getUser(player.getUniqueId()).getCachedData().getMetaData().getPrefix();
+        if(prefix != null) return convertColorCodesToAdventure(prefix);
         return "";
+    }
+
+    private static String translateLegacyHexColorCodes(String message) {
+        Matcher matcher = Pattern.compile("&(#[A-Fa-f0-9]{6})").matcher(message);
+        StringBuilder buffer = new StringBuilder(message.length() + 4 * 8);
+        while (matcher.find()) {
+            String group = matcher.group(1);
+            matcher.appendReplacement(buffer, "<color:" + group + ">");
+        }
+        return matcher.appendTail(buffer).toString();
     }
 
     public static Integer getMaxHomes(OfflinePlayer player) {
