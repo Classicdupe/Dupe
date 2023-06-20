@@ -52,9 +52,13 @@ public class H2ClanDatabase implements ClanDatabase {
         }
 
         globalConfig = YamlConfiguration.loadConfiguration(globalConfigFile);
+        try {
+            main = DriverManager.getConnection("jdbc:h2:" + ClassicDupe.getPlugin().getDataFolder().getAbsolutePath() + "/clansData/main");
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
         Bukkit.getScheduler().runTaskAsynchronously(plugin, () -> {
             try {
-                main = DriverManager.getConnection("jdbc:h2:" + ClassicDupe.getPlugin().getDataFolder().getAbsolutePath() + "/clansData/main");
                 // x y z pitch yaw world
                 main.prepareStatement("CREATE TABLE IF NOT EXISTS clans(clanId VARCHAR, clanName VARCHAR, clanKills INT, publicClan BOOLEAN, clanColor VARCHAR)").execute();
                 main.prepareStatement("CREATE TABLE IF NOT EXISTS clanWarps(clanId VARCHAR, name VARCHAR, levelNeeded INT, x INT, y INT, z INT, pitch FLOAT, yaw FLOAT, world VARCHAR)").execute();

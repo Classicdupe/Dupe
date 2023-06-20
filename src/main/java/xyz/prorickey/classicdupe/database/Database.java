@@ -265,13 +265,13 @@ public class Database {
                 playerConn.prepareStatement("CREATE TABLE IF NOT EXISTS particleEffects(uuid VARCHAR, killEffect VARCHAR, particleEffect VARCHAR)").execute();
                 linkingConn.prepareStatement("CREATE TABLE IF NOT EXISTS link(uuid VARCHAR, dscid Long)").execute();
                 homesConn.prepareStatement("CREATE TABLE IF NOT EXISTS homes(uuid VARCHAR, name VARCHAR, world VARCHAR, x DOUBLE, y DOUBLE, z DOUBLE, yaw FLOAT, pitch FLOAT)").execute();
-                bountyConn.prepareStatement("CREATE TABLE IF NOT EXISTS bounty(uuid VARCHAR, amount BIGINT)").execute();
+                bountyConn.prepareStatement("CREATE TABLE IF NOT EXISTS bounties(uuid VARCHAR, amount BIGINT)").execute();
 
                 filterDatabase = new FilterDatabase(serverConn);
                 playerDatabase = new PlayerDatabase(playerConn);
                 linkingDatabase = new LinkingDatabase(linkingConn);
                 homesDatabase = new HomesDatabase(homesConn);
-                bountyDatabase = new BountyDatabase(playerConn);
+                bountyDatabase = new BountyDatabase(bountyConn);
             }
         } catch (SQLException e) {
             throw new RuntimeException(e);

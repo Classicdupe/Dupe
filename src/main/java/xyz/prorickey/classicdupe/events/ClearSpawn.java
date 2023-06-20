@@ -12,6 +12,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.scheduler.BukkitRunnable;
+import xyz.prorickey.classicdupe.Config;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -20,6 +21,7 @@ public class ClearSpawn implements Listener {
 
     @EventHandler
     public void onBlockPlace(BlockPlaceEvent e) {
+        if(Config.getConfig().getBoolean("dev")) return;
         RegionContainer container = WorldGuard.getInstance().getPlatform().getRegionContainer();
         RegionManager regions = container.get(BukkitAdapter.adapt(e.getPlayer().getWorld()));
         ProtectedRegion region = regions.getRegion("clearspawn");
@@ -31,6 +33,7 @@ public class ClearSpawn implements Listener {
 
     @EventHandler
     public void onBlockBreak(BlockBreakEvent e) {
+        if(Config.getConfig().getBoolean("dev")) return;
         RegionContainer container = WorldGuard.getInstance().getPlatform().getRegionContainer();
         RegionManager regions = container.get(BukkitAdapter.adapt(e.getPlayer().getWorld()));
         ProtectedRegion region = regions.getRegion("clearspawn");
@@ -42,6 +45,7 @@ public class ClearSpawn implements Listener {
     public static class ClearSpawnTask extends BukkitRunnable {
         @Override
         public void run() {
+            if(Config.getConfig().getBoolean("dev")) return;
             for(int i = 0; i < blockMap.size(); i++) {
                 Block block = blockMap.keySet().stream().toList().get(i);
                 Long time = blockMap.get(block);

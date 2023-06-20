@@ -72,7 +72,7 @@ public class Chat implements Listener {
 
         e.result(mm.deserialize(serialized));
     }
-    
+
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onAsyncChat(AsyncChatEvent e) {
         if(!ClassicDupe.getDatabase().getFilterDatabase().checkMessage(PlainTextComponentSerializer.plainText().serialize(e.message()).toLowerCase())) {
