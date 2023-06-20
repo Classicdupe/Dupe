@@ -6,6 +6,7 @@ import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import xyz.prorickey.classicdupe.ClassicDupe;
 
+import javax.security.auth.callback.Callback;
 import java.io.File;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -69,7 +70,8 @@ public class HomesDatabase {
     }
 
     public void addHome(Player player, String home, Location location) {
-        homes.get(player).put(home, location);
+        if(homes.containsKey(player)) homes.get(player).put(home, location);
+        else loadPlayer(player);
         Bukkit.getScheduler().runTaskAsynchronously(ClassicDupe.getPlugin(), () -> {
             try {
                 PreparedStatement stat1 = conn.prepareStatement("SELECT * FROM homes WHERE uuid=? AND name=?");
@@ -106,7 +108,8 @@ public class HomesDatabase {
     }
 
     public void delHome(Player player, String name) {
-        homes.get(player).remove(name);
+        if(homes.containsKey(player)) homes.get(player).remove(name);
+        else loadPlayer(player);
         Bukkit.getScheduler().runTaskAsynchronously(ClassicDupe.getPlugin(), () -> {
             try {
                 PreparedStatement stat = conn.prepareStatement("DELETE FROM homes WHERE uuid=? AND name=?");
