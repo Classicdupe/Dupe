@@ -114,7 +114,7 @@ economy:
             lore: "<yellow>50% more sword damage<br><yellow>Small speed buff"
           - material: ward_armor_trim_smithing_template
             cost: 1
-            lore: "<yellow>50% more damage and protection<br><yellow>Slowness 1<br><yellow>75% reduced knockback"
+            lore: "<yellow>25% more damage and protection<br><yellow>Slowness 1<br><yellow>75% reduced knockback"
           - material: wayfinder_armor_trim_smithing_template
             cost: 1
             lore: "<yellow>25% chance of getting speed when hit(Does stack)"
@@ -171,6 +171,6 @@ trimset:
   tide:
     thornsAttackMultiplier: 1.5
   ward:
-    attackMultiplier: 1.5
-    defenseMultiplier: 0.5
+    attackMultiplier: 1.25
+    defenseMultiplier: 0.75
     knockbackMultiplier: 0.5
