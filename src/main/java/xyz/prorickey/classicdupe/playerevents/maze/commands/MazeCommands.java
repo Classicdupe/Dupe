@@ -81,7 +81,7 @@ public class MazeCommands implements CommandExecutor {
                             if (p.getLocation().getX() >= MAZEmanager.MazeLocation.x && p.getLocation().getX() <= MAZEmanager.MazeLocation.x + 100) {
                                 if (p.getLocation().getY() >= MAZEmanager.MazeLocation.y && p.getLocation().getY() <= MAZEmanager.MazeLocation.y + 100) {
                                     if (p.getLocation().getZ() >= MAZEmanager.MazeLocation.z && p.getLocation().getZ() <= MAZEmanager.MazeLocation.z + 100) {
-                                        p.teleport(Bukkit.getWorld("world").getSpawnLocation());
+                                        p.teleport(ClassicDupe.getDatabase().getSpawn("hub"));
                                     }
                                 }
                             }

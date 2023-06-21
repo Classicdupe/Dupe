@@ -21,16 +21,13 @@ public class PlayerOnEnd implements Listener {
         Player player = event.getPlayer();
         Location playerLocation = player.getLocation();
 
-
-        if (MAZEmanager.MazeRunning &&isInMaze(playerLocation) && isStandingOnGoldBlock(playerLocation)) {
+        if (MAZEmanager.MazeRunning && isInMaze(playerLocation) && isStandingOnGoldBlock(playerLocation)) {
+            System.out.println("Running bs");
             player.sendMessage(Utils.format("<gold><b>You have completed the maze!"));
 
             MAZEmanager.leaderboard.add(player.getName());
 
             for (Player onlinePlayer : Bukkit.getOnlinePlayers()) {
-                if (onlinePlayer.name() == player.name()) {
-                    continue;
-                }
                 onlinePlayer.sendMessage(Utils.format("<gold><b>" + player.getName() + " has completed the maze!"));
             }
 
@@ -43,9 +40,9 @@ public class PlayerOnEnd implements Listener {
         double y = location.getY();
         double z = location.getZ();
 
-        return x >= MAZEmanager.MazeLocation.x && x <= MAZEmanager.MazeLocation.x + MAZEmanager.MazeSize &&
-                y >= MAZEmanager.MazeLocation.y && y <= MAZEmanager.MazeLocation.y + 10 &&
-                z >= MAZEmanager.MazeLocation.z && z <= MAZEmanager.MazeLocation.z + MAZEmanager.MazeSize;
+        return x >= MAZEmanager.MazeLocation.x - MAZEmanager.MazeSize && x <= MAZEmanager.MazeLocation.x + MAZEmanager.MazeSize &&
+                y >= MAZEmanager.MazeLocation.y - 10 && y <= MAZEmanager.MazeLocation.y + 10 &&
+                z >= MAZEmanager.MazeLocation.z - MAZEmanager.MazeSize && z <= MAZEmanager.MazeLocation.z + MAZEmanager.MazeSize;
     }
 
     private boolean isStandingOnGoldBlock(Location location) {

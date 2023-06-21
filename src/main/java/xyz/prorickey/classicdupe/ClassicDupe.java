@@ -8,6 +8,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.command.PluginCommand;
 import org.bukkit.enchantments.Enchantment;
+import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.EnchantmentStorageMeta;
 import org.bukkit.plugin.RegisteredServiceProvider;
@@ -337,7 +338,20 @@ getServer().getPluginManager().registerEvents(new FixArmorTrimCrafting(), this);
 
     public static List<String> getOnlinePlayerUsernames() {
         List<String> list = new ArrayList<>();
-        plugin.getServer().getOnlinePlayers().forEach(player -> list.add(player.getName()));
+        plugin.getServer().getOnlinePlayers().forEach(player -> {
+            if(!Utils.isVanished(player)) list.add(player.getName());
+        });
+        return list;
+    }
+
+    public static List<String> getOnlinePlayerUsernames(Player player) {
+        List<String> list = new ArrayList<>();
+        if(player.hasPermission("mod.seevanish")) plugin.getServer().getOnlinePlayers().forEach(playe -> {
+            list.add(playe.getName());
+        });
+        else plugin.getServer().getOnlinePlayers().forEach(playe -> {
+            if(!Utils.isVanished(playe)) list.add(playe.getName());
+        });
         return list;
     }
 
