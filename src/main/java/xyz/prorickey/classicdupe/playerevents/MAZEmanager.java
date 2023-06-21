@@ -29,7 +29,7 @@ public class MAZEmanager {
     public static boolean MazeRunning = false;
     public static Vector3d MazeLocation = new Vector3d(0, 0, 0);
     public static Location MazeLoc;
-    public static int MazeSize = 10;
+    public static int MazeSize = 30;
     public static ArrayList leaderboard = new ArrayList<String>();
     public static Location MazeSpawn;
 
@@ -93,7 +93,7 @@ public class MAZEmanager {
                 path2.toFile().createNewFile();
                 //set internals to 0,0,0
                 Files.writeString(path2, "0,65,0");
-                MazeSpawn = new Location(Bukkit.getWorld("world"), 0, 65, 0);
+                MazeSpawn = new Location(Bukkit.getWorld("maze"), 0, 65, 0);
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -105,12 +105,12 @@ public class MAZEmanager {
                 e.printStackTrace();
             }
             String[] dataSplit2 = data2.split(",");
-            MazeSpawn = new Location(Bukkit.getWorld("world"), Float.parseFloat(dataSplit2[0]), Float.parseFloat(dataSplit2[1]), Float.parseFloat(dataSplit2[2]));
+            MazeSpawn = new Location(Bukkit.getWorld("maze"), Float.parseFloat(dataSplit2[0]), Float.parseFloat(dataSplit2[1]), Float.parseFloat(dataSplit2[2]));
         }
 
 
 
-        MazeLoc = new Location(Bukkit.getWorld("world"), MazeLocation.x, MazeLocation.y, MazeLocation.z);
+        MazeLoc = new Location(Bukkit.getWorld("maze"), MazeLocation.x, MazeLocation.y, MazeLocation.z);
         if (AutoStart) {
 
             //THREAD OF the method auto manager and the thread's var name is AMThread
