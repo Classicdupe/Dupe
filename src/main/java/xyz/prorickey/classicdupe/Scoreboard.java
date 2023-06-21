@@ -88,7 +88,7 @@ public class Scoreboard {
             else tpsStr = "<red>" + tps;
 
             updateTeamScore(obj, board, 5, Utils.format("<gold>\u2022 <yellow>TPS " + tpsStr));
-            updateTeamScore(obj, board, 4, Utils.format("<gold>\u2022 <yellow>Online <green>" + Bukkit.getOnlinePlayers().size()));
+            updateTeamScore(obj, board, 4, Utils.format("<gold>\u2022 <yellow>Online <green>" + ClassicDupe.getOnlinePlayerUsernames().size()));
             updateTeamScore(obj, board, 3, Utils.format("<gold>\u2022 <yellow>Uptime <green>" + Metrics.getServerMetrics().getServerUptimeFormatted()));
             updateTeamScore(obj, board, 2, Utils.format("<gold>\u2022 <yellow>Playtime <green>" + Metrics.getPlayerMetrics().getPlaytimeFormatted(player.getUniqueId())));
         }
