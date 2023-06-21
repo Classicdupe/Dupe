@@ -231,6 +231,14 @@ public class ClassicDupe extends JavaPlugin {
         this.getCommand("mutepings").setExecutor(new MutePingsCMD());
         this.getCommand("mutepings").setTabCompleter(new MutePingsCMD());
 
+        headlines hl = new headlines();
+        this.getCommand("headline").setExecutor(hl);
+        this.getCommand("alert").setExecutor(hl);
+        this.getCommand("subhead").setExecutor(hl);
+        this.getCommand("headline").setTabCompleter(hl);
+        this.getCommand("alert").setTabCompleter(hl);
+        this.getCommand("subhead").setTabCompleter(hl);
+
         getServer().getPluginManager().registerEvents(new JoinEvent(), this);
         getServer().getPluginManager().registerEvents(new QuitEvent(), this);
         getServer().getPluginManager().registerEvents(new CancelPortalCreation(), this);

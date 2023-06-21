@@ -334,6 +334,21 @@ commands:
         list:
             description: To list all custom items
             usage: "Usage: /customitem list"
+  headline:
+    description: Broadcast a headline
+    usage: /headline <message>
+    permission: headliner.perms
+    aliases: [ hl ]
+
+  alert:
+    description: Broadcast an alert
+    usage: /alert <message>
+    permission: headliner.broadcast
+  subhead:
+    description: Broadcast a subheader
+    usage: /subhead <message>
+    permission: headliner.subheader
+    aliases: [ sh ]
   bounty:
     description: To list and place bounties on players
     usage: "Usage: /bounty"
@@ -362,3 +377,12 @@ permissions:
     description: Allows you to force set a bounty
   default.bounty.delete:
     description: Allows you to delete a bounty
+  admin.headliner.perms:
+    description: Allows the user to use the headline command
+
+  admin.headliner.broadcast:
+    description: Allows the user to use the chat broadcast command
+
+  admin.headerliner.subheader:
+    description: Allows the user to use the subheader command
+
