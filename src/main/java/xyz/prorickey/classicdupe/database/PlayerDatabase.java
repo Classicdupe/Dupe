@@ -53,7 +53,8 @@ public class PlayerDatabase {
                         set.getBoolean("night"),
                         set.getInt("balance"),
                         set.getBoolean("deathmessages"),
-                        set.getBoolean("mutepings")
+                        set.getBoolean("mutepings"),
+                        set.getInt("killStreak")
                 );
             }
             return null;
@@ -91,7 +92,8 @@ public class PlayerDatabase {
                             set.getBoolean("night"),
                             set.getInt("balance"),
                             set.getBoolean("deathmessages"),
-                            set.getBoolean("mutepings")
+                            set.getBoolean("mutepings"),
+                            set.getInt("killStreak")
                     ));
                 } else {
                     PreparedStatement stat1 = conn.prepareStatement("INSERT INTO players(uuid, name, nickname, timesjoined, playtime, randomitem, chatcolor, gradient, gradientfrom, gradientto, night, balance, deathmessages, mutepings) VALUES (?, ?, null, 1, 0, true, '<gray>', false, null, null, true, 0, true, false)");
@@ -115,7 +117,8 @@ public class PlayerDatabase {
                             true,
                             0,
                             true,
-                            false
+                            false,
+                            0
                     ));
                 }
             } catch (SQLException e) {
@@ -190,6 +193,8 @@ public class PlayerDatabase {
     public static final Map<Integer, Integer> deathsLeaderboardD = new HashMap<>();
     public static final Map<Integer, String> playtimeLeaderboard = new HashMap<>();
     public static final Map<Integer, Long> playtimeLeaderboardP = new HashMap<>();
+    public static final Map<Integer, String> killStreakLeaderboard = new HashMap<>();
+    public static final Map<Integer, Integer> killStreakLeaderboardK = new HashMap<>();
 
     public void reloadLeaderboards() {
         Bukkit.getScheduler().runTaskAsynchronously(ClassicDupe.getPlugin(), () -> {
@@ -216,6 +221,14 @@ public class PlayerDatabase {
                         PlayerData data = getPlayerData(UUID.fromString(playtimeSet.getString("uuid")));
                         playtimeLeaderboard.put(i+1, data.name);
                         playtimeLeaderboardP.put(i+1, playtimeSet.getLong("playtime"));
+                    }
+                }
+                ResultSet killStreakSet = conn.prepareStatement("SELECT * FROM stats ORDER BY killStreak DESC").executeQuery();
+                for(int i = 0; i < 10; i++) {
+                    if(killStreakSet.next()) {
+                        PlayerData data = getPlayerData(UUID.fromString(killStreakSet.getString("uuid")));
+                        killStreakLeaderboard.put(i+1, data.name);
+                        killStreakLeaderboardK.put(i+1, killStreakSet.getInt("killStreak"));
                     }
                 }
             } catch (SQLException e) {

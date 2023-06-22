@@ -26,6 +26,7 @@ public class PlayerData {
     public Integer balance;
     public boolean deathmessages;
     public boolean mutepings;
+    public Integer killStreak;
 
     public PlayerData(Connection conn,
                       UUID uuid1,
@@ -41,7 +42,8 @@ public class PlayerData {
                       boolean night1,
                       Integer balance1,
                       boolean deathmessages1,
-                      boolean mutepings1
+                      boolean mutepings1,
+                      Integer killStreak1
     ) {
         this.conn = conn;
         uuid = uuid1;
@@ -58,6 +60,7 @@ public class PlayerData {
         balance = balance1;
         deathmessages = deathmessages1;
         mutepings = mutepings1;
+        killStreak = killStreak1;
     }
 
     public UUID getUuid() { return uuid; }
@@ -74,6 +77,7 @@ public class PlayerData {
     public Integer getBalance() { return balance; }
     public boolean getDeathMessages() { return deathmessages; }
     public boolean getMutePings() { return mutepings; }
+    public Integer getKillStreak() { return killStreak; }
 
     public void setNickname(String nickname) {
         this.nickname = nickname;
@@ -290,6 +294,34 @@ public class PlayerData {
             try {
                 PreparedStatement statement = conn.prepareStatement("UPDATE players SET mutepings=? WHERE uuid=?");
                 statement.setBoolean(1, mutePings);
+                statement.setString(2, this.uuid.toString());
+                statement.executeUpdate();
+            } catch (SQLException e) {
+                Bukkit.getLogger().severe(e.toString());
+            }
+        });
+    }
+
+    public void setKillStreak(Integer killStreak) {
+        this.killStreak = killStreak;
+        Bukkit.getScheduler().runTaskAsynchronously(ClassicDupe.getPlugin(), () -> {
+            try {
+                PreparedStatement statement = conn.prepareStatement("UPDATE players SET killstreak=? WHERE uuid=?");
+                statement.setInt(1, killStreak);
+                statement.setString(2, this.uuid.toString());
+                statement.executeUpdate();
+            } catch (SQLException e) {
+                Bukkit.getLogger().severe(e.toString());
+            }
+        });
+    }
+
+    public void addKillStreak(Integer add) {
+        this.killStreak += add;
+        Bukkit.getScheduler().runTaskAsynchronously(ClassicDupe.getPlugin(), () -> {
+            try {
+                PreparedStatement statement = conn.prepareStatement("UPDATE players SET killstreak=killstreak+? WHERE uuid=?");
+                statement.setInt(1, add);
                 statement.setString(2, this.uuid.toString());
                 statement.executeUpdate();
             } catch (SQLException e) {
