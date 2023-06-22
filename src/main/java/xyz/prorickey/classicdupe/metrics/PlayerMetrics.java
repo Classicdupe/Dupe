@@ -55,6 +55,15 @@ public class PlayerMetrics implements Listener {
         return String.format("%02d:%02d:%02d", HH, MM, SS);
     }
 
+    public static String getPlaytimeFormatted(Long playtime) {
+        Duration duration = Duration.ofMillis(playtime);
+        long seconds = duration.getSeconds();
+        long HH = seconds / 3600;
+        long MM = (seconds % 3600) / 60;
+        long SS = seconds % 60;
+        return String.format("%02d:%02d:%02d", HH, MM, SS);
+    }
+
     public class PlaytimeTask extends BukkitRunnable {
 
         private static final Map<Player, Long> lastUpdate = new HashMap<>();

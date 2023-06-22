@@ -188,6 +188,8 @@ public class PlayerDatabase {
     public static final Map<Integer, Integer> killsLeaderboardK = new HashMap<>();
     public static final Map<Integer, String> deathsLeaderboard = new HashMap<>();
     public static final Map<Integer, Integer> deathsLeaderboardD = new HashMap<>();
+    public static final Map<Integer, String> playtimeLeaderboard = new HashMap<>();
+    public static final Map<Integer, Long> playtimeLeaderboardP = new HashMap<>();
 
     public void reloadLeaderboards() {
         Bukkit.getScheduler().runTaskAsynchronously(ClassicDupe.getPlugin(), () -> {
@@ -206,6 +208,14 @@ public class PlayerDatabase {
                         PlayerData data = getPlayerData(UUID.fromString(deathsSet.getString("uuid")));
                         deathsLeaderboard.put(i+1, data.name);
                         deathsLeaderboardD.put(i+1, deathsSet.getInt("deaths"));
+                    }
+                }
+                ResultSet playtimeSet = conn.prepareStatement("SELECT * FROM players ORDER BY playtime DESC").executeQuery();
+                for(int i = 0; i < 10; i++) {
+                    if(playtimeSet.next()) {
+                        PlayerData data = getPlayerData(UUID.fromString(playtimeSet.getString("uuid")));
+                        playtimeLeaderboard.put(i+1, data.name);
+                        playtimeLeaderboardP.put(i+1, playtimeSet.getLong("playtime"));
                     }
                 }
             } catch (SQLException e) {
