@@ -25,10 +25,7 @@ public class NicknameCMD implements CommandExecutor, TabCompleter {
             sender.sendMessage(Utils.cmdMsg("<red>You cannot execute this command from console"));
             return true;
         }
-        if (args[0] == "off") {
-            ClassicDupe.getDatabase().getPlayerDatabase().getPlayerData(p.getUniqueId()).setNickname(p.getName());
-        }
-        if(args.length < 1) {
+        if(args.length == 0) {
             ClassicDupe.getDatabase().getPlayerDatabase().getPlayerData(p.getUniqueId()).resetNickname();
             sender.sendMessage(Utils.cmdMsg("<green>Reset your nickname"));
             return true;
