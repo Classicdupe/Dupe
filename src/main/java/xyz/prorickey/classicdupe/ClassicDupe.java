@@ -23,7 +23,6 @@ import xyz.prorickey.classicdupe.commands.admin.*;
 import xyz.prorickey.classicdupe.commands.default1.*;
 import xyz.prorickey.classicdupe.commands.moderator.*;
 import xyz.prorickey.classicdupe.commands.perk.*;
-import xyz.prorickey.classicdupe.custom.tables.CraftingTable;
 import xyz.prorickey.classicdupe.customitems.cicommands;
 import xyz.prorickey.classicdupe.database.Database;
 import xyz.prorickey.classicdupe.database.PlayerVaultDatabase;
@@ -240,6 +239,8 @@ public class ClassicDupe extends JavaPlugin {
         this.getCommand("subhead").setTabCompleter(hl);
         this.getCommand("help").setExecutor(new HelpCMD());
         this.getCommand("help").setTabCompleter(new HelpCMD());
+        this.getCommand("customarmor").setExecutor(new CustomArmorCMD());
+        this.getCommand("customarmor").setTabCompleter(new CustomArmorCMD());
 
         getServer().getPluginManager().registerEvents(new JoinEvent(), this);
         getServer().getPluginManager().registerEvents(new QuitEvent(), this);

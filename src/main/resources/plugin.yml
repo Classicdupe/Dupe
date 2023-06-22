@@ -360,6 +360,9 @@ commands:
   help:
     description: To open the help menu
     usage: "Usage: /help"
+  customarmor:
+    description: To get a custom armor
+    usage: "Usage: /customitem <armorSet>"
 
 permissions:
   default.spawn.others:
