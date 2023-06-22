@@ -2,8 +2,10 @@ package xyz.prorickey.classicdupe;
 
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.minimessage.MiniMessage;
+import org.bukkit.Material;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.metadata.MetadataValue;
 import org.codehaus.plexus.util.StringUtils;
 
@@ -98,5 +100,11 @@ public class Utils {
         int maxWidth = 80,
                 spaces = (int) Math.round((maxWidth-1.4*text.length())/2);
         return StringUtils.repeat(" ", spaces)+text;
+    }
+
+    public static ItemStack getGuiFiller() {
+        ItemStack item = new ItemStack(Material.GRAY_STAINED_GLASS_PANE);
+        item.editMeta(meta -> meta.displayName(Component.text(" ")));
+        return item;
     }
 }

@@ -231,7 +231,6 @@ public class ClassicDupe extends JavaPlugin {
         this.getCommand("deathmessages").setTabCompleter(new DeathMessagesCMD());
         this.getCommand("mutepings").setExecutor(new MutePingsCMD());
         this.getCommand("mutepings").setTabCompleter(new MutePingsCMD());
-
         headlines hl = new headlines();
         this.getCommand("headline").setExecutor(hl);
         this.getCommand("alert").setExecutor(hl);
@@ -239,6 +238,8 @@ public class ClassicDupe extends JavaPlugin {
         this.getCommand("headline").setTabCompleter(hl);
         this.getCommand("alert").setTabCompleter(hl);
         this.getCommand("subhead").setTabCompleter(hl);
+        this.getCommand("help").setExecutor(new HelpCMD());
+        this.getCommand("help").setTabCompleter(new HelpCMD());
 
         getServer().getPluginManager().registerEvents(new JoinEvent(), this);
         getServer().getPluginManager().registerEvents(new QuitEvent(), this);
@@ -266,8 +267,7 @@ public class ClassicDupe extends JavaPlugin {
         getServer().getPluginManager().registerEvents(new ItemUse(), this);
         //getServer().getPluginManager().registerEvents(new CraftingTable(), this);
         getServer().getPluginManager().registerEvents(new BountyCMD(), this);
-        //getServer().getPluginManager().registerEvents(new CraftingTable(), this);
-getServer().getPluginManager().registerEvents(new FixArmorTrimCrafting(), this);
+        getServer().getPluginManager().registerEvents(new FixArmorTrimCrafting(), this);
 
         //Init maze
         MAZEmanager.init();
