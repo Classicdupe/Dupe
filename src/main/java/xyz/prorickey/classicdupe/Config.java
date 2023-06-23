@@ -11,6 +11,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 import xyz.prorickey.classicdupe.commands.default1.DupeCMD;
 import xyz.prorickey.classicdupe.commands.perk.SuffixCMD;
 import xyz.prorickey.classicdupe.events.BlockPlace;
+import xyz.prorickey.classicdupe.events.ChatRewards;
 
 public class Config {
 
@@ -31,6 +32,7 @@ public class Config {
         Config.getConfig().getStringList("forbiddenDupes").forEach(str -> DupeCMD.forbiddenDupes.add(Material.valueOf(str.toUpperCase())));
         Config.getConfig().getStringList("forbiddenDupesInCombat").forEach(str -> DupeCMD.forbiddenDupesInCombat.add(Material.valueOf(str.toUpperCase())));
         Config.getConfig().getStringList("removedItems").forEach(str -> ClassicDupe.randomItems.remove(new ItemStack(Material.valueOf(str.toUpperCase()))));
+        ChatRewards.wordsList.addAll(Config.getConfig().getStringList("rewardWords"));
         MemorySection sec = (MemorySection) Config.getConfig().get("suffix");
         assert sec != null;
         sec.getKeys(true).forEach((name) -> SuffixCMD.suffixes.put(name, Config.getConfig().getString("suffix." + name)));

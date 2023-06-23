@@ -2,6 +2,7 @@ package xyz.prorickey.classicdupe;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 import net.kyori.adventure.text.event.ClickEvent;
 import org.bukkit.Bukkit;
@@ -77,6 +78,7 @@ public class ClassicDupe extends JavaPlugin {
         new Scoreboard.ScoreboardTask().runTaskTimer(this, 0, 10);
         new ClearSpawn.ClearSpawnTask().runTaskTimer(this, 0, 20);
         new ArmorTrims.ArmorTrimsTask().runTaskTimer(this, 0, 20);
+        new ChatRewards.ChatRewardsTask().runTaskTimer(this, 0, 20*90);
 
         new Clans(this);
         KOTHEventManager.init(this);

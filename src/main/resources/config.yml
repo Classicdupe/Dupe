@@ -174,3 +174,11 @@ trimset:
     attackMultiplier: 1.25
     defenseMultiplier: 0.75
     knockbackMultiplier: 0.5
+rewardWords:
+  - minecraft
+  - classicdupe
+  - prorickey
+  - netherite
+  - diamond
+  - dupe
+  - legend
