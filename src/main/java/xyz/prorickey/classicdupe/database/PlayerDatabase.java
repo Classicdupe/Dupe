@@ -5,6 +5,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.jetbrains.annotations.Nullable;
 import xyz.prorickey.classicdupe.ClassicDupe;
+import xyz.prorickey.classicdupe.metrics.Metrics;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -213,14 +214,6 @@ public class PlayerDatabase {
                         PlayerData data = getPlayerData(UUID.fromString(deathsSet.getString("uuid")));
                         deathsLeaderboard.put(i+1, data.name);
                         deathsLeaderboardD.put(i+1, deathsSet.getInt("deaths"));
-                    }
-                }
-                ResultSet playtimeSet = conn.prepareStatement("SELECT * FROM players ORDER BY playtime DESC").executeQuery();
-                for(int i = 0; i < 10; i++) {
-                    if(playtimeSet.next()) {
-                        PlayerData data = getPlayerData(UUID.fromString(playtimeSet.getString("uuid")));
-                        playtimeLeaderboard.put(i+1, data.name);
-                        playtimeLeaderboardP.put(i+1, playtimeSet.getLong("playtime"));
                     }
                 }
                 ResultSet killStreakSet = conn.prepareStatement("SELECT * FROM players ORDER BY killStreak DESC").executeQuery();

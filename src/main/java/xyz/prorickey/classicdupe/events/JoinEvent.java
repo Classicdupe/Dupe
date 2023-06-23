@@ -96,7 +96,7 @@ public class JoinEvent implements Listener {
     }
 
     public static final Map<Player, Long> afkTime = new HashMap<>();
-    public static final Integer AFK_TIME_NEEDED = 60 * 1000;
+    public static final Integer AFK_TIME_NEEDED = 5*60*1000;
 
     public static class JoinEventTasks extends BukkitRunnable {
         @Override
@@ -116,13 +116,13 @@ public class JoinEvent implements Listener {
                     if(player.isOnline()) player.sendMessage(Utils.cmdMsg("<red>You are no longer protected by naked protection"));
                 }
             }
-            if(!Config.getConfig().getBoolean("dev")) Bukkit.getOnlinePlayers().forEach(player -> {
+            if(Config.getConfig().getBoolean("dev")) Bukkit.getOnlinePlayers().forEach(player -> {
                 RegionContainer container = WorldGuard.getInstance().getPlatform().getRegionContainer();
                 RegionManager regions = container.get(BukkitAdapter.adapt(player.getWorld()));
                 ProtectedRegion region = regions.getRegion("afk");
                 if(region != null && region.contains(BukkitAdapter.asBlockVector(player.getLocation()))) {
-                    if(!afkTime.containsKey(player)) afkTime.put(player, System.currentTimeMillis());
-                    else if(afkTime.get(player)+AFK_TIME_NEEDED > System.currentTimeMillis()) {
+                    if(!afkTime.containsKey(player)) afkTime.put(player, System.currentTimeMillis()+AFK_TIME_NEEDED);
+                    else if(afkTime.get(player) < System.currentTimeMillis()) {
                         afkTime.remove(player);
                         ClassicDupe.getDatabase()
                                 .getPlayerDatabase()

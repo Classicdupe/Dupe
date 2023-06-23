@@ -6,6 +6,7 @@ import net.dv8tion.jda.api.entities.channel.concrete.TextChannel;
 import net.kyori.adventure.key.Key;
 import net.kyori.adventure.sound.Sound;
 import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.event.HoverEvent;
 import net.kyori.adventure.text.format.TextColor;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
@@ -123,20 +124,18 @@ public class Chat implements Listener {
         else if(pgroup.equalsIgnoreCase("mvp")) chatCooldown.put(e.getPlayer(), System.currentTimeMillis()+2000);
         else if(pgroup.equalsIgnoreCase("legend")) chatCooldown.put(e.getPlayer(), System.currentTimeMillis()+1000);
 
-        ChatType chatType = ChatType.DEFAULT;
-        if(ChatColorCMD.colorProfiles.containsKey(e.getPlayer().getUniqueId().toString())) chatType = ChatType.COLOR;
-        if(ChatGradientCMD.gradientProfiles.containsKey(e.getPlayer().getUniqueId().toString())) chatType = ChatType.GRADIENT;
-
-        String name = e.getPlayer().getName();
-        PlayerData data = ClassicDupe.getDatabase().getPlayerDatabase().getPlayerData(e.getPlayer().getUniqueId());
-        if(data.nickname != null) name = data.nickname;
-
         MiniMessage mm = MiniMessage.miniMessage();
-        String finalName2 = name;
+        Component name = mm.deserialize(Utils.getPrefix(e.getPlayer()));
+        PlayerData data = ClassicDupe.getDatabase().getPlayerDatabase().getPlayerData(e.getPlayer().getUniqueId());
+        if(data.nickname != null) name = name.append(Utils.format(data.nickname))
+                .hoverEvent(HoverEvent.showText(Utils.format("<yellow>Real Name: " + e.getPlayer().getName())));
+        else name = name.append(Utils.format(e.getPlayer().getName()));
+
         String finalClanColor2 = clanColor;
+        Component finalName = name;
         e.renderer((player, sourceDisplayName, message, viewer) ->
                 Utils.format((clanName != null ? "<dark_gray>[" + finalClanColor2 + clanName + "<dark_gray>] " : ""))
-                        .append(mm.deserialize(((Utils.getPrefix(player) != null) ? Utils.getPrefix(player) : "") + finalName2))
+                        .append(finalName)
                         .append(Utils.format((Utils.getSuffix(player) != null) ? " " + Utils.convertColorCodesToAdventure(Utils.getSuffix(player))  : ""))
                         .append(Utils.format(" <gray>\u00BB <white>"))
                         .append(message)

@@ -66,7 +66,6 @@ public class Utils {
      * @param player The player to get the prefix of
      * @return The prefix of the player formatted with adventure color codes
      */
-    @Deprecated
     public static String getPrefix(OfflinePlayer player) {
         String prefix = ClassicDupe.getLPAPI().getUserManager().getUser(player.getUniqueId()).getCachedData().getMetaData().getPrefix();
         if(prefix != null) return convertColorCodesToAdventure(prefix) + "<b></b>";
