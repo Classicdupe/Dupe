@@ -79,6 +79,7 @@ public class ClassicDupe extends JavaPlugin {
         new ClearSpawn.ClearSpawnTask().runTaskTimer(this, 0, 20);
         new ArmorTrims.ArmorTrimsTask().runTaskTimer(this, 0, 20);
         new ChatRewards.ChatRewardsTask().runTaskTimer(this, 0, 20*90);
+        new ChatRewards.EndChatRewards().runTaskTimer(this, 5*90, 20*90);
 
         new Clans(this);
         KOTHEventManager.init(this);

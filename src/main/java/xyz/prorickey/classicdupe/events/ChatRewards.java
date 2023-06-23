@@ -10,17 +10,23 @@ import xyz.prorickey.classicdupe.ClassicDupe;
 import xyz.prorickey.classicdupe.Utils;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 import static xyz.prorickey.classicdupe.ClassicDupe.plugin;
 
 public class ChatRewards implements Listener {
 
-    public static ArrayList<String> wordsList = new ArrayList<String>();
+    private static ArrayList<String> wordsList = new ArrayList<>();
 
     private static boolean rewardActive;
 
     private static String currentWord;
+
+    public static void setWordsList(List<String> newList){
+        wordsList = new ArrayList<String>(newList);
+        Bukkit.getLogger().info("newList " + newList + ", wordsList " + wordsList);
+    }
 
     @EventHandler
     public void onPlayerChat(PlayerChatEvent e) {
@@ -52,7 +58,6 @@ public class ChatRewards implements Listener {
                         .append(Utils.format("<yellow>"+scrambleWord(rewardWord))));
                 player.sendMessage(Utils.format("<green>-----------------------------------------------------"));
             });
-            new ChatRewards.EndChatRewards().runTaskTimer(pl, 0, 10*90);
         }
     }
 
@@ -79,7 +84,8 @@ public class ChatRewards implements Listener {
 
     public static String getRewardWord(){ return currentWord; }
     private static String getRandomWord(){
-        int randomIndex = new Random().nextInt(wordsList.size());
+        int randomIndex = (int) Math.round(Math.random()*wordsList.size());
+        Bukkit.getLogger().info(randomIndex + ", " + wordsList);
         return wordsList.get(randomIndex);
     }
 
