@@ -33,6 +33,9 @@ public class CustomSets {
     @SuppressWarnings("ConstantConditions")
     public static void reload() {
         customSetsConfig = YamlConfiguration.loadConfiguration(customSetsFile);
+        keys.clear();
+        keysToSets.clear();
+        sets.clear();
         customSetsConfig.getKeys(false).forEach(key -> {
             CustomSets set = new CustomSets(customSetsConfig.getConfigurationSection(key));
             keys.add(set.key);

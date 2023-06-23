@@ -1,6 +1,6 @@
 opal:
   name: Opal
-  color: #0CB0F6
+  color: "#0CB0F6"
   smithable: false
 
   helmet:
