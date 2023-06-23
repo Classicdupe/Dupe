@@ -223,7 +223,7 @@ public class PlayerDatabase {
                         playtimeLeaderboardP.put(i+1, playtimeSet.getLong("playtime"));
                     }
                 }
-                ResultSet killStreakSet = conn.prepareStatement("SELECT * FROM stats ORDER BY killStreak DESC").executeQuery();
+                ResultSet killStreakSet = conn.prepareStatement("SELECT * FROM players ORDER BY killStreak DESC").executeQuery();
                 for(int i = 0; i < 10; i++) {
                     if(killStreakSet.next()) {
                         PlayerData data = getPlayerData(UUID.fromString(killStreakSet.getString("uuid")));

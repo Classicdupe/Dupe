@@ -23,6 +23,7 @@ import xyz.prorickey.classicdupe.commands.admin.*;
 import xyz.prorickey.classicdupe.commands.default1.*;
 import xyz.prorickey.classicdupe.commands.moderator.*;
 import xyz.prorickey.classicdupe.commands.perk.*;
+import xyz.prorickey.classicdupe.custom.CustomSets;
 import xyz.prorickey.classicdupe.customitems.cicommands;
 import xyz.prorickey.classicdupe.database.Database;
 import xyz.prorickey.classicdupe.database.PlayerVaultDatabase;
@@ -79,6 +80,7 @@ public class ClassicDupe extends JavaPlugin {
 
         new Clans(this);
         KOTHEventManager.init(this);
+        CustomSets.init();
 
         for (Material value : Material.values()) randomItems.add(new ItemStack(value));
         for (Enchantment value : Enchantment.values()) {
@@ -239,8 +241,8 @@ public class ClassicDupe extends JavaPlugin {
         this.getCommand("subhead").setTabCompleter(hl);
         this.getCommand("help").setExecutor(new HelpCMD());
         this.getCommand("help").setTabCompleter(new HelpCMD());
-        this.getCommand("customarmor").setExecutor(new CustomArmorCMD());
-        this.getCommand("customarmor").setTabCompleter(new CustomArmorCMD());
+        this.getCommand("customset").setExecutor(new CustomSetCMD());
+        this.getCommand("customset").setTabCompleter(new CustomSetCMD());
 
         getServer().getPluginManager().registerEvents(new JoinEvent(), this);
         getServer().getPluginManager().registerEvents(new QuitEvent(), this);
@@ -269,6 +271,7 @@ public class ClassicDupe extends JavaPlugin {
         //getServer().getPluginManager().registerEvents(new CraftingTable(), this);
         getServer().getPluginManager().registerEvents(new BountyCMD(), this);
         getServer().getPluginManager().registerEvents(new FixArmorTrimCrafting(), this);
+        getServer().getPluginManager().registerEvents(new HelpCMD(), this);
 
         //Init maze
         MAZEmanager.init();

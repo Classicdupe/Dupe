@@ -60,7 +60,7 @@ public class HelpCMD implements CommandExecutor, TabCompleter, Listener {
                 meta.displayName(Utils.format("<color:#E6EC18><b>Duping"));
                 meta.lore(List.of(
                    Utils.format("<color:#E6EC18>Dupe the item in your hand with /dupe"),
-                   Utils.format("<color:##E6EC18>Not all items are dupable though!")
+                   Utils.format("<color:#E6EC18>Not all items are dupable though!")
                 ));
             });
             gui.setItem(22, dupe);
@@ -70,7 +70,7 @@ public class HelpCMD implements CommandExecutor, TabCompleter, Listener {
             rules.editMeta(meta -> {
                 meta.addEnchant(Enchantment.DAMAGE_ALL, 1, true);
                 meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES, ItemFlag.HIDE_ENCHANTS, ItemFlag.HIDE_ITEM_SPECIFICS);
-                meta.displayName(Utils.format("<color:F92626><b>Rules"));
+                meta.displayName(Utils.format("<color:#F92626><b>Rules"));
                 meta.lore(List.of(
                     Utils.format("<color:#F92626>Make sure you take a look at the rules!"),
                     Utils.format("<color:#F92626>Click to view the rules")
@@ -143,6 +143,8 @@ public class HelpCMD implements CommandExecutor, TabCompleter, Listener {
                 ));
             });
             gui.setItem(32, nakedOff);
+
+            player.openInventory(gui);
         }
         return true;
     }

@@ -38,30 +38,6 @@ public class DupeCMD implements CommandExecutor, TabCompleter {
             p.sendMessage(Utils.cmdMsg("<red>That item is undupable"));
             return true;
         }
-        if(shulkerBoxes.contains(p.getInventory().getItemInMainHand().getType())) {
-            ItemStack item = p.getInventory().getItemInMainHand();
-            ShulkerBox box = (ShulkerBox) ((BlockStateMeta) item.getItemMeta()).getBlockState();
-            AtomicBoolean illegal = new AtomicBoolean(false);
-            box.getInventory().forEach(itemStack -> {
-                if(!checkDupable(itemStack)) illegal.set(true);
-            });
-            if(illegal.get()) {
-                p.sendMessage(Utils.cmdMsg("<red>You cannot dupe a shulker that contains undupeable items"));
-                return true;
-            }
-        }
-        if(p.getInventory().getItemInMainHand().getType().equals(Material.BUNDLE)) {
-            ItemStack item = p.getInventory().getItemInMainHand();
-            BundleMeta bundle = (BundleMeta) item.getItemMeta();
-            AtomicBoolean illegal = new AtomicBoolean(false);
-            bundle.getItems().forEach(itemStack -> {
-                if(!checkDupable(itemStack)) illegal.set(true);
-            });
-            if(illegal.get()) {
-                p.sendMessage(Utils.cmdMsg("<red>You cannot dupe a bundle that contains undupeable items"));
-                return true;
-            }
-        }
         if(Combat.inCombat.containsKey(p.getPlayer()) && forbiddenDupesInCombat.contains(p.getInventory().getItemInMainHand().getType())) {
             p.sendMessage(Utils.cmdMsg("<red>You cannot dupe that item while in combat"));
             return true;
@@ -85,7 +61,7 @@ public class DupeCMD implements CommandExecutor, TabCompleter {
         return new ArrayList<>();
     }
 
-    List<Material> shulkerBoxes = List.of(
+    private static final List<Material> shulkerBoxes = List.of(
         Material.SHULKER_BOX,
         Material.WHITE_SHULKER_BOX,
         Material.ORANGE_SHULKER_BOX,
@@ -108,12 +84,30 @@ public class DupeCMD implements CommandExecutor, TabCompleter {
     public static Boolean checkDupable(ItemStack item) {
         if(item == null || item.getType() == Material.AIR) return true;
         if(forbiddenDupes.contains(item.getType())) return false;
-        if(Boolean.TRUE.equals(item.getItemMeta().getPersistentDataContainer().get(undupableKey, PersistentDataType.BOOLEAN))) return false;
-        if (item.getItemMeta().getPersistentDataContainer().has(CIKeys.FBWAND, PersistentDataType.STRING)) return false;
-        if (item.getItemMeta().getPersistentDataContainer().has(CIKeys.BURSTBOW, PersistentDataType.STRING)) return false;
-        if (item.getItemMeta().getPersistentDataContainer().has(CIKeys.PVPPOT, PersistentDataType.STRING)) return false;
-        if (item.getItemMeta().getPersistentDataContainer().has(CIKeys.PVPPOT2, PersistentDataType.STRING)) return false;
+        if(Boolean.TRUE.equals(
+                Boolean.TRUE.equals(item.getItemMeta().getPersistentDataContainer().get(undupableKey, PersistentDataType.BOOLEAN)) ||
+                item.getItemMeta().getPersistentDataContainer().has(CIKeys.FBWAND, PersistentDataType.STRING) ||
+                item.getItemMeta().getPersistentDataContainer().has(CIKeys.BURSTBOW, PersistentDataType.STRING) ||
+                item.getItemMeta().getPersistentDataContainer().has(CIKeys.PVPPOT, PersistentDataType.STRING) ||
+                item.getItemMeta().getPersistentDataContainer().has(CIKeys.PVPPOT2, PersistentDataType.STRING)
+        )) return false;
         if (item.getItemMeta() instanceof ArmorMeta armorMeta && armorMeta.hasTrim()) return false;
+        if(shulkerBoxes.contains(item.getType())) {
+            AtomicBoolean illegal = new AtomicBoolean(false);
+            ShulkerBox box = (ShulkerBox) ((BlockStateMeta) item.getItemMeta()).getBlockState();
+            box.getInventory().forEach(itemStack -> {
+                if(!checkDupable(itemStack)) illegal.set(true);
+            });
+            return !illegal.get();
+        }
+        if(item.getType().equals(Material.BUNDLE)) {
+            AtomicBoolean illegal = new AtomicBoolean(false);
+            BundleMeta bundle = (BundleMeta) item.getItemMeta();
+            bundle.getItems().forEach(itemStack -> {
+                if(!checkDupable(itemStack)) illegal.set(true);
+            });
+            return !illegal.get();
+        }
         return !(item.getItemMeta() instanceof ArmorMeta armorMeta) || !armorMeta.hasTrim();
     }
 

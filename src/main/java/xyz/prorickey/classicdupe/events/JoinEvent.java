@@ -128,7 +128,7 @@ public class JoinEvent implements Listener {
                                 .getPlayerDatabase()
                                 .getPlayerData(player.getUniqueId()).addBalance(1);
                     }
-                }
+                } else if(afkTime.containsKey(player)) afkTime.remove(player);
             });
         }
     }

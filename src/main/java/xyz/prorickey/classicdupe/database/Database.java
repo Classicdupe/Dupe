@@ -269,7 +269,7 @@ public class Database {
                         "timesjoined long, playtime long, randomitem BOOLEAN, " +
                         "chatcolor VARCHAR, gradient BOOLEAN, gradientfrom VARCHAR, " +
                         "gradientto VARCHAR, night BOOLEAN, balance BIGINT, " +
-                        "deathmessages BOOLEAN, mutepings BOOLEAN, , killStreak INT)").execute();
+                        "deathmessages BOOLEAN, mutepings BOOLEAN, killStreak INT)").execute();
                 serverConn.prepareStatement("CREATE TABLE IF NOT EXISTS filter(text varchar, fullword BOOLEAN)").execute();
                 serverConn.prepareStatement("CREATE TABLE IF NOT EXISTS spawn(spawn varchar, x DOUBLE, y DOUBLE, z DOUBLE, pitch FLOAT, yaw FLOAT, world varchar)").execute();
                 playerConn.prepareStatement("CREATE TABLE IF NOT EXISTS stats(uuid VARCHAR, kills INT, deaths INT)").execute();
