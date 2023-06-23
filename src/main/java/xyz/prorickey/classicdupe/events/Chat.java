@@ -8,6 +8,7 @@ import net.kyori.adventure.sound.Sound;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.event.HoverEvent;
 import net.kyori.adventure.text.format.TextColor;
+import net.kyori.adventure.text.format.TextDecoration;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
 import org.bukkit.Bukkit;
@@ -125,11 +126,13 @@ public class Chat implements Listener {
         else if(pgroup.equalsIgnoreCase("legend")) chatCooldown.put(e.getPlayer(), System.currentTimeMillis()+1000);
 
         MiniMessage mm = MiniMessage.miniMessage();
-        Component name = mm.deserialize(Utils.getPrefix(e.getPlayer()));
+        Component name;
         PlayerData data = ClassicDupe.getDatabase().getPlayerDatabase().getPlayerData(e.getPlayer().getUniqueId());
-        if(data.nickname != null) name = name.append(Utils.format(data.nickname))
-                .hoverEvent(HoverEvent.showText(Utils.format("<yellow>Real Name: " + e.getPlayer().getName())));
-        else name = name.append(Utils.format(e.getPlayer().getName()));
+        if(data.nickname != null) {
+            name = mm.deserialize(Utils.getPrefix(e.getPlayer()) + data.nickname)
+                    .hoverEvent(HoverEvent.showText(Utils.format("<yellow>Real Name: " + e.getPlayer().getName())));
+        }
+        else name = Utils.format(Utils.getPrefix(e.getPlayer()) + e.getPlayer().getName());
 
         String finalClanColor2 = clanColor;
         Component finalName = name;
