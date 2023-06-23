@@ -40,6 +40,6 @@ public interface ClanDatabase {
     void sendClanChat(String message, Player player);
 
     void addClanKill(Clan clan);
-    Map<Clan, Integer> getTopClanKills();
+    Map<Integer, Clan> getTopClanKills();
 
 }

@@ -41,8 +41,6 @@ public class MariaClanDatabase implements ClanDatabase {
 
     private final List<Player> clanChatMembers = new ArrayList<>();
 
-    private Map<Clan, Integer> topClanKills = new HashMap<>();
-
     public MariaClanDatabase(JavaPlugin plugin, Connection conn) {
         this.plugin = plugin;
         this.conn = conn;
@@ -442,18 +440,21 @@ public class MariaClanDatabase implements ClanDatabase {
         });
     }
 
+    private Map<Integer, Clan> topClanKills = new HashMap<>();
+
     @Override
-    public Map<Clan, Integer> getTopClanKills() { return topClanKills; }
+    public Map<Integer, Clan> getTopClanKills() { return topClanKills; }
 
     public class TopClanKills extends BukkitRunnable {
         @Override
         public void run() {
             try {
-                Map<Clan, Integer> clanKillsSorted = new HashMap<>();
+                Map<Integer, Clan> clanKillsSorted = new HashMap<>();
                 ResultSet rs = conn.prepareStatement("SELECT * FROM clans ORDER BY clanKills DESC LIMIT 10").executeQuery();
+                int i = 1;
                 while(rs.next()) {
-                    Clan clan = getClan(UUID.fromString(rs.getString("clanId")));
-                    clanKillsSorted.put(clan, rs.getInt("clanKills"));
+                    clanKillsSorted.put(i, getClan(UUID.fromString(rs.getString("clanId"))));
+                    i++;
                 }
                 topClanKills = clanKillsSorted;
             } catch (SQLException e) {

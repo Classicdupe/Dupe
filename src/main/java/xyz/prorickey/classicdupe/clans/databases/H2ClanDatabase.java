@@ -35,7 +35,7 @@ public class H2ClanDatabase implements ClanDatabase {
 
     public static final List<Player> clanChatMembers = new ArrayList<>();
 
-    private static Map<Clan, Integer> topClanKills = new HashMap<>();
+    private static Map<Integer, Clan> topClanKills = new HashMap<>();
 
     public H2ClanDatabase(JavaPlugin plugin) {
 
@@ -410,17 +410,18 @@ public class H2ClanDatabase implements ClanDatabase {
     }
 
     @Override
-    public Map<Clan, Integer> getTopClanKills() { return topClanKills; }
+    public Map<Integer, Clan> getTopClanKills() { return topClanKills; }
 
     public class TopClanKills extends BukkitRunnable {
         @Override
         public void run() {
             try {
-                Map<Clan, Integer> clanKillsSorted = new HashMap<>();
+                Map<Integer, Clan> clanKillsSorted = new HashMap<>();
                 ResultSet rs = main.prepareStatement("SELECT * FROM clans ORDER BY clanKills DESC LIMIT 10").executeQuery();
+                int i = 1;
                 while(rs.next()) {
-                    Clan clan = getClan(rs.getString("clanId"));
-                    clanKillsSorted.put(clan, rs.getInt("clanKills"));
+                    clanKillsSorted.put(i, getClan(UUID.fromString(rs.getString("clanId"))));
+                    i++;
                 }
                 topClanKills = clanKillsSorted;
             } catch (SQLException e) {
