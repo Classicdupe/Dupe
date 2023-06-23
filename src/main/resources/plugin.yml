@@ -339,7 +339,6 @@ commands:
     usage: /headline <message>
     permission: headliner.perms
     aliases: [ hl ]
-
   alert:
     description: Broadcast an alert
     usage: /alert <message>
@@ -358,6 +357,13 @@ commands:
   mutepings:
     description: To mute pings in chat
     usage: "Usage: /mutepings"
+  help:
+    description: To open the help menu
+    usage: "Usage: /help"
+  customset:
+    description: To get a custom armor
+    usage: "Usage: /customitem <armorSet>"
+
 permissions:
   default.spawn.others:
     description: Allows you to teleport others to spawn

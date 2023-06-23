@@ -8,6 +8,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import xyz.prorickey.classicdupe.Config;
 import xyz.prorickey.classicdupe.Utils;
+import xyz.prorickey.classicdupe.custom.CustomSets;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,6 +17,7 @@ public class ConfigReload implements CommandExecutor, TabCompleter {
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
         Config.reloadConfig();
+        CustomSets.reload();
         sender.sendMessage(Utils.cmdMsg("<green>The config has been reloaded"));
         return true;
     }

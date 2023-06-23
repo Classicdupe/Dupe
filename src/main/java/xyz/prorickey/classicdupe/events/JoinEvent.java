@@ -1,5 +1,10 @@
 package xyz.prorickey.classicdupe.events;
 
+import com.sk89q.worldedit.bukkit.BukkitAdapter;
+import com.sk89q.worldguard.WorldGuard;
+import com.sk89q.worldguard.protection.managers.RegionManager;
+import com.sk89q.worldguard.protection.regions.ProtectedRegion;
+import com.sk89q.worldguard.protection.regions.RegionContainer;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
@@ -12,6 +17,7 @@ import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
 import xyz.prorickey.classicdupe.ClassicDupe;
+import xyz.prorickey.classicdupe.Config;
 import xyz.prorickey.classicdupe.Utils;
 import xyz.prorickey.classicdupe.commands.perk.ChatColorCMD;
 import xyz.prorickey.classicdupe.commands.perk.ChatGradientCMD;
@@ -89,6 +95,9 @@ public class JoinEvent implements Listener {
 
     }
 
+    public static final Map<Player, Long> afkTime = new HashMap<>();
+    public static final Integer AFK_TIME_NEEDED = 5*60*1000;
+
     public static class JoinEventTasks extends BukkitRunnable {
         @Override
         public void run() {
@@ -107,6 +116,20 @@ public class JoinEvent implements Listener {
                     if(player.isOnline()) player.sendMessage(Utils.cmdMsg("<red>You are no longer protected by naked protection"));
                 }
             }
+            if(Config.getConfig().getBoolean("dev")) Bukkit.getOnlinePlayers().forEach(player -> {
+                RegionContainer container = WorldGuard.getInstance().getPlatform().getRegionContainer();
+                RegionManager regions = container.get(BukkitAdapter.adapt(player.getWorld()));
+                ProtectedRegion region = regions.getRegion("afk");
+                if(region != null && region.contains(BukkitAdapter.asBlockVector(player.getLocation()))) {
+                    if(!afkTime.containsKey(player)) afkTime.put(player, System.currentTimeMillis()+AFK_TIME_NEEDED);
+                    else if(afkTime.get(player) < System.currentTimeMillis()) {
+                        afkTime.remove(player);
+                        ClassicDupe.getDatabase()
+                                .getPlayerDatabase()
+                                .getPlayerData(player.getUniqueId()).addBalance(1);
+                    }
+                } else if(afkTime.containsKey(player)) afkTime.remove(player);
+            });
         }
     }
 

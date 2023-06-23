@@ -7,6 +7,8 @@ import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.jetbrains.annotations.Nullable;
 import xyz.prorickey.classicdupe.ClassicDupe;
+import xyz.prorickey.classicdupe.database.PlayerData;
+import xyz.prorickey.classicdupe.database.PlayerDatabase;
 
 import java.io.File;
 import java.sql.Connection;
@@ -55,6 +57,15 @@ public class PlayerMetrics implements Listener {
         return String.format("%02d:%02d:%02d", HH, MM, SS);
     }
 
+    public static String getPlaytimeFormatted(Long playtime) {
+        Duration duration = Duration.ofMillis(playtime);
+        long seconds = duration.getSeconds();
+        long HH = seconds / 3600;
+        long MM = (seconds % 3600) / 60;
+        long SS = seconds % 60;
+        return String.format("%02d:%02d:%02d", HH, MM, SS);
+    }
+
     public class PlaytimeTask extends BukkitRunnable {
 
         private static final Map<Player, Long> lastUpdate = new HashMap<>();
@@ -72,7 +83,22 @@ public class PlayerMetrics implements Listener {
                     } catch (SQLException ex) {
                         throw new RuntimeException(ex);
                     }
+
                 });
+            });
+            Bukkit.getScheduler().runTaskAsynchronously(ClassicDupe.getPlugin(), () -> {
+                try {
+                    ResultSet playtimeSet = conn.prepareStatement("SELECT * FROM playtime ORDER BY season DESC").executeQuery();
+                    for(int i = 0; i < 10; i++) {
+                        if(playtimeSet.next()) {
+                            PlayerData data = ClassicDupe.getDatabase().getPlayerDatabase().getPlayerData(UUID.fromString(playtimeSet.getString("uuid")));
+                            PlayerDatabase.playtimeLeaderboard.put(i+1, data.name);
+                            PlayerDatabase.playtimeLeaderboardP.put(i+1, playtimeSet.getLong("season"));
+                        }
+                    }
+                } catch (SQLException ex) {
+                    throw new RuntimeException(ex);
+                }
             });
         }
     }

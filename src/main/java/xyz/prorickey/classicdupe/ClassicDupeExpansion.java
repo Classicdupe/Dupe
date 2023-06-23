@@ -6,6 +6,7 @@ import org.jetbrains.annotations.NotNull;
 import xyz.prorickey.classicdupe.clans.builders.Clan;
 import xyz.prorickey.classicdupe.database.PlayerData;
 import xyz.prorickey.classicdupe.database.PlayerDatabase;
+import xyz.prorickey.classicdupe.metrics.PlayerMetrics;
 
 import java.util.stream.Collectors;
 
@@ -74,6 +75,18 @@ public class ClassicDupeExpansion extends PlaceholderExpansion {
                 } else {
                     return " ";
                 }
+            }
+        } else if(params.toLowerCase().startsWith("top_playtime_")) {
+            for(int i5 = 0; i5 < 10; i5++) {
+                if(PlayerDatabase.playtimeLeaderboard.size() < i5+1) return " ";
+                if(params.equalsIgnoreCase("top_playtime_" + (i5+1) + "_name")) return PlayerDatabase.playtimeLeaderboard.get(i5+1);
+                else if(params.equalsIgnoreCase("top_playtime_" + (i5+1) + "_playtime")) return PlayerMetrics.getPlaytimeFormatted(PlayerDatabase.playtimeLeaderboardP.get(i5+1));
+            }
+        } else if(params.toLowerCase().startsWith("top_killstreak_")) {
+            for(int i6 = 0; i6 < 10; i6++) {
+                if(PlayerDatabase.killStreakLeaderboard.size() < i6+1) return " ";
+                if(params.equalsIgnoreCase("top_killstreak_" + (i6+1) + "_name")) return PlayerDatabase.killStreakLeaderboard.get(i6+1);
+                else if(params.equalsIgnoreCase("top_killstreak_" + (i6+1) + "_killstreak")) return PlayerDatabase.killStreakLeaderboardK.get(i6+1).toString();
             }
         }
         return null;

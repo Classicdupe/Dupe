@@ -9,6 +9,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
+import org.bukkit.event.inventory.PrepareSmithingEvent;
 import org.bukkit.inventory.meta.ArmorMeta;
 import org.bukkit.inventory.meta.trim.TrimMaterial;
 import org.bukkit.inventory.meta.trim.TrimPattern;
@@ -18,6 +19,7 @@ import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
 import xyz.prorickey.classicdupe.ClassicDupe;
 import xyz.prorickey.classicdupe.Config;
+import xyz.prorickey.classicdupe.custom.CustomSets;
 
 import java.util.Random;
 import java.util.UUID;
@@ -218,6 +220,27 @@ public class ArmorTrims implements Listener {
                 bootsMeta.hasTrim() &&
                 bootsMeta.getTrim().getPattern().equals(pattern) &&
                 bootsMeta.getTrim().getMaterial().equals(trimMat);
+    }
+
+    @EventHandler
+    public void onPrepareSmithing(PrepareSmithingEvent event) {
+        if(event.getInventory().getInputEquipment() != null || event.getInventory().getInputTemplate().getType() == Material.NETHERITE_UPGRADE_SMITHING_TEMPLATE) {
+            CustomSets.keys.forEach(key -> {
+                if(
+                        event.getInventory().getInputEquipment().getItemMeta().getPersistentDataContainer().has(key) &&
+                                !CustomSets.keysToSets.get(key).getSmithable()
+                ) event.setResult(null);
+            });
+        } else if(
+                (event.getInventory().getInputEquipment() != null || event.getInventory().getInputTemplate().getType() != Material.NETHERITE_UPGRADE_SMITHING_TEMPLATE) &&
+                        !(event.getInventory().getInputEquipment().getType().equals(Material.NETHERITE_HELMET) ||
+                                event.getInventory().getInputEquipment().getType().equals(Material.NETHERITE_CHESTPLATE) ||
+                                event.getInventory().getInputEquipment().getType().equals(Material.NETHERITE_LEGGINGS) ||
+                                event.getInventory().getInputEquipment().getType().equals(Material.NETHERITE_BOOTS))
+        ) {
+            event.setResult(null);
+        }
+
     }
 
 }

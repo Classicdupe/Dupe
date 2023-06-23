@@ -1,0 +1,37 @@
+opal:
+  name: Opal
+  color: "#0CB0F6"
+  smithable: false
+
+  helmet:
+    material: DIAMOND_HELMET
+    armor: 4
+    toughness: 4
+    kbresistance: 0.2
+    maxHealth: 20
+
+  chestplate:
+    material: DIAMOND_CHESTPLATE
+    armor: 10
+    toughness: 4
+    kbresistance: 0.2
+    maxHealth: 20
+
+  leggings:
+    material: DIAMOND_LEGGINGS
+    armor: 8
+    toughness: 4
+    kbresistance: 0.2
+    maxHealth: 20
+
+  boots:
+    material: DIAMOND_BOOTS
+    armor: 4
+    toughness: 4
+    kbresistance: 0.2
+    maxHealth: 20
+
+  sword:
+    material: DIAMOND_SWORD
+    damage: 10
+    speed: 1.6

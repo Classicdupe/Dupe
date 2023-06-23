@@ -43,7 +43,11 @@ public class Database {
 
                 ClassicDupe.clanDatabase = new MariaClanDatabase(ClassicDupe.getPlugin(), conn);
 
-                conn.prepareStatement("CREATE TABLE IF NOT EXISTS players(uuid TEXT, name TEXT, nickname TEXT, timesjoined long, playtime long, randomitem BOOLEAN, chatcolor TEXT, gradient BOOLEAN, gradientfrom TEXT, gradientto TEXT, night BOOLEAN, balance BIGINT, deathmessages BOOLEAN, mutepings BOOLEAN)").execute();
+                conn.prepareStatement("CREATE TABLE IF NOT EXISTS players(uuid TEXT, name TEXT, nickname TEXT, " +
+                        "timesjoined long, playtime long, randomitem BOOLEAN, " +
+                        "chatcolor TEXT, gradient BOOLEAN, gradientfrom TEXT, " +
+                        "gradientto TEXT, night BOOLEAN, balance BIGINT, " +
+                        "deathmessages BOOLEAN, mutepings BOOLEAN, killStreak INT)").execute();
                 conn.prepareStatement("CREATE TABLE IF NOT EXISTS filter(text TEXT, fullword BOOLEAN)").execute();
                 conn.prepareStatement("CREATE TABLE IF NOT EXISTS spawn(spawn TEXT, x DOUBLE, y DOUBLE, z DOUBLE, pitch FLOAT, yaw FLOAT, world TEXT)").execute();
                 conn.prepareStatement("CREATE TABLE IF NOT EXISTS stats(uuid TEXT, kills INT, deaths INT)").execute();
@@ -65,8 +69,8 @@ public class Database {
                             PreparedStatement playerStat = playerConn.prepareStatement("SELECT * FROM players");
                             ResultSet playerSet = playerStat.executeQuery();
                             PreparedStatement stat = conn.prepareStatement("INSERT INTO" +
-                                    " players(uuid, name, nickname, timesjoined, playtime, randomitem, chatcolor, gradient, gradientfrom, gradientto, night, balance, deathmessages, mutepings)" +
-                                    " VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+                                    " players(uuid, name, nickname, timesjoined, playtime, randomitem, chatcolor, gradient, gradientfrom, gradientto, night, balance, deathmessages, mutepings, killStreak)" +
+                                    " VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
                             while(playerSet.next()) {
                                 stat.setString(1, playerSet.getString("uuid"));
                                 stat.setString(2, playerSet.getString("name"));
@@ -82,6 +86,7 @@ public class Database {
                                 stat.setLong(12, playerSet.getInt("balance"));
                                 stat.setBoolean(13, playerSet.getBoolean("deathmessages"));
                                 stat.setBoolean(14, playerSet.getBoolean("mutepings"));
+                                stat.setInt(15, playerSet.getInt("killStreak"));
                                 stat.addBatch();
                             }
                             stat.executeLargeBatch();
@@ -260,7 +265,11 @@ public class Database {
                 homesConn = DriverManager.getConnection ("jdbc:h2:" + ClassicDupe.getPlugin().getDataFolder().getAbsolutePath() + File.separator + "homes");
                 bountyConn = DriverManager.getConnection ("jdbc:h2:" + ClassicDupe.getPlugin().getDataFolder().getAbsolutePath() + File.separator + "bountyData");
 
-                playerConn.prepareStatement("CREATE TABLE IF NOT EXISTS players(uuid varchar, name varchar, nickname varchar, timesjoined long, playtime long, randomitem BOOLEAN, chatcolor VARCHAR, gradient BOOLEAN, gradientfrom VARCHAR, gradientto VARCHAR, night BOOLEAN, balance BIGINT, deathmessages BOOLEAN, mutepings BOOLEAN)").execute();
+                playerConn.prepareStatement("CREATE TABLE IF NOT EXISTS players(uuid varchar, name varchar, nickname varchar, " +
+                        "timesjoined long, playtime long, randomitem BOOLEAN, " +
+                        "chatcolor VARCHAR, gradient BOOLEAN, gradientfrom VARCHAR, " +
+                        "gradientto VARCHAR, night BOOLEAN, balance BIGINT, " +
+                        "deathmessages BOOLEAN, mutepings BOOLEAN, killStreak INT)").execute();
                 serverConn.prepareStatement("CREATE TABLE IF NOT EXISTS filter(text varchar, fullword BOOLEAN)").execute();
                 serverConn.prepareStatement("CREATE TABLE IF NOT EXISTS spawn(spawn varchar, x DOUBLE, y DOUBLE, z DOUBLE, pitch FLOAT, yaw FLOAT, world varchar)").execute();
                 playerConn.prepareStatement("CREATE TABLE IF NOT EXISTS stats(uuid VARCHAR, kills INT, deaths INT)").execute();
