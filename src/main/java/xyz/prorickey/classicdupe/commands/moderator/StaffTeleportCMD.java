@@ -37,6 +37,7 @@ public class StaffTeleportCMD implements CommandExecutor, TabCompleter {
             return true;
         }
         TpaCMD.saveLocation(p);
+        p.setGameMode(GameMode.SPECTATOR);
         p.teleport(target);
         p.setGameMode(GameMode.SPECTATOR);
         p.playSound(p.getLocation(), Sound.ENTITY_ENDER_DRAGON_GROWL, 3.0F, 0.533F);
