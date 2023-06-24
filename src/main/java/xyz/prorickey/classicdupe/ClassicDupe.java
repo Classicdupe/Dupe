@@ -243,6 +243,8 @@ public class ClassicDupe extends JavaPlugin {
         this.getCommand("help").setTabCompleter(new HelpCMD());
         this.getCommand("customset").setExecutor(new CustomSetCMD());
         this.getCommand("customset").setTabCompleter(new CustomSetCMD());
+        this.getCommand("afk").setExecutor(new SpawnCMD());
+        this.getCommand("afk").setTabCompleter(new SpawnCMD());
 
         getServer().getPluginManager().registerEvents(new JoinEvent(), this);
         getServer().getPluginManager().registerEvents(new QuitEvent(), this);

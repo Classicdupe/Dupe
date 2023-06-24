@@ -363,6 +363,9 @@ commands:
   customset:
     description: To get a custom armor
     usage: "Usage: /customitem <armorSet>"
+  afk:
+    description: To teleport to the afk area
+    usage: "Usage: /afk"
 
 permissions:
   default.spawn.others:
