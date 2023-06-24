@@ -39,6 +39,11 @@ public class SetSpawnCMD implements CommandExecutor, TabCompleter {
                     player.sendMessage(Utils.cmdMsg("<green>Set the nether spawn location to your location"));
                     return true;
                 }
+                case "afk" -> {
+                    ClassicDupe.getDatabase().setSpawn("afk", player.getLocation());
+                    player.sendMessage(Utils.cmdMsg("<green>Set the afk spawn location to your location"));
+                    return true;
+                }
                 default -> {
                     player.sendMessage(Utils.cmdMsg("<red>What spawn would you like to set? <gray>(hub, overworld, nether)"));
                     return true;
@@ -64,6 +69,11 @@ public class SetSpawnCMD implements CommandExecutor, TabCompleter {
                 case "nether" -> {
                     ClassicDupe.getDatabase().setSpawn("nether", tarj.getLocation());
                     sender.sendMessage(Utils.cmdMsg("<green>Set the nether spawn location to <yellow>" + tarj.getName() + "'s <green>location"));
+                    return true;
+                }
+                case "afk" -> {
+                    ClassicDupe.getDatabase().setSpawn("afk", tarj.getLocation());
+                    sender.sendMessage(Utils.cmdMsg("<green>Set the afk spawn location to <yellow>" + tarj.getName() + "'s <green>location"));
                     return true;
                 }
                 default -> {
