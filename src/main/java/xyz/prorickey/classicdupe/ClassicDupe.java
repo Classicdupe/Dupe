@@ -270,7 +270,8 @@ public class ClassicDupe extends JavaPlugin {
         //getServer().getPluginManager().registerEvents(new CraftingTable(), this);
         getServer().getPluginManager().registerEvents(new BountyCMD(), this);
         //getServer().getPluginManager().registerEvents(new CraftingTable(), this);
-getServer().getPluginManager().registerEvents(new FixArmorTrimCrafting(), this);
+        getServer().getPluginManager().registerEvents(new FixArmorTrimCrafting(), this);
+        getServer().getPluginManager().registerEvents(new ChatRewards(), this);
 
         //Init maze
         MAZEmanager.init();

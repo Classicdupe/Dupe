@@ -1,9 +1,10 @@
 package xyz.prorickey.classicdupe.events;
 
+import io.papermc.paper.event.player.AsyncChatEvent;
 import org.bukkit.Bukkit;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
-import org.bukkit.event.player.PlayerChatEvent;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
 import xyz.prorickey.classicdupe.ClassicDupe;
@@ -28,15 +29,15 @@ public class ChatRewards implements Listener {
         Bukkit.getLogger().info("newList " + newList + ", wordsList " + wordsList);
     }
 
-    @EventHandler
-    public void onPlayerChat(PlayerChatEvent e) {
+    @EventHandler (priority = EventPriority.HIGHEST)
+    public static void RewardsPlayerChat(AsyncChatEvent e) {
         if(isRewardActive()){
-            if(e.getMessage().toLowerCase().contains(getRewardWord())){
+            if(e.message().toString().toLowerCase().contains(getRewardWord())){
                 rewardActive = false;
                 // Add DB to player idk how
                 ClassicDupe.getPlugin().getServer().getOnlinePlayers().forEach(player -> {
                     player.sendMessage(Utils.format("<green>-----------------------------------------------------"));
-                    player.sendMessage(Utils.format("<aqua><bold>UNSCRAMBLE</bold> <green>the word was guessed by <italic>"+e.getPlayer().getName()+" <green>!")
+                    player.sendMessage(Utils.format("<aqua><bold>UNSCRAMBLE</bold> <green>the word was guessed by <italic>"+e.getPlayer().getName()+"<green>! \n")
                             .append(Utils.format("<green>The word was "+"<yellow>"+getRewardWord())));
                     player.sendMessage(Utils.format("<green>-----------------------------------------------------"));
                 });
@@ -54,7 +55,7 @@ public class ChatRewards implements Listener {
             rewardActive = true;
             ClassicDupe.getPlugin().getServer().getOnlinePlayers().forEach(player -> {
                 player.sendMessage(Utils.format("<green>-----------------------------------------------------"));
-                player.sendMessage(Utils.format("<aqua><bold>UNSCRAMBLE</bold> <green>the word below to win DB! ")
+                player.sendMessage(Utils.format("<aqua><bold>UNSCRAMBLE</bold> <green>the word below to win DB! \n")
                         .append(Utils.format("<yellow>"+scrambleWord(rewardWord))));
                 player.sendMessage(Utils.format("<green>-----------------------------------------------------"));
             });
