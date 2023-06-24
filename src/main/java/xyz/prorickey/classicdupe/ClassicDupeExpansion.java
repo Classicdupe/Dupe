@@ -66,7 +66,7 @@ public class ClassicDupeExpansion extends PlaceholderExpansion {
         } else if(params.toLowerCase().startsWith("top_clankills_")) {
             for (int i4 = 0; i4 < 10; i4++) {
                 if (ClassicDupe.getClanDatabase().getTopClanKills().size()-1 < i4) return " ";
-                Clan clan = ClassicDupe.getClanDatabase().getTopClanKills().keySet().stream().toList().get(i4);
+                Clan clan = ClassicDupe.getClanDatabase().getTopClanKills().get(i4+1);
                 if(clan != null) {
                     if (params.equalsIgnoreCase("top_clanKills_" + (i4 + 1) + "_name"))
                         return clan.getClanName();
