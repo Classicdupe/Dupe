@@ -73,6 +73,7 @@ public class BountyCMD implements CommandExecutor, TabCompleter, Listener {
                         return true;
                     }
                     playerData.subtractBalance(amount);
+                    ClassicDupe.getDatabase().getBountyDatabase().setBounty(target.getUniqueId(), amount);
                     player.sendMessage(Utils.cmdMsg("<green>You placed a bounty of <yellow>" + amount + "<green> on <yellow>" + target.getName()));
                     if(target.isOnline()) target.getPlayer().sendMessage(Utils.cmdMsg("<green>A bounty of <yellow>" + amount + "<green> has been placed on you by <yellow>" + player.getName()));
                 }
