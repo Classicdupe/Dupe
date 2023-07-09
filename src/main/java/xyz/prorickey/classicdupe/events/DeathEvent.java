@@ -43,9 +43,11 @@ public class DeathEvent implements Listener {
                 ClassicDupe.getDatabase().getPlayerDatabase().addKill(killer.getUniqueId().toString());
                 ClassicDupe.getDatabase().getPlayerDatabase().getPlayerData(killer.getUniqueId()).addKillStreak(1);
                 ClassicDupe.getDatabase().getPlayerDatabase().getPlayerData(killer.getUniqueId()).addBalance(Config.getConfig().getInt("economy.moneyMaking.kill"));
-                if(ClassicDupe.getDatabase().getBountyDatabase().getBounty(player.getUniqueId()) != null)
+                if(ClassicDupe.getDatabase().getBountyDatabase().getBounty(player.getUniqueId()) != null) {
                     ClassicDupe.getDatabase().getPlayerDatabase().getPlayerData(killer.getUniqueId())
                             .addBalance(ClassicDupe.getDatabase().getBountyDatabase().getBounty(player.getUniqueId()));
+                    ClassicDupe.getDatabase().getBountyDatabase().deleteBounty(player.getUniqueId());
+                }
                 if(ClassicDupe.getClanDatabase().getClanMember(killer.getUniqueId()).getClanID() != null) ClassicDupe
                         .getClanDatabase()
                         .addClanKill(
