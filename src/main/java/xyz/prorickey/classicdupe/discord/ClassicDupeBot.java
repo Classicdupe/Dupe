@@ -30,9 +30,6 @@ public class ClassicDupeBot extends ListenerAdapter {
                 .build();
 
         jda.updateCommands().addCommands(
-                Commands.slash("stats", "Get the stats of a player")
-                        .addOption(OptionType.STRING, "ign", "The username of the player you want the stats of", false)
-                        .addOption(OptionType.USER, "user", "The user you would like to get the stats of", false),
                 Commands.slash("execute", "To execute a console command")
                         .setGuildOnly(true)
                         .setDefaultPermissions(DefaultMemberPermissions.enabledFor(Permission.ADMINISTRATOR))
