@@ -61,7 +61,7 @@ public class DupeCMD implements CommandExecutor, TabCompleter {
         return new ArrayList<>();
     }
 
-    private static final List<Material> shulkerBoxes = List.of(
+    public static final List<Material> shulkerBoxes = List.of(
         Material.SHULKER_BOX,
         Material.WHITE_SHULKER_BOX,
         Material.ORANGE_SHULKER_BOX,
