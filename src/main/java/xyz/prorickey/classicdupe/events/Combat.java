@@ -14,14 +14,12 @@ import org.bukkit.event.player.PlayerCommandPreprocessEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.player.PlayerRiptideEvent;
 import org.bukkit.scheduler.BukkitRunnable;
+import org.bukkit.util.Vector;
 import xyz.prorickey.classicdupe.ClassicDupe;
 import xyz.prorickey.classicdupe.Utils;
 import xyz.prorickey.classicdupe.clans.builders.ClanMember;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 
 public class Combat implements Listener {
 
@@ -87,11 +85,22 @@ public class Combat implements Listener {
         }
     }
 
-    @EventHandler
+    /*@EventHandler
     public void onPlayerMove(PlayerMoveEvent e) {
         if(Combat.inCombat.containsKey(e.getPlayer()) && e.getPlayer().isRiptiding()) {
             e.getPlayer().sendMessage(Utils.cmdMsg("<red>You cannot riptide while in combat"));
             e.setCancelled(true);
+        }
+    }*/
+
+    // An interesting approach offered by one of the paper devs - Replaces what I made above
+    @EventHandler
+    public void onPlayerRiptide(PlayerRiptideEvent e) {
+        if(Combat.inCombat.containsKey(e.getPlayer())) {
+            e.getPlayer().sendMessage(Utils.cmdMsg("<red>You cannot riptide while in combat"));
+            Player player = e.getPlayer();
+            Vector vel = player.getVelocity();
+            Bukkit.getScheduler().scheduleSyncDelayedTask(ClassicDupe.getPlugin(), () -> player.setVelocity(vel), 1L);
         }
     }
 
