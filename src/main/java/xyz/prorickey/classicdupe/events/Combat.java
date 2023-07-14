@@ -1,16 +1,19 @@
 package xyz.prorickey.classicdupe.events;
 
 import org.bukkit.Bukkit;
+import org.bukkit.Material;
 import org.bukkit.entity.Arrow;
 import org.bukkit.entity.EnderCrystal;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
+import org.bukkit.event.Event;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityToggleGlideEvent;
 import org.bukkit.event.player.PlayerCommandPreprocessEvent;
+import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.player.PlayerRiptideEvent;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -94,13 +97,22 @@ public class Combat implements Listener {
     }*/
 
     // An interesting approach offered by one of the paper devs - Replaces what I made above
-    @EventHandler
+    /*@EventHandler
     public void onPlayerRiptide(PlayerRiptideEvent e) {
         if(Combat.inCombat.containsKey(e.getPlayer())) {
             e.getPlayer().sendMessage(Utils.cmdMsg("<red>You cannot riptide while in combat"));
             Player player = e.getPlayer();
             Vector vel = player.getVelocity();
             Bukkit.getScheduler().scheduleSyncDelayedTask(ClassicDupe.getPlugin(), () -> player.setVelocity(vel), 1L);
+        }
+    }*/
+
+    // An interesting approach offered by just a regular user - Replaces the two above
+    @EventHandler
+    public void onPlayerInteract(PlayerInteractEvent e) {
+        if(Combat.inCombat.containsKey(e.getPlayer()) && e.getItem().getType().equals(Material.TRIDENT)) {
+            e.getPlayer().sendMessage(Utils.cmdMsg("<red>You cannot riptide while in combat"));
+            e.setUseItemInHand(Event.Result.DENY);
         }
     }
 
