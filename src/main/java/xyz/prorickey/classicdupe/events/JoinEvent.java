@@ -16,6 +16,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.BlockStateMeta;
 import org.bukkit.inventory.meta.BundleMeta;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.potion.PotionEffect;
@@ -107,7 +108,7 @@ public class JoinEvent implements Listener {
         for(int i = 0; i < inventory.getSize(); i++) {
             ItemStack itemStack = inventory.getItem(i);
             if(itemStack == null) continue;
-            if(DupeCMD.shulkerBoxes.contains(itemStack.getType())) removeOpal(((ShulkerBox) itemStack.getItemMeta()).getInventory());
+            if(DupeCMD.shulkerBoxes.contains(itemStack.getType())) removeOpal(((ShulkerBox) ((BlockStateMeta) itemStack.getItemMeta()).getBlockState()).getInventory());
             if(itemStack.getItemMeta() instanceof BundleMeta) {
                 BundleMeta meta = ((BundleMeta) itemStack.getItemMeta());
                 meta.getItems().forEach(item -> {
