@@ -9,7 +9,9 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ArmorMeta;
 import org.bukkit.inventory.meta.BlockStateMeta;
 import org.bukkit.inventory.meta.BundleMeta;
+import org.bukkit.inventory.meta.PotionMeta;
 import org.bukkit.persistence.PersistentDataType;
+import org.bukkit.potion.PotionType;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import xyz.prorickey.classicdupe.ClassicDupe;
@@ -39,6 +41,12 @@ public class DupeCMD implements CommandExecutor, TabCompleter {
             return true;
         }
         if(Combat.inCombat.containsKey(p.getPlayer()) && forbiddenDupesInCombat.contains(p.getInventory().getItemInMainHand().getType())) {
+            p.sendMessage(Utils.cmdMsg("<red>You cannot dupe that item while in combat"));
+            return true;
+        }
+        if(p.getInventory().getItemInMainHand().getItemMeta() instanceof PotionMeta potionMeta &&
+                    (potionMeta.getBasePotionData().getType().equals(PotionType.INSTANT_HEAL) ||
+                    potionMeta.getBasePotionData().getType().equals(PotionType.REGEN))) {
             p.sendMessage(Utils.cmdMsg("<red>You cannot dupe that item while in combat"));
             return true;
         }
