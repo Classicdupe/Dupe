@@ -11,6 +11,8 @@ import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityToggleGlideEvent;
 import org.bukkit.event.player.PlayerCommandPreprocessEvent;
+import org.bukkit.event.player.PlayerMoveEvent;
+import org.bukkit.event.player.PlayerRiptideEvent;
 import org.bukkit.scheduler.BukkitRunnable;
 import xyz.prorickey.classicdupe.ClassicDupe;
 import xyz.prorickey.classicdupe.Utils;
@@ -82,6 +84,14 @@ public class Combat implements Listener {
         if(Combat.inCombat.containsKey(player) && !player.isGliding()) {
             e.setCancelled(true);
             player.sendMessage(Utils.cmdMsg("<red>You cannot use an elytra while in combat"));
+        }
+    }
+
+    @EventHandler
+    public void onPlayerMove(PlayerMoveEvent e) {
+        if(Combat.inCombat.containsKey(e.getPlayer()) && e.getPlayer().isRiptiding()) {
+            e.getPlayer().sendMessage(Utils.cmdMsg("<red>You cannot riptide while in combat"));
+            e.setCancelled(true);
         }
     }
 
