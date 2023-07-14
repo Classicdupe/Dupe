@@ -13,7 +13,6 @@ import java.util.Map;
 public class PearlCooldown implements Listener {
 
     private static final Map<Player, Long> pearlCooldown = new HashMap<>();
-
     @EventHandler
     public void onPlayerInteract(PlayerInteractEvent e) {
         if(e.getMaterial().equals(Material.ENDER_PEARL)) {

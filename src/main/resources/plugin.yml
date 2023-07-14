@@ -367,6 +367,9 @@ commands:
   afk:
     description: To teleport to the afk area
     usage: "Usage: /afk"
+  worldsize:
+    description: To get the sizes of the world
+    usage: "Usage: /worldsize"
 
 permissions:
   default.spawn.others:

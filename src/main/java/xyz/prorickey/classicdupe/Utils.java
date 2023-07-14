@@ -9,8 +9,15 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.metadata.MetadataValue;
 import org.codehaus.plexus.util.StringUtils;
 
+import java.io.IOException;
+import java.nio.file.FileVisitResult;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.SimpleFileVisitor;
+import java.nio.file.attribute.BasicFileAttributes;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.atomic.AtomicLong;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -105,5 +112,38 @@ public class Utils {
         ItemStack item = new ItemStack(Material.GRAY_STAINED_GLASS_PANE);
         item.editMeta(meta -> meta.displayName(Component.text(" ")));
         return item;
+    }
+
+    /**
+     * Attempts to calculate the size of a file or directory.
+     *
+     * <p>
+     * Since the operation is non-atomic, the returned value may be inaccurate.
+     * However, this method is quick and does its best.
+     */
+    public static long size(Path path) {
+
+        final AtomicLong size = new AtomicLong(0);
+
+        try {
+            Files.walkFileTree(path, new SimpleFileVisitor<Path>() {
+                @Override
+                public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) {
+                    size.addAndGet(attrs.size());
+                    return FileVisitResult.CONTINUE;
+                }
+                @Override
+                public FileVisitResult visitFileFailed(Path file, IOException exc) {
+                    return FileVisitResult.CONTINUE;
+                }
+                @Override
+                public FileVisitResult postVisitDirectory(Path dir, IOException exc) {
+                    return FileVisitResult.CONTINUE;
+                }
+            });
+        } catch (IOException e) {
+            throw new AssertionError("walkFileTree will not throw IOException if the FileVisitor does not");
+        }
+        return size.get();
     }
 }
