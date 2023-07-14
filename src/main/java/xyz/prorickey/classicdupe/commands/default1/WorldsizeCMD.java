@@ -23,10 +23,10 @@ public class WorldsizeCMD implements CommandExecutor, TabCompleter {
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
         sender.sendMessage(Utils.cmdMsg("<yellow>Fetching World Sizes..."));
         Bukkit.getScheduler().runTaskAsynchronously(ClassicDupe.getPlugin(), () -> {
-            overworldSize = Utils.size(Paths.get("", "/worlds/world"));
-            netherSize = Utils.size(Paths.get("", "/worlds/world_nether"));
-            sender.sendMessage(Utils.cmdMsg("<yellow>Overworld Size: <white>" + overworldSize + " bytes"));
-            sender.sendMessage(Utils.cmdMsg("<yellow>Nether Size: <white>" + netherSize + " bytes"));
+            overworldSize = Utils.size(Paths.get(System.getProperty("user.dir"), "/worlds/world/"));
+            netherSize = Utils.size(Paths.get(System.getProperty("user.dir"), "/worlds/world_nether/"));
+            sender.sendMessage(Utils.cmdMsg("<yellow>Overworld Size: <white>" + Math.round((float) overworldSize /1000000) + " MB"));
+            sender.sendMessage(Utils.cmdMsg("<yellow>Nether Size: <white>" + Math.round((float) netherSize /1000000) + " MB"));
         });
         return true;
     }

@@ -88,31 +88,14 @@ public class Combat implements Listener {
         }
     }
 
-    /*@EventHandler
-    public void onPlayerMove(PlayerMoveEvent e) {
-        if(Combat.inCombat.containsKey(e.getPlayer()) && e.getPlayer().isRiptiding()) {
-            e.getPlayer().sendMessage(Utils.cmdMsg("<red>You cannot riptide while in combat"));
-            e.setCancelled(true);
-        }
-    }*/
-
-    // An interesting approach offered by one of the paper devs - Replaces what I made above
-    /*@EventHandler
+    // An interesting approach offered by one of the paper devs
+    @EventHandler
     public void onPlayerRiptide(PlayerRiptideEvent e) {
         if(Combat.inCombat.containsKey(e.getPlayer())) {
             e.getPlayer().sendMessage(Utils.cmdMsg("<red>You cannot riptide while in combat"));
             Player player = e.getPlayer();
             Vector vel = player.getVelocity();
             Bukkit.getScheduler().scheduleSyncDelayedTask(ClassicDupe.getPlugin(), () -> player.setVelocity(vel), 1L);
-        }
-    }*/
-
-    // An interesting approach offered by just a regular user - Replaces the two above
-    @EventHandler
-    public void onPlayerInteract(PlayerInteractEvent e) {
-        if(Combat.inCombat.containsKey(e.getPlayer()) && e.getItem().getType().equals(Material.TRIDENT)) {
-            e.getPlayer().sendMessage(Utils.cmdMsg("<red>You cannot riptide while in combat"));
-            e.setUseItemInHand(Event.Result.DENY);
         }
     }
 
