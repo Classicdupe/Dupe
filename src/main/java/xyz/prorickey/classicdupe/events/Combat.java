@@ -3,6 +3,7 @@ package xyz.prorickey.classicdupe.events;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Arrow;
 import org.bukkit.entity.EnderCrystal;
+import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -29,7 +30,7 @@ public class Combat implements Listener {
 
     @EventHandler
     public void onEntityDamageByEntity(EntityDamageByEntityEvent e) {
-        if(e.getEntity().hasMetadata("NPC")) return;
+        if(!e.getEntity().getType().equals(EntityType.PLAYER) || e.getEntity().hasMetadata("NPC")) return;
         if(e.getDamager() instanceof Player att && Utils.isVanished(att) && !att.hasPermission("admin.bypassnopvpinvanish")) {
             e.setCancelled(true);
             att.sendMessage(Utils.cmdMsg("<red>You cannot attack players while vanished"));
