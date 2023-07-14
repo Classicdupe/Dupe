@@ -66,8 +66,13 @@ public class MariaClanDatabase implements ClanDatabase {
 
                 ResultSet data = this.conn.prepareStatement("SELECT clanId, clanName FROM clans").executeQuery();
                 while(data.next()) {
-                    this.allClanIds.add(UUID.fromString(data.getString("clanId")));
-                    this.allClanNames.add(data.getString("clanName"));
+                    PreparedStatement stat = this.conn.prepareStatement("SELECT uuid FROM clanPlayers WHERE clanId=?");
+                    stat.setString(1, data.getString("clanId"));
+                    ResultSet players = stat.executeQuery();
+                    if(players.next()) {
+                        this.allClanIds.add(UUID.fromString(data.getString("clanId")));
+                        this.allClanNames.add(data.getString("clanName"));
+                    }
                 }
             } catch (SQLException e) {
                 throw new RuntimeException(e);
