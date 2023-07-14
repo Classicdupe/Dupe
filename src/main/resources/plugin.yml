@@ -44,6 +44,8 @@ commands:
   overworld:
     description: To go to the overworld
     usage: "Usage: /overworld [player]"
+    aliases:
+      - ow
   setspawn:
     description: Sets the spawn to the players location
     permission: admin.setspawn
