@@ -370,7 +370,9 @@ commands:
   worldsize:
     description: To get the sizes of the world
     usage: "Usage: /worldsize"
-
+  pay:
+    description: To pay other players
+    usage: "Usage: /pay"
 permissions:
   default.spawn.others:
     description: Allows you to teleport others to spawn
