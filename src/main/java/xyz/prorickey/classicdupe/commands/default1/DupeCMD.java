@@ -44,7 +44,8 @@ public class DupeCMD implements CommandExecutor, TabCompleter {
             p.sendMessage(Utils.cmdMsg("<red>You cannot dupe that item while in combat"));
             return true;
         }
-        if(p.getInventory().getItemInMainHand().getItemMeta() instanceof PotionMeta potionMeta &&
+        if(Combat.inCombat.containsKey(p.getPlayer()) &&
+                p.getInventory().getItemInMainHand().getItemMeta() instanceof PotionMeta potionMeta &&
                     (potionMeta.getBasePotionData().getType().equals(PotionType.INSTANT_HEAL) ||
                     potionMeta.getBasePotionData().getType().equals(PotionType.REGEN))) {
             p.sendMessage(Utils.cmdMsg("<red>You cannot dupe that item while in combat"));
