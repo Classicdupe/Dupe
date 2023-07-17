@@ -100,7 +100,6 @@ public class DupeCMD implements CommandExecutor, TabCompleter {
                 item.getItemMeta().getPersistentDataContainer().has(CIKeys.PVPPOT, PersistentDataType.STRING) ||
                 item.getItemMeta().getPersistentDataContainer().has(CIKeys.PVPPOT2, PersistentDataType.STRING)
         )) return false;
-        if (item.getItemMeta() instanceof ArmorMeta armorMeta && armorMeta.hasTrim()) return false;
         if(shulkerBoxes.contains(item.getType())) {
             AtomicBoolean illegal = new AtomicBoolean(false);
             ShulkerBox box = (ShulkerBox) ((BlockStateMeta) item.getItemMeta()).getBlockState();
