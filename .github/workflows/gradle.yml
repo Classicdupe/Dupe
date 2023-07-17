@@ -16,3 +16,19 @@ jobs:
       run: chmod +x ./gradlew
     - name: Build with Gradle
       run: ./gradlew shadowJar
+    - name: Create a Release in a GitHub Action
+      uses: comnoco/create-release-action@v2.0.5
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        tag_name: ${{ github.ref }}
+        release_name: Release ${{ github.ref }}
+        draft: false
+        generate_release_notes: true
+        make_latest: true
+        prerelease: false
+    - name: Release
+      uses: softprops/action-gh-release@v1
+      if: startsWith(github.ref, ${{ github.ref }})
+      with:
+        files: /build/libs/*
