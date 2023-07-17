@@ -1,5 +1,6 @@
 name: Gradle ShadowJar Build
 on: [push, pull_request]
+permissions: read-all
 jobs:
 
   build:
@@ -15,7 +16,7 @@ jobs:
       run: chmod +x ./gradlew
     - name: Build with Gradle
       run: ./gradlew shadowJar
-      
+
   release:
     needs: build
     runs-on: ubuntu-latest
