@@ -28,17 +28,6 @@ public class ClassicDupeBot extends ListenerAdapter {
                         new StaffChat()
                 )
                 .build();
-
-        jda.updateCommands().addCommands(
-                Commands.slash("execute", "To execute a console command")
-                        .setGuildOnly(true)
-                        .setDefaultPermissions(DefaultMemberPermissions.enabledFor(Permission.ADMINISTRATOR))
-                        .addOption(OptionType.STRING, "command", "The command you would like to execute", true),
-                Commands.slash("link", "To link your minecraft account")
-                        .addOption(OptionType.STRING, "code", "The link code you were provided", true),
-                Commands.slash("unlink", "To unlink your discord account")
-
-        ).queue();
     }
 
     public static JDA getJDA() { return jda; }
