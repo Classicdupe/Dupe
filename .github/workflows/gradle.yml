@@ -1,10 +1,9 @@
 name: Gradle ShadowJar Build
 on: [push, pull_request]
 jobs:
+
   build:
-
     runs-on: ubuntu-latest
-
     steps:
     - uses: actions/checkout@v3
     - name: Set up JDK 17
@@ -16,6 +15,11 @@ jobs:
       run: chmod +x ./gradlew
     - name: Build with Gradle
       run: ./gradlew shadowJar
+      
+  release:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
     - name: Create a Release in a GitHub Action
       uses: comnoco/create-release-action@v2.0.5
       env:
@@ -24,8 +28,8 @@ jobs:
         tag_name: ${{ github.ref }}
         release_name: Release ${{ github.ref }}
         draft: false
-        generate_release_notes: true
-        make_latest: true
+        body: |
+          Created automatically by Github Actions
         prerelease: false
     - name: Release
       uses: softprops/action-gh-release@v1
