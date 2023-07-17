@@ -1,6 +1,8 @@
 name: Gradle ShadowJar Build
 on: [push, pull_request]
-permissions: read-all
+permissions:
+  contents: write
+  pull-requests: read
 jobs:
 
   build:
