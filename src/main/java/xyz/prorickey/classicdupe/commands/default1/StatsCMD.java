@@ -11,6 +11,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import xyz.prorickey.classicdupe.ClassicDupe;
 import xyz.prorickey.classicdupe.Utils;
+import xyz.prorickey.classicdupe.database.PlayerData;
 import xyz.prorickey.classicdupe.database.PlayerDatabase;
 import xyz.prorickey.classicdupe.metrics.Metrics;
 import xyz.prorickey.proutils.TabComplete;
@@ -27,16 +28,19 @@ public class StatsCMD implements CommandExecutor, TabCompleter {
         }
         if(args.length == 0) {
             PlayerDatabase.PlayerStats stats = ClassicDupe.getDatabase().getPlayerDatabase().getStats(player.getUniqueId().toString());
+            PlayerData data = ClassicDupe.getDatabase().getPlayerDatabase().getPlayerData(player.getUniqueId());
             player.sendMessage(Utils.cmdMsg("<green>Stats of <yellow>" + player.getName()));
             player.sendMessage(Utils.format("<gray>- <green>Kills: <yellow>" + stats.kills));
             player.sendMessage(Utils.format("<gray>- <green>Deaths: <yellow>" + stats.deaths));
             player.sendMessage(Utils.format("<gray>- <green>KDR: <yellow>" + stats.kdr));
+            player.sendMessage(Utils.format("<gray>- <green>Balance: <yellow>" + data.getBalance()));
             player.sendMessage(Utils.format("<gray>- <green>Playtime: <yellow>" + Metrics.getPlayerMetrics().getPlaytimeFormatted(player.getUniqueId())));
             return true;
         } else if(args.length == 1) {
             OfflinePlayer tarj = Bukkit.getOfflinePlayer(args[0]);
             PlayerDatabase.PlayerStats stats = ClassicDupe.getDatabase().getPlayerDatabase().getStats(tarj.getUniqueId().toString());
-            if(stats == null) {
+            PlayerData data = ClassicDupe.getDatabase().getPlayerDatabase().getPlayerData(tarj.getUniqueId());
+            if(stats == null || data == null) {
                 player.sendMessage(Utils.cmdMsg("<red>That player has not joined the server before"));
                 return true;
             }
@@ -44,6 +48,7 @@ public class StatsCMD implements CommandExecutor, TabCompleter {
             player.sendMessage(Utils.format("<gray>- <green>Kills: <yellow>" + stats.kills));
             player.sendMessage(Utils.format("<gray>- <green>Deaths: <yellow>" + stats.deaths));
             player.sendMessage(Utils.format("<gray>- <green>KDR: <yellow>" + stats.kdr));
+            player.sendMessage(Utils.format("<gray>- <green>Balance: <yellow>" + data.getBalance()));
             player.sendMessage(Utils.format("<gray>- <green>Playtime: <yellow>" + Metrics.getPlayerMetrics().getPlaytimeFormatted(tarj.getUniqueId())));
             return true;
         }
