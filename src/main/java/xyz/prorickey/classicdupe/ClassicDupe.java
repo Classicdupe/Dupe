@@ -27,6 +27,7 @@ import xyz.prorickey.classicdupe.custom.CustomSets;
 import xyz.prorickey.classicdupe.customitems.cicommands;
 import xyz.prorickey.classicdupe.database.Database;
 import xyz.prorickey.classicdupe.database.PlayerVaultDatabase;
+import xyz.prorickey.classicdupe.discord.BoosterService;
 import xyz.prorickey.classicdupe.discord.ClassicDupeBot;
 import xyz.prorickey.classicdupe.events.*;
 import xyz.prorickey.classicdupe.metrics.Metrics;
@@ -278,7 +279,7 @@ public class ClassicDupe extends JavaPlugin {
         getServer().getPluginManager().registerEvents(new BountyCMD(), this);
         getServer().getPluginManager().registerEvents(new FixArmorTrimCrafting(), this);
         getServer().getPluginManager().registerEvents(new HelpCMD(), this);
-
+        getServer().getPluginManager().registerEvents(new BoosterService(), this);
         //Init maze
         MAZEmanager.init();
 
