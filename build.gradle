@@ -13,6 +13,7 @@ repositories {
     maven { url "https://maven.enginehub.org/repo/" }
     maven { url 'https://repo.prorickey.xyz/repository/maven-public'}
     maven { url 'https://oss.sonatype.org/content/repositories/snapshots/' }
+    maven { url 'https://jitpack.io' }
 }
 
 dependencies {
@@ -27,6 +28,7 @@ dependencies {
     compileOnly 'net.dv8tion:JDA:5.0.0-beta.10'
     compileOnly 'org.mariadb.jdbc:mariadb-java-client:3.1.4'
     compileOnly 'com.fasterxml.jackson.core:jackson-annotations:2.15.2'
+    compileOnly "com.github.MilkBowl:VaultAPI:1.7"
 
     implementation 'xyz.prorickey:proutils:1.0.1'
     implementation 'xyz.xenondevs:particle:1.8.4'

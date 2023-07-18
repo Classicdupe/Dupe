@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import net.kyori.adventure.text.event.ClickEvent;
+import net.milkbowl.vault.economy.Economy;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.command.PluginCommand;
@@ -12,6 +13,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.EnchantmentStorageMeta;
 import org.bukkit.plugin.RegisteredServiceProvider;
+import org.bukkit.plugin.ServicePriority;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
 
@@ -40,6 +42,7 @@ public class ClassicDupe extends JavaPlugin {
     public static JavaPlugin plugin;
     public static ClassicDupeBot bot;
     public static LuckPerms lpapi;
+    public static Economy econ;
     public static Database database;
     public static ClanDatabase clanDatabase;
     public static PlayerVaultDatabase pvdatabase;
@@ -61,10 +64,19 @@ public class ClassicDupe extends JavaPlugin {
         RegisteredServiceProvider<LuckPerms> lppro = Bukkit.getServicesManager().getRegistration(LuckPerms.class);
         if(lppro != null) { lpapi = lppro.getProvider(); }
         if(Bukkit.getPluginManager().getPlugin("PlaceholderAPI") != null) new ClassicDupeExpansion(this).register();
+        RegisteredServiceProvider<Economy> rsp = getServer().getServicesManager().getRegistration(Economy.class);
+        if(rsp != null) { econ = rsp.getProvider(); }
 
         Config.init(this);
         database = new Database();
         pvdatabase = new PlayerVaultDatabase(this);
+
+        Bukkit.getServicesManager().register(
+                Economy.class,
+                new VaultEconomy(database.getPlayerDatabase()),
+                Bukkit.getPluginManager().getPlugin("Vault"),
+                ServicePriority.Normal
+        );
 
         bot = new ClassicDupeBot(this);
 
