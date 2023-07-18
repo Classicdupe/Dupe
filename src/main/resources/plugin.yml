@@ -3,7 +3,7 @@ name: ClassicDupe
 version: ${version}
 description: The core plugin behind everything that happens in ClassicDupe
 api-version: 1.19
-load: POSTWORLD
+load: STARTUP
 authors:
   - Prorickey
   - ModdedKid
