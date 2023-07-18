@@ -45,7 +45,7 @@ public class JoinEvent implements Listener {
         ClassicDupe.getClanDatabase().updateClanMemberInfo(e.getPlayer());
         if(ClassicDupe.getDatabase().getPlayerDatabase().getPlayerData(e.getPlayer().getUniqueId()) == null) {
             ClassicDupe.getDatabase().getPlayerDatabase().playerDataUpdateAndLoad(e.getPlayer());
-            e.getPlayer().teleport(ClassicDupe.getDatabase().getSpawn("hub"));
+            if(ClassicDupe.getDatabase().getSpawn("hub") != null) e.getPlayer().teleport(ClassicDupe.getDatabase().getSpawn("hub"));
             e.joinMessage(Utils.format("<yellow>" + e.getPlayer().getName() + " <green>Just joined for the first time! Give them a warm welcome"));
             e.getPlayer().sendMessage(Utils.cmdMsg("<green>Every <yellow>60 <green>you will recieve a random item. Execute /random to disable or enable this"));
             ChatColorCMD.colorProfiles.put(e.getPlayer().getUniqueId().toString(), "<gray>");
