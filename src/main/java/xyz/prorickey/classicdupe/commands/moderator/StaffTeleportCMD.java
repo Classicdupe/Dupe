@@ -42,6 +42,12 @@ public class StaffTeleportCMD implements CommandExecutor, TabCompleter {
         p.setGameMode(GameMode.SPECTATOR);
         p.playSound(p.getLocation(), Sound.ENTITY_ENDER_DRAGON_GROWL, 3.0F, 0.533F);
         p.sendMessage(Utils.cmdMsg("<green>You were successfully teleported! use /back to get to your old location!"));
+        p.setGameMode(GameMode.SPECTATOR);
+        // check in 5 ticks if the player is not in spectator mode
+        Bukkit.getScheduler().scheduleSyncDelayedTask(ClassicDupe.getPlugin(), () -> {
+            if (p.getGameMode() == GameMode.SPECTATOR) return;
+            p.setGameMode(GameMode.SPECTATOR);
+        }, 5L);
         return true;
     }
 
