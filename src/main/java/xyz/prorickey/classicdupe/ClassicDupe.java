@@ -292,6 +292,11 @@ public class ClassicDupe extends JavaPlugin {
         getServer().getPluginManager().registerEvents(new FixArmorTrimCrafting(), this);
         getServer().getPluginManager().registerEvents(new HelpCMD(), this);
         getServer().getPluginManager().registerEvents(new BoosterService(), this);
+
+        getServer().getPluginManager().registerEvents(new pvsee(), this);
+        //set command & tab completer
+        this.getCommand("pvsee").setExecutor(new pvsee());
+        this.getCommand("pvsee").setTabCompleter(new pvsee());
         //Init maze
         MAZEmanager.init();
 

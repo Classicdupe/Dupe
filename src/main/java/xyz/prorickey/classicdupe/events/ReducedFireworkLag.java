@@ -12,7 +12,7 @@ public class ReducedFireworkLag implements Listener {
     @EventHandler
     public void onFireworkExplode(FireworkExplodeEvent e) {
         Firework fw = e.getEntity();
-        if(fw.getFireworkMeta().getEffectsSize() > 3) {
+        if(fw.getFireworkMeta().getEffectsSize() > 2) {
             e.setCancelled(true);
             FireworkMeta meta = fw.getFireworkMeta();
             meta.clearEffects();
