@@ -21,6 +21,7 @@ import xyz.prorickey.classicdupe.ClassicDupe;
 import xyz.prorickey.classicdupe.Config;
 import xyz.prorickey.classicdupe.custom.CustomSets;
 
+import java.util.Objects;
 import java.util.Random;
 import java.util.UUID;
 
@@ -224,7 +225,8 @@ public class ArmorTrims implements Listener {
 
     @EventHandler
     public void onPrepareSmithing(PrepareSmithingEvent event) {
-        if(event.getInventory().getInputEquipment() != null || event.getInventory().getInputTemplate().getType() == Material.NETHERITE_UPGRADE_SMITHING_TEMPLATE) {
+
+        if(event.getInventory().getInputEquipment() != null || Objects.requireNonNull(event.getInventory().getInputTemplate()).getType() == Material.NETHERITE_UPGRADE_SMITHING_TEMPLATE) {
             CustomSets.keys.forEach(key -> {
                 if(
                         event.getInventory().getInputEquipment().getItemMeta().getPersistentDataContainer().has(key) &&
