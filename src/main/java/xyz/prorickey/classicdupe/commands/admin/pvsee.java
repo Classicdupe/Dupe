@@ -11,11 +11,13 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.inventory.Inventory;
+import org.bukkit.inventory.InventoryHolder;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import xyz.prorickey.classicdupe.ClassicDupe;
 import xyz.prorickey.classicdupe.Utils;
+import xyz.prorickey.classicdupe.custom.CustomInvData;
 import xyz.prorickey.proutils.TabComplete;
 
 import java.util.*;
@@ -48,7 +50,7 @@ public class pvsee implements CommandExecutor, TabCompleter, Listener {
             }
             sender.sendMessage(Utils.cmdMsg("<green>Opening vault #" + args[0] + " for " + args[1]));
 
-            Inventory vaultGUI = Bukkit.createInventory(null, 54, Utils.format("invsee " + target.getUniqueId().toString() + " " + args[0]));
+            Inventory vaultGUI = Bukkit.createInventory(new CustomInvData(target.getUniqueId().toString(), Integer.parseInt(args[0])), 54, Utils.cmdMsg("<green>Opening vault #" + args[0] + " for " + args[1]));
             vaultMap.forEach(vaultGUI::setItem);
             senderPlayer.openInventory(vaultGUI);
             vaultGuis.put(target.getUniqueId().toString(), vaultGUI);
@@ -66,13 +68,13 @@ public class pvsee implements CommandExecutor, TabCompleter, Listener {
 
     @EventHandler
     public void onInventoryClose(InventoryCloseEvent e) {
-        String[] titleArry = e.getView().getOriginalTitle().split(" ");
-        if (!Objects.equals(titleArry[0], "invsee")) return;
+
+        if (!(e.getInventory().getHolder() instanceof CustomInvData)) return;
         if(!e.getInventory().equals(vaultGuis.get(e.getPlayer().getUniqueId().toString()))) return;
 
-        vaultGuis.remove(titleArry[1]);
+        vaultGuis.remove(((CustomInvData) e.getInventory().getHolder()).uuid);
         String name = PlainTextComponentSerializer.plainText().serialize(e.getView().title());
-        int vault = Integer.parseInt(titleArry[2]);
+        int vault = ((CustomInvData) e.getInventory().getHolder()).vault;
         ClassicDupe.getPVDatabase().setVault(e.getPlayer().getUniqueId().toString(), vault, e.getInventory());
         e.getPlayer().sendMessage(Utils.cmdMsg("<green>Saved vault #" + vault + " for " + name));
     }
