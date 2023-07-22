@@ -62,7 +62,8 @@ public class pvsee implements CommandExecutor, TabCompleter, Listener {
 
     @Override
     public @Nullable List<String> onTabComplete(@NotNull CommandSender commandSender, @NotNull Command command, @NotNull String s, @NotNull String[] args) {
-        if(args.length == 1) return TabComplete.tabCompletionsSearch(args[0], ClassicDupe.getOnlinePlayerUsernames());
+        if(args.length == 1) return TabComplete.tabCompletionsSearch(args[0], List.of("1", "2"));
+        if(args.length == 2) return TabComplete.tabCompletionsSearch(args[1], ClassicDupe.getOnlinePlayerUsernames().stream().toList());
         return new ArrayList<>();
     }
 
