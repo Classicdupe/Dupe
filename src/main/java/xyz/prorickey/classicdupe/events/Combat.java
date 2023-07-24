@@ -21,6 +21,7 @@ import org.bukkit.util.Vector;
 import xyz.prorickey.classicdupe.ClassicDupe;
 import xyz.prorickey.classicdupe.Utils;
 import xyz.prorickey.classicdupe.clans.builders.ClanMember;
+import xyz.prorickey.classicdupe.playerevents.KOTHEventManager;
 
 import java.util.*;
 
@@ -82,6 +83,10 @@ public class Combat implements Listener {
     @EventHandler
     public void onEntityToggleGlide(EntityToggleGlideEvent e) {
         if(!(e.getEntity() instanceof Player player)) return;
+        if(KOTHEventManager.region != null && KOTHEventManager.region.contains(
+                e.getEntity().getLocation().getBlockX(),
+                e.getEntity().getLocation().getBlockY(),
+                e.getEntity().getLocation().getBlockZ())) return;
         if(Combat.inCombat.containsKey(player) && !player.isGliding()) {
             e.setCancelled(true);
             player.sendMessage(Utils.cmdMsg("<red>You cannot use an elytra while in combat"));

@@ -57,7 +57,7 @@ public class Chat implements Listener {
                 serialized = serialized.replace("@" + onlinePlayer.getName(), "<yellow>@"+onlinePlayer.getName()+"</yellow>");
                 PlayerData playerData = ClassicDupe.getDatabase().getPlayerDatabase().getPlayerData(onlinePlayer.getUniqueId());
                 if(!playerData.getMutePings())
-                    onlinePlayer.playSound(Sound.sound(Key.key("block.note_block.pling"), Sound.Source.MASTER, 1, 1));
+                   onlinePlayer.playSound(Sound.sound(Key.key("block.note_block.pling"), Sound.Source.MASTER, 1, 1));
             }
         }
         ChatType chatType = ChatType.DEFAULT;

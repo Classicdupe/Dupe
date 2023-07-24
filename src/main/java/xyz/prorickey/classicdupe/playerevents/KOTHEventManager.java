@@ -16,6 +16,7 @@ import com.sk89q.worldguard.protection.flags.Flags;
 import com.sk89q.worldguard.protection.flags.StateFlag;
 import com.sk89q.worldguard.protection.regions.ProtectedCuboidRegion;
 import net.kyori.adventure.audience.Audience;
+import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.event.HoverEvent;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
@@ -39,7 +40,8 @@ import java.util.stream.Collectors;
 public class KOTHEventManager {
 
     private static JavaPlugin plugin;
-    private static long timeSinceLastKOTH;
+    private static long timeSinceLastKOTH = 0;
+    private static boolean automatic = false;
 
     public static boolean running = false;
     public static Map<UUID, PlayerKothData> kothData = new HashMap<>();
@@ -48,13 +50,23 @@ public class KOTHEventManager {
 
     public static void init(JavaPlugin pl) {
         plugin = pl;
-        timeSinceLastKOTH = 0;
 
         pl.getCommand("koth").setExecutor(new KothKCMD());
         pl.getCommand("koth").setTabCompleter(new KothKCMD());
 
         pl.getServer().getPluginManager().registerEvents(new KEPoints(), pl);
+        Bukkit.getScheduler().scheduleSyncRepeatingTask(ClassicDupe.getPlugin(), new KothManagerRunnable(), 0, 20*5);
+    }
 
+    public static class KothManagerRunnable implements Runnable {
+        @Override
+        public void run() {
+            if(timeSinceLastKOTH == 0) timeSinceLastKOTH = System.currentTimeMillis();
+            else if(timeSinceLastKOTH + (1000*60*60*6) < System.currentTimeMillis()) {
+                startKOTH();
+                automatic = true;
+            }
+        }
     }
 
     /* Koth Perms
@@ -74,6 +86,8 @@ public class KOTHEventManager {
             return data;
         }
     }
+
+    // TODO: Load players when they join too
 
     public static void startKOTH() {
         String KOTHSchem = getRandomKOTHSchem();
@@ -103,10 +117,14 @@ public class KOTHEventManager {
         Bukkit.getScheduler().scheduleSyncDelayedTask(ClassicDupe.getPlugin(), KOTHEventManager::endKOTHEvent, 20*60*30);
     }
 
+    // TODO: Portals don't work for regular players
+
     public static void endKOTHEvent() {
         if(!running) return;
+        timeSinceLastKOTH = System.currentTimeMillis();
         carpetTask.cancel();
         KRunnable.bossBars.forEach(Audience::hideBossBar);
+        KRunnable.bossBars.clear();
         WorldGuard.getInstance().getPlatform().getRegionContainer()
                 .get(BukkitAdapter.adapt(Bukkit.getWorld("world"))).removeRegion(region.getId());
         CuboidRegion rg = new CuboidRegion(BukkitAdapter.adapt(Bukkit.getWorld("world")), region.getMinimumPoint(), region.getMaximumPoint());
@@ -116,60 +134,59 @@ public class KOTHEventManager {
         });
         region = null;
         running = false;
-        if(kothData.size() > 3) {
-            Map<PlayerKothData, Integer> kothPoints = new HashMap<>();
-            Map<PlayerKothData, Integer> kothKills = new HashMap<>();
-            kothData.forEach((uuid, data) -> {
-                kothPoints.put(data, data.getPoints());
-                kothKills.put(data, data.getKills());
-            });
-            Map<Integer, PlayerKothData> topPoints =
-                    kothPoints.entrySet().stream()
-                            .sorted(Map.Entry.comparingByValue(Comparator.reverseOrder()))
-                            .limit(3)
-                            .collect(Collectors.toMap(
-                                    Map.Entry::getValue, Map.Entry::getKey, (e1, e2) -> e1, LinkedHashMap::new));
-            Map<Integer, PlayerKothData> topKills =
-                    kothKills.entrySet().stream()
-                            .sorted(Map.Entry.comparingByValue(Comparator.reverseOrder()))
-                            .limit(3)
-                            .collect(Collectors.toMap(
-                                    Map.Entry::getValue, Map.Entry::getKey, (e1, e2) -> e1, LinkedHashMap::new));
-            List<PlayerKothData> topPointsList = topPoints.values().stream().toList();
-            List<PlayerKothData> topKillsList = topKills.values().stream().toList();
-            Bukkit.getOnlinePlayers().forEach(p -> {
-                p.sendMessage(Utils.format("<yellow><b>The KOTH event has ended"));
-                p.sendMessage(Utils.format("<yellow>--- <gold>Top Points <yellow>---"));
-                p.sendMessage(Utils.format("<yellow>1. " + topPointsList.get(0).getOffPlayer().getName() + " - " + topPointsList.get(0).getPoints())
-                        .hoverEvent(HoverEvent.showText(
-                                Utils.format("<yellow>KOTH Stats\n<green>Kills <gray>>- <yellow>" + topPointsList.get(0).getKills() + "\n<green>Deaths <gray>>- <yellow>" + topPointsList.get(0).getDeaths() + "\n<green>Points <gray>>- <yellow>" + topPointsList.get(0).getPoints()))
-                        ));
-                p.sendMessage(Utils.format("<yellow>2. " + topPointsList.get(1).getOffPlayer().getName() + " - " + topPointsList.get(1).getPoints())
-                        .hoverEvent(HoverEvent.showText(
-                                Utils.format("<yellow>KOTH Stats\n<green>Kills <gray>>- <yellow>" + topPointsList.get(1).getKills() + "\n<green>Deaths <gray>>- <yellow>" + topPointsList.get(1).getDeaths() + "\n<green>Points <gray>>- <yellow>" + topPointsList.get(1).getPoints()))
-                        ));
-                p.sendMessage(Utils.format("<yellow>3. " + topPointsList.get(2).getOffPlayer().getName() + " - " + topPointsList.get(2).getPoints())
-                        .hoverEvent(HoverEvent.showText(
-                                Utils.format("<yellow>KOTH Stats\n<green>Kills <gray>>- <yellow>" + topPointsList.get(2).getKills() + "\n<green>Deaths <gray>>- <yellow>" + topPointsList.get(2).getDeaths() + "\n<green>Points <gray>>- <yellow>" + topPointsList.get(2).getPoints()))
-                        ));
-                p.sendMessage(" ");
-                p.sendMessage(Utils.format("<yellow>--- <gold>Top Kills <yellow>---"));
-                p.sendMessage(Utils.format("<yellow>1. " + topKillsList.get(0).getOffPlayer().getName() + " - " + topKillsList.get(0).getKills())
-                        .hoverEvent(HoverEvent.showText(
-                                Utils.format("<yellow>KOTH Stats\n<green>Kills <gray>>- <yellow>" + topKillsList.get(0).getKills() + "\n<green>Deaths <gray>>- <yellow>" + topKillsList.get(0).getDeaths() + "\n<green>Points <gray>>- <yellow>" + topKillsList.get(0).getPoints()))
-                        ));
-                p.sendMessage(Utils.format("<yellow>2. " + topKillsList.get(1).getOffPlayer().getName() + " - " + topKillsList.get(1).getKills())
-                        .hoverEvent(HoverEvent.showText(
-                                Utils.format("<yellow>KOTH Stats\n<green>Kills <gray>>- <yellow>" + topKillsList.get(1).getKills() + "\n<green>Deaths <gray>>- <yellow>" + topKillsList.get(1).getDeaths() + "\n<green>Points <gray>>- <yellow>" + topKillsList.get(1).getPoints()))
-                        ));
-                p.sendMessage(Utils.format("<yellow>3. " + topKillsList.get(2).getOffPlayer().getName() + " - " + topKillsList.get(2).getKills())
-                        .hoverEvent(HoverEvent.showText(
-                                Utils.format("<yellow>KOTH Stats\n<green>Kills <gray>>- <yellow>" + topKillsList.get(2).getKills() + "\n<green>Deaths <gray>>- <yellow>" + topKillsList.get(2).getDeaths() + "\n<green>Points <gray>>- <yellow>" + topKillsList.get(2).getPoints()))
-                        ));
-            });
+        Map<PlayerKothData, Integer> kothPoints = new HashMap<>();
+        Map<PlayerKothData, Integer> kothKills = new HashMap<>();
+        kothData.forEach((uuid, data) -> {
+            kothPoints.put(data, data.getPoints());
+            kothKills.put(data, data.getKills());
+        });
+        Map<Integer, PlayerKothData> topPoints =
+                kothPoints.entrySet().stream()
+                        .sorted(Map.Entry.comparingByValue(Comparator.reverseOrder()))
+                        .limit(3)
+                        .collect(Collectors.toMap(
+                                Map.Entry::getValue, Map.Entry::getKey, (e1, e2) -> e1, LinkedHashMap::new));
+        Map<Integer, PlayerKothData> topKills =
+                kothKills.entrySet().stream()
+                        .sorted(Map.Entry.comparingByValue(Comparator.reverseOrder()))
+                        .limit(3)
+                        .collect(Collectors.toMap(
+                                Map.Entry::getValue, Map.Entry::getKey, (e1, e2) -> e1, LinkedHashMap::new));
+        List<PlayerKothData> topPointsList = topPoints.values().stream().toList();
+        List<PlayerKothData> topKillsList = topKills.values().stream().toList();
+        List<Component> topPointsComp = new ArrayList<>();
+        for(int i = 0; i < 3; i++) {
+            if(topPointsList.size() <= i) break;
+            topPointsComp.add(Utils.format("<yellow>" + i+1 + ". " + topPointsList.get(i).getOffPlayer().getName() + " - " + topPointsList.get(i).getPoints())
+                    .hoverEvent(HoverEvent.showText(
+                            Utils.format("<yellow>KOTH Stats\n<green>Kills <gray>>- <yellow>" + topPointsList.get(i).getKills() + "\n<green>Deaths <gray>>- <yellow>" + topPointsList.get(i).getDeaths() + "\n<green>Points <gray>>- <yellow>" + topPointsList.get(i).getPoints()))
+                    ));
+            if(automatic) ClassicDupe.getDatabase().getPlayerDatabase()
+                    .getPlayerData(topPointsList.get(i).getOffPlayer().getUniqueId())
+                    .addBalance(300-(i*100));
         }
+        List<Component> topKillsComp = new ArrayList<>();
+        for(int i = 0; i < 3; i++) {
+            if(topKillsList.size() <= i) break;
+            topKillsComp.add(Utils.format("<yellow>" + i+1 + ". " + topKillsList.get(i).getOffPlayer().getName() + " - " + topKillsList.get(i).getKills())
+                    .hoverEvent(HoverEvent.showText(
+                            Utils.format("<yellow>KOTH Stats\n<green>Kills <gray>>- <yellow>" + topKillsList.get(i).getKills() + "\n<green>Deaths <gray>>- <yellow>" + topKillsList.get(i).getDeaths() + "\n<green>Points <gray>>- <yellow>" + topKillsList.get(i).getPoints()))
+                    ));
+            if(automatic) ClassicDupe.getDatabase().getPlayerDatabase()
+                    .getPlayerData(topKillsList.get(i).getOffPlayer().getUniqueId())
+                    .addBalance(300-(i*100));
+        }
+        Bukkit.getOnlinePlayers().forEach(p -> {
+            p.sendMessage(Utils.format("<yellow><b>The KOTH event has ended"));
+            if(automatic) p.sendMessage(Utils.format("<yellow>You will be rewarded in dabloons for your placement"));
+            p.sendMessage(Utils.format("<yellow>--- <gold>Top Points <yellow>---"));
+            topKillsComp.forEach(p::sendMessage);
+            p.sendMessage(Utils.format(" "));
+            p.sendMessage(Utils.format("<yellow>--- <gold>Top Kills <yellow>---"));
+            topPointsComp.forEach(p::sendMessage);
+        });
         kothData = new HashMap<>();
-        timeSinceLastKOTH = System.currentTimeMillis();
+        automatic = false;
     }
 
     public static String getRandomKOTHSchem() {
