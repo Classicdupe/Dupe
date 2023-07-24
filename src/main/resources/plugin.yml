@@ -376,6 +376,10 @@ commands:
   pay:
     description: To pay other players
     usage: "Usage: /pay"
+  pvsee:
+    description: To see other players inventories
+    usage: "Usage: /pvsee"
+    permission: admin.pvsee
 permissions:
   default.spawn.others:
     description: Allows you to teleport others to spawn
