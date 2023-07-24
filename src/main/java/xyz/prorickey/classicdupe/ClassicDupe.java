@@ -293,10 +293,10 @@ public class ClassicDupe extends JavaPlugin {
         getServer().getPluginManager().registerEvents(new HelpCMD(), this);
         getServer().getPluginManager().registerEvents(new BoosterService(), this);
 
-        getServer().getPluginManager().registerEvents(new pvsee(), this);
+        getServer().getPluginManager().registerEvents(new PvSeeCMD(), this);
         //set command & tab completer
-        this.getCommand("pvsee").setExecutor(new pvsee());
-        this.getCommand("pvsee").setTabCompleter(new pvsee());
+        this.getCommand("pvsee").setExecutor(new PvSeeCMD());
+        this.getCommand("pvsee").setTabCompleter(new PvSeeCMD());
         //Init maze
         MAZEmanager.init();
 

@@ -11,7 +11,6 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.inventory.Inventory;
-import org.bukkit.inventory.InventoryHolder;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -22,7 +21,7 @@ import xyz.prorickey.proutils.TabComplete;
 
 import java.util.*;
 
-public class pvsee implements CommandExecutor, TabCompleter, Listener {
+public class PvSeeCMD implements CommandExecutor, TabCompleter, Listener {
 
     public static final Map<String, Inventory> vaultGuis = new HashMap<>();
 
